@@ -971,3 +971,423 @@ nav{
 }
 
 }
+
+/* ===========================
+   Homepage V1.1 Enhancements
+=========================== */
+
+body.home-page{
+    background:linear-gradient(180deg,#f8fbff 0%,#f4f7fc 100%);
+}
+
+.home-page .site-header{
+    padding:18px 8%;
+    background:linear-gradient(135deg,#1565C0 0%,#1d4ed8 100%);
+    box-shadow:0 20px 45px rgba(21,101,192,.18);
+}
+
+.home-page .site-header .logo h2{
+    font-size:1.9rem;
+    letter-spacing:-0.02em;
+}
+
+.home-page .site-header nav a{
+    position:relative;
+    padding-bottom:4px;
+}
+
+.home-page .site-header nav a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:2px;
+    background:#ffd54f;
+    transform:scaleX(0);
+    transform-origin:center;
+    transition:transform .25s ease;
+}
+
+.home-page .site-header nav a:hover::after{
+    transform:scaleX(1);
+}
+
+.home-page .hero{
+    padding:90px 8% 80px;
+    background:radial-gradient(circle at top left, rgba(255,255,255,.24), transparent 32%), linear-gradient(135deg,#1565C0 0%,#1d4ed8 100%);
+    color:#fff;
+}
+
+.home-page .hero-content{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    align-items:center;
+    gap:35px;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+.home-page .hero-copy{
+    animation:fadeUp .7s ease both;
+}
+
+.home-page .hero-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    backdrop-filter:blur(8px);
+    font-size:.95rem;
+    font-weight:600;
+    margin-bottom:16px;
+}
+
+.home-page .hero h1{
+    font-size:3.2rem;
+    line-height:1.08;
+    margin-bottom:16px;
+    max-width:700px;
+}
+
+.home-page .hero p{
+    font-size:1.08rem;
+    line-height:1.8;
+    max-width:640px;
+    margin-bottom:24px;
+    color:rgba(255,255,255,.92);
+}
+
+.home-page .search-box{
+    max-width:680px;
+    margin:0 0 24px;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 18px 45px rgba(12,34,70,.25);
+}
+
+.home-page .search-box input{
+    padding:18px 20px;
+    font-size:1rem;
+    border:0;
+    outline:none;
+}
+
+.home-page .search-box button{
+    min-width:140px;
+    background:#ffd54f;
+    color:#0f172a;
+    font-weight:700;
+    transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.home-page .search-box button:hover{
+    transform:translateY(-1px);
+    box-shadow:inset 0 0 0 2px rgba(15,23,42,.06);
+}
+
+.home-page .hero-highlights{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:16px;
+}
+
+.home-page .hero-highlights div{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:12px 14px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:14px;
+    min-width:112px;
+}
+
+.home-page .hero-highlights strong{
+    font-size:1.1rem;
+}
+
+.home-page .hero-highlights span{
+    font-size:.9rem;
+    color:rgba(255,255,255,.9);
+}
+
+.home-page .hero-card{
+    background:rgba(255,255,255,.96);
+    color:#1f2937;
+    padding:28px;
+    border-radius:24px;
+    box-shadow:0 24px 50px rgba(7,24,47,.2);
+    animation:fadeUp .8s ease both;
+}
+
+.home-page .hero-card h3{
+    margin-bottom:14px;
+    color:#0f172a;
+    font-size:1.2rem;
+}
+
+.home-page .hero-card ul{
+    list-style:none;
+    display:grid;
+    gap:10px;
+}
+
+.home-page .hero-card li{
+    padding-left:18px;
+    position:relative;
+    color:#475569;
+    line-height:1.6;
+}
+
+.home-page .hero-card li::before{
+    content:"•";
+    position:absolute;
+    left:0;
+    color:#2563eb;
+    font-size:1.2rem;
+}
+
+.home-page .container{
+    max-width:1200px;
+    margin:0 auto;
+}
+
+.home-page .section-heading{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.home-page .section-heading h2{
+    color:#0f172a;
+    margin-bottom:10px;
+    font-size:2.1rem;
+}
+
+.home-page .section-subtitle{
+    color:#64748b;
+    font-size:1rem;
+    max-width:700px;
+    margin:0 auto;
+}
+
+.home-page .exam-section,
+.home-page .subjects,
+.home-page .features,
+.home-page .latest,
+.home-page .stats-section{
+    padding:80px 8%;
+}
+
+.home-page .exam-section{
+    background:#fff;
+}
+
+.home-page .subjects{
+    background:#f8fbff;
+}
+
+.home-page .features{
+    background:#ffffff;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.home-page .feature,
+.home-page .exam-card,
+.home-page .subject-card,
+.home-page .question-preview,
+.home-page .type-card{
+    border:1px solid rgba(148,163,184,.16);
+    box-shadow:0 16px 40px rgba(15,23,42,.06);
+    transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.home-page .feature:hover,
+.home-page .exam-card:hover,
+.home-page .subject-card:hover,
+.home-page .question-preview:hover,
+.home-page .type-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 24px 48px rgba(37,99,235,.14);
+}
+
+.home-page .exam-card button,
+.home-page .subject-card a,
+.home-page .primary-btn,
+.home-page .solve-btn{
+    transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.home-page .exam-card button:hover,
+.home-page .subject-card a:hover,
+.home-page .primary-btn:hover,
+.home-page .solve-btn:hover{
+    transform:translateY(-2px);
+}
+
+.home-page .feature{
+    padding:28px;
+    border-radius:20px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+.home-page .feature h3{
+    margin:10px 0 8px;
+    color:#0f172a;
+}
+
+.home-page .feature p{
+    color:#64748b;
+    line-height:1.7;
+}
+
+.home-page .subject-card{
+    padding:30px 24px;
+    border-radius:20px;
+    text-align:center;
+    background:#fff;
+}
+
+.home-page .subject-card .icon{
+    font-size:3rem;
+    margin-bottom:10px;
+}
+
+.home-page .subject-card h3{
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+.home-page .subject-card p{
+    color:#64748b;
+    min-height:72px;
+}
+
+.home-page .count{
+    display:inline-block;
+    margin:14px 0 10px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#eff6ff;
+    color:#2563eb;
+    font-weight:700;
+}
+
+.home-page .subject-card a{
+    font-weight:700;
+    color:#2563eb;
+}
+
+.home-page .question-preview{
+    border-radius:20px;
+    padding:24px 26px;
+    margin-bottom:20px;
+    background:#fff;
+}
+
+.home-page .question-preview h3{
+    font-size:1.2rem;
+    margin-bottom:12px;
+}
+
+.home-page .question-meta{
+    margin:16px 0 18px;
+}
+
+.home-page .site-footer{
+    padding:46px 8% 24px;
+    background:#0f172a;
+    color:#e2e8f0;
+}
+
+.home-page .footer-content{
+    display:grid;
+    grid-template-columns:1.2fr .8fr .8fr;
+    gap:24px;
+    margin-bottom:24px;
+}
+
+.home-page .site-footer h3,
+.home-page .site-footer h4{
+    margin-bottom:10px;
+    color:#fff;
+}
+
+.home-page .site-footer a{
+    display:block;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.home-page .footer-bottom{
+    border-top:1px solid rgba(255,255,255,.12);
+    padding-top:14px;
+    text-align:center;
+    color:#94a3b8;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(18px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media (max-width:900px){
+    .home-page .hero-content{
+        grid-template-columns:1fr;
+    }
+
+    .home-page .hero-card{
+        max-width:620px;
+    }
+
+    .home-page .footer-content{
+        grid-template-columns:1fr;
+    }
+}
+
+@media (max-width:768px){
+    .home-page .site-header{
+        padding:18px 20px;
+    }
+
+    .home-page .hero{
+        padding:70px 20px 70px;
+    }
+
+    .home-page .hero h1{
+        font-size:2.25rem;
+    }
+
+    .home-page .search-box{
+        flex-direction:column;
+    }
+
+    .home-page .search-box input,
+    .home-page .search-box button{
+        width:100%;
+    }
+
+    .home-page .hero-highlights{
+        flex-direction:column;
+    }
+
+    .home-page .exam-section,
+    .home-page .subjects,
+    .home-page .features,
+    .home-page .latest,
+    .home-page .stats-section{
+        padding:60px 20px;
+    }
+}

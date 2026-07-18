@@ -17,22 +17,30 @@ async function loadLatestQuestions() {
 
     latest.forEach(q => {
 
+        const difficultyClass = (q.difficulty || "Medium").toLowerCase();
+
         container.innerHTML += `
         <div class="question-preview">
 
             <div class="question-header">
 
-                <span class="exam-tag">${q.exam}</span>
+                <span class="exam-tag">${q.exam || "Exam"}</span>
 
-                <span class="chapter-tag">${q.chapter}</span>
+                <span class="chapter-tag">${q.chapter || "Chapter"}</span>
 
-                <span class="difficulty ${q.difficulty.toLowerCase()}">
-                    ${q.difficulty}
+                <span class="difficulty ${difficultyClass}">
+                    ${q.difficulty || "Medium"}
                 </span>
 
             </div>
 
-            <h3>${q.question}</h3>
+            <h3>${q.question || "No question available"}</h3>
+
+            <div class="question-meta">
+                <span>📅 ${q.year || "N/A"}</span>
+                <span>👁 ${q.views || 0}</span>
+                <span>👍 ${q.likes || 0}</span>
+            </div>
 
             <div class="question-buttons">
 
