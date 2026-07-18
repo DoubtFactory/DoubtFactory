@@ -1,5 +1,12 @@
 # Doubt Factory Changelog
 
+## v1.3.0
+- Added a more professional and responsive search experience
+- Introduced instant search with debounce input
+- Added search suggestions and keyboard navigation support
+- Added filter chips for exam and difficulty-focused filtering
+- Improved empty states, loading feedback, and result card presentation
+
 ## v1.0.0-alpha.1
 - Project started
 - Requirements finalized

@@ -1,14 +1,35 @@
-<div class="container">
+<div class="search-page">
 
-    <h2>Search Questions</h2>
+    <div class="container search-shell">
 
-    <input
-        type="text"
-        id="searchBox"
-        placeholder="Search any chemistry question..."
-    >
+        <div class="search-hero">
+            <h2>Search Chemistry Questions</h2>
+            <p>Find the right question quickly by topic, chapter, exam, or keyword.</p>
+        </div>
 
-    <div id="searchResults"></div>
+        <div class="search-input-wrap">
+            <input
+                type="text"
+                id="searchBox"
+                placeholder="Search any chemistry question..."
+                autocomplete="off"
+            >
+            <button type="button" id="searchButton">Search</button>
+        </div>
+
+        <div class="search-suggestions" id="suggestions"></div>
+
+        <div class="search-filters" id="filterChips">
+            <button class="chip active" data-filter="All">All</button>
+            <button class="chip" data-filter="JEE Main">JEE Main</button>
+            <button class="chip" data-filter="JEE Advanced">JEE Advanced</button>
+            <button class="chip" data-filter="NEET">NEET</button>
+        </div>
+
+        <div class="search-meta" id="searchMeta"></div>
+        <div id="searchResults"></div>
+
+    </div>
 
 </div>
 

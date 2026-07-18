@@ -837,6 +837,234 @@ nav{
 
 }
 /* ===========================
+   Search Experience
+=========================== */
+
+.search-page{
+    background:linear-gradient(180deg,#f8fbff 0%,#f4f7fb 100%);
+    min-height:100vh;
+    padding:40px 20px 70px;
+}
+
+.search-shell{
+    max-width:1100px;
+    margin:0 auto;
+}
+
+.search-hero{
+    text-align:center;
+    margin-bottom:24px;
+}
+
+.search-hero h2{
+    font-size:2.2rem;
+    color:#0f172a;
+    margin-bottom:8px;
+}
+
+.search-hero p{
+    color:#64748b;
+    font-size:1rem;
+}
+
+.search-input-wrap{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#fff;
+    border:1px solid #dce7f3;
+    border-radius:18px;
+    padding:10px;
+    box-shadow:0 16px 38px rgba(15,23,42,.08);
+    margin-bottom:14px;
+}
+
+.search-input-wrap input{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:12px 14px;
+    font-size:1rem;
+}
+
+.search-input-wrap button{
+    border:none;
+    background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);
+    color:#fff;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.search-suggestions{
+    display:none;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    box-shadow:0 12px 24px rgba(15,23,42,.06);
+    margin-bottom:16px;
+    overflow:hidden;
+}
+
+.suggestion-item{
+    width:100%;
+    text-align:left;
+    padding:12px 14px;
+    border:none;
+    background:#fff;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active{
+    background:#f8fbff;
+}
+
+.suggestion-item strong,
+.suggestion-item span{
+    color:#0f172a;
+}
+
+.suggestion-item mark{
+    background:#fde68a;
+    color:#111827;
+    padding:0 2px;
+    border-radius:4px;
+}
+
+.search-filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:18px 0 18px;
+}
+
+.chip{
+    border:1px solid #dbeafe;
+    background:#fff;
+    color:#2563eb;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.chip.active{
+    background:#2563eb;
+    color:#fff;
+    border-color:#2563eb;
+}
+
+.search-meta{
+    margin-bottom:12px;
+}
+
+.meta-text{
+    color:#475569;
+}
+
+.search-result-card{
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:0 14px 28px rgba(15,23,42,.06);
+    animation:fadeUp .35s ease both;
+}
+
+.result-top{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.result-tag{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#eff6ff;
+    color:#2563eb;
+    font-size:12px;
+    font-weight:700;
+}
+
+.result-tag.alt{
+    background:#f5f3ff;
+    color:#7c3aed;
+}
+
+.search-result-card h3{
+    font-size:1.15rem;
+    margin-bottom:8px;
+    color:#111827;
+}
+
+.search-result-card p{
+    color:#475569;
+    line-height:1.7;
+    margin-bottom:10px;
+}
+
+.search-result-card mark{
+    background:#fde68a;
+    color:#111827;
+    padding:0 2px;
+    border-radius:4px;
+}
+
+.result-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    color:#64748b;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.search-result-card a{
+    color:#2563eb;
+    font-weight:700;
+}
+
+.empty-state{
+    background:#fff;
+    border:1px dashed #cbd5e1;
+    border-radius:16px;
+    padding:24px;
+    text-align:center;
+    color:#64748b;
+}
+
+.empty-state.loading{
+    color:#2563eb;
+}
+
+@media (max-width:768px){
+    .search-input-wrap{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search-input-wrap button{
+        width:100%;
+    }
+
+    .search-page{
+        padding:24px 16px 56px;
+    }
+
+    .search-hero h2{
+        font-size:1.7rem;
+    }
+}
+
+/* ===========================
    Manage Questions
 =========================== */
 
