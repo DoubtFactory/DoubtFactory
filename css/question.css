@@ -1,0 +1,275 @@
+.container{
+
+max-width:1000px;
+
+margin:auto;
+
+padding:40px 20px;
+
+}
+
+.breadcrumb{
+
+margin:20px 0;
+
+color:#666;
+
+}
+
+.question-box{
+
+background:#fff;
+
+padding:35px;
+
+border-radius:20px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.question-tags{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+margin-bottom:25px;
+
+}
+
+.tag{
+
+padding:8px 15px;
+
+border-radius:20px;
+
+color:white;
+
+font-size:14px;
+
+}
+
+.blue{
+
+background:#1565C0;
+
+}
+
+.purple{
+
+background:#8E24AA;
+
+}
+
+.orange{
+
+background:#FB8C00;
+
+}
+
+.option{
+
+display:block;
+
+padding:18px;
+
+margin:15px 0;
+
+background:#f7f9fc;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+
+.option:hover{
+
+background:#E3F2FD;
+
+}
+
+.submit-btn{
+
+margin-top:25px;
+
+padding:15px 35px;
+
+background:#1565C0;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-size:16px;
+
+}
+
+.stats{
+
+display:flex;
+
+gap:25px;
+
+flex-wrap:wrap;
+
+margin:30px 0;
+
+font-weight:600;
+
+}
+
+.solution,
+.video,
+.discussion{
+
+margin-top:30px;
+
+background:#fff;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.video-placeholder{
+
+height:300px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:#eee;
+
+border-radius:15px;
+
+margin-top:20px;
+
+}
+
+textarea{
+
+width:100%;
+
+height:150px;
+
+padding:15px;
+
+margin-top:20px;
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+font-family:Poppins,sans-serif;
+
+}
+
+.discussion button{
+
+margin-top:20px;
+
+padding:15px 30px;
+
+background:#1565C0;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+}
+.result-message{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-top:20px;
+
+    margin-bottom:20px;
+
+}
+
+#solutionBox{
+
+    background:#f8f9fa;
+
+    border-left:5px solid #2d6cdf;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    margin-top:25px;
+
+}
+.question-navigation{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:40px;
+
+}
+
+.nav-btn{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 30px;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.nav-btn:hover{
+
+    background:#1d4ed8;
+
+}
+.question-counter{
+    font-size:18px;
+    font-weight:700;
+    color:#2563eb;
+    margin:20px 0;
+}
+.nav-btn:disabled{
+    background:#cbd5e1;
+    cursor:not-allowed;
+    opacity:0.7;
+}
+.tag.green{
+
+    background:#E8F5E9;
+
+    color:#2E7D32;
+
+}

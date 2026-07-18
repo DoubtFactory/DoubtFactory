@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel | Doubt Factory</title>
+
+<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="container">
+
+<h2>Doubt Factory Admin</h2>
+
+<nav>
+
+<a href="index.html">Home</a>
+<a href="admin.html">Admin</a>
+
+</nav>
+
+</div>
+</header>
+
+<main class="container">
+
+<h1>Add New Question</h1>
+<section class="admin-dashboard">
+
+    <div class="dashboard-card">
+        <h3>Total Questions</h3>
+        <h2 id="totalQuestions">0</h2>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Subjects</h3>
+        <h2>3</h2>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Chapters</h3>
+        <h2>37</h2>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Video Solutions</h3>
+        <h2 id="totalVideos">0</h2>
+    </div>
+
+</section>
+
+<form id="questionForm">
+
+<h3>Basic Information</h3>
+
+<select id="subject" required>
+
+<option value="">Select Subject</option>
+
+<option>Physical Chemistry</option>
+
+<option>Organic Chemistry</option>
+
+<option>Inorganic Chemistry</option>
+
+</select>
+
+<select id="chapter" required>
+
+    <option value="">Select Chapter</option>
+
+</select>
+
+<select id="exam" required>
+
+<option value="">Select Exam</option>
+
+<option>JEE Main</option>
+
+<option>JEE Advanced</option>
+
+<option>NEET</option>
+
+</select>
+
+<input type="number" id="year" placeholder="Year" required>
+
+<select id="difficulty" required>
+
+<option value="">Difficulty</option>
+
+<option>Easy</option>
+
+<option>Medium</option>
+
+<option>Hard</option>
+
+</select>
+
+<select id="type" required>
+
+<option value="">Question Type</option>
+
+<option>Single Correct</option>
+
+<option>Multiple Correct</option>
+
+<option>Integer Type</option>
+
+<option>Assertion Reason</option>
+
+<option>Match the Column</option>
+
+<option>Paragraph Based</option>
+
+</select>
+
+<hr>
+
+<h3>Question</h3>
+
+<textarea
+id="question"
+rows="5"
+placeholder="Enter Question"
+required></textarea>
+
+<input type="text" id="optionA" placeholder="Option A">
+
+<input type="text" id="optionB" placeholder="Option B">
+
+<input type="text" id="optionC" placeholder="Option C">
+
+<input type="text" id="optionD" placeholder="Option D">
+
+<input type="number" id="answer"
+placeholder="Correct Option Index (0-3)">
+
+<textarea
+id="solution"
+rows="5"
+placeholder="Solution"></textarea>
+
+<input
+type="url"
+id="youtube"
+placeholder="Paste YouTube Video URL">
+
+<button type="submit">
+
+Save Question
+
+</button>
+
+</form>
+<hr>
+
+<h2>All Questions</h2>
+
+<table id="questionsTable" border="1" width="100%" cellspacing="0" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Exam</th>
+            <th>Chapter</th>
+            <th>Year</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody id="questionsTableBody">
+
+    </tbody>
+
+</table>
+
+<h2>Generated JSON</h2>
+
+<pre id="output"></pre>
+
+<hr>
+
+<h2>Live Preview</h2>
+
+<div id="previewCard" class="question-preview">
+
+    <div class="question-header">
+
+        <span class="exam-tag" id="previewExam">Exam</span>
+
+        <span class="chapter-tag" id="previewChapter">Chapter</span>
+
+        <span class="difficulty medium" id="previewDifficulty">
+            Difficulty
+        </span>
+
+    </div>
+
+    <h3 id="previewQuestion">
+        Your question will appear here...
+    </h3>
+
+</div>
+
+</main>
+
+<script type="module" src="js/admin.js"></script>
+
+</body>
+</html>

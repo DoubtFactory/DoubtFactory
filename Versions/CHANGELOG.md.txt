@@ -1,0 +1,6 @@
+# Doubt Factory Changelog
+
+## v1.0.0-alpha.1
+- Project started
+- Requirements finalized
+- Development structure created

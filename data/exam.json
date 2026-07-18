@@ -1,0 +1,17 @@
+[
+    {
+        "name": "JEE Main",
+        "color": "#2563eb",
+        "icon": "📘"
+    },
+    {
+        "name": "JEE Advanced",
+        "color": "#7c3aed",
+        "icon": "🏆"
+    },
+    {
+        "name": "NEET",
+        "color": "#16a34a",
+        "icon": "🩺"
+    }
+]

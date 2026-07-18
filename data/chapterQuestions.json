@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "subject": "Physical Chemistry",
+    "chapter": "Thermodynamics",
+    "exam": "JEE Main",
+    "year": 2024,
+    "title": "One mole of an ideal gas expands isothermally from 10 L to 20 L."
+  },
+  {
+    "id": 2,
+    "subject": "Physical Chemistry",
+    "chapter": "Thermodynamics",
+    "exam": "JEE Advanced",
+    "year": 2023,
+    "title": "A Carnot engine operates between two heat reservoirs."
+  },
+  {
+    "id": 3,
+    "subject": "Physical Chemistry",
+    "chapter": "Thermodynamics",
+    "exam": "NEET",
+    "year": 2022,
+    "title": "Calculate the work done during reversible expansion."
+  }
+]

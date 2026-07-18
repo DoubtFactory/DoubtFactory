@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Doubt Factory - Question</title>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/question.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<h2>Doubt Factory</h2>
+<p>Turning Doubts into Clarity</p>
+</div>
+
+<nav>
+
+<a href="index.html">Home</a>
+
+<a href="exam.html">Exams</a>
+
+<a href="subject.html">Subjects</a>
+
+<a href="questions.html">Questions</a>
+
+<a href="search.html">Search</a>
+
+</nav>
+
+</header>
+
+<div class="container">
+
+<div class="breadcrumb">
+
+<span id="breadcrumb">
+Home
+</span>
+
+<div id="questionCounter" class="question-counter">
+    Question 1 of 1
+</div>
+
+</div>
+
+<div class="question-tags">
+
+<span class="tag blue" id="examTag"></span>
+
+<span class="tag purple" id="chapterTag"></span>
+
+<span class="tag orange" id="difficultyTag"></span>
+
+<span class="tag green" id="typeTag"></span>
+
+</div>
+
+<h2 id="questionText">
+Loading question...
+</h2>
+
+<form>
+
+<div id="optionsContainer"></div>
+
+<button type="button" class="submit-btn" id="submitAnswer">
+
+Submit Answer
+
+</button>
+<div id="resultMessage" class="result-message"></div>
+
+<div id="solutionBox" style="display:none;">
+    <h3>Solution</h3>
+    <p id="solutionText"></p>
+</div>
+
+</form>
+
+</div>
+
+<div class="stats">
+
+    <span>👁 <span id="views">0</span> Views</span>
+
+    <span>👍 <span id="likes">0</span></span>
+
+    <span>👎 <span id="dislikes">0</span></span>
+
+    <span>💬 <span id="comments">0</span> Comments</span>
+
+</div>
+
+
+<div class="video">
+
+    <h3>🎥 Video Solution</h3>
+
+    <div id="videoContainer">
+        <p>No video available.</p>
+    </div>
+
+</div>
+
+<div class="discussion">
+
+    <h3>Student Discussion</h3>
+
+    <input
+        type="text"
+        id="commentName"
+        placeholder="Your name (optional)"
+    >
+
+    <textarea
+        id="commentText"
+        placeholder="Write your doubt..."
+    ></textarea>
+
+    <button id="postComment">
+        Post Comment
+    </button>
+
+    <div id="commentsList"></div>
+
+</div>
+
+<div class="question-navigation">
+
+    <button id="prevQuestion" class="nav-btn" disabled>
+        ← Previous
+    </button>
+
+    <button id="nextQuestion" class="nav-btn">
+        Next →
+    </button>
+
+</div>
+
+<script type="module" src="js/question.js"></script>
+
+</body>
+</html>

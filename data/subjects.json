@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Physical Chemistry",
+    "icon": "⚛️",
+    "color": "#2563eb"
+  },
+  {
+    "name": "Organic Chemistry",
+    "icon": "🧪",
+    "color": "#16a34a"
+  },
+  {
+    "name": "Inorganic Chemistry",
+    "icon": "🧬",
+    "color": "#7c3aed"
+  }
+]

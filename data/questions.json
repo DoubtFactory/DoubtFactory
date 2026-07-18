@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "exam": "JEE Main",
+    "year": 2024,
+    "subject": "Physical Chemistry",
+    "chapter": "Thermodynamics",
+    "difficulty": "Medium",
+    "type": "Single Correct",
+
+    "question": "One mole of an ideal gas expands isothermally from 10 L to 20 L at 300 K. The work done is:",
+
+    "options": [
+      "0",
+      "nRT ln2",
+      "300 J",
+      "600 J"
+    ],
+
+    "answer": 1,
+
+    "solution": "For reversible isothermal expansion, W = nRT ln(V₂/V₁)=nRT ln2.",
+
+    "youtube":"dQw4w9WgXcQ",
+
+    "views": 0,
+
+    "likes": 0
+  },
+
+  {
+    "id": 2,
+    "exam": "NEET",
+    "year": 2023,
+    "subject": "Physical Chemistry",
+    "chapter": "Thermodynamics",
+    "difficulty": "Easy",
+    "type": "Single Correct",
+
+    "question": "The SI unit of entropy is:",
+
+    "options": [
+      "J K⁻¹ mol⁻¹",
+      "J",
+      "cal",
+      "atm"
+    ],
+
+    "answer": 0,
+
+    "solution": "The SI unit of molar entropy is J mol⁻¹ K⁻¹.",
+
+    "youtube":"dQw4w9WgXcQ",
+
+    "views": 0,
+
+    "likes": 0
+  }
+]

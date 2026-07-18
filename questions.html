@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questions | Doubt Factory</title>
+
+<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="container">
+
+<h2>Doubt Factory</h2>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="exam.html">Exams</a>
+<a href="subject.html">Subjects</a>
+<a href="search.html">Search</a>
+</nav>
+
+</div>
+</header>
+
+<main class="container">
+
+    <h1 id="chapterTitle">Loading...</h1>
+
+    <div class="filters">
+
+        <select id="examFilter">
+            <option value="All">All Exams</option>
+            <option>JEE Main</option>
+            <option>JEE Advanced</option>
+            <option>NEET</option>
+        </select>
+
+        <select id="yearFilter">
+            <option value="All">All Years</option>
+        </select>
+
+        <select id="difficultyFilter">
+            <option value="All">All Difficulty</option>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+        </select>
+
+    </div>
+
+    <input
+        type="text"
+        id="searchQuestion"
+        class="search-question"
+        placeholder="🔍 Search questions in this chapter...">
+
+    <div id="questionList"></div>
+
+</main>
+
+<script type="module" src="js/questions.js"></script>
+
+</body>
+</html>

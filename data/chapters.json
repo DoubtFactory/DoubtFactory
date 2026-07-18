@@ -1,0 +1,48 @@
+[
+  {
+    "subject": "Physical Chemistry",
+    "chapters": [
+      	"Mole Concept",
+     	 "Atomic Structure",
+	"Gaseous State",
+	"Redox & Equivalent Concept",
+     	 "Thermodynamics",
+     	 "Chemical Equilibrium",
+     	 "Ionic Equilibrium",
+     	 "Electrochemistry",
+     	 "Chemical Kinetics",
+     	 "Solutions",
+      	"Surface Chemistry",
+	"Solid State"
+    ]
+  },
+  {
+    "subject": "Organic Chemistry",
+    "chapters": [
+       "Nomenclature",
+	"General Organic Chemistry",
+      "Hydrocarbons",
+      "Haloalkanes and Haloarenes",
+      "Alcohols Phenols and Ethers",
+      "Aldehydes Ketones and Carboxylic Acids",
+      "Amines",
+      "Biomolecules",
+	 "Chemistry in Everyday Life",
+      "Polymers"
+    ]
+  },
+  {
+    "subject": "Inorganic Chemistry",
+    "chapters": [
+	 "Periodic Table",
+      "Chemical Bonding",
+      "Coordination Compounds",
+      "p-Block",
+      "d and f Block",
+	 "Salt Analysis",
+      "Metallurgy",
+      "Hydrogen",
+      "s-Block"
+    ]
+  }
+]
