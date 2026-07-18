@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body class="question-page">
 
 <header>
 
@@ -42,7 +42,11 @@
 
 </header>
 
-<div class="container">
+<div class="container question-layout">
+
+<div class="question-main">
+
+<div class="question-card">
 
 <div class="breadcrumb">
 
@@ -72,19 +76,19 @@ Home
 Loading question...
 </h2>
 
-<form>
+<form class="question-form">
 
-<div id="optionsContainer"></div>
+<div id="optionsContainer" class="options-list"></div>
 
 <button type="button" class="submit-btn" id="submitAnswer">
 
 Submit Answer
 
 </button>
-<div id="resultMessage" class="result-message"></div>
+<div id="resultMessage" class="result-message" aria-live="polite"></div>
 
-<div id="solutionBox" style="display:none;">
-    <h3>Solution</h3>
+<div id="solutionBox" style="display:none;" class="solution-card">
+    <h3>Explanation</h3>
     <p id="solutionText"></p>
 </div>
 
@@ -92,32 +96,23 @@ Submit Answer
 
 </div>
 
-<div class="stats">
+<div class="video-card">
 
-    <span>👁 <span id="views">0</span> Views</span>
-
-    <span>👍 <span id="likes">0</span></span>
-
-    <span>👎 <span id="dislikes">0</span></span>
-
-    <span>💬 <span id="comments">0</span> Comments</span>
-
-</div>
-
-
-<div class="video">
-
-    <h3>🎥 Video Solution</h3>
+    <div class="card-heading">
+        <h3>🎥 Video Solution</h3>
+    </div>
 
     <div id="videoContainer">
-        <p>No video available.</p>
+        <p class="empty-state">No video available.</p>
     </div>
 
 </div>
 
-<div class="discussion">
+<div class="discussion-card">
 
-    <h3>Student Discussion</h3>
+    <div class="card-heading">
+        <h3>Student Discussion</h3>
+    </div>
 
     <input
         type="text"
@@ -134,7 +129,7 @@ Submit Answer
         Post Comment
     </button>
 
-    <div id="commentsList"></div>
+    <div id="commentsList" class="comments-list"></div>
 
 </div>
 
@@ -147,6 +142,47 @@ Submit Answer
     <button id="nextQuestion" class="nav-btn">
         Next →
     </button>
+
+</div>
+
+</div>
+
+<aside class="question-sidebar">
+
+<div class="sticky-panel">
+
+<div class="panel-head">
+<p class="panel-label">Question Overview</p>
+<h3>Practice Mode</h3>
+</div>
+
+<div class="stats">
+
+    <div class="stat-pill">
+        <span>Views</span>
+        <strong id="views">0</strong>
+    </div>
+
+    <div class="stat-pill">
+        <span>Likes</span>
+        <strong id="likes">0</strong>
+    </div>
+
+    <div class="stat-pill">
+        <span>Comments</span>
+        <strong id="comments">0</strong>
+    </div>
+
+</div>
+
+<div class="panel-note">
+<h4>How to use</h4>
+<p>Select the best answer, review the explanation, and use the video solution if needed.</p>
+</div>
+
+</div>
+
+</aside>
 
 </div>
 

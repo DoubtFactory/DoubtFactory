@@ -57,8 +57,8 @@ function showQuestion() {
     document.getElementById("typeTag").textContent = q.type;
 
     document.getElementById("questionText").textContent = q.question;
-document.getElementById("breadcrumb").innerHTML =
-    `Home > ${q.subject} > ${q.chapter}`;
+    document.getElementById("breadcrumb").innerHTML =
+        `Home > ${q.subject} > ${q.chapter}`;
 
     document.getElementById("questionCounter").textContent =
         `Question ${currentIndex + 1} of ${questions.length}`;
@@ -70,15 +70,14 @@ document.getElementById("breadcrumb").innerHTML =
     q.options.forEach((option, index) => {
 
         options.innerHTML += `
-            <label class="option">
+            <label class="option-card">
                 <input
                     type="radio"
                     name="answer"
                     value="${index}"
                 >
-                ${option}
+                <span>${option}</span>
             </label>
-            <br>
         `;
 
     });
@@ -89,15 +88,20 @@ document.getElementById("breadcrumb").innerHTML =
 
             radio.addEventListener("change", () => {
                 selectedAnswer = Number(radio.value);
+                const cards = document.querySelectorAll('.option-card');
+                cards.forEach(card => card.classList.remove('selected'));
+                radio.closest('.option-card').classList.add('selected');
             });
 
         });
 
     document.getElementById("solutionBox").style.display = "none";
     document.getElementById("resultMessage").textContent = "";
+    document.getElementById("resultMessage").className = "result-message";
 
     document.getElementById("views").textContent = q.views ?? 0;
     document.getElementById("likes").textContent = q.likes ?? 0;
+    document.getElementById("comments").textContent = 0;
 
     const video = document.getElementById("videoContainer");
 
@@ -115,7 +119,7 @@ document.getElementById("breadcrumb").innerHTML =
 
     } else {
 
-        video.innerHTML = "<p>No video available.</p>";
+        video.innerHTML = "<p class='empty-state'>No video available.</p>";
 
     }
 
@@ -125,7 +129,7 @@ document.getElementById("breadcrumb").innerHTML =
     document.getElementById("nextQuestion").disabled =
         currentIndex === questions.length - 1;
 
-loadComments();
+    loadComments();
 }
 
 document
@@ -147,11 +151,13 @@ document
 
         result.innerHTML =
             "✅ Correct Answer!";
+        result.className = "result-message success";
 
     } else {
 
         result.innerHTML =
             `❌ Wrong Answer. Correct option is ${q.answer + 1}.`;
+        result.className = "result-message error";
 
     }
 
