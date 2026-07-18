@@ -6,7 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Doubt Factory - Question</title>
-
+<meta name="description" content="Practice a chemistry question with explanation, video support, and discussion tools on Doubt Factory.">
+<meta name="theme-color" content="#1565C0">
+<link rel="canonical" href="question.html">
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/question.css">
 
@@ -26,7 +28,7 @@
 <p>Turning Doubts into Clarity</p>
 </div>
 
-<nav>
+<nav aria-label="Primary navigation">
 
 <a href="index.html">Home</a>
 
@@ -76,9 +78,9 @@ Home
 Loading question...
 </h2>
 
-<form class="question-form">
+<form class="question-form" novalidate>
 
-<div id="optionsContainer" class="options-list"></div>
+<div id="optionsContainer" class="options-list" aria-label="Answer options"></div>
 
 <button type="button" class="submit-btn" id="submitAnswer">
 
@@ -114,22 +116,27 @@ Submit Answer
         <h3>Student Discussion</h3>
     </div>
 
+    <label class="sr-only" for="commentName">Your name</label>
     <input
         type="text"
         id="commentName"
         placeholder="Your name (optional)"
+        aria-label="Your name"
     >
 
+    <label class="sr-only" for="commentText">Your doubt</label>
     <textarea
         id="commentText"
         placeholder="Write your doubt..."
+        aria-label="Write your doubt"
     ></textarea>
 
-    <button id="postComment">
+    <button id="postComment" type="button">
         Post Comment
     </button>
 
-    <div id="commentsList" class="comments-list"></div>
+    <div id="commentFeedback" class="inline-feedback" role="alert" aria-live="polite"></div>
+    <div id="commentsList" class="comments-list" aria-live="polite"></div>
 
 </div>
 

@@ -7,15 +7,18 @@
             <p>Find the right question quickly by topic, chapter, exam, or keyword.</p>
         </div>
 
-        <div class="search-input-wrap">
+        <form class="search-input-wrap" role="search">
+            <label class="sr-only" for="searchBox">Search chemistry questions</label>
             <input
                 type="text"
                 id="searchBox"
                 placeholder="Search any chemistry question..."
                 autocomplete="off"
+                aria-label="Search chemistry questions"
+                aria-controls="searchResults"
             >
-            <button type="button" id="searchButton">Search</button>
-        </div>
+            <button type="submit" id="searchButton" aria-label="Search chemistry questions">Search</button>
+        </form>
 
         <div class="search-suggestions" id="suggestions"></div>
 
@@ -26,8 +29,8 @@
             <button class="chip" data-filter="NEET">NEET</button>
         </div>
 
-        <div class="search-meta" id="searchMeta"></div>
-        <div id="searchResults"></div>
+        <div class="search-meta" id="searchMeta" aria-live="polite"></div>
+        <div id="searchResults" aria-live="polite"></div>
 
     </div>
 

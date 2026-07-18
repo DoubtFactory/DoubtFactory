@@ -3,10 +3,17 @@ body.question-page{
     color:#1f2937;
 }
 
+button,
+input,
+textarea,
+select{
+    min-height:44px;
+}
+
 .question-page .container{
     max-width:1280px;
     margin:auto;
-    padding:36px 20px 50px;
+    padding:24px 16px 48px;
 }
 
 .question-layout{
@@ -68,7 +75,7 @@ body.question-page{
 .green{background:#2E7D32;}
 
 #questionText{
-    font-size:1.7rem;
+    font-size:clamp(1.2rem,2.4vw,1.7rem);
     line-height:1.6;
     margin-bottom:22px;
     color:#111827;
@@ -90,7 +97,7 @@ body.question-page{
     display:flex;
     align-items:center;
     gap:12px;
-    padding:16px 18px;
+    padding:14px 16px;
     background:#f8fafc;
     border:1px solid #e2e8f0;
     border-radius:14px;
@@ -117,7 +124,7 @@ body.question-page{
 
 .submit-btn{
     margin-top:12px;
-    padding:14px 24px;
+    padding:14px 20px;
     background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);
     color:#fff;
     border:none;
@@ -372,5 +379,24 @@ body.question-page{
 
     .nav-btn{
         width:100%;
+    }
+
+    .breadcrumb{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+@media (max-width:480px){
+    .question-page .container{
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    .question-card,
+    .video-card,
+    .discussion-card,
+    .sticky-panel{
+        border-radius:16px;
     }
 }

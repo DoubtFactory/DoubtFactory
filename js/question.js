@@ -1,4 +1,4 @@
-import {
+﻿import {
     getQuestionById,
     getQuestions,
     getComments,
@@ -9,38 +9,37 @@ let questions = [];
 let currentIndex = 0;
 let selectedAnswer = -1;
 
+function setFeedback(text, type = "") {
+    const result = document.getElementById("resultMessage");
+    if (!result) return;
+    result.textContent = text;
+    result.className = `result-message${type ? ` ${type}` : ""}`;
+}
+
+function setCommentFeedback(text, type = "") {
+    const feedback = document.getElementById("commentFeedback");
+    if (!feedback) return;
+    feedback.textContent = text;
+    feedback.className = `inline-feedback${type ? ` ${type}` : ""}`;
+}
+
 async function loadQuestion() {
-
     const params = new URLSearchParams(window.location.search);
-
     const id = params.get("id");
-    console.log("URL id:", id);
-
     const question = await getQuestionById(id);
-    console.log("Question from Firebase:", question);
-
     questions = await getQuestions();
-    console.log("All questions:", questions);
 
     if (!question) {
-
-        document.getElementById("questionText").textContent =
-            "Question not found.";
-
-        throw new Error("Question not found");
+        const target = document.getElementById("questionText");
+        if (target) target.textContent = "Question not found.";
+        return;
     }
 
-    const subject = params.get("subject");
-    const chapter = params.get("chapter");
-
-questions = await getQuestions();
-
     currentIndex = questions.findIndex(q => q.docId === id);
-console.log("Current Index:", currentIndex);
 
     if (currentIndex === -1) {
-        document.getElementById("questionText").textContent =
-            "Question not found.";
+        const target = document.getElementById("questionText");
+        if (target) target.textContent = "Question not found.";
         return;
     }
 
@@ -48,212 +47,136 @@ console.log("Current Index:", currentIndex);
 }
 
 function showQuestion() {
-
     const q = questions[currentIndex];
-
-    document.getElementById("examTag").textContent = q.exam;
-    document.getElementById("chapterTag").textContent = q.chapter;
-    document.getElementById("difficultyTag").textContent = q.difficulty;
-    document.getElementById("typeTag").textContent = q.type;
-
-    document.getElementById("questionText").textContent = q.question;
-    document.getElementById("breadcrumb").innerHTML =
-        `Home > ${q.subject} > ${q.chapter}`;
-
-    document.getElementById("questionCounter").textContent =
-        `Question ${currentIndex + 1} of ${questions.length}`;
-
     const options = document.getElementById("optionsContainer");
+
+    if (!q || !options) return;
+
+    document.getElementById("examTag").textContent = q.exam || "Exam";
+    document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
+    document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
+    document.getElementById("typeTag").textContent = q.type || "Question";
+    document.getElementById("questionText").textContent = q.question || "No question available";
+    document.getElementById("breadcrumb").innerHTML = `Home > ${q.subject || "Subject"} > ${q.chapter || "Chapter"}`;
+    document.getElementById("questionCounter").textContent = `Question ${currentIndex + 1} of ${questions.length}`;
 
     options.innerHTML = "";
 
     q.options.forEach((option, index) => {
-
-        options.innerHTML += `
-            <label class="option-card">
-                <input
-                    type="radio"
-                    name="answer"
-                    value="${index}"
-                >
-                <span>${option}</span>
-            </label>
+        const label = document.createElement("label");
+        label.className = "option-card";
+        label.innerHTML = `
+            <input type="radio" name="answer" value="${index}">
+            <span>${option}</span>
         `;
-
+        options.appendChild(label);
     });
 
-    document
-        .querySelectorAll('input[name="answer"]')
-        .forEach(radio => {
-
-            radio.addEventListener("change", () => {
-                selectedAnswer = Number(radio.value);
-                const cards = document.querySelectorAll('.option-card');
-                cards.forEach(card => card.classList.remove('selected'));
-                radio.closest('.option-card').classList.add('selected');
-            });
-
+    document.querySelectorAll('input[name="answer"]').forEach(radio => {
+        radio.addEventListener("change", () => {
+            selectedAnswer = Number(radio.value);
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+            radio.closest('.option-card').classList.add('selected');
         });
+    });
 
-    document.getElementById("solutionBox").style.display = "none";
-    document.getElementById("resultMessage").textContent = "";
-    document.getElementById("resultMessage").className = "result-message";
+    const solutionBox = document.getElementById("solutionBox");
+    const resultMessage = document.getElementById("resultMessage");
+    if (solutionBox) solutionBox.style.display = "none";
+    if (resultMessage) {
+        resultMessage.textContent = "";
+        resultMessage.className = "result-message";
+    }
 
     document.getElementById("views").textContent = q.views ?? 0;
     document.getElementById("likes").textContent = q.likes ?? 0;
     document.getElementById("comments").textContent = 0;
 
     const video = document.getElementById("videoContainer");
-
     if (q.youtube) {
-
-        video.innerHTML = `
-            <iframe
-                width="100%"
-                height="400"
-                src="https://www.youtube.com/embed/${q.youtube}"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
-        `;
-
+        video.innerHTML = `<iframe loading="lazy" title="Video solution" width="100%" height="300" src="https://www.youtube.com/embed/${q.youtube}" allowfullscreen></iframe>`;
     } else {
-
         video.innerHTML = "<p class='empty-state'>No video available.</p>";
-
     }
 
-    document.getElementById("prevQuestion").disabled =
-        currentIndex === 0;
-
-    document.getElementById("nextQuestion").disabled =
-        currentIndex === questions.length - 1;
+    const prevButton = document.getElementById("prevQuestion");
+    const nextButton = document.getElementById("nextQuestion");
+    if (prevButton) prevButton.disabled = currentIndex === 0;
+    if (nextButton) nextButton.disabled = currentIndex === questions.length - 1;
 
     loadComments();
 }
 
-document
-.getElementById("submitAnswer")
-.addEventListener("click", () => {
-
+document.getElementById("submitAnswer").addEventListener("click", () => {
     const q = questions[currentIndex];
 
     if (selectedAnswer === -1) {
-
-        alert("Please select an option.");
+        setFeedback("Please select an option.", "error");
         return;
-
     }
-
-    const result = document.getElementById("resultMessage");
 
     if (selectedAnswer === q.answer) {
-
-        result.innerHTML =
-            "✅ Correct Answer!";
-        result.className = "result-message success";
-
+        setFeedback("✅ Correct Answer!", "success");
     } else {
-
-        result.innerHTML =
-            `❌ Wrong Answer. Correct option is ${q.answer + 1}.`;
-        result.className = "result-message error";
-
+        setFeedback(`❌ Wrong Answer. Correct option is ${q.answer + 1}.`, "error");
     }
 
-    document.getElementById("solutionText").textContent =
-        q.solution;
-
-    document.getElementById("solutionBox").style.display =
-        "block";
-
+    const solution = document.getElementById("solutionText");
+    if (solution) solution.textContent = q.solution || "No solution available.";
+    const solutionBox = document.getElementById("solutionBox");
+    if (solutionBox) solutionBox.style.display = "block";
 });
 
-document
-document
-.getElementById("prevQuestion")
-.addEventListener("click", () => {
-
+document.getElementById("prevQuestion").addEventListener("click", () => {
     if (currentIndex > 0) {
-
         const prevQuestion = questions[currentIndex - 1];
-
-        window.location.href =
-            `question.html?id=${prevQuestion.docId}&subject=${encodeURIComponent(prevQuestion.subject)}&chapter=${encodeURIComponent(prevQuestion.chapter)}`;
-
+        window.location.href = `question.html?id=${prevQuestion.docId}&subject=${encodeURIComponent(prevQuestion.subject)}&chapter=${encodeURIComponent(prevQuestion.chapter)}`;
     }
-
 });
 
-document
-.getElementById("nextQuestion")
-.addEventListener("click", () => {
-
+document.getElementById("nextQuestion").addEventListener("click", () => {
     if (currentIndex < questions.length - 1) {
-
         const nextQuestion = questions[currentIndex + 1];
-
-        window.location.href =
-            `question.html?id=${nextQuestion.docId}&subject=${encodeURIComponent(nextQuestion.subject)}&chapter=${encodeURIComponent(nextQuestion.chapter)}`;
-
+        window.location.href = `question.html?id=${nextQuestion.docId}&subject=${encodeURIComponent(nextQuestion.subject)}&chapter=${encodeURIComponent(nextQuestion.chapter)}`;
     }
-
 });
 
 async function loadComments() {
-
     const q = questions[currentIndex];
-
     const comments = await getComments(q.docId);
-
     const list = document.getElementById("commentsList");
 
+    if (!list) return;
     list.innerHTML = "";
 
     comments.forEach(c => {
-
-        list.innerHTML += `
-            <div class="comment">
-                <strong>${c.name}</strong><br>
-                ${c.comment}
-                <hr>
-            </div>
-        `;
-
+        const item = document.createElement("div");
+        item.className = "comment";
+        item.innerHTML = `<strong>${c.name || "Anonymous"}</strong><br>${c.comment}`;
+        list.appendChild(item);
     });
-
 }
 
-document
-.getElementById("postComment")
-.addEventListener("click", async () => {
-
+document.getElementById("postComment").addEventListener("click", async () => {
     const q = questions[currentIndex];
+    const name = document.getElementById("commentName").value.trim() || "Anonymous";
+    const comment = document.getElementById("commentText").value.trim();
 
-    const name =
-        document.getElementById("commentName").value.trim() ||
-        "Anonymous";
-
-    const comment =
-        document.getElementById("commentText").value.trim();
-
-    if(comment===""){
-        alert("Write a comment.");
+    if (!comment) {
+        setCommentFeedback("Write a comment before posting.", "error");
         return;
     }
 
     await addComment({
-
         questionId: q.docId,
         name,
         comment,
         time: new Date()
-
     });
 
     document.getElementById("commentText").value = "";
-
+    setCommentFeedback("Comment posted.", "success");
     loadComments();
-
 });
+
 loadQuestion();

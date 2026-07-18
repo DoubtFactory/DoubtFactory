@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Panel | Doubt Factory</title>
-
+<meta name="description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
+<meta name="theme-color" content="#1565C0">
+<link rel="canonical" href="admin.html">
 <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -16,7 +18,7 @@
 
 <h2>Doubt Factory Admin</h2>
 
-<nav>
+<nav aria-label="Admin navigation">
 <a href="index.html">Home</a>
 <a href="admin.html">Admin</a>
 </nav>
@@ -76,6 +78,7 @@
 <h3>Basic Information</h3>
 
 <div class="form-grid">
+    <label class="sr-only" for="subject">Subject</label>
     <select id="subject" required>
     <option value="">Select Subject</option>
     <option>Physical Chemistry</option>
@@ -83,10 +86,12 @@
     <option>Inorganic Chemistry</option>
     </select>
 
+    <label class="sr-only" for="chapter">Chapter</label>
     <select id="chapter" required>
         <option value="">Select Chapter</option>
     </select>
 
+    <label class="sr-only" for="exam">Exam</label>
     <select id="exam" required>
     <option value="">Select Exam</option>
     <option>JEE Main</option>
@@ -94,8 +99,10 @@
     <option>NEET</option>
     </select>
 
+    <label class="sr-only" for="year">Year</label>
     <input type="number" id="year" placeholder="Year" required>
 
+    <label class="sr-only" for="difficulty">Difficulty</label>
     <select id="difficulty" required>
     <option value="">Difficulty</option>
     <option>Easy</option>
@@ -103,6 +110,7 @@
     <option>Hard</option>
     </select>
 
+    <label class="sr-only" for="type">Question type</label>
     <select id="type" required>
     <option value="">Question Type</option>
     <option>Single Correct</option>
@@ -116,20 +124,28 @@
 
 <h3>Question Content</h3>
 
+<label class="sr-only" for="question">Question</label>
 <textarea id="question" rows="5" placeholder="Enter Question" required></textarea>
 
 <div class="form-grid">
+<label class="sr-only" for="optionA">Option A</label>
 <input type="text" id="optionA" placeholder="Option A">
+<label class="sr-only" for="optionB">Option B</label>
 <input type="text" id="optionB" placeholder="Option B">
+<label class="sr-only" for="optionC">Option C</label>
 <input type="text" id="optionC" placeholder="Option C">
+<label class="sr-only" for="optionD">Option D</label>
 <input type="text" id="optionD" placeholder="Option D">
 </div>
 
 <div class="form-grid">
+<label class="sr-only" for="answer">Correct option index</label>
 <input type="number" id="answer" placeholder="Correct Option Index (0-3)">
+<label class="sr-only" for="youtube">YouTube video URL</label>
 <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
 </div>
 
+<label class="sr-only" for="solution">Solution</label>
 <textarea id="solution" rows="5" placeholder="Solution"></textarea>
 
 <div class="form-actions">

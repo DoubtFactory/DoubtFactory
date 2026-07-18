@@ -5,8 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Doubt Factory</title>
-
+<title>Doubt Factory | Chemistry Practice for JEE & NEET</title>
+<meta name="description" content="Doubt Factory is a modern chemistry practice platform for JEE and NEET students with topic-wise questions, explanations, and video support.">
+<meta name="theme-color" content="#1565C0">
+<link rel="canonical" href="index.html">
 <link rel="stylesheet" href="css/main.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +30,7 @@
 
 </div>
 
-<nav>
+<nav aria-label="Primary navigation">
     <a href="index.html">Home</a>
     <a href="exam.html">Exams</a>
     <a href="subject.html">Subjects</a>
@@ -51,18 +53,18 @@
 Practice thousands of carefully selected Chemistry questions with clear explanations, video support, and exam-focused practice.
 </p>
 
-<div class="search-box">
-
+<form class="search-box" role="search">
+<label class="sr-only" for="homeSearch">Search chemistry questions</label>
 <input
+    id="homeSearch"
     type="text"
     placeholder="Search Chemistry Questions..."
+    aria-label="Search chemistry questions"
 >
-
-<button type="button">
+<button type="submit" aria-label="Search chemistry questions">
 Search
 </button>
-
-</div>
+</form>
 
 <div class="hero-highlights">
 <div>

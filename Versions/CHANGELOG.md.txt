@@ -1,5 +1,13 @@
 # Doubt Factory Changelog
 
+## v1.5.0
+- Improved mobile responsiveness across the home, question, search, and admin pages
+- Enhanced touch targets, spacing, typography, and keyboard accessibility
+- Added clearer focus states, labels, and ARIA-friendly feedback for forms and search
+- Improved performance by reducing unnecessary DOM updates and using document fragments
+- Added lazy loading for embedded video content and better empty/loading states
+- Polished navigation, semantic structure, meta tags, and canonical links for launch readiness
+
 ## v1.4.0
 - Added a more professional admin dashboard experience
 - Introduced a sidebar-based layout with mobile-friendly behavior
