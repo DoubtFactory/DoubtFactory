@@ -9,26 +9,40 @@
 <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body>
+<body class="admin-page">
 
 <header class="navbar">
-<div class="container">
+<div class="container admin-nav">
 
 <h2>Doubt Factory Admin</h2>
 
 <nav>
-
 <a href="index.html">Home</a>
 <a href="admin.html">Admin</a>
-
 </nav>
 
 </div>
 </header>
 
-<main class="container">
+<main class="container admin-shell">
 
-<h1>Add New Question</h1>
+<aside class="admin-sidebar">
+    <h3>Admin Tools</h3>
+    <a href="#formSection">Create Question</a>
+    <a href="#tableSection">Manage Questions</a>
+    <a href="#previewSection">Preview</a>
+</aside>
+
+<section class="admin-main">
+
+<div class="admin-topbar">
+    <div>
+        <p class="admin-eyebrow">Content Studio</p>
+        <h1>Add New Question</h1>
+    </div>
+    <div class="admin-status" id="saveStatus">Draft ready</div>
+</div>
+
 <section class="admin-dashboard">
 
     <div class="dashboard-card">
@@ -53,115 +67,97 @@
 
 </section>
 
-<form id="questionForm">
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<section class="admin-grid" id="formSection">
+
+<form id="questionForm" class="admin-form-card">
 
 <h3>Basic Information</h3>
 
-<select id="subject" required>
+<div class="form-grid">
+    <select id="subject" required>
+    <option value="">Select Subject</option>
+    <option>Physical Chemistry</option>
+    <option>Organic Chemistry</option>
+    <option>Inorganic Chemistry</option>
+    </select>
 
-<option value="">Select Subject</option>
+    <select id="chapter" required>
+        <option value="">Select Chapter</option>
+    </select>
 
-<option>Physical Chemistry</option>
+    <select id="exam" required>
+    <option value="">Select Exam</option>
+    <option>JEE Main</option>
+    <option>JEE Advanced</option>
+    <option>NEET</option>
+    </select>
 
-<option>Organic Chemistry</option>
+    <input type="number" id="year" placeholder="Year" required>
 
-<option>Inorganic Chemistry</option>
+    <select id="difficulty" required>
+    <option value="">Difficulty</option>
+    <option>Easy</option>
+    <option>Medium</option>
+    <option>Hard</option>
+    </select>
 
-</select>
+    <select id="type" required>
+    <option value="">Question Type</option>
+    <option>Single Correct</option>
+    <option>Multiple Correct</option>
+    <option>Integer Type</option>
+    <option>Assertion Reason</option>
+    <option>Match the Column</option>
+    <option>Paragraph Based</option>
+    </select>
+</div>
 
-<select id="chapter" required>
+<h3>Question Content</h3>
 
-    <option value="">Select Chapter</option>
+<textarea id="question" rows="5" placeholder="Enter Question" required></textarea>
 
-</select>
-
-<select id="exam" required>
-
-<option value="">Select Exam</option>
-
-<option>JEE Main</option>
-
-<option>JEE Advanced</option>
-
-<option>NEET</option>
-
-</select>
-
-<input type="number" id="year" placeholder="Year" required>
-
-<select id="difficulty" required>
-
-<option value="">Difficulty</option>
-
-<option>Easy</option>
-
-<option>Medium</option>
-
-<option>Hard</option>
-
-</select>
-
-<select id="type" required>
-
-<option value="">Question Type</option>
-
-<option>Single Correct</option>
-
-<option>Multiple Correct</option>
-
-<option>Integer Type</option>
-
-<option>Assertion Reason</option>
-
-<option>Match the Column</option>
-
-<option>Paragraph Based</option>
-
-</select>
-
-<hr>
-
-<h3>Question</h3>
-
-<textarea
-id="question"
-rows="5"
-placeholder="Enter Question"
-required></textarea>
-
+<div class="form-grid">
 <input type="text" id="optionA" placeholder="Option A">
-
 <input type="text" id="optionB" placeholder="Option B">
-
 <input type="text" id="optionC" placeholder="Option C">
-
 <input type="text" id="optionD" placeholder="Option D">
+</div>
 
-<input type="number" id="answer"
-placeholder="Correct Option Index (0-3)">
+<div class="form-grid">
+<input type="number" id="answer" placeholder="Correct Option Index (0-3)">
+<input type="url" id="youtube" placeholder="Paste YouTube Video URL">
+</div>
 
-<textarea
-id="solution"
-rows="5"
-placeholder="Solution"></textarea>
+<textarea id="solution" rows="5" placeholder="Solution"></textarea>
 
-<input
-type="url"
-id="youtube"
-placeholder="Paste YouTube Video URL">
+<div class="form-actions">
+<button type="submit" id="saveButton">Save Question</button>
+<button type="button" id="clearButton">Clear</button>
+</div>
 
-<button type="submit">
-
-Save Question
-
-</button>
+<div id="formError" class="form-error"></div>
 
 </form>
-<hr>
 
+<section class="preview-card" id="previewSection">
+<h3>Live Preview</h3>
+<div id="previewCard" class="question-preview">
+    <div class="question-header">
+        <span class="exam-tag" id="previewExam">Exam</span>
+        <span class="chapter-tag" id="previewChapter">Chapter</span>
+        <span class="difficulty medium" id="previewDifficulty">Difficulty</span>
+    </div>
+    <h3 id="previewQuestion">Your question will appear here...</h3>
+</div>
+</section>
+
+</section>
+
+<section class="table-card" id="tableSection">
 <h2>All Questions</h2>
-
-<table id="questionsTable" border="1" width="100%" cellspacing="0" cellpadding="8">
+<table id="questionsTable" class="question-table">
     <thead>
         <tr>
             <th>Exam</th>
@@ -170,41 +166,16 @@ Save Question
             <th>Action</th>
         </tr>
     </thead>
-
-    <tbody id="questionsTableBody">
-
-    </tbody>
-
+    <tbody id="questionsTableBody"></tbody>
 </table>
+</section>
 
+<section class="json-card">
 <h2>Generated JSON</h2>
-
 <pre id="output"></pre>
+</section>
 
-<hr>
-
-<h2>Live Preview</h2>
-
-<div id="previewCard" class="question-preview">
-
-    <div class="question-header">
-
-        <span class="exam-tag" id="previewExam">Exam</span>
-
-        <span class="chapter-tag" id="previewChapter">Chapter</span>
-
-        <span class="difficulty medium" id="previewDifficulty">
-            Difficulty
-        </span>
-
-    </div>
-
-    <h3 id="previewQuestion">
-        Your question will appear here...
-    </h3>
-
-</div>
-
+</section>
 </main>
 
 <script type="module" src="js/admin.js"></script>

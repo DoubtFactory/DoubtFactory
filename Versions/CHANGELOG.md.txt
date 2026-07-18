@@ -1,5 +1,14 @@
 # Doubt Factory Changelog
 
+## v1.4.0
+- Added a more professional admin dashboard experience
+- Introduced a sidebar-based layout with mobile-friendly behavior
+- Improved form organization with clearer cards and sections
+- Added a live preview panel for question creation
+- Added autosave draft support in localStorage
+- Added form validation and toast-style notifications
+- Added loading feedback while saving and better delete confirmation
+
 ## v1.3.0
 - Added a more professional and responsive search experience
 - Introduced instant search with debounce input
