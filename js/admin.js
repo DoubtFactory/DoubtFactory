@@ -475,3 +475,16 @@ if (logoutBtn) {
     });
 }
 console.log("admin.js loaded");
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            window.location.href = "login.html";
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
+    });
+}
