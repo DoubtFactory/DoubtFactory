@@ -100,8 +100,6 @@ if (homeSearchForm && homeSearchInput) {
    homeSearchForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    alert("Search button clicked");
-
     const keyword = homeSearchInput.value.trim();
 
    window.location.href = "search.html";
