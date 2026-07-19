@@ -1,6 +1,7 @@
 import {
     auth,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "./firebase.js";
 
 onAuthStateChanged(auth, (user) => {
