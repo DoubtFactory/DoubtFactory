@@ -1,7 +1,15 @@
 import {
     auth,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    onAuthStateChanged
 } from "./firebase.js";
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+        window.location.href = "admin.html";
+    }
+
+});
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
