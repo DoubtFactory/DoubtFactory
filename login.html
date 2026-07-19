@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Doubt Factory</title>
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,Helvetica,sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#0f62fe,#3b82f6);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-card{
+            width:420px;
+            background:#fff;
+            padding:40px;
+            border-radius:18px;
+            box-shadow:0 20px 50px rgba(0,0,0,.25);
+        }
+
+        h1{
+            text-align:center;
+            color:#0f62fe;
+            margin-bottom:10px;
+        }
+
+        p{
+            text-align:center;
+            color:#666;
+            margin-bottom:30px;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            margin-bottom:18px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            font-size:16px;
+        }
+
+        button{
+            width:100%;
+            padding:15px;
+            border:none;
+            border-radius:10px;
+            background:#0f62fe;
+            color:white;
+            font-size:17px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0047c6;
+        }
+
+        #error{
+            color:red;
+            margin-top:15px;
+            text-align:center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+<h1>Doubt Factory</h1>
+
+<p>Administrator Login</p>
+
+<input
+id="email"
+type="email"
+placeholder="Email">
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+<button id="loginBtn">
+Login
+</button>
+
+<div id="error"></div>
+
+</div>
+
+<script type="module" src="js/login.js"></script>
+
+</body>
+</html>
