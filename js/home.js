@@ -96,13 +96,13 @@ const homeSearchForm = document.querySelector(".search-box");
 const homeSearchInput = document.getElementById("homeSearch");
 
 if (homeSearchForm && homeSearchInput) {
+    homeSearchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-   homeSearchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+        const keyword = homeSearchInput.value.trim();
 
-    const keyword = homeSearchInput.value.trim();
+        if (!keyword) return;
 
-   window.location.href = "search.html";
-});
-
+        window.location.href = `search.html?q=${encodeURIComponent(keyword)}`;
+    });
 }
