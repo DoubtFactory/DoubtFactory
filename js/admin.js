@@ -459,21 +459,6 @@ loadDraft();
 updateDashboard();
 loadQuestionsTable();
 
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-        try {
-            await signOut(auth);
-
-            sessionStorage.removeItem("adminLoggedIn");
-
-            window.location.href = "login.html";
-        } catch (error) {
-            alert(error.message);
-        }
-    });
-}
 console.log("admin.js loaded");
 const logoutBtn = document.getElementById("logoutBtn");
 
