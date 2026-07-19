@@ -1,3 +1,4 @@
+import { uploadImage } from "./cloudinary.js";
 import { getQuestions } from "./firebase.js";
 import {
     auth,
@@ -227,27 +228,63 @@ subjectSelect.addEventListener("change", () => {
 });
 
 function collectFormData() {
+
     return {
+
         id: Date.now(),
+
         subject: document.getElementById("subject").value,
+
         chapter: document.getElementById("chapter").value,
+
         exam: document.getElementById("exam").value,
+
         year: Number(document.getElementById("year").value),
+
         difficulty: document.getElementById("difficulty").value,
+
         type: document.getElementById("type").value,
+
         question: document.getElementById("question").value,
+
+        // NEW
+        questionImage: document.getElementById("questionImage").value,
+
         options: [
             document.getElementById("optionA").value,
             document.getElementById("optionB").value,
             document.getElementById("optionC").value,
             document.getElementById("optionD").value
         ],
+
+        // NEW
+        optionImages: {
+
+            A: document.getElementById("optionAImage").value,
+
+            B: document.getElementById("optionBImage").value,
+
+            C: document.getElementById("optionCImage").value,
+
+            D: document.getElementById("optionDImage").value
+
+        },
+
         answer: Number(document.getElementById("answer").value),
+
         solution: document.getElementById("solution").value,
+
+        // NEW
+        solutionImage: document.getElementById("solutionImage").value,
+
         youtube: extractVideoId(document.getElementById("youtube").value),
+
         views: 0,
+
         likes: 0
+
     };
+
 }
 
 function validateForm() {
@@ -473,3 +510,30 @@ if (logoutBtn) {
         }
     });
 }
+function connectUploader(buttonId, inputId) {
+
+    const button = document.getElementById(buttonId);
+    const input = document.getElementById(inputId);
+
+    if (!button || !input) return;
+
+    button.addEventListener("click", () => {
+
+        uploadImage((url) => {
+
+            input.value = url;
+
+        });
+
+    });
+
+}
+
+connectUploader("uploadQuestionImage", "questionImage");
+
+connectUploader("uploadOptionAImage", "optionAImage");
+connectUploader("uploadOptionBImage", "optionBImage");
+connectUploader("uploadOptionCImage", "optionCImage");
+connectUploader("uploadOptionDImage", "optionDImage");
+
+connectUploader("uploadSolutionImage", "solutionImage");
