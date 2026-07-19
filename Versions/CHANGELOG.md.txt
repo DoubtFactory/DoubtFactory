@@ -1,12 +1,12 @@
 # Doubt Factory Changelog
 
-## v1.5.0
-- Improved mobile responsiveness across the home, question, search, and admin pages
-- Enhanced touch targets, spacing, typography, and keyboard accessibility
-- Added clearer focus states, labels, and ARIA-friendly feedback for forms and search
-- Improved performance by reducing unnecessary DOM updates and using document fragments
-- Added lazy loading for embedded video content and better empty/loading states
-- Polished navigation, semantic structure, meta tags, and canonical links for launch readiness
+## Version 1.5
+- Professional Manage Questions dashboard experience
+- Better table presentation with stronger visual hierarchy
+- Added instant search, filtering, sorting, and pagination
+- Added loading state, empty state, and responsive dashboard layout
+- Improved management workflow with preview, edit, and delete actions
+- Added toast notifications and a delete confirmation modal
 
 ## v1.4.0
 - Added a more professional admin dashboard experience

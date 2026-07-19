@@ -29,46 +29,110 @@
 
 </header>
 
-<main class="container">
+<main class="container manage-shell">
 
-<h1>Manage Questions</h1>
+<section class="manage-dashboard-card">
 
-<input
-type="text"
-id="searchBox"
-placeholder="Search by question, chapter or exam...">
+<div class="manage-toolbar">
+    <div>
+        <p class="manage-eyebrow">Content Studio</p>
+        <h1>Manage Questions</h1>
+    </div>
 
-<table class="question-table">
+    <div class="manage-toolbar-actions">
+        <div class="manage-count-pill">Total <strong id="questionCount">0</strong></div>
+        <button type="button" class="manage-refresh-btn" id="refreshButton">Refresh</button>
+    </div>
+</div>
 
-<thead>
+<div class="manage-search-row">
+    <label class="sr-only" for="searchBox">Search questions</label>
+    <input
+        type="text"
+        id="searchBox"
+        placeholder="Search by question, subject, chapter, or exam...">
+</div>
 
-<tr>
+<div class="manage-filters">
+    <label class="manage-filter-field">
+        <span>Subject</span>
+        <select id="filterSubject">
+            <option value="All">All Subjects</option>
+        </select>
+    </label>
 
-<th>ID</th>
+    <label class="manage-filter-field">
+        <span>Chapter</span>
+        <select id="filterChapter">
+            <option value="All">All Chapters</option>
+        </select>
+    </label>
 
-<th>Exam</th>
+    <label class="manage-filter-field">
+        <span>Exam</span>
+        <select id="filterExam">
+            <option value="All">All Exams</option>
+        </select>
+    </label>
 
-<th>Chapter</th>
+    <label class="manage-filter-field">
+        <span>Type</span>
+        <select id="filterType">
+            <option value="All">All Types</option>
+        </select>
+    </label>
+</div>
 
-<th>Year</th>
+<div class="manage-table-card">
+    <div class="manage-table-meta">
+        <p class="manage-table-caption">Review, filter, and manage your chemistry question bank.</p>
+        <div class="manage-table-status" id="tableStatus">Loading questions...</div>
+    </div>
 
-<th>Difficulty</th>
+    <div class="manage-table-wrap">
+        <div id="tableLoading" class="manage-empty manage-loading" role="status">Loading questions...</div>
 
-<th>Question</th>
+        <table class="question-table">
+            <thead>
+                <tr>
+                    <th><button type="button" class="sort-btn" data-sort="question">Question</button></th>
+                    <th><button type="button" class="sort-btn" data-sort="subject">Subject</button></th>
+                    <th><button type="button" class="sort-btn" data-sort="chapter">Chapter</button></th>
+                    <th><button type="button" class="sort-btn" data-sort="exam">Exam</button></th>
+                    <th><button type="button" class="sort-btn" data-sort="type">Type</button></th>
+                    <th><button type="button" class="sort-btn" data-sort="year">Date</button></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="questionTableBody"></tbody>
+        </table>
+    </div>
 
-<th>Actions</th>
+    <div id="tableEmptyState" class="manage-empty" hidden>
+        <div class="manage-empty-icon">📭</div>
+        <h3>No questions found</h3>
+        <p>Try adjusting your search or filters to view more results.</p>
+    </div>
 
-</tr>
+    <div class="manage-pagination" id="paginationControls"></div>
+</div>
 
-</thead>
-
-<tbody id="questionTableBody">
-
-</tbody>
-
-</table>
+</section>
 
 </main>
+
+<div class="manage-modal-backdrop" id="deleteModal" hidden>
+    <div class="manage-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <h3 id="modalTitle">Delete question?</h3>
+        <p id="deleteModalText">This action will remove the question from the current list.</p>
+        <div class="manage-modal-actions">
+            <button type="button" class="manage-cancel-btn" id="cancelDeleteButton">Cancel</button>
+            <button type="button" class="manage-delete-btn" id="confirmDeleteButton">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="manage-toast" id="manageToast" aria-live="polite"></div>
 
 <script src="js/manage.js"></script>
 

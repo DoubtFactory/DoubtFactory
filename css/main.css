@@ -1409,83 +1409,324 @@ nav a{
    Manage Questions
 =========================== */
 
-.question-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    margin-top:30px;
-
-    background:#fff;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-
+.manage-shell{
+    padding:32px 20px 50px;
 }
 
-.question-table th,
-.question-table td{
-
-    padding:15px;
-
-    border-bottom:1px solid #eee;
-
-    text-align:left;
-
+.manage-dashboard-card{
+    background:linear-gradient(135deg,#ffffff 0%,#f8fbff 100%);
+    border-radius:24px;
+    padding:24px;
+    box-shadow:0 20px 45px rgba(15,23,42,.08);
 }
 
-.question-table th{
-
-    background:#1565C0;
-
-    color:white;
-
+.manage-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px;
 }
 
-.question-table tr:hover{
-
-    background:#f5f7fb;
-
+.manage-eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.78rem;
+    color:#2563eb;
+    font-weight:700;
+    margin-bottom:6px;
 }
 
-#searchBox{
-
-    width:100%;
-
-    padding:15px;
-
-    margin-top:20px;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-    font-size:16px;
-
+.manage-toolbar h1{
+    color:#0f172a;
+    font-size:1.9rem;
 }
-.delete-btn{
 
-    background:#dc2626;
+.manage-toolbar-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-    color:white;
-
+.manage-count-pill,
+.manage-refresh-btn,
+.manage-action-btn,
+.manage-delete-btn,
+.manage-cancel-btn,
+.page-btn,
+.sort-btn{
     border:none;
-
-    padding:8px 14px;
-
-    border-radius:8px;
-
+    border-radius:999px;
+    font-weight:700;
     cursor:pointer;
-
-    font-size:14px;
-
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
-.delete-btn:hover{
-
-    background:#b91c1c;
-
+.manage-count-pill{
+    background:#eff6ff;
+    color:#2563eb;
+    padding:10px 14px;
 }
+
+.manage-refresh-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:10px 16px;
+}
+
+.manage-refresh-btn:hover,
+.manage-action-btn:hover,
+.manage-delete-btn:hover,
+.manage-cancel-btn:hover,
+.page-btn:hover,
+.sort-btn:hover{
+    transform:translateY(-1px);
+}
+
+.manage-search-row{
+    margin-bottom:16px;
+}
+
+.manage-shell #searchBox{
+    width:100%;
+    padding:14px 16px;
+    border:1px solid #dbeafe;
+    border-radius:14px;
+    font-size:16px;
+    background:#fff;
+}
+
+.manage-filters{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.manage-filter-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    color:#475569;
+    font-size:.95rem;
+}
+
+.manage-filter-field select{
+    padding:10px 12px;
+    border:1px solid #dbeafe;
+    border-radius:12px;
+    background:#fff;
+    color:#0f172a;
+}
+
+.manage-table-card{
+    background:#fff;
+    border-radius:20px;
+    border:1px solid #e2e8f0;
+    padding:18px;
+}
+
+.manage-table-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.manage-table-caption{
+    color:#64748b;
+    font-size:.95rem;
+}
+
+.manage-table-status{
+    color:#2563eb;
+    font-weight:700;
+    font-size:.95rem;
+}
+
+.manage-shell .question-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+.manage-shell .question-table th,
+.manage-shell .question-table td{
+    padding:14px 12px;
+    border-bottom:1px solid #e2e8f0;
+    text-align:left;
+    vertical-align:top;
+}
+
+.manage-shell .question-table th{
+    background:#f8fbff;
+    color:#0f172a;
+    font-size:.92rem;
+}
+
+.manage-shell .question-table tr:hover{
+    background:#f8fbff;
+}
+
+.manage-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.manage-action-btn{
+    padding:8px 12px;
+    font-size:.85rem;
+    color:#0f172a;
+    background:#f8fafc;
+}
+
+.manage-action-btn.preview-btn{
+    background:#eff6ff;
+    color:#2563eb;
+}
+
+.manage-action-btn.edit-btn{
+    background:#fef3c7;
+    color:#b45309;
+}
+
+.manage-shell .delete-btn{
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:8px 12px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.manage-empty{
+    background:#f8fbff;
+    border:1px dashed #cbd5e1;
+    border-radius:16px;
+    padding:28px;
+    text-align:center;
+    color:#64748b;
+}
+
+.manage-empty-icon{
+    font-size:2rem;
+    margin-bottom:8px;
+}
+
+.manage-loading{
+    color:#2563eb;
+    font-weight:700;
+}
+
+.manage-pagination{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:16px;
+    flex-wrap:wrap;
+}
+
+.page-btn{
+    padding:8px 12px;
+    background:#f8fafc;
+    color:#0f172a;
+}
+
+.page-btn.active{
+    background:#2563eb;
+    color:#fff;
+}
+
+.page-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.sort-btn{
+    background:transparent;
+    color:inherit;
+    padding:0;
+}
+
+.manage-modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1200;
+}
+
+.manage-modal{
+    width:min(420px,100%);
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 20px 50px rgba(15,23,42,.2);
+}
+
+.manage-modal h3{
+    margin-bottom:8px;
+    color:#0f172a;
+}
+
+.manage-modal p{
+    color:#64748b;
+    margin-bottom:18px;
+}
+
+.manage-modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+
+.manage-cancel-btn{
+    padding:10px 14px;
+    background:#f1f5f9;
+    color:#334155;
+}
+
+.manage-delete-btn{
+    padding:10px 14px;
+    background:#dc2626;
+    color:#fff;
+}
+
+.manage-toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    padding:12px 16px;
+    border-radius:999px;
+    color:#fff;
+    background:#0f172a;
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    z-index:1300;
+}
+
+.manage-toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.manage-toast.success{
+    background:#15803d;
+}
+
+.manage-toast.error{
+    background:#dc2626;
+}
+
 /* ==========================
    Mobile Responsive
 ========================== */
