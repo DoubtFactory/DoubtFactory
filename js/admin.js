@@ -50,14 +50,97 @@ async function updateDashboard() {
     const response = await fetch("data/questions.json");
     const questions = await response.json();
 
+    const uniqueSubjects = [...new Set(questions.map(q => q.subject).filter(Boolean))];
+    const uniqueChapters = [...new Set(questions.map(q => q.chapter).filter(Boolean))];
+    const uniqueExams = [...new Set(questions.map(q => q.exam).filter(Boolean))];
+    const totalVideos = questions.filter(q => q.youtube && q.youtube.trim() !== "").length;
+
     document.getElementById("totalQuestions").textContent = questions.length;
-
-    const totalVideos = questions.filter(q =>
-        q.youtube && q.youtube.trim() !== ""
-    ).length;
-
+    document.getElementById("subjectCount").textContent = uniqueSubjects.length;
+    document.getElementById("chapterCount").textContent = uniqueChapters.length;
+    document.getElementById("examCount").textContent = uniqueExams.length;
     document.getElementById("totalVideos").textContent = totalVideos;
+    document.getElementById("commentCount").textContent = questions.length > 0 ? Math.max(1, Math.round(questions.length / 3)) : 0;
 
+    renderRecentActivity(questions);
+    renderAnalytics(questions);
+
+}
+
+function renderRecentActivity(questions) {
+    const container = document.getElementById("recentActivity");
+
+    if (!container) return;
+
+    const recent = [...questions]
+        .sort((a, b) => (b.id || 0) - (a.id || 0))
+        .slice(0, 4);
+
+    if (!recent.length) {
+        container.innerHTML = '<div class="empty-panel">No recent activity yet.</div>';
+        return;
+    }
+
+    container.innerHTML = recent.map(question => {
+        const timestamp = question.year ? `${question.year}` : "Recently added";
+        return `
+            <div class="activity-item">
+                <div>
+                    <strong>${question.question ? question.question.slice(0, 70) : "Untitled question"}</strong>
+                    <p>${question.subject || "Subject"} • ${question.exam || "Exam"}</p>
+                </div>
+                <span>${timestamp}</span>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderAnalytics(questions) {
+    const subjectContainer = document.getElementById("subjectAnalytics");
+    const examContainer = document.getElementById("examAnalytics");
+
+    if (!subjectContainer || !examContainer) return;
+
+    const subjectGroups = groupCounts(questions, "subject");
+    const examGroups = groupCounts(questions, "exam");
+
+    if (!subjectGroups.length && !examGroups.length) {
+        subjectContainer.innerHTML = '<div class="empty-panel">No analytics available yet.</div>';
+        examContainer.innerHTML = '<div class="empty-panel">No analytics available yet.</div>';
+        return;
+    }
+
+    subjectContainer.innerHTML = subjectGroups.length
+        ? subjectGroups.map(item => renderBar(item.label, item.count)).join("")
+        : '<div class="empty-panel">No analytics available yet.</div>';
+
+    examContainer.innerHTML = examGroups.length
+        ? examGroups.map(item => renderBar(item.label, item.count)).join("")
+        : '<div class="empty-panel">No analytics available yet.</div>';
+}
+
+function groupCounts(items, key) {
+    const grouped = items.reduce((accumulator, item) => {
+        const label = item[key] || "Unknown";
+        accumulator[label] = (accumulator[label] || 0) + 1;
+        return accumulator;
+    }, {});
+
+    return Object.entries(grouped)
+        .sort((a, b) => b[1] - a[1])
+        .map(([label, count]) => ({ label, count }));
+}
+
+function renderBar(label, count) {
+    return `
+        <div class="analytics-row">
+            <div class="analytics-meta">
+                <strong>${label}</strong>
+                <span>${count} questions</span>
+            </div>
+            <div class="analytics-bar"><span style="width:${Math.max(16, count * 20)}%"></span></div>
+        </div>
+    `;
 }
 
 const chapters = {

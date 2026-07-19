@@ -1,5 +1,13 @@
 # Doubt Factory Changelog
 
+## Version 1.6
+- Analytics Dashboard for the admin experience
+- Added dashboard statistics for questions, subjects, chapters, exams, videos, and comments
+- Added recent activity feed using the existing question data
+- Added quick action cards for adding, managing, browsing, and searching questions
+- Added lightweight analytics sections for questions by subject and exam
+- Improved responsive admin layout and overview experience
+
 ## Version 1.5
 - Professional Manage Questions dashboard experience
 - Better table presentation with stronger visual hierarchy
