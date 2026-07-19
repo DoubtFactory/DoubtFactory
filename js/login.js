@@ -10,13 +10,13 @@ const error = document.getElementById("error");
 
 loginBtn.addEventListener("click", async () => {
 
-    error.textContent = "";
+    error.innerHTML = "";
 
     try {
 
         await signInWithEmailAndPassword(
             auth,
-            email.value.trim(),
+            email.value,
             password.value
         );
 
@@ -24,10 +24,7 @@ loginBtn.addEventListener("click", async () => {
 
     } catch (err) {
 
-        console.error(err);
-
-        error.textContent =
-            "Invalid email or password.";
+        error.innerHTML = err.message;
 
     }
 
