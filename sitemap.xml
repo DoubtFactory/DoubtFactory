@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://doubtfactory.example.com/index.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://doubtfactory.example.com/exam.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://doubtfactory.example.com/subject.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://doubtfactory.example.com/questions.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://doubtfactory.example.com/question.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://doubtfactory.example.com/search.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/</loc>
+</url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/search.html</loc>
+</url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/subject.html</loc>
+</url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/chapter.html</loc>
+</url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/questions.html</loc>
+</url>
+
+<url>
+<loc>https://DoubtFactory.github.io/DoubtFactory/login.html</loc>
+</url>
+
 </urlset>
