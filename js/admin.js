@@ -457,3 +457,20 @@ clearButton.addEventListener("click", clearDraft);
 loadDraft();
 updateDashboard();
 loadQuestionsTable();
+import { auth, signOut } from "./firebase.js";
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+
+            sessionStorage.removeItem("adminLoggedIn");
+
+            window.location.href = "login.html";
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+}
