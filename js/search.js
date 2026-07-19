@@ -22,6 +22,7 @@ async function load() {
         '<div class="empty-state loading">Loading questions…</div>';
 
     questions = await getQuestions();
+console.log("Questions loaded:", questions);
 
     if (searchBox && initialQuery) {
         searchBox.value = initialQuery;
