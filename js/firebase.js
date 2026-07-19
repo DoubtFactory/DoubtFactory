@@ -1,6 +1,11 @@
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import {
     getFirestore,
     collection,
@@ -24,6 +29,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
+export const auth = getAuth(app);
+
+export {
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+};
 export async function getQuestions() {
 
     const snapshot = await getDocs(collection(db, "questions"));
