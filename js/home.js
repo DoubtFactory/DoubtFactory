@@ -97,19 +97,18 @@ const homeSearchInput = document.getElementById("homeSearch");
 
 if (homeSearchForm && homeSearchInput) {
 
-    homeSearchForm.addEventListener("submit", (e) => {
+   homeSearchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-        e.preventDefault();
+    alert("Search button clicked");
 
-        const keyword = homeSearchInput.value.trim();
+    const keyword = homeSearchInput.value.trim();
 
-        if (keyword) {
-            window.location.href =
-                `search.html?q=${encodeURIComponent(keyword)}`;
-        } else {
-            window.location.href = "search.html";
-        }
-
-    });
+    if (keyword) {
+        window.location.href = `search.html?q=${encodeURIComponent(keyword)}`;
+    } else {
+        window.location.href = "search.html";
+    }
+});
 
 }
