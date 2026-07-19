@@ -21,6 +21,7 @@
 </head>
 
 <body class="admin-page">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header class="navbar">
 <div class="container admin-nav">
@@ -35,16 +36,16 @@
 </div>
 </header>
 
-<main class="container admin-shell">
+<main id="mainContent" class="container admin-shell">
 
-<aside class="admin-sidebar">
+<aside class="admin-sidebar" aria-label="Admin tools">
     <h3>Admin Tools</h3>
     <a href="#formSection">Create Question</a>
     <a href="#tableSection">Manage Questions</a>
     <a href="#previewSection">Preview</a>
 </aside>
 
-<section class="admin-main">
+<section class="admin-main" aria-label="Admin workspace">
 
 <div class="admin-topbar">
     <div>
@@ -54,7 +55,7 @@
     <div class="admin-status" id="saveStatus">Draft ready</div>
 </div>
 
-<section class="admin-dashboard">
+<section class="admin-dashboard" aria-label="Admin overview statistics">
 
     <div class="dashboard-card">
         <div class="dashboard-icon">📝</div>
@@ -137,9 +138,9 @@
 
 <div id="toast" class="toast" aria-live="polite"></div>
 
-<section class="admin-grid" id="formSection">
+<section class="admin-grid" id="formSection" aria-label="Question creation and preview">
 
-<form id="questionForm" class="admin-form-card">
+<form id="questionForm" class="admin-form-card" aria-label="Create a question">
 
 <h3>Basic Information</h3>
 
@@ -237,9 +238,9 @@
 
 </section>
 
-<section class="table-card" id="tableSection">
-<h2>All Questions</h2>
-<table id="questionsTable" class="question-table">
+<section class="table-card" id="tableSection" aria-labelledby="questionsTableHeading">
+<h2 id="questionsTableHeading">All Questions</h2>
+<table id="questionsTable" class="question-table" aria-label="Question list">
     <thead>
         <tr>
             <th>Exam</th>
@@ -252,8 +253,8 @@
 </table>
 </section>
 
-<section class="json-card">
-<h2>Generated JSON</h2>
+<section class="json-card" aria-labelledby="jsonHeading">
+<h2 id="jsonHeading">Generated JSON</h2>
 <pre id="output"></pre>
 </section>
 

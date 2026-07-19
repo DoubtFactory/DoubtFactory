@@ -19,13 +19,14 @@
 </head>
 
 <body>
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header class="navbar">
 <div class="container">
 
 <h2>Doubt Factory</h2>
 
-<nav>
+<nav aria-label="Primary navigation">
 <a href="index.html">Home</a>
 <a href="exam.html">Exams</a>
 <a href="subject.html">Subjects</a>
@@ -35,24 +36,27 @@
 </div>
 </header>
 
-<main class="container">
+<main id="mainContent" class="container">
 
     <h1 id="chapterTitle">Loading...</h1>
 
-    <div class="filters">
+    <div class="filters" aria-label="Question filters">
 
-        <select id="examFilter">
+        <label class="sr-only" for="examFilter">Filter by exam</label>
+        <select id="examFilter" aria-label="Filter by exam">
             <option value="All">All Exams</option>
             <option>JEE Main</option>
             <option>JEE Advanced</option>
             <option>NEET</option>
         </select>
 
-        <select id="yearFilter">
+        <label class="sr-only" for="yearFilter">Filter by year</label>
+        <select id="yearFilter" aria-label="Filter by year">
             <option value="All">All Years</option>
         </select>
 
-        <select id="difficultyFilter">
+        <label class="sr-only" for="difficultyFilter">Filter by difficulty</label>
+        <select id="difficultyFilter" aria-label="Filter by difficulty">
             <option value="All">All Difficulty</option>
             <option>Easy</option>
             <option>Medium</option>
@@ -61,11 +65,13 @@
 
     </div>
 
+    <label class="sr-only" for="searchQuestion">Search questions in this chapter</label>
     <input
         type="text"
         id="searchQuestion"
         class="search-question"
-        placeholder="🔍 Search questions in this chapter...">
+        placeholder="🔍 Search questions in this chapter..."
+        aria-label="Search questions in this chapter">
 
     <div id="questionList"></div>
 

@@ -28,6 +28,7 @@
 </head>
 
 <body class="home-page">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header class="site-header">
 
@@ -48,6 +49,7 @@
 
 </header>
 
+<main id="mainContent">
 <section class="hero">
 
 <div class="hero-content">
@@ -92,7 +94,7 @@ Search
 
 </div>
 
-<div class="hero-card">
+<div class="hero-card" aria-label="Why students love Doubt Factory">
 <h3>Why students love Doubt Factory</h3>
 <ul>
 <li>Exam-specific practice for JEE Main, JEE Advanced, and NEET</li>
@@ -104,12 +106,13 @@ Search
 </div>
 
 </section>
-<section class="exam-section">
+<section class="exam-section" aria-labelledby="examHeading">
+
 
     <div class="container">
 
         <div class="section-heading">
-            <h2>Choose Your Exam</h2>
+            <h2 id="examHeading">Choose Your Exam</h2>
             <p class="section-subtitle">
                 Select your target exam to practice the right pattern of Chemistry questions.
             </p>
@@ -144,21 +147,21 @@ Search
 
 </section>
 
-<section class="subjects">
+<section class="subjects" aria-labelledby="subjectHeading">
 
 <div class="container">
 
 <div class="section-heading">
-<h2>Practice by Subject</h2>
+<h2 id="subjectHeading">Practice by Subject</h2>
 <p class="section-subtitle">Build mastery across Physical, Organic, and Inorganic Chemistry.</p>
 </div>
 
-<section class="question-types">
+<section class="question-types" aria-labelledby="typeHeading">
 
     <div class="container">
 
         <div class="section-heading">
-            <h2>Practice by Question Type</h2>
+            <h2 id="typeHeading">Practice by Question Type</h2>
 
             <p class="section-subtitle">
                 Choose the question format based on your target examination.

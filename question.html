@@ -29,6 +29,7 @@
 </head>
 
 <body class="question-page">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header>
 
@@ -53,7 +54,7 @@
 
 </header>
 
-<div class="container question-layout">
+<main id="mainContent" class="container question-layout">
 
 <div class="question-main">
 
@@ -87,7 +88,7 @@ Home
 Loading question...
 </h2>
 
-<form class="question-form" novalidate>
+<form class="question-form" novalidate aria-label="Question answer form">
 
 <div id="optionsContainer" class="options-list" aria-label="Answer options"></div>
 
@@ -113,7 +114,7 @@ Submit Answer
         <h3>🎥 Video Solution</h3>
     </div>
 
-    <div id="videoContainer">
+    <div id="videoContainer" aria-label="Video solution container">
         <p class="empty-state">No video available.</p>
     </div>
 
@@ -140,7 +141,7 @@ Submit Answer
         aria-label="Write your doubt"
     ></textarea>
 
-    <button id="postComment" type="button">
+    <button id="postComment" type="button" aria-label="Post comment">
         Post Comment
     </button>
 
@@ -200,7 +201,7 @@ Submit Answer
 
 </aside>
 
-</div>
+</main>
 
 <script type="module" src="js/question.js"></script>
 

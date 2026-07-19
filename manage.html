@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header class="navbar">
 
@@ -27,7 +28,7 @@
 
 <h2>Doubt Factory Admin</h2>
 
-<nav>
+<nav aria-label="Admin navigation">
 
 <a href="admin.html">Dashboard</a>
 
@@ -39,7 +40,7 @@
 
 </header>
 
-<main class="container manage-shell">
+<main id="mainContent" class="container manage-shell">
 
 <section class="manage-dashboard-card">
 
@@ -50,8 +51,8 @@
     </div>
 
     <div class="manage-toolbar-actions">
-        <div class="manage-count-pill">Total <strong id="questionCount">0</strong></div>
-        <button type="button" class="manage-refresh-btn" id="refreshButton">Refresh</button>
+        <div class="manage-count-pill" aria-live="polite">Total <strong id="questionCount">0</strong></div>
+        <button type="button" class="manage-refresh-btn" id="refreshButton" aria-label="Refresh question list">Refresh</button>
     </div>
 </div>
 
@@ -102,7 +103,7 @@
     <div class="manage-table-wrap">
         <div id="tableLoading" class="manage-empty manage-loading" role="status">Loading questions...</div>
 
-        <table class="question-table">
+        <table class="question-table" aria-label="Questions management table">
             <thead>
                 <tr>
                     <th><button type="button" class="sort-btn" data-sort="question">Question</button></th>
@@ -132,7 +133,7 @@
 </main>
 
 <div class="manage-modal-backdrop" id="deleteModal" hidden>
-    <div class="manage-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="manage-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="deleteModalText">
         <h3 id="modalTitle">Delete question?</h3>
         <p id="deleteModalText">This action will remove the question from the current list.</p>
         <div class="manage-modal-actions">
