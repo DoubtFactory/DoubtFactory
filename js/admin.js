@@ -457,7 +457,6 @@ clearButton.addEventListener("click", clearDraft);
 loadDraft();
 updateDashboard();
 loadQuestionsTable();
-import { auth, signOut } from "./firebase.js";
 
 const logoutBtn = document.getElementById("logoutBtn");
 
