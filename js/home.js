@@ -1,10 +1,25 @@
 import { getQuestions } from "./firebase.js";
 
-async function loadLatestQuestions() {
-    const container = document.getElementById("latestQuestions");
+function createSkeletonCards(count = 2) {
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i += 1) {
+        const card = document.createElement("div");
+        card.className = "skeleton-card";
+        card.innerHTML = `
+            <div class="skeleton-line short"></div>
+            <div class="skeleton-line long"></div>
+            <div class="skeleton-line medium"></div>
+        `;
+        fragment.appendChild(card);
+    }
+
+    return fragment;
+}
+
+function renderLatestQuestions(questions, container) {
     if (!container) return;
 
-    const questions = await getQuestions();
     const latest = [...questions]
         .sort((a, b) => (b.id || 0) - (a.id || 0))
         .slice(0, 6);
@@ -37,20 +52,43 @@ async function loadLatestQuestions() {
     container.replaceChildren(fragment);
 }
 
-async function loadStats() {
-    const questions = await getQuestions();
+function updateStats(questions) {
     const statQuestions = document.getElementById("statQuestions");
     const statVideos = document.getElementById("statVideos");
 
     if (statQuestions) {
         statQuestions.textContent = questions.length;
+        statQuestions.removeAttribute("aria-busy");
     }
 
     if (statVideos) {
         const videos = questions.filter(q => q.youtube && q.youtube !== "");
         statVideos.textContent = videos.length;
+        statVideos.removeAttribute("aria-busy");
     }
 }
 
-loadLatestQuestions();
-loadStats();
+async function loadHomeContent() {
+    const container = document.getElementById("latestQuestions");
+
+    if (container) {
+        container.replaceChildren(createSkeletonCards(2));
+        container.setAttribute("aria-busy", "true");
+    }
+
+    try {
+        const questions = await getQuestions();
+        renderLatestQuestions(questions, container);
+        updateStats(questions);
+    } catch (error) {
+        if (container) {
+            container.replaceChildren();
+            const message = document.createElement("p");
+            message.className = "empty-state";
+            message.textContent = "Questions are loading slowly. Please refresh in a moment.";
+            container.appendChild(message);
+        }
+    }
+}
+
+loadHomeContent();

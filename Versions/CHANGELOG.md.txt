@@ -1,5 +1,12 @@
 # Doubt Factory Changelog
 
+## Version 2.0.3
+- Performance optimization pass for the homepage experience
+- Reduced duplicate question data fetches by loading homepage content once
+- Added lightweight loading placeholders for latest questions and statistics
+- Kept UI structure unchanged while improving perceived loading speed
+- Removed redundant CSS rules and improved loading feedback without changing Firebase logic
+
 ## Version 2.0.1
 - Launch readiness SEO foundation update
 - Added metadata, canonical tags, and Open Graph/Twitter card support across key pages

@@ -317,7 +317,18 @@ Search
             </p>
         </div>
 
-        <div id="latestQuestions"></div>
+        <div id="latestQuestions" class="loading-stack" aria-live="polite" aria-busy="true">
+            <div class="skeleton-card">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line medium"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line medium"></div>
+            </div>
+        </div>
 
     </div>
 
@@ -333,12 +344,12 @@ Search
         <div class="exam-grid">
 
             <div class="exam-card">
-                <h1 id="statQuestions">0</h1>
+                <h1 id="statQuestions" aria-busy="true">—</h1>
                 <p>Total Questions</p>
             </div>
 
             <div class="exam-card">
-                <h1 id="statVideos">0</h1>
+                <h1 id="statVideos" aria-busy="true">—</h1>
                 <p>Video Solutions</p>
             </div>
 
