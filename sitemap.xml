@@ -3,27 +3,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/</loc>
 </url>
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/search.html</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/search.html</loc>
 </url>
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/subject.html</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/subject.html</loc>
 </url>
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/chapter.html</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/chapter.html</loc>
 </url>
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/questions.html</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/questions.html</loc>
 </url>
 
 <url>
-<loc>https://DoubtFactory.github.io/DoubtFactory/login.html</loc>
+<loc>https://doubtfactory.github.io/DoubtFactory/question.html</loc>
+</url>
+
+<url>
+<loc>https://doubtfactory.github.io/DoubtFactory/login.html</loc>
+</url>
+
+<url>
+<loc>https://doubtfactory.github.io/DoubtFactory/admin.html</loc>
 </url>
 
 </urlset>

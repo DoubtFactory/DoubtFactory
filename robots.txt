@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://DoubtFactory.github.io/DoubtFactory/sitemap.xml
+Sitemap: https://doubtfactory.github.io/DoubtFactory/sitemap.xml
