@@ -474,3 +474,4 @@ if (logoutBtn) {
         }
     });
 }
+console.log("admin.js loaded");
