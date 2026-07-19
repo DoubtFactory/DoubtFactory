@@ -85,7 +85,9 @@ if (questionImageContainer) {
     const key = ["A", "B", "C", "D"][index];
 
     const image =
-        q.optionImages?.[key] || "";
+    q.optionImages && q.optionImages[key]
+        ? q.optionImages[key]
+        : "";
 
     const label = document.createElement("label");
 
@@ -193,6 +195,7 @@ const solutionBox =
 
 if (solutionBox)
     solutionBox.style.display = "block";
+});
 
 document.getElementById("prevQuestion").addEventListener("click", () => {
     if (currentIndex > 0) {
