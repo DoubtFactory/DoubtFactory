@@ -400,3 +400,15 @@ select{
         border-radius:16px;
     }
 }
+.question-image,
+.option-image,
+.solution-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.option-image {
+    max-height: 120px;
+}

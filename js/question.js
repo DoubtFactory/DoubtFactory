@@ -57,20 +57,61 @@ function showQuestion() {
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
     document.getElementById("questionText").textContent = q.question || "No question available";
+const questionImageContainer = document.getElementById("questionImageContainer");
+
+if (questionImageContainer) {
+
+    questionImageContainer.innerHTML = "";
+
+    if (q.questionImage) {
+
+        questionImageContainer.innerHTML = `
+            <img
+                src="${q.questionImage}"
+                class="question-image"
+                alt="Question Image">
+        `;
+
+    }
+
+}
     document.getElementById("breadcrumb").innerHTML = `Home > ${q.subject || "Subject"} > ${q.chapter || "Chapter"}`;
     document.getElementById("questionCounter").textContent = `Question ${currentIndex + 1} of ${questions.length}`;
 
     options.innerHTML = "";
 
     q.options.forEach((option, index) => {
-        const label = document.createElement("label");
-        label.className = "option-card";
-        label.innerHTML = `
-            <input type="radio" name="answer" value="${index}">
+
+    const key = ["A", "B", "C", "D"][index];
+
+    const image =
+        q.optionImages?.[key] || "";
+
+    const label = document.createElement("label");
+
+    label.className = "option-card";
+
+    label.innerHTML = `
+
+        <input type="radio" name="answer" value="${index}">
+
+        <div>
+
             <span>${option}</span>
-        `;
-        options.appendChild(label);
-    });
+
+            ${
+                image
+                ? `<br><img src="${image}" class="option-image" alt="Option ${key}">`
+                : ""
+            }
+
+        </div>
+
+    `;
+
+    options.appendChild(label);
+
+});
 
     document.querySelectorAll('input[name="answer"]').forEach(radio => {
         radio.addEventListener("change", () => {
@@ -122,10 +163,36 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
     }
 
     const solution = document.getElementById("solutionText");
-    if (solution) solution.textContent = q.solution || "No solution available.";
-    const solutionBox = document.getElementById("solutionBox");
-    if (solutionBox) solutionBox.style.display = "block";
-});
+
+if (solution)
+    solution.textContent =
+        q.solution || "No solution available.";
+
+const solutionImageContainer =
+    document.getElementById("solutionImageContainer");
+
+if (solutionImageContainer) {
+
+    solutionImageContainer.innerHTML = "";
+
+    if (q.solutionImage) {
+
+        solutionImageContainer.innerHTML = `
+            <img
+                src="${q.solutionImage}"
+                class="solution-image"
+                alt="Solution Image">
+        `;
+
+    }
+
+}
+
+const solutionBox =
+    document.getElementById("solutionBox");
+
+if (solutionBox)
+    solutionBox.style.display = "block";
 
 document.getElementById("prevQuestion").addEventListener("click", () => {
     if (currentIndex > 0) {
