@@ -198,16 +198,37 @@
 
 <label class="sr-only" for="question">Question</label>
 <textarea id="question" rows="5" placeholder="Enter Question" required></textarea>
+<label>Question Image</label>
 
+<input
+    type="file"
+    id="questionImage"
+    accept="image/*">
 <div class="form-grid">
 <label class="sr-only" for="optionA">Option A</label>
 <input type="text" id="optionA" placeholder="Option A">
+<input
+    type="file"
+    id="optionAImage"
+    accept="image/*">
 <label class="sr-only" for="optionB">Option B</label>
 <input type="text" id="optionB" placeholder="Option B">
+<input
+    type="file"
+    id="optionBImage"
+    accept="image/*">
 <label class="sr-only" for="optionC">Option C</label>
 <input type="text" id="optionC" placeholder="Option C">
+<input
+    type="file"
+    id="optionCImage"
+    accept="image/*">
 <label class="sr-only" for="optionD">Option D</label>
 <input type="text" id="optionD" placeholder="Option D">
+<input
+    type="file"
+    id="optionDImage"
+    accept="image/*">
 </div>
 
 <div class="form-grid">
@@ -219,7 +240,12 @@
 
 <label class="sr-only" for="solution">Solution</label>
 <textarea id="solution" rows="5" placeholder="Solution"></textarea>
+<label>Solution Image</label>
 
+<input
+    type="file"
+    id="solutionImage"
+    accept="image/*">
 <div class="form-actions">
 <button type="submit" id="saveButton">Save Question</button>
 <button type="button" id="clearButton">Clear</button>
