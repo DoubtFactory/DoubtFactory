@@ -1,3 +1,4 @@
+import { getQuestions } from "./firebase.js";
 import {
     auth,
     onAuthStateChanged,
@@ -60,8 +61,7 @@ function updateStatus(message) {
 
 async function updateDashboard() {
 
-    const response = await fetch("data/questions.json");
-    const questions = await response.json();
+    const questions = await getQuestions();
 
     const uniqueSubjects = [...new Set(questions.map(q => q.subject).filter(Boolean))];
     const uniqueChapters = [...new Set(questions.map(q => q.chapter).filter(Boolean))];
