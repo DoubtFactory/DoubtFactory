@@ -1,3 +1,15 @@
+import {
+    auth,
+    onAuthStateChanged
+} from "./firebase.js";
+
+onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+        window.location.href = "login.html";
+    }
+
+});
 import { db } from "./firebase.js";
 
 import {
