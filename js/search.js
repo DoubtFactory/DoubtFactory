@@ -11,12 +11,24 @@ let questions = [];
 let activeFilter = "All";
 let activeSuggestionIndex = -1;
 let debounceTimer = null;
+const params = new URLSearchParams(window.location.search);
+const initialQuery = params.get("q") || "";
 
 async function load() {
+
     if (!results) return;
-    results.innerHTML = '<div class="empty-state loading">Loading questions…</div>';
+
+    results.innerHTML =
+        '<div class="empty-state loading">Loading questions…</div>';
+
     questions = await getQuestions();
+
+    if (searchBox && initialQuery) {
+        searchBox.value = initialQuery;
+    }
+
     renderResults();
+
 }
 
 function normalizeText(value) {

@@ -92,3 +92,24 @@ async function loadHomeContent() {
 }
 
 loadHomeContent();
+const homeSearchForm = document.querySelector(".search-box");
+const homeSearchInput = document.getElementById("homeSearch");
+
+if (homeSearchForm && homeSearchInput) {
+
+    homeSearchForm.addEventListener("submit", (e) => {
+
+        e.preventDefault();
+
+        const keyword = homeSearchInput.value.trim();
+
+        if (keyword) {
+            window.location.href =
+                `search.html?q=${encodeURIComponent(keyword)}`;
+        } else {
+            window.location.href = "search.html";
+        }
+
+    });
+
+}
