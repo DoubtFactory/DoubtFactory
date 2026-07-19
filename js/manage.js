@@ -10,7 +10,9 @@ async function loadTable() {
     showLoading(true);
 
     try {
-        const response = await fetch("data/questions.json");
+        import { getQuestions } from "./firebase.js";
+
+const questions = await getQuestions();
         allQuestions = await response.json();
         populateFilters();
         applyFilters();

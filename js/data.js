@@ -4,7 +4,9 @@ async function loadQuestions() {
 
     if (questions.length > 0) return;
 
-    const response = await fetch("data/questions.json");
+    import { getQuestions } from "./firebase.js";
+
+const questions = await getQuestions();
 
     questions = await response.json();
 
