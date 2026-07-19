@@ -104,11 +104,7 @@ if (homeSearchForm && homeSearchInput) {
 
     const keyword = homeSearchInput.value.trim();
 
-    if (keyword) {
-        window.location.href = `search.html?q=${encodeURIComponent(keyword)}`;
-    } else {
-        window.location.href = "search.html";
-    }
+   window.location.href = "search.html";
 });
 
 }
