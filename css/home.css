@@ -1,0 +1,21 @@
+/* Mobile search box */
+@media (max-width: 768px) {
+
+    .search-box {
+        max-width: 95%;
+        margin: 15px auto;
+    }
+
+    .search-box input {
+        height: 42px;
+        font-size: 15px;
+        padding: 10px 14px;
+    }
+
+    .search-box button {
+        height: 42px;
+        padding: 0 16px;
+        font-size: 14px;
+    }
+
+}
