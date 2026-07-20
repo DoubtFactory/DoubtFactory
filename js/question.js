@@ -80,35 +80,30 @@ if (questionImageContainer) {
 
     options.innerHTML = "";
 
-    q.options.forEach((option, index) => {
+   q.options.forEach((option, index) => {
 
-    const key = ["A", "B", "C", "D"][index];
+    const key = ["A","B","C","D"][index];
 
-    const image =
-    q.optionImages && q.optionImages[key]
-        ? q.optionImages[key]
-        : "";
+    const image = q.optionImages?.[key] || "";
 
     const label = document.createElement("label");
-
     label.className = "option-card";
 
     label.innerHTML = `
-
         <input type="radio" name="answer" value="${index}">
 
-        <div>
+        <div class="option-content">
+
+            ${image ? `
+                <img
+                    src="${image}"
+                    class="option-image"
+                    alt="Option ${key}">
+            ` : ""}
 
             <span>${option}</span>
 
-            ${
-                image
-                ? `<br><img src="${image}" class="option-image" alt="Option ${key}">`
-                : ""
-            }
-
         </div>
-
     `;
 
     options.appendChild(label);

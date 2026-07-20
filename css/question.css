@@ -412,3 +412,54 @@ select{
 .option-image {
     max-height: 120px;
 }
+.question-image{
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin:20px 0;
+    border-radius:10px;
+}
+
+.option-image{
+    display:block;
+    max-width:220px;
+    height:auto;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+.solution-image{
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin-top:20px;
+    border-radius:10px;
+}
+.option-content{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.option-image{
+    width:220px;
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    display:block;
+}
+
+.solution-image{
+    width:100%;
+    max-width:700px;
+    display:block;
+    margin-top:15px;
+}
+
+.question-image{
+    width:100%;
+    max-width:700px;
+    display:block;
+    margin:15px 0;
+}
