@@ -463,3 +463,8 @@ select{
     display:block;
     margin:15px 0;
 }
+/* Preserve question formatting */
+#questionText {
+    white-space: pre-wrap;
+    line-height: 1.7;
+}
