@@ -1971,52 +1971,30 @@ nav a{
 
 @media (max-width:768px){
 
-header{
-    flex-direction:column;
-    gap:15px;
-    text-align:center;
-}
+    .home-page .search-box{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        max-width:100%;
+        margin:0 auto 20px;
+    }
 
-nav{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-}
+    .home-page .search-box input{
+        flex:1;
+        width:auto;
+        padding:12px 14px;
+        font-size:14px;
+        border-radius:12px 0 0 12px;
+        margin-bottom:0;
+    }
 
-.exam-grid,
-.subject-grid,
-.type-grid{
-    grid-template-columns:1fr;
-}
-
-.question-buttons{
-    flex-direction:column;
-}
-
-.question-preview{
-    padding:18px;
-}
-
-.hero h1{
-    font-size:32px;
-}
-
-.hero p{
-    font-size:16px;
-}
-
-.search-box{
-    flex-direction:column;
-}
-
-.search-box input{
-    width:100%;
-}
-
-.search-box button{
-    width:100%;
-}
+    .home-page .search-box button{
+        width:auto;
+        min-width:90px;
+        padding:12px 16px;
+        font-size:14px;
+        border-radius:0 12px 12px 0;
+    }
 
 }
 
