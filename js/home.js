@@ -36,7 +36,11 @@ function renderLatestQuestions(questions, container) {
                 <span class="chapter-tag">${q.chapter || "Chapter"}</span>
                 <span class="difficulty ${difficultyClass}">${q.difficulty || "Medium"}</span>
             </div>
-            <h3>${q.question || "No question available"}</h3>
+            <h3>${
+    (q.question || "No question available").length > 180
+        ? (q.question || "").substring(0, 180) + "..."
+        : (q.question || "")
+}</h3>
             <div class="question-meta">
                 <span>📅 ${q.year || "N/A"}</span>
                 <span>👁 ${q.views || 0}</span>
