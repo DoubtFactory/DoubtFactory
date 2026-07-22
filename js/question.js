@@ -56,7 +56,10 @@ function showQuestion() {
     document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
-    document.getElementById("questionText").textContent = q.question || "No question available";
+   document.getElementById("questionText").innerHTML =
+    (q.question || "No question available")
+        .replace(/ /g, "&nbsp;")
+        .replace(/\n/g, "<br>");
 const questionImageContainer = document.getElementById("questionImageContainer");
 
 if (questionImageContainer) {
