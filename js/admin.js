@@ -463,10 +463,20 @@ async function loadQuestionsTable() {
                 <td>${q.chapter || ""}</td>
                 <td>${q.year || ""}</td>
                 <td>
-                    <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">
-                        Delete
-                    </button>
-                </td>
+
+    <button
+        class="edit-btn"
+        onclick="editQuestion('${documentItem.id}')">
+        Edit
+    </button>
+
+    <button
+        class="delete-btn"
+        onclick="deleteQuestion('${documentItem.id}')">
+        Delete
+    </button>
+
+</td>
             </tr>
         `;
     });

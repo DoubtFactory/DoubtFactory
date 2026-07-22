@@ -2417,3 +2417,26 @@ body.home-page{
         padding:60px 20px;
     }
 }
+.edit-btn{
+
+    background:#2563eb;
+
+    color:#fff;
+
+    border:none;
+
+    padding:8px 14px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    margin-right:8px;
+
+}
+
+.edit-btn:hover{
+
+    background:#1d4ed8;
+
+}
