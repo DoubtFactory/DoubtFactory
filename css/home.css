@@ -19,3 +19,42 @@
     }
 
 }
+/* ===========================
+   Latest Question Card
+=========================== */
+
+.question-preview{
+    transition:.25s;
+    border-radius:20px;
+}
+
+.question-preview:hover{
+    transform:translateY(-4px);
+}
+
+.question-title{
+    font-size:30px;
+    line-height:1.55;
+    font-weight:700;
+    color:#16213e;
+    margin:22px 0;
+}
+
+.question-meta{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    margin-top:18px;
+    color:#666;
+    font-size:15px;
+}
+
+.question-buttons{
+    margin-top:25px;
+}
+
+.primary-btn{
+    border-radius:12px;
+    padding:14px 30px;
+    font-weight:600;
+}
