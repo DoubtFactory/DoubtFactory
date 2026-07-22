@@ -22,7 +22,7 @@ import {
     deleteDoc,
     doc,
     getDoc
-} from "https://www.gstatic.com/firebasejs/11.x.x/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 const toast = document.getElementById("toast");
