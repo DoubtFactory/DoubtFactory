@@ -463,8 +463,11 @@ select{
     display:block;
     margin:15px 0;
 }
-/* Preserve question formatting */
-#questionText {
+/* ===============================
+   Preserve Question Formatting
+================================ */
+
+#questionText{
     white-space: pre-wrap;
     line-height: 1.7;
 }
