@@ -44,12 +44,18 @@ ${
 }
 </h3>
             <div class="question-meta">
-                <span>📅 ${q.year || "N/A"}</span>
-                <span>👁 ${q.views || 0}</span>
-                <span>👍 ${q.likes || 0}</span>
-            </div>
+
+    <span class="meta-year">
+        📅 ${q.year || "N/A"}
+    </span>
+
+    <span class="meta-type">
+        ${q.type || "Question"}
+    </span>
+
+</div>
             <div class="question-buttons">
-                <a class="primary-btn" href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}">Solve Question →</a>
+                <a class="primary-btn" href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}">Practice Now →</a>
             </div>
         `;
         fragment.appendChild(card);
