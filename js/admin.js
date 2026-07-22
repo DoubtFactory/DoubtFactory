@@ -547,3 +547,70 @@ connectUploader("uploadOptionCImage", "optionCImage");
 connectUploader("uploadOptionDImage", "optionDImage");
 
 connectUploader("uploadSolutionImage", "solutionImage");
+window.editQuestion = async function(id) {
+
+    try {
+
+        const docRef = doc(db, "questions", id);
+
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            alert("Question not found.");
+            return;
+        }
+
+        const q = docSnap.data();
+
+        document.getElementById("subject").value = q.subject || "";
+        document.getElementById("chapter").value = q.chapter || "";
+        document.getElementById("exam").value = q.exam || "";
+        document.getElementById("year").value = q.year || "";
+        document.getElementById("difficulty").value = q.difficulty || "";
+        document.getElementById("type").value = q.type || "";
+        document.getElementById("question").value = q.question || "";
+
+        document.getElementById("questionImage").value =
+            q.questionImage || "";
+
+        document.getElementById("optionA").value = q.options?.[0] || "";
+        document.getElementById("optionB").value = q.options?.[1] || "";
+        document.getElementById("optionC").value = q.options?.[2] || "";
+        document.getElementById("optionD").value = q.options?.[3] || "";
+
+        document.getElementById("optionAImage").value =
+            q.optionImages?.A || "";
+
+        document.getElementById("optionBImage").value =
+            q.optionImages?.B || "";
+
+        document.getElementById("optionCImage").value =
+            q.optionImages?.C || "";
+
+        document.getElementById("optionDImage").value =
+            q.optionImages?.D || "";
+
+        document.getElementById("answer").value = q.answer;
+
+        document.getElementById("solution").value =
+            q.solution || "";
+
+        document.getElementById("solutionImage").value =
+            q.solutionImage || "";
+
+        document.getElementById("youtube").value =
+            q.youtube || "";
+
+        updatePreview();
+
+        alert("Question loaded. You can now edit it.");
+
+    } catch(err){
+
+        console.error(err);
+
+        alert(err.message);
+
+    }
+
+};
