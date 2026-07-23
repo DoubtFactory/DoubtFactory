@@ -32,6 +32,13 @@ const formError = document.getElementById("formError");
 const saveButton = document.getElementById("saveButton");
 const clearButton = document.getElementById("clearButton");
 const statusLabel = document.getElementById("saveStatus");
+/* ===========================================
+   EDIT MODE
+=========================================== */
+
+let editingDocId = null;
+
+let isEditing = false;
 
 function extractVideoId(url) {
 
@@ -55,8 +62,25 @@ function showToast(message, type = "success") {
 }
 
 function setSavingState(isSaving) {
+
     saveButton.disabled = isSaving;
-    saveButton.textContent = isSaving ? "Saving..." : "Save Question";
+
+    if (isSaving) {
+
+        saveButton.textContent =
+            isEditing
+                ? "Updating..."
+                : "Saving...";
+
+    } else {
+
+        saveButton.textContent =
+            isEditing
+                ? "Update Question"
+                : "Save Question";
+
+    }
+
 }
 
 function updateStatus(message) {
@@ -354,12 +378,26 @@ function loadDraft() {
 }
 
 function clearDraft() {
+
     localStorage.removeItem(STORAGE_KEY);
+
     document.getElementById("questionForm").reset();
-    chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+
+    chapterSelect.innerHTML =
+        '<option value="">Select Chapter</option>';
+
     formError.textContent = "";
+
+    editingDocId = null;
+
+    isEditing = false;
+
+    saveButton.textContent = "Save Question";
+
     updatePreview();
+
     updateStatus("Form cleared");
+
 }
 
 document.getElementById("questionForm").addEventListener("submit", async function(e) {
