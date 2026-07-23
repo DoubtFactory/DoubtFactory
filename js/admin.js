@@ -23,6 +23,7 @@ import {
     doc,
     getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+let editingDocId = null;
 
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 const toast = document.getElementById("toast");
