@@ -567,8 +567,19 @@ window.editQuestion = async function(id) {
 console.log("Chapter element:", document.getElementById("chapter"));
 console.log("Exam element:", document.getElementById("exam"));
 
-document.getElementById("subject").value = q.subject || "";
-document.getElementById("chapter").value = q.chapter || "";
+const subject = document.getElementById("subject");
+subject.value = q.subject || "";
+
+// Trigger the same code that normally loads chapters
+subject.dispatchEvent(new Event("change"));
+
+// Give the chapters a moment to load
+setTimeout(() => {
+
+    document.getElementById("chapter").value =
+        q.chapter || "";
+
+},300);
 document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
