@@ -563,9 +563,13 @@ window.editQuestion = async function(id) {
 
         const q = docSnap.data();
 
-        document.getElementById("subject").value = q.subject || "";
-        document.getElementById("chapter").value = q.chapter || "";
-        document.getElementById("exam").value = q.exam || "";
+        console.log("Subject element:", document.getElementById("subject"));
+console.log("Chapter element:", document.getElementById("chapter"));
+console.log("Exam element:", document.getElementById("exam"));
+
+document.getElementById("subject").value = q.subject || "";
+document.getElementById("chapter").value = q.chapter || "";
+document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
