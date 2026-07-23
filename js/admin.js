@@ -1,4 +1,3 @@
-let editingDocId = null;
 import { uploadImage } from "./cloudinary.js";
 import { getQuestions } from "./firebase.js";
 import {
@@ -26,7 +25,7 @@ import {
     updateDoc
 
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-let editingDocId = null;
+
 
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 const toast = document.getElementById("toast");
