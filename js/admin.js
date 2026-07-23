@@ -604,7 +604,8 @@ window.editQuestion = async function(id) {
 
         updatePreview();
 
-        alert("Question loaded. You can now edit it.");
+        console.log(q);
+alert(JSON.stringify(q, null, 2));
 
     } catch(err){
 
