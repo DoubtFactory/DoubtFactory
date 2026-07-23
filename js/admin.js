@@ -22,7 +22,9 @@ import {
     getDocs,
     deleteDoc,
     doc,
-    getDoc
+    getDoc,
+    updateDoc
+
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 let editingDocId = null;
 
@@ -417,15 +419,48 @@ document.getElementById("questionForm").addEventListener("submit", async functio
     updateStatus("Saving question...");
 
     try {
-        await addDoc(collection(db, "questions"), question);
-        localStorage.removeItem(STORAGE_KEY);
-        showToast("Question saved successfully.", "success");
-        updateStatus("Saved to Firebase");
-        document.getElementById("questionForm").reset();
-        chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-        updatePreview();
-        loadQuestionsTable();
-        updateDashboard();
+        if (isEditing && editingDocId) {
+
+    await updateDoc(
+        doc(db, "questions", editingDocId),
+        question
+    );
+
+    showToast("Question updated successfully.", "success");
+
+    updateStatus("Question updated");
+
+} else {
+
+    await addDoc(
+        collection(db, "questions"),
+        question
+    );
+
+    showToast("Question saved successfully.", "success");
+
+    updateStatus("Saved to Firebase");
+
+}
+
+localStorage.removeItem(STORAGE_KEY);
+
+document.getElementById("questionForm").reset();
+
+chapterSelect.innerHTML =
+    '<option value="">Select Chapter</option>';
+
+editingDocId = null;
+
+isEditing = false;
+
+saveButton.textContent = "Save Question";
+
+updatePreview();
+
+loadQuestionsTable();
+
+updateDashboard();
     } catch (error) {
         console.error(error);
         showToast("Error saving question.", "error");
@@ -603,6 +638,10 @@ window.editQuestion = async function(id) {
 
         const q = docSnap.data();
 editingDocId = id;
+
+isEditing = true;
+
+saveButton.textContent = "Update Question";
 
         console.log("Subject element:", document.getElementById("subject"));
 console.log("Chapter element:", document.getElementById("chapter"));
