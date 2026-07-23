@@ -1,3 +1,4 @@
+let editingDocId = null;
 import { uploadImage } from "./cloudinary.js";
 import { getQuestions } from "./firebase.js";
 import {
@@ -563,6 +564,7 @@ window.editQuestion = async function(id) {
         }
 
         const q = docSnap.data();
+editingDocId = id;
 
         console.log("Subject element:", document.getElementById("subject"));
 console.log("Chapter element:", document.getElementById("chapter"));
@@ -620,8 +622,12 @@ document.getElementById("exam").value = q.exam || "";
 
         updatePreview();
 
-        console.log(q);
-alert(JSON.stringify(q, null, 2));
+        window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+});
+
+updatePreview();
 
     } catch(err){
 
