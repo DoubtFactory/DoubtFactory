@@ -133,12 +133,52 @@ if (questionImageContainer) {
     document.getElementById("likes").textContent = q.likes ?? 0;
     document.getElementById("comments").textContent = 0;
 
-    const video = document.getElementById("videoContainer");
+   const video = document.getElementById("videoContainer");
+
+if (video) {
+
+    let videoId = "";
+
     if (q.youtube) {
-        video.innerHTML = `<iframe loading="lazy" title="Video solution" width="100%" height="300" src="https://www.youtube.com/embed/${q.youtube}" allowfullscreen></iframe>`;
-    } else {
-        video.innerHTML = "<p class='empty-state'>No video available.</p>";
+
+        const url = q.youtube.trim();
+
+        if (url.includes("watch?v=")) {
+
+            videoId = url.split("watch?v=")[1].split("&")[0];
+
+        } else if (url.includes("youtu.be/")) {
+
+            videoId = url.split("youtu.be/")[1].split("?")[0];
+
+        } else {
+
+            videoId = url;
+
+        }
+
     }
+
+    if (videoId) {
+
+        video.innerHTML = `
+            <iframe
+                width="100%"
+                height="400"
+                src="https://www.youtube.com/embed/${videoId}"
+                title="Video Solution"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
+        `;
+
+    } else {
+
+        video.innerHTML = `<p class="empty-state">No video available.</p>`;
+
+    }
+
+}
 
     const prevButton = document.getElementById("prevQuestion");
     const nextButton = document.getElementById("nextQuestion");
