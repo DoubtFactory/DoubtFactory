@@ -115,8 +115,8 @@ function renderRecentActivity(questions) {
     if (!container) return;
 
     const recent = [...questions]
-        .sort((a, b) => (b.id || 0) - (a.id || 0))
-        .slice(0, 4);
+    .reverse()
+    .slice(0, 4);
 
     if (!recent.length) {
         container.innerHTML = '<div class="empty-panel">No recent activity yet.</div>';
