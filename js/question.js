@@ -129,9 +129,13 @@ if (questionImageContainer) {
         resultMessage.className = "result-message";
     }
 
-    document.getElementById("views").textContent = q.views ?? 0;
-    document.getElementById("likes").textContent = q.likes ?? 0;
-    document.getElementById("comments").textContent = 0;
+   const views = document.getElementById("views");
+const likes = document.getElementById("likes");
+const comments = document.getElementById("comments");
+
+if (views) views.textContent = q.views ?? 0;
+if (likes) likes.textContent = q.likes ?? 0;
+if (comments) comments.textContent = 0;
 
 console.log("YouTube value from Firebase:", q.youtube);
 console.log(q);
