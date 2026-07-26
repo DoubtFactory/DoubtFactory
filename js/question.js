@@ -164,9 +164,29 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
 
     const solution = document.getElementById("solutionText");
 
-if (solution)
-    solution.textContent =
-        q.solution || "No solution available.";
+if (solution) {
+
+    if (
+        q.solution &&
+        q.solution.trim() !== ""
+    ) {
+
+        solution.textContent = q.solution;
+
+    } else if (
+        !q.solutionImage ||
+        q.solutionImage.trim() === ""
+    ) {
+
+        solution.textContent = "No solution available.";
+
+    } else {
+
+        solution.textContent = "";
+
+    }
+
+}
 
 const solutionImageContainer =
     document.getElementById("solutionImageContainer");
