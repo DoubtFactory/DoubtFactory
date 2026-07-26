@@ -133,6 +133,8 @@ if (questionImageContainer) {
     document.getElementById("likes").textContent = q.likes ?? 0;
     document.getElementById("comments").textContent = 0;
 
+console.log("YouTube value from Firebase:", q.youtube);
+console.log(q);
    const video = document.getElementById("videoContainer");
 
 if (video) {
