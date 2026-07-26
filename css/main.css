@@ -2448,3 +2448,59 @@ body.home-page{
     background:#1d4ed8;
 
 }
+/* ==========================
+   Dark Mode
+========================== */
+
+.theme-toggle{
+    margin-left:20px;
+    cursor:pointer;
+    border:none;
+    background:#ffffff20;
+    color:#fff;
+    font-size:20px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    transition:.3s;
+}
+
+.theme-toggle:hover{
+    background:#ffffff40;
+}
+
+body.dark{
+    background:#121212;
+    color:#eee;
+}
+
+body.dark .site-header{
+    background:#0b0b0b;
+}
+
+body.dark nav a{
+    color:#fff;
+}
+
+body.dark .card,
+body.dark .hero-card,
+body.dark .question-card,
+body.dark .feature-card,
+body.dark .sidebar,
+body.dark .content-box{
+    background:#1d1d1d;
+    color:#fff;
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+    background:#2b2b2b;
+    color:#fff;
+    border-color:#444;
+}
+
+body.dark footer{
+    background:#0d0d0d;
+    color:#ccc;
+}
