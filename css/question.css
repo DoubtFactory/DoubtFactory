@@ -17,12 +17,8 @@ select{
 }
 
 .question-layout{
-    display:grid;
-    grid-template-columns:1.6fr .6fr;
-    gap:28px;
-    align-items:start;
+    display:block;
 }
-
 .question-main{
     display:flex;
     flex-direction:column;
