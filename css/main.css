@@ -122,27 +122,22 @@ a{
     color:inherit;
 }
 
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-
+.site-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-
-    padding:18px min(8%, 32px);
+    padding:18px min(8%,32px);
     background:#1565C0;
     color:#fff;
-
     box-shadow:0 5px 20px rgba(0,0,0,.15);
 }
+
 .logo{
     display:inline-block;
     text-decoration:none;
     color:#fff;
-    cursor:pointer;
 }
+
 .logo h2{
     font-size:32px;
     font-weight:700;
@@ -152,6 +147,7 @@ header{
     font-size:14px;
     opacity:.9;
 }
+
 .logo:hover{
     color:#fff;
     text-decoration:none;
@@ -161,17 +157,16 @@ header{
 .logo p{
     color:inherit;
 }
+
 nav{
     display:flex;
     gap:30px;
 }
 
 nav a{
-    color:white;
+    color:#fff;
+    text-decoration:none;
     font-weight:500;
-    transition:.3s;
-    padding:8px 10px;
-    border-radius:8px;
 }
 
 nav a:hover{
