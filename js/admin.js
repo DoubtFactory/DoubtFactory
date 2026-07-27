@@ -85,7 +85,13 @@ function setSavingState(isSaving) {
 }
 
 function updateStatus(message) {
-    statusLabel.textContent = message;
+
+    const statusLabel = document.getElementById("status");
+
+    if (statusLabel) {
+        statusLabel.textContent = message;
+    }
+
 }
 
 async function updateDashboard() {
@@ -97,12 +103,30 @@ async function updateDashboard() {
     const uniqueExams = [...new Set(questions.map(q => q.exam).filter(Boolean))];
     const totalVideos = questions.filter(q => q.youtube && q.youtube.trim() !== "").length;
 
-    document.getElementById("totalQuestions").textContent = questions.length;
-    document.getElementById("subjectCount").textContent = uniqueSubjects.length;
-    document.getElementById("chapterCount").textContent = uniqueChapters.length;
-    document.getElementById("examCount").textContent = uniqueExams.length;
-    document.getElementById("totalVideos").textContent = totalVideos;
-    document.getElementById("commentCount").textContent = questions.length > 0 ? Math.max(1, Math.round(questions.length / 3)) : 0;
+const subjectCount = document.getElementById("subjectCount");
+if (subjectCount) {
+    subjectCount.textContent = uniqueSubjects.length;
+
+const examCount = document.getElementById("examCount");
+if (examCount) {
+    examCount.textContent = uniqueExams.length;
+   
+ const totalQuestions = document.getElementById("totalQuestions");
+if (totalQuestions) totalQuestions.textContent = questions.length;
+
+const chapterCount = document.getElementById("chapterCount");
+if (chapterCount) chapterCount.textContent = uniqueChapters.length;
+
+const totalVideosEl = document.getElementById("totalVideos");
+if (totalVideosEl) totalVideosEl.textContent = totalVideos;
+
+const commentCount = document.getElementById("commentCount");
+if (commentCount) {
+    commentCount.textContent =
+        questions.length > 0
+            ? Math.max(1, Math.round(questions.length / 3))
+            : 0;
+}
 
     renderRecentActivity(questions);
     renderAnalytics(questions);
