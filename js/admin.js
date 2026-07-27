@@ -673,16 +673,13 @@ console.log("Exam element:", document.getElementById("exam"));
 const subject = document.getElementById("subject");
 subject.value = q.subject || "";
 
-// Trigger the same code that normally loads chapters
-subject.dispatchEvent(new Event("change"));
+// Load the chapters for this subject
+await loadChapters(subject.value);
 
-// Give the chapters a moment to load
-setTimeout(() => {
+// Now set the chapter
+document.getElementById("chapter").value = q.chapter || "";
 
-    document.getElementById("chapter").value =
-        q.chapter || "";
-
-},300);
+// Set remaining fields
 document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
