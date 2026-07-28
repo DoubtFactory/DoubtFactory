@@ -28,11 +28,21 @@ import {
 
 
 const STORAGE_KEY = "doubtFactoryAdminDraft";
+
 const toast = document.getElementById("toast");
 const formError = document.getElementById("formError");
+
 const saveButton = document.getElementById("saveButton");
 const clearButton = document.getElementById("clearButton");
+
 const statusLabel = document.getElementById("saveStatus");
+
+const subjectSelect = document.getElementById("subject");
+const chapterSelect = document.getElementById("chapter");
+
+const questionForm = document.getElementById("questionForm");
+
+const output = document.getElementById("output");
 /* ===========================================
    EDIT MODE
 =========================================== */
