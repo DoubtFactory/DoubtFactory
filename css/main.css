@@ -2502,3 +2502,40 @@ body.dark footer{
     background:#0d0d0d;
     color:#ccc;
 }
+.chem-toolbar{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:8px;
+
+margin-bottom:12px;
+
+}
+
+.chem-toolbar button{
+
+padding:8px 14px;
+
+border:none;
+
+border-radius:8px;
+
+background:#0b57d0;
+
+color:white;
+
+cursor:pointer;
+
+font-size:16px;
+
+font-weight:600;
+
+}
+
+.chem-toolbar button:hover{
+
+background:#0847aa;
+
+}

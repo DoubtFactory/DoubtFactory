@@ -762,3 +762,20 @@ updatePreview();
     }
 
 };
+let activeMathField = null;
+
+document.querySelectorAll("math-field").forEach(field => {
+    field.addEventListener("focus", () => {
+        activeMathField = field;
+    });
+});
+
+window.insertChem = function(symbol) {
+
+    if (!activeMathField) return;
+
+    activeMathField.insert(symbol);
+
+    activeMathField.focus();
+
+};
