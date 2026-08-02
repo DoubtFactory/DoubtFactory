@@ -311,17 +311,17 @@ function collectFormData() {
 
         type: document.getElementById("type").value,
 
-        question: document.getElementById("question").value,
+        question: document.getElementById("question").getValue(),
 
         // NEW
         questionImage: document.getElementById("questionImage").value,
 
         options: [
-            document.getElementById("optionA").value,
-            document.getElementById("optionB").value,
-            document.getElementById("optionC").value,
-            document.getElementById("optionD").value
-        ],
+    document.getElementById("optionA").getValue(),
+    document.getElementById("optionB").getValue(),
+    document.getElementById("optionC").getValue(),
+    document.getElementById("optionD").getValue()
+],
 
         // NEW
         optionImages: {
@@ -338,7 +338,7 @@ function collectFormData() {
 
         answer: Number(document.getElementById("answer").value),
 
-        solution: document.getElementById("solution").value,
+        solution: document.getElementById("solution").getValue(),
 
         // NEW
         solutionImage: document.getElementById("solutionImage").value,
@@ -402,13 +402,13 @@ function loadDraft() {
         document.getElementById("year").value = draft.year || "";
         document.getElementById("difficulty").value = draft.difficulty || "";
         document.getElementById("type").value = draft.type || "";
-        document.getElementById("question").value = draft.question || "";
-        document.getElementById("optionA").value = draft.optionA || "";
-        document.getElementById("optionB").value = draft.optionB || "";
-        document.getElementById("optionC").value = draft.optionC || "";
-        document.getElementById("optionD").value = draft.optionD || "";
+        document.getElementById("question").setValue(draft.question || "");
+        document.getElementById("optionA").setValue(draft.optionA || "");
+document.getElementById("optionB").setValue(draft.optionB || "");
+document.getElementById("optionC").setValue(draft.optionC || "");
+document.getElementById("optionD").setValue(draft.optionD || "");
         document.getElementById("answer").value = draft.answer || "";
-        document.getElementById("solution").value = draft.solution || "";
+        document.getElementById("solution").setValue(draft.solution || "");
         document.getElementById("youtube").value = draft.youtube || "";
         updatePreview();
     } catch (error) {
@@ -712,15 +712,15 @@ document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
-        document.getElementById("question").value = q.question || "";
+        document.getElementById("question").setValue(q.question || "");
 
         document.getElementById("questionImage").value =
             q.questionImage || "";
 
-        document.getElementById("optionA").value = q.options?.[0] || "";
-        document.getElementById("optionB").value = q.options?.[1] || "";
-        document.getElementById("optionC").value = q.options?.[2] || "";
-        document.getElementById("optionD").value = q.options?.[3] || "";
+        document.getElementById("optionA").setValue(q.options?.[0] || "");
+document.getElementById("optionB").setValue(q.options?.[1] || "");
+document.getElementById("optionC").setValue(q.options?.[2] || "");
+document.getElementById("optionD").setValue(q.options?.[3] || "");
 
         document.getElementById("optionAImage").value =
             q.optionImages?.A || "";
@@ -736,8 +736,7 @@ document.getElementById("exam").value = q.exam || "";
 
         document.getElementById("answer").value = q.answer;
 
-        document.getElementById("solution").value =
-            q.solution || "";
+        document.getElementById("solution").setValue(q.solution || "");
 
         document.getElementById("solutionImage").value =
             q.solutionImage || "";
