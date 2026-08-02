@@ -113,34 +113,41 @@ async function updateDashboard() {
     const uniqueExams = [...new Set(questions.map(q => q.exam).filter(Boolean))];
     const totalVideos = questions.filter(q => q.youtube && q.youtube.trim() !== "").length;
 
-const subjectCount = document.getElementById("subjectCount");
-if (subjectCount) {
-    subjectCount.textContent = uniqueSubjects.length;
+    const totalQuestions = document.getElementById("totalQuestions");
+    if (totalQuestions) {
+        totalQuestions.textContent = questions.length;
+    }
 
-const examCount = document.getElementById("examCount");
-if (examCount) {
-    examCount.textContent = uniqueExams.length;
-   
- const totalQuestions = document.getElementById("totalQuestions");
-if (totalQuestions) totalQuestions.textContent = questions.length;
+    const subjectCount = document.getElementById("subjectCount");
+    if (subjectCount) {
+        subjectCount.textContent = uniqueSubjects.length;
+    }
 
-const chapterCount = document.getElementById("chapterCount");
-if (chapterCount) chapterCount.textContent = uniqueChapters.length;
+    const chapterCount = document.getElementById("chapterCount");
+    if (chapterCount) {
+        chapterCount.textContent = uniqueChapters.length;
+    }
 
-const totalVideosEl = document.getElementById("totalVideos");
-if (totalVideosEl) totalVideosEl.textContent = totalVideos;
+    const examCount = document.getElementById("examCount");
+    if (examCount) {
+        examCount.textContent = uniqueExams.length;
+    }
 
-const commentCount = document.getElementById("commentCount");
-if (commentCount) {
-    commentCount.textContent =
-        questions.length > 0
-            ? Math.max(1, Math.round(questions.length / 3))
-            : 0;
-}
+    const totalVideosEl = document.getElementById("totalVideos");
+    if (totalVideosEl) {
+        totalVideosEl.textContent = totalVideos;
+    }
+
+    const commentCount = document.getElementById("commentCount");
+    if (commentCount) {
+        commentCount.textContent =
+            questions.length > 0
+                ? Math.max(1, Math.round(questions.length / 3))
+                : 0;
+    }
 
     renderRecentActivity(questions);
     renderAnalytics(questions);
-
 }
 
 function renderRecentActivity(questions) {
