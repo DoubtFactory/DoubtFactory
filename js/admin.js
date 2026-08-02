@@ -493,11 +493,23 @@ isEditing = false;
 
 saveButton.textContent = "Save Question";
 
-updatePreview();
+try {
+    updatePreview();
+} catch(e) {
+    console.error("updatePreview()", e);
+}
 
-loadQuestionsTable();
+try {
+    await loadQuestionsTable();
+} catch(e) {
+    console.error("loadQuestionsTable()", e);
+}
 
-updateDashboard();
+try {
+    await updateDashboard();
+} catch(e) {
+    console.error("updateDashboard()", e);
+}
     } catch (error) {
         console.error(error);
         showToast("Error saving question.", "error");
