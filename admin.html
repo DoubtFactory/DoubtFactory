@@ -186,8 +186,20 @@ import "https://unpkg.com/mathlive?module";
 
 <h3>Question Content</h3>
 
-<label class="sr-only" for="question">Question</label>
-<textarea id="question" rows="5" placeholder="Enter Question" required></textarea>
+<label>Question</label>
+
+<math-field
+    id="question"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:140px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:12px;
+        font-size:20px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
@@ -196,7 +208,18 @@ import "https://unpkg.com/mathlive?module";
 
 <div class="form-grid">
 <label class="sr-only" for="optionA">Option A</label>
-<input type="text" id="optionA" placeholder="Option A">
+<math-field
+    id="optionA"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:55px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:8px;
+        font-size:18px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Option A Image</label>
     <input type="text" id="optionAImage" readonly>
@@ -204,7 +227,18 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionB">Option B</label>
-<input type="text" id="optionB" placeholder="Option B">
+<math-field
+    id="optionB"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:55px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:8px;
+        font-size:18px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Option B Image</label>
     <input type="text" id="optionBImage" readonly>
@@ -212,7 +246,18 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionC">Option C</label>
-<input type="text" id="optionC" placeholder="Option C">
+<math-field
+    id="optionC"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:55px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:8px;
+        font-size:18px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Option C Image</label>
     <input type="text" id="optionCImage" readonly>
@@ -220,7 +265,18 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionD">Option D</label>
-<input type="text" id="optionD" placeholder="Option D">
+<math-field
+    id="optionD"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:55px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:8px;
+        font-size:18px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Option D Image</label>
     <input type="text" id="optionDImage" readonly>
@@ -248,7 +304,18 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="solution">Solution</label>
-<textarea id="solution" rows="5" placeholder="Solution"></textarea>
+<math-field
+    id="solution"
+    class="math-editor"
+    style="
+        width:100%;
+        min-height:180px;
+        border:1px solid #dcdcdc;
+        border-radius:10px;
+        padding:12px;
+        font-size:20px;
+    ">
+</math-field>
 <div class="form-group">
     <label>Solution Image</label>
     <input type="text" id="solutionImage" readonly placeholder="No image selected">
