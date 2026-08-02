@@ -683,14 +683,12 @@ console.log("Exam element:", document.getElementById("exam"));
 const subject = document.getElementById("subject");
 subject.value = q.subject || "";
 
-// Trigger the existing subject change event
+// Trigger the existing change event that populates chapters
 subject.dispatchEvent(new Event("change"));
 
-// Wait for chapter dropdown to refresh
+// Wait briefly, then select the saved chapter
 setTimeout(() => {
-
     chapterSelect.value = q.chapter || "";
-
 }, 300);
 
 // Set remaining fields
