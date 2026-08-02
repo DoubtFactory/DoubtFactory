@@ -276,9 +276,6 @@ const chapters = {
 
 };
 
-const subjectSelect = document.getElementById("subject");
-const chapterSelect = document.getElementById("chapter");
-
 subjectSelect.addEventListener("change", () => {
 
     chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
