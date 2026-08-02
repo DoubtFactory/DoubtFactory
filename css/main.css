@@ -1248,9 +1248,7 @@ nav a{
 }
 
 .admin-grid{
-    display:grid;
-    grid-template-columns:1.2fr .8fr;
-    gap:20px;
+    display:block;
 }
 
 .admin-form-card h3,
