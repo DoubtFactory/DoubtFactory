@@ -716,15 +716,17 @@ document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
-        document.getElementById("question").setValue(q.question || "");
+        if (tinymce.get("question")) {
+    tinymce.get("question").setContent(q.question || "");
+}
 
         document.getElementById("questionImage").value =
             q.questionImage || "";
 
-        document.getElementById("optionA").setValue(q.options?.[0] || "");
-document.getElementById("optionB").setValue(q.options?.[1] || "");
-document.getElementById("optionC").setValue(q.options?.[2] || "");
-document.getElementById("optionD").setValue(q.options?.[3] || "");
+       document.getElementById("optionA").value = q.options?.[0] || "";
+document.getElementById("optionB").value = q.options?.[1] || "";
+document.getElementById("optionC").value = q.options?.[2] || "";
+document.getElementById("optionD").value = q.options?.[3] || "";
 
         document.getElementById("optionAImage").value =
             q.optionImages?.A || "";
@@ -740,7 +742,9 @@ document.getElementById("optionD").setValue(q.options?.[3] || "");
 
         document.getElementById("answer").value = q.answer;
 
-        document.getElementById("solution").setValue(q.solution || "");
+        if (tinymce.get("solution")) {
+    tinymce.get("solution").setContent(q.solution || "");
+}
 
         document.getElementById("solutionImage").value =
             q.solutionImage || "";
