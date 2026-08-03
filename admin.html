@@ -19,12 +19,7 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.core.css">
-<link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.css">
 
-<script type="module">
-import "https://unpkg.com/mathlive?module";
-</script>
 
 </head>
 
@@ -187,57 +182,13 @@ import "https://unpkg.com/mathlive?module";
 <h3>Question Content</h3>
 
 <label>Question</label>
-<div class="chem-toolbar">
 
-<button onclick="insertChem('\\rightleftharpoons')">⇌</button>
-
-<button onclick="insertChem('\\rightarrow')">→</button>
-
-<button onclick="insertChem('\\leftarrow')">←</button>
-
-<button onclick="insertChem('\\Delta')">Δ</button>
-
-<button onclick="insertChem('^+')">⁺</button>
-
-<button onclick="insertChem('^-')">⁻</button>
-
-<button onclick="insertChem('_2')">₂</button>
-
-<button onclick="insertChem('_3')">₃</button>
-
-<button onclick="insertChem('_4')">₄</button>
-
-<button onclick="insertChem('_5')">₅</button>
-
-<button onclick="insertChem('\\alpha')">α</button>
-
-<button onclick="insertChem('\\beta')">β</button>
-
-<button onclick="insertChem('\\gamma')">γ</button>
-
-<button onclick="insertChem('\\degree')">°</button>
-
-<button onclick="insertChem('\\times')">×</button>
-
-<button onclick="insertChem('\\div')">÷</button>
-
-<button onclick="insertChem('\\frac{}{}')">a/b</button>
-
-<button onclick="insertChem('\\sqrt{}')">√</button>
-
-</div>
-<math-field
+<textarea
     id="question"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:140px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:12px;
-        font-size:20px;
-    ">
-</math-field>
+    rows="8"
+    placeholder="Enter Question"
+    required>
+</textarea>
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
@@ -246,18 +197,10 @@ import "https://unpkg.com/mathlive?module";
 
 <div class="form-grid">
 <label class="sr-only" for="optionA">Option A</label>
-<math-field
+<input
+    type="text"
     id="optionA"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:55px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:8px;
-        font-size:18px;
-    ">
-</math-field>
+    placeholder="Option A">
 <div class="form-group">
     <label>Option A Image</label>
     <input type="text" id="optionAImage" readonly>
@@ -265,18 +208,10 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionB">Option B</label>
-<math-field
+<input
+    type="text"
     id="optionB"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:55px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:8px;
-        font-size:18px;
-    ">
-</math-field>
+    placeholder="Option B">
 <div class="form-group">
     <label>Option B Image</label>
     <input type="text" id="optionBImage" readonly>
@@ -284,18 +219,10 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionC">Option C</label>
-<math-field
+<input
+    type="text"
     id="optionC"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:55px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:8px;
-        font-size:18px;
-    ">
-</math-field>
+    placeholder="Option C">
 <div class="form-group">
     <label>Option C Image</label>
     <input type="text" id="optionCImage" readonly>
@@ -303,18 +230,10 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="optionD">Option D</label>
-<math-field
+<input
+    type="text"
     id="optionD"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:55px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:8px;
-        font-size:18px;
-    ">
-</math-field>
+    placeholder="Option D">
 <div class="form-group">
     <label>Option D Image</label>
     <input type="text" id="optionDImage" readonly>
@@ -342,18 +261,11 @@ import "https://unpkg.com/mathlive?module";
 </div>
 
 <label class="sr-only" for="solution">Solution</label>
-<math-field
+<textarea
     id="solution"
-    class="math-editor"
-    style="
-        width:100%;
-        min-height:180px;
-        border:1px solid #dcdcdc;
-        border-radius:10px;
-        padding:12px;
-        font-size:20px;
-    ">
-</math-field>
+    rows="8"
+    placeholder="Solution">
+</textarea>
 <div class="form-group">
     <label>Solution Image</label>
     <input type="text" id="solutionImage" readonly placeholder="No image selected">
