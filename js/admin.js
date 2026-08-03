@@ -311,8 +311,6 @@ function collectFormData() {
 
         type: document.getElementById("type").value,
 
-        question: questionEditor.getData(),
-
         // NEW
         questionImage: document.getElementById("questionImage").value,
 
@@ -338,7 +336,7 @@ function collectFormData() {
 
         answer: Number(document.getElementById("answer").value),
 
-        solution: solutionEditor.getData(),
+       
 
         // NEW
         solutionImage: document.getElementById("solutionImage").value,
@@ -378,13 +376,13 @@ function saveDraft() {
         year: document.getElementById("year").value,
         difficulty: document.getElementById("difficulty").value,
         type: document.getElementById("type").value,
-        question: questionEditor.getData(),
+     
         optionA: document.getElementById("optionA").value,
         optionB: document.getElementById("optionB").value,
         optionC: document.getElementById("optionC").value,
         optionD: document.getElementById("optionD").value,
         answer: document.getElementById("answer").value,
-        solution: solutionEditor.getData(),
+        
         youtube: document.getElementById("youtube").value
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -402,17 +400,13 @@ function loadDraft() {
         document.getElementById("year").value = draft.year || "";
         document.getElementById("difficulty").value = draft.difficulty || "";
         document.getElementById("type").value = draft.type || "";
-        if (tinymce.get("question")) {
-    questionEditor.setData(draft.question || "");
-}
+
         document.getElementById("optionA").value = draft.optionA || "";
 document.getElementById("optionB").value = draft.optionB || "";
 document.getElementById("optionC").value = draft.optionC || "";
 document.getElementById("optionD").value = draft.optionD || "";
         document.getElementById("answer").value = draft.answer || "";
-        if (tinymce.get("solution")) {
-    solutionEditor.setData(draft.solution || "");
-}
+     
         document.getElementById("youtube").value = draft.youtube || "";
         updatePreview();
     } catch (error) {
@@ -425,13 +419,6 @@ function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
 
     document.getElementById("questionForm").reset();
-if (tinymce.get("question")) {
-    questionEditor.setData("");
-}
-
-if (tinymce.get("solution")) {
-    solutionEditor.setData("");
-}
 
     chapterSelect.innerHTML =
         '<option value="">Select Chapter</option>';
@@ -579,7 +566,6 @@ function updatePreview() {
     tag.className = "difficulty " + difficulty.toLowerCase();
 
     document.getElementById("previewQuestion").textContent =
-        questionEditor.getData() ||
         "Your question will appear here...";
 }
 
@@ -723,9 +709,6 @@ document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
-        if (tinymce.get("question")) {
-    questionEditor.setData(q.question || "");
-}
 
         document.getElementById("questionImage").value =
             q.questionImage || "";
@@ -748,10 +731,6 @@ document.getElementById("optionD").value = q.options?.[3] || "";
             q.optionImages?.D || "";
 
         document.getElementById("answer").value = q.answer;
-
-        if (tinymce.get("solution")) {
-    solutionEditor.setData(q.solution || "");
-}
 
         document.getElementById("solutionImage").value =
             q.solutionImage || "";
