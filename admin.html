@@ -314,19 +314,17 @@
 let questionEditor;
 let solutionEditor;
 
-ClassicEditor
-.create(document.querySelector("#question"))
+ClassicEditor.create(document.querySelector("#question"))
 .then(editor => {
     questionEditor = editor;
 })
-.catch(console.error);
+.catch(error => console.error(error));
 
-ClassicEditor
-.create(document.querySelector("#solution"))
+ClassicEditor.create(document.querySelector("#solution"))
 .then(editor => {
     solutionEditor = editor;
 })
-.catch(console.error);
+.catch(error => console.error(error));
 </script>
 </body>
 </html>
