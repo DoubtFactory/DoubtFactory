@@ -779,3 +779,18 @@ window.insertChem = function(symbol) {
     activeMathField.focus();
 
 };
+document.querySelectorAll("math-field").forEach(field => {
+
+    field.setOptions({
+
+        smartMode: true,
+
+        smartFence: true,
+
+        virtualKeyboardMode: "manual",
+
+        defaultMode: "math"
+
+    });
+
+});
