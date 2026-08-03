@@ -56,10 +56,11 @@ function showQuestion() {
     document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
-   document.getElementById("questionText").innerHTML =
-    (q.question || "No question available")
-        .replace(/ /g, "&nbsp;")
-        .replace(/\n/g, "<br>");
+   document.getElementById("questionText").innerHTML = `
+<math-field readonly>
+${q.question || ""}
+</math-field>
+`;
 const questionImageContainer = document.getElementById("questionImageContainer");
 
 if (questionImageContainer) {
@@ -104,7 +105,9 @@ if (questionImageContainer) {
                     alt="Option ${key}">
             ` : ""}
 
-            <span>${option}</span>
+           <math-field readonly>
+${option}
+</math-field>
 
         </div>
     `;
@@ -217,7 +220,11 @@ if (solution) {
         q.solution.trim() !== ""
     ) {
 
-        solution.textContent = q.solution;
+        solution.innerHTML = `
+<math-field readonly>
+${q.solution || ""}
+</math-field>
+`;
 
     } else if (
         !q.solutionImage ||
