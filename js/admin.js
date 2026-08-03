@@ -770,15 +770,44 @@ document.querySelectorAll("math-field").forEach(field => {
     });
 });
 
-window.insertChem = function(symbol) {
+window.insertChem = function(symbol){
 
-    if (!activeMathField) return;
+    if(!activeMathField) return;
 
-    activeMathField.insert(symbol);
+    activeMathField.executeCommand(["insert", symbol]);
 
     activeMathField.focus();
 
 };
+document.addEventListener("keydown",(e)=>{
+
+    if(!activeMathField) return;
+
+    if(e.ctrlKey && e.key==="2"){
+
+        e.preventDefault();
+
+        activeMathField.executeCommand(["insert","_2"]);
+
+    }
+
+    if(e.ctrlKey && e.key==="3"){
+
+        e.preventDefault();
+
+        activeMathField.executeCommand(["insert","_3"]);
+
+    }
+
+    if(e.ctrlKey && e.key==="="){
+
+        e.preventDefault();
+
+        activeMathField.executeCommand(["insert","\\rightleftharpoons"]);
+
+    }
+
+});
 document.querySelectorAll("math-field").forEach(field => {
 
     field.setOptions({
