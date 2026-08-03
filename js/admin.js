@@ -402,13 +402,17 @@ function loadDraft() {
         document.getElementById("year").value = draft.year || "";
         document.getElementById("difficulty").value = draft.difficulty || "";
         document.getElementById("type").value = draft.type || "";
-        document.getElementById("question").setValue(draft.question || "");
-        document.getElementById("optionA").setValue(draft.optionA || "");
-document.getElementById("optionB").setValue(draft.optionB || "");
-document.getElementById("optionC").setValue(draft.optionC || "");
-document.getElementById("optionD").setValue(draft.optionD || "");
+        if (tinymce.get("question")) {
+    tinymce.get("question").setContent(draft.question || "");
+}
+        document.getElementById("optionA").value = draft.optionA || "";
+document.getElementById("optionB").value = draft.optionB || "";
+document.getElementById("optionC").value = draft.optionC || "";
+document.getElementById("optionD").value = draft.optionD || "";
         document.getElementById("answer").value = draft.answer || "";
-        document.getElementById("solution").setValue(draft.solution || "");
+        if (tinymce.get("solution")) {
+    tinymce.get("solution").setContent(draft.solution || "");
+}
         document.getElementById("youtube").value = draft.youtube || "";
         updatePreview();
     } catch (error) {
