@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
 </head>
 
@@ -311,66 +311,22 @@
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script>
-tinymce.init({
+let questionEditor;
+let solutionEditor;
 
-    selector: '#question,#solution',
+ClassicEditor
+.create(document.querySelector("#question"))
+.then(editor => {
+    questionEditor = editor;
+})
+.catch(console.error);
 
-    height: 350,
-
-    menubar: false,
-
-    branding: false,
-
-    plugins: 'lists table link image code fullscreen',
-
-    toolbar:
-        'undo redo | bold italic underline | superscript subscript | bullist numlist | alignleft aligncenter alignright | table | chemistry',
-
-    setup: function(editor){
-
-        editor.ui.registry.addButton('chemistry',{
-
-            text:'Chemistry',
-
-            onAction:function(){
-
-                const value = prompt(
-`Insert Chemistry Symbol
-
-1 = ⇌
-2 = →
-3 = Δ
-4 = α
-5 = β
-6 = γ
-7 = °
-8 = ×
-9 = ±`
-                );
-
-                const map = {
-                    "1":"⇌",
-                    "2":"→",
-                    "3":"Δ",
-                    "4":"α",
-                    "5":"β",
-                    "6":"γ",
-                    "7":"°",
-                    "8":"×",
-                    "9":"±"
-                };
-
-                if(map[value]){
-                    editor.insertContent(map[value]);
-                }
-
-            }
-
-        });
-
-    }
-
-});
+ClassicEditor
+.create(document.querySelector("#solution"))
+.then(editor => {
+    solutionEditor = editor;
+})
+.catch(console.error);
 </script>
 </body>
 </html>
