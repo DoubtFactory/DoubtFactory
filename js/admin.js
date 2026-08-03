@@ -311,16 +311,16 @@ function collectFormData() {
 
         type: document.getElementById("type").value,
 
-        question: document.getElementById("question").getValue(),
+        question: tinymce.get("question").getContent(),
 
         // NEW
         questionImage: document.getElementById("questionImage").value,
 
-        options: [
-    document.getElementById("optionA").getValue(),
-    document.getElementById("optionB").getValue(),
-    document.getElementById("optionC").getValue(),
-    document.getElementById("optionD").getValue()
+       options: [
+    document.getElementById("optionA").value,
+    document.getElementById("optionB").value,
+    document.getElementById("optionC").value,
+    document.getElementById("optionD").value
 ],
 
         // NEW
@@ -338,7 +338,7 @@ function collectFormData() {
 
         answer: Number(document.getElementById("answer").value),
 
-        solution: document.getElementById("solution").getValue(),
+        solution: tinymce.get("solution").getContent(),
 
         // NEW
         solutionImage: document.getElementById("solutionImage").value,
@@ -378,13 +378,13 @@ function saveDraft() {
         year: document.getElementById("year").value,
         difficulty: document.getElementById("difficulty").value,
         type: document.getElementById("type").value,
-        question: document.getElementById("question").value,
+        question: tinymce.get("question").getContent(),
         optionA: document.getElementById("optionA").value,
         optionB: document.getElementById("optionB").value,
         optionC: document.getElementById("optionC").value,
         optionD: document.getElementById("optionD").value,
         answer: document.getElementById("answer").value,
-        solution: document.getElementById("solution").value,
+        solution: tinymce.get("solution").getContent(),
         youtube: document.getElementById("youtube").value
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -568,7 +568,7 @@ function updatePreview() {
     tag.className = "difficulty " + difficulty.toLowerCase();
 
     document.getElementById("previewQuestion").textContent =
-        document.getElementById("question").value ||
+        tinymce.get("question").getContent() ||
         "Your question will appear here...";
 }
 
