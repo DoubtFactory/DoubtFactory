@@ -425,6 +425,13 @@ function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
 
     document.getElementById("questionForm").reset();
+if (tinymce.get("question")) {
+    tinymce.get("question").setContent("");
+}
+
+if (tinymce.get("solution")) {
+    tinymce.get("solution").setContent("");
+}
 
     chapterSelect.innerHTML =
         '<option value="">Select Chapter</option>';
