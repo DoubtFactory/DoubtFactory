@@ -312,6 +312,7 @@ function collectFormData() {
         type: document.getElementById("type").value,
 
         // NEW
+question: questionEditor.getData(),
         questionImage: document.getElementById("questionImage").value,
 
        options: [
@@ -335,10 +336,8 @@ function collectFormData() {
         },
 
         answer: Number(document.getElementById("answer").value),
-
+solution: solutionEditor.getData(),
        
-
-        // NEW
         solutionImage: document.getElementById("solutionImage").value,
 
         youtube: extractVideoId(document.getElementById("youtube").value),
@@ -376,13 +375,13 @@ function saveDraft() {
         year: document.getElementById("year").value,
         difficulty: document.getElementById("difficulty").value,
         type: document.getElementById("type").value,
-     
+     question: questionEditor ? questionEditor.getData() : "",
         optionA: document.getElementById("optionA").value,
         optionB: document.getElementById("optionB").value,
         optionC: document.getElementById("optionC").value,
         optionD: document.getElementById("optionD").value,
         answer: document.getElementById("answer").value,
-        
+        solution: solutionEditor ? solutionEditor.getData() : "",
         youtube: document.getElementById("youtube").value
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -400,13 +399,17 @@ function loadDraft() {
         document.getElementById("year").value = draft.year || "";
         document.getElementById("difficulty").value = draft.difficulty || "";
         document.getElementById("type").value = draft.type || "";
-
+if (questionEditor) {
+    questionEditor.setData(draft.question || "");
+}
         document.getElementById("optionA").value = draft.optionA || "";
 document.getElementById("optionB").value = draft.optionB || "";
 document.getElementById("optionC").value = draft.optionC || "";
 document.getElementById("optionD").value = draft.optionD || "";
         document.getElementById("answer").value = draft.answer || "";
-     
+     if (solutionEditor) {
+    solutionEditor.setData(draft.solution || "");
+}
         document.getElementById("youtube").value = draft.youtube || "";
         updatePreview();
     } catch (error) {
