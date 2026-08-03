@@ -422,7 +422,13 @@ function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
 
     document.getElementById("questionForm").reset();
+if (questionEditor) {
+    questionEditor.setData("");
+}
 
+if (solutionEditor) {
+    solutionEditor.setData("");
+}
     chapterSelect.innerHTML =
         '<option value="">Select Chapter</option>';
 
@@ -712,7 +718,9 @@ document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
-
+if (questionEditor) {
+    questionEditor.setData(q.question || "");
+}
         document.getElementById("questionImage").value =
             q.questionImage || "";
 
@@ -734,7 +742,9 @@ document.getElementById("optionD").value = q.options?.[3] || "";
             q.optionImages?.D || "";
 
         document.getElementById("answer").value = q.answer;
-
+if (solutionEditor) {
+    solutionEditor.setData(q.solution || "");
+}
         document.getElementById("solutionImage").value =
             q.solutionImage || "";
 
