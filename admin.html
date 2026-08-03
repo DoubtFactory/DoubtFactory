@@ -318,13 +318,13 @@ ClassicEditor.create(document.querySelector("#question"))
 .then(editor => {
     questionEditor = editor;
 })
-.catch(error => console.error(error));
+.catch(console.error);
 
 ClassicEditor.create(document.querySelector("#solution"))
 .then(editor => {
     solutionEditor = editor;
 })
-.catch(error => console.error(error));
+.catch(console.error);
 </script>
 </body>
 </html>
