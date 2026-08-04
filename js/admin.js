@@ -769,5 +769,3 @@ updatePreview();
     }
 
 };
-
-});
