@@ -19,7 +19,9 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
 </head>
 
@@ -183,12 +185,8 @@
 
 <label>Question</label>
 
-<textarea
-    id="question"
-    rows="8"
-    placeholder="Enter Question"
-    required>
-</textarea>
+<div id="questionEditor" style="height:250px;"></div>
+<input type="hidden" id="question">
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
@@ -197,10 +195,8 @@
 
 <div class="form-grid">
 <label class="sr-only" for="optionA">Option A</label>
-<input
-    type="text"
-    id="optionA"
-    placeholder="Option A">
+<div id="optionAEditor" style="height:120px;"></div>
+<input type="hidden" id="optionA">
 <div class="form-group">
     <label>Option A Image</label>
     <input type="text" id="optionAImage" readonly>
@@ -208,10 +204,8 @@
 </div>
 
 <label class="sr-only" for="optionB">Option B</label>
-<input
-    type="text"
-    id="optionB"
-    placeholder="Option B">
+<div id="optionBEditor" style="height:120px;"></div>
+<input type="hidden" id="optionB">
 <div class="form-group">
     <label>Option B Image</label>
     <input type="text" id="optionBImage" readonly>
@@ -219,10 +213,8 @@
 </div>
 
 <label class="sr-only" for="optionC">Option C</label>
-<input
-    type="text"
-    id="optionC"
-    placeholder="Option C">
+<div id="optionCEditor" style="height:120px;"></div>
+<input type="hidden" id="optionC">
 <div class="form-group">
     <label>Option C Image</label>
     <input type="text" id="optionCImage" readonly>
@@ -230,10 +222,8 @@
 </div>
 
 <label class="sr-only" for="optionD">Option D</label>
-<input
-    type="text"
-    id="optionD"
-    placeholder="Option D">
+<div id="optionDEditor" style="height:120px;"></div>
+<input type="hidden" id="optionD">
 <div class="form-group">
     <label>Option D Image</label>
     <input type="text" id="optionDImage" readonly>
@@ -261,11 +251,8 @@
 </div>
 
 <label class="sr-only" for="solution">Solution</label>
-<textarea
-    id="solution"
-    rows="8"
-    placeholder="Solution">
-</textarea>
+<div id="solutionEditor" style="height:250px;"></div>
+<input type="hidden" id="solution">
 <div class="form-group">
     <label>Solution Image</label>
     <input type="text" id="solutionImage" readonly placeholder="No image selected">
