@@ -297,6 +297,46 @@
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
+<script>
+const toolbarOptions = [
+  [{ 'header': [1, 2, 3, false] }],
+  ['bold', 'italic', 'underline'],
+  [{ 'script': 'sub' }, { 'script': 'super' }],
+  [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+  [{ 'align': [] }],
+  ['blockquote', 'code-block'],
+  ['clean']
+];
 
+const questionEditor = new Quill('#questionEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+
+const optionAEditor = new Quill('#optionAEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+
+const optionBEditor = new Quill('#optionBEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+
+const optionCEditor = new Quill('#optionCEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+
+const optionDEditor = new Quill('#optionDEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+
+const solutionEditor = new Quill('#solutionEditor', {
+    theme: 'snow',
+    modules: { toolbar: toolbarOptions }
+});
+</script>
 </body>
 </html>
