@@ -383,13 +383,13 @@ function saveDraft() {
         year: document.getElementById("year").value,
         difficulty: document.getElementById("difficulty").value,
         type: document.getElementById("type").value,
-     question: document.getElementById("question").value,
-        optionA: document.getElementById("optionA").value,
-        optionB: document.getElementById("optionB").value,
-        optionC: document.getElementById("optionC").value,
-        optionD: document.getElementById("optionD").value,
+     question: questionEditor.root.innerHTML,
+        optionA: optionAEditor.root.innerHTML,
+        optionB: optionBEditor.root.innerHTML,
+        optionC: optionCEditor.root.innerHTML,
+        optionD: optionDEditor.root.innerHTML,
         answer: document.getElementById("answer").value,
-        solution: document.getElementById("solution").value,
+        solution: solutionEditor.root.innerHTML,
         youtube: document.getElementById("youtube").value
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -407,13 +407,13 @@ function loadDraft() {
         document.getElementById("year").value = draft.year || "";
         document.getElementById("difficulty").value = draft.difficulty || "";
         document.getElementById("type").value = draft.type || "";
-document.getElementById("question").value = draft.question || "";
-        document.getElementById("optionA").value = draft.optionA || "";
-document.getElementById("optionB").value = draft.optionB || "";
-document.getElementById("optionC").value = draft.optionC || "";
-document.getElementById("optionD").value = draft.optionD || "";
+questionEditor.root.innerHTML = draft.question || "";
+optionAEditor.root.innerHTML = draft.optionA || "";
+optionBEditor.root.innerHTML = draft.optionB || "";
+optionCEditor.root.innerHTML = draft.optionC || "";
+optionDEditor.root.innerHTML = draft.optionD || "";
         document.getElementById("answer").value = draft.answer || "";
-    document.getElementById("solution").value = draft.solution || "";
+    solutionEditor.root.innerHTML = draft.solution || "";
         document.getElementById("youtube").value = draft.youtube || "";
         updatePreview();
     } catch (error) {
@@ -426,6 +426,17 @@ function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
 
     document.getElementById("questionForm").reset();
+questionEditor.setContents([]);
+
+optionAEditor.setContents([]);
+
+optionBEditor.setContents([]);
+
+optionCEditor.setContents([]);
+
+optionDEditor.setContents([]);
+
+solutionEditor.setContents([]);
 document.getElementById("question").value = "";
 document.getElementById("solution").value = "";
     chapterSelect.innerHTML =
