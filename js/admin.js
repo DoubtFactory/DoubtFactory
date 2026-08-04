@@ -560,22 +560,8 @@ fields.forEach(id => {
 });
 
 function updatePreview() {
-
-    document.getElementById("previewExam").textContent =
-        document.getElementById("exam").value || "Exam";
-
-    document.getElementById("previewChapter").textContent =
-        document.getElementById("chapter").value || "Chapter";
-
-    const difficulty =
-        document.getElementById("difficulty").value || "Difficulty";
-
-    const tag = document.getElementById("previewDifficulty");
-    tag.textContent = difficulty;
-    tag.className = "difficulty " + difficulty.toLowerCase();
-
-    document.getElementById("previewQuestion").textContent =
-        "Your question will appear here...";
+    // Live Preview removed
+    return;
 }
 
 async function loadQuestionsTable() {
