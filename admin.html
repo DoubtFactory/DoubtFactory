@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
 
 </head>
 
@@ -310,21 +310,6 @@
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
-<script>
-let questionEditor;
-let solutionEditor;
 
-ClassicEditor.create(document.querySelector("#question"))
-.then(editor => {
-    questionEditor = editor;
-})
-.catch(console.error);
-
-ClassicEditor.create(document.querySelector("#solution"))
-.then(editor => {
-    solutionEditor = editor;
-})
-.catch(console.error);
-</script>
 </body>
 </html>
