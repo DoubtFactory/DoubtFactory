@@ -311,18 +311,24 @@ function collectFormData() {
 
         type: document.getElementById("type").value,
 
-        // NEW
-question: document.getElementById("question").value,
+        // Question
+        question: questionEditor.root.innerHTML,
+
         questionImage: document.getElementById("questionImage").value,
 
-       options: [
-    document.getElementById("optionA").value,
-    document.getElementById("optionB").value,
-    document.getElementById("optionC").value,
-    document.getElementById("optionD").value
-],
+        // Options
+        options: [
 
-        // NEW
+            optionAEditor.root.innerHTML,
+
+            optionBEditor.root.innerHTML,
+
+            optionCEditor.root.innerHTML,
+
+            optionDEditor.root.innerHTML
+
+        ],
+
         optionImages: {
 
             A: document.getElementById("optionAImage").value,
@@ -336,8 +342,10 @@ question: document.getElementById("question").value,
         },
 
         answer: Number(document.getElementById("answer").value),
-solution: document.getElementById("solution").value,
-       
+
+        // Solution
+        solution: solutionEditor.root.innerHTML,
+
         solutionImage: document.getElementById("solutionImage").value,
 
         youtube: extractVideoId(document.getElementById("youtube").value),
