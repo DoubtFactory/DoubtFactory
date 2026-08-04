@@ -668,7 +668,6 @@ window.editQuestion = async function(id) {
     try {
 
         const docRef = doc(db, "questions", id);
-
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -677,40 +676,43 @@ window.editQuestion = async function(id) {
         }
 
         const q = docSnap.data();
-editingDocId = id;
 
-isEditing = true;
+        editingDocId = id;
+        isEditing = true;
 
-saveButton.textContent = "Update Question";
+        saveButton.textContent = "Update Question";
 
-        console.log("Subject element:", document.getElementById("subject"));
-console.log("Chapter element:", document.getElementById("chapter"));
-console.log("Exam element:", document.getElementById("exam"));
+        const subject = document.getElementById("subject");
+        subject.value = q.subject || "";
 
-const subject = document.getElementById("subject");
-subject.value = q.subject || "";
+        subject.dispatchEvent(new Event("change"));
 
-// Trigger the existing change event that populates chapters
-subject.dispatchEvent(new Event("change"));
+        setTimeout(() => {
+            chapterSelect.value = q.chapter || "";
+        }, 300);
 
-// Wait briefly, then select the saved chapter
-setTimeout(() => {
-    chapterSelect.value = q.chapter || "";
-}, 300);
-
-// Set remaining fields
-document.getElementById("exam").value = q.exam || "";
+        document.getElementById("exam").value = q.exam || "";
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
-document.getElementById("question").value = q.question || "";
+
+        // ==========================
+        // QUILL EDITORS
+        // ==========================
+
+        questionEditor.root.innerHTML = q.question || "";
+
+        optionAEditor.root.innerHTML = q.options?.[0] || "";
+        optionBEditor.root.innerHTML = q.options?.[1] || "";
+        optionCEditor.root.innerHTML = q.options?.[2] || "";
+        optionDEditor.root.innerHTML = q.options?.[3] || "";
+
+        solutionEditor.root.innerHTML = q.solution || "";
+
+        // ==========================
+
         document.getElementById("questionImage").value =
             q.questionImage || "";
-
-       document.getElementById("optionA").value = q.options?.[0] || "";
-document.getElementById("optionB").value = q.options?.[1] || "";
-document.getElementById("optionC").value = q.options?.[2] || "";
-document.getElementById("optionD").value = q.options?.[3] || "";
 
         document.getElementById("optionAImage").value =
             q.optionImages?.A || "";
@@ -725,26 +727,21 @@ document.getElementById("optionD").value = q.options?.[3] || "";
             q.optionImages?.D || "";
 
         document.getElementById("answer").value = q.answer;
-document.getElementById("solution").value = q.solution || "";
+
         document.getElementById("solutionImage").value =
             q.solutionImage || "";
 
         document.getElementById("youtube").value =
             q.youtube || "";
 
-        updatePreview();
-
         window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-});
-
-updatePreview();
+            top: 0,
+            behavior: "smooth"
+        });
 
     } catch(err){
 
         console.error(err);
-
         alert(err.message);
 
     }
