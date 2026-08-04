@@ -184,7 +184,41 @@
 <h3>Question Content</h3>
 
 <label>Question</label>
+<div class="chem-toolbar">
 
+<button type="button" onclick="insertChem('⇌')">⇌</button>
+
+<button type="button" onclick="insertChem('→')">→</button>
+
+<button type="button" onclick="insertChem('←')">←</button>
+
+<button type="button" onclick="insertChem('Δ')">Δ</button>
+
+<button type="button" onclick="insertChem('α')">α</button>
+
+<button type="button" onclick="insertChem('β')">β</button>
+
+<button type="button" onclick="insertChem('γ')">γ</button>
+
+<button type="button" onclick="insertChem('λ')">λ</button>
+
+<button type="button" onclick="insertChem('μ')">μ</button>
+
+<button type="button" onclick="insertChem('°')">°</button>
+
+<button type="button" onclick="insertChem('±')">±</button>
+
+<button type="button" onclick="insertChem('≤')">≤</button>
+
+<button type="button" onclick="insertChem('≥')">≥</button>
+
+<button type="button" onclick="insertChem('≠')">≠</button>
+
+<button type="button" onclick="insertChem('×')">×</button>
+
+<button type="button" onclick="insertChem('÷')">÷</button>
+
+</div>
 <div id="questionEditor" style="height:250px;"></div>
 <input type="hidden" id="question">
 <div class="form-group">
@@ -298,45 +332,81 @@
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
 <script>
+
 const toolbarOptions = [
-  [{ 'header': [1, 2, 3, false] }],
-  ['bold', 'italic', 'underline'],
-  [{ 'script': 'sub' }, { 'script': 'super' }],
-  [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-  [{ 'align': [] }],
-  ['blockquote', 'code-block'],
+  [{ 'header': [1,2,3,false] }],
+  ['bold','italic','underline'],
+  [{ 'script':'sub' },{ 'script':'super' }],
+  [{ 'list':'ordered' },{ 'list':'bullet' }],
+  [{ 'align':[] }],
+  ['blockquote','code-block'],
   ['clean']
 ];
 
-const questionEditor = new Quill('#questionEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const questionEditor = new Quill('#questionEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
 
-const optionAEditor = new Quill('#optionAEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const optionAEditor = new Quill('#optionAEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
 
-const optionBEditor = new Quill('#optionBEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const optionBEditor = new Quill('#optionBEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
 
-const optionCEditor = new Quill('#optionCEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const optionCEditor = new Quill('#optionCEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
 
-const optionDEditor = new Quill('#optionDEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const optionDEditor = new Quill('#optionDEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
 
-const solutionEditor = new Quill('#solutionEditor', {
-    theme: 'snow',
-    modules: { toolbar: toolbarOptions }
+const solutionEditor = new Quill('#solutionEditor',{
+    theme:'snow',
+    modules:{toolbar:toolbarOptions}
 });
+
+/* ---------- ADD FROM HERE ---------- */
+
+let activeEditor = questionEditor;
+
+[
+    questionEditor,
+    optionAEditor,
+    optionBEditor,
+    optionCEditor,
+    optionDEditor,
+    solutionEditor
+].forEach(editor => {
+
+    editor.root.addEventListener("click", () => {
+
+        activeEditor = editor;
+
+    });
+
+});
+
+function insertChem(symbol){
+
+    const range = activeEditor.getSelection(true);
+
+    activeEditor.insertText(range.index, symbol);
+
+    activeEditor.setSelection(range.index + symbol.length);
+
+}
+
+/* ---------- END HERE ---------- */
+
 </script>
+
 </body>
 </html>
