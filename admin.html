@@ -19,9 +19,7 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
 </head>
 
@@ -217,8 +215,7 @@
 <button type="button" onclick="insertChem('10⁻³')">10⁻³</button>
 
 </div>
-<div id="questionEditor" style="height:250px;"></div>
-<input type="hidden" id="question">
+<textarea id="question" rows="8" placeholder="Enter Question"></textarea>
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
