@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- FIXED: Added maximum-scale=1.0 and user-scalable=no to strictly prevent accidental pinching/zooming on mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Admin Panel | Doubt Factory</title>
 <meta name="description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
@@ -25,24 +26,22 @@
 <body class="admin-page">
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<header class="navbar">
-<div class="container admin-nav">
-
-<h2>Doubt Factory Admin</h2>
-
-<nav aria-label="Admin navigation">
-    <a href="index.html">Home</a>
-    <a href="admin.html">Admin</a>
-
-    <button id="logoutBtn" class="btn btn-danger">
-        Logout
-    </button>
-<button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-    🌙
-</button>
-</nav>
-
-</div>
+<!-- FIXED: Restored the proper site-header so it gets the blue background and white text styling -->
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <h2>Doubt Factory</h2>
+        <p>Admin Panel</p>
+    </a>
+    <nav aria-label="Admin navigation">
+        <a href="index.html">Home</a>
+        <a href="admin.html">Admin</a>
+        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+            Logout
+        </button>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" style="margin-left:5px;">
+            🌙
+        </button>
+    </nav>
 </header>
 
 <main id="mainContent" class="container admin-shell">
