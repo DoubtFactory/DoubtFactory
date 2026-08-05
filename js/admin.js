@@ -146,31 +146,38 @@ function buildToolbar(textarea) {
                 const history = editorHistories[textarea.id];
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
-                const selectedText = textarea.value.substring(start, end);
-                const beforeText = textarea.value.substring(0, start);
-                const afterText = textarea.value.substring(end);
+                const text = textarea.value;
+                const beforeText = text.substring(0, start);
+                const selectedText = text.substring(start, end);
+                const afterText = text.substring(end);
 
                 if (item.action !== "undo" && item.action !== "redo") {
-                    history.save(textarea.value);
+                    history.save(text);
                 }
+
+                let newCursorPos = start;
 
                 if (item.action === "insert") {
                     const insertStr = item.args[0];
                     textarea.value = beforeText + insertStr + afterText;
-                    textarea.setSelectionRange(start + insertStr.length, start + insertStr.length);
+                    newCursorPos = start + insertStr.length;
                 } else if (item.action === "wrap") {
                     const prefix = item.args[0];
                     const suffix = item.args[1];
                     textarea.value = beforeText + prefix + selectedText + suffix + afterText;
-                    textarea.setSelectionRange(start + prefix.length, start + prefix.length + selectedText.length);
+                    newCursorPos = start + prefix.length + selectedText.length;
                 } else if (item.action === "clear") {
                     const cleanText = selectedText.replace(/<[^>]*>?/gm, '');
                     textarea.value = beforeText + cleanText + afterText;
-                    textarea.setSelectionRange(start, start + cleanText.length);
+                    newCursorPos = start + cleanText.length;
                 } else if (item.action === "undo") {
-                    textarea.value = history.undo(textarea.value);
+                    textarea.value = history.undo(text);
                 } else if (item.action === "redo") {
-                    textarea.value = history.redo(textarea.value);
+                    textarea.value = history.redo(text);
+                }
+                
+                if (item.action !== "undo" && item.action !== "redo") {
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
                 }
                 
                 textarea.dispatchEvent(new Event('input'));

@@ -180,8 +180,8 @@
 
 <h3>Question Content</h3>
 
-<div class="form-group editor-wrapper">
-    <label for="question">Question</label>
+<label for="question">Question</label>
+<div class="chem-editor-wrapper">
     <textarea id="question" class="chem-editor" rows="8" placeholder="Enter Question"></textarea>
 </div>
 <div class="form-group">
@@ -191,8 +191,8 @@
 </div>
 
 <div class="form-grid">
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionA">Option A</label>
+    <label class="sr-only" for="optionA">Option A</label>
+    <div class="chem-editor-wrapper">
         <textarea id="optionA" class="chem-editor" rows="4" placeholder="Enter Option A"></textarea>
     </div>
     <div class="form-group">
@@ -201,8 +201,8 @@
         <button type="button" id="uploadOptionAImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionB">Option B</label>
+    <label class="sr-only" for="optionB">Option B</label>
+    <div class="chem-editor-wrapper">
         <textarea id="optionB" class="chem-editor" rows="4" placeholder="Enter Option B"></textarea>
     </div>
     <div class="form-group">
@@ -211,8 +211,8 @@
         <button type="button" id="uploadOptionBImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionC">Option C</label>
+    <label class="sr-only" for="optionC">Option C</label>
+    <div class="chem-editor-wrapper">
         <textarea id="optionC" class="chem-editor" rows="4" placeholder="Enter Option C"></textarea>
     </div>
     <div class="form-group">
@@ -221,8 +221,8 @@
         <button type="button" id="uploadOptionCImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionD">Option D</label>
+    <label class="sr-only" for="optionD">Option D</label>
+    <div class="chem-editor-wrapper">
         <textarea id="optionD" class="chem-editor" rows="4" placeholder="Enter Option D"></textarea>
     </div>
     <div class="form-group">
@@ -244,13 +244,13 @@
     </div>
     
     <div class="form-group">
-        <label for="youtube">YouTube video URL</label>
+        <label for="youtube" style="display:block;">YouTube video URL</label>
         <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
     </div>
 </div>
 
-<div class="form-group editor-wrapper">
-    <label for="solution">Solution</label>
+<label for="solution">Solution</label>
+<div class="chem-editor-wrapper">
     <textarea id="solution" class="chem-editor" rows="8" placeholder="Enter Solution"></textarea>
 </div>
 <div class="form-group">

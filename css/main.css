@@ -2424,19 +2424,28 @@ body.home-page{
     }
 }
 .edit-btn{
+
     background:#2563eb;
+
     color:#fff;
+
     border:none;
+
     padding:8px 14px;
+
     border-radius:8px;
+
     cursor:pointer;
+
     margin-right:8px;
+
 }
 
 .edit-btn:hover{
-    background:#1d4ed8;
-}
 
+    background:#1d4ed8;
+
+}
 /* ==========================
    Dark Mode
 ========================== */
@@ -2497,26 +2506,30 @@ body.dark footer{
 /* ===========================
    CUSTOM CHEMISTRY TOOLBAR
 =========================== */
-.editor-wrapper {
+.chem-editor-wrapper {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .custom-editor-toolbar {
     display: flex;
-    gap: 16px;
+    flex-wrap: nowrap;
+    gap: 12px;
     padding: 10px;
-    background: #ffffff;
-    border: 1px solid #dbeafe;
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
+    background: #f8fbff;
+    border-bottom: 1px solid #dbeafe;
     overflow-x: auto;
     white-space: nowrap;
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .custom-editor-toolbar::-webkit-scrollbar {
@@ -2532,7 +2545,7 @@ body.dark footer{
     gap: 6px;
     align-items: center;
     border-right: 1px solid #e2e8f0;
-    padding-right: 16px;
+    padding-right: 12px;
 }
 .toolbar-group:last-child {
     border-right: none;
@@ -2551,12 +2564,13 @@ body.dark footer{
     padding: 6px 10px;
     border: 1px solid transparent;
     border-radius: 6px;
-    background: #f8fafc;
+    background: #ffffff;
     color: #334155;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .toolbar-btn:hover {
     background: #eff6ff;
@@ -2564,22 +2578,38 @@ body.dark footer{
     border-color: #bfdbfe;
 }
 
-.editor-wrapper textarea {
-    border-radius: 0 0 12px 12px;
-    border-top: 1px solid #dbeafe;
+.chem-editor-wrapper textarea.chem-editor {
+    border: none !important;
+    border-radius: 0 !important;
     margin-bottom: 0 !important;
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    background: #ffffff;
+    resize: vertical;
+    outline: none;
+    min-height: 120px;
+}
+.chem-editor-wrapper textarea.chem-editor:focus {
+    background: #fafcff;
 }
 
-body.dark .custom-editor-toolbar {
+body.dark .chem-editor-wrapper {
     background: #1d1d1d;
     border-color: #333;
 }
-body.dark .toolbar-group {
+body.dark .custom-editor-toolbar {
+    background: #2b2b2b;
     border-color: #333;
 }
+body.dark .toolbar-group {
+    border-color: #444;
+}
 body.dark .toolbar-btn {
-    background: #2b2b2b;
+    background: #1d1d1d;
     color: #e2e8f0;
+    box-shadow: none;
 }
 body.dark .toolbar-btn:hover {
     background: #3b82f6;
@@ -2588,4 +2618,11 @@ body.dark .toolbar-btn:hover {
 }
 body.dark .group-label {
     color: #64748b;
+}
+body.dark .chem-editor-wrapper textarea.chem-editor {
+    background: #1d1d1d;
+    color: #fff;
+}
+body.dark .chem-editor-wrapper textarea.chem-editor:focus {
+    background: #252525;
 }
