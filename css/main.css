@@ -2502,151 +2502,56 @@ body.dark footer{
     background:#0d0d0d;
     color:#ccc;
 }
+.chem-toolbar{
 
+display:flex;
+
+flex-wrap:wrap;
+
+gap:8px;
+
+margin-bottom:12px;
+
+}
+
+.chem-toolbar button{
+
+padding:8px 14px;
+
+border:none;
+
+border-radius:8px;
+
+background:#0b57d0;
+
+color:white;
+
+cursor:pointer;
+
+font-size:16px;
+
+font-weight:600;
+
+}
+
+.chem-toolbar button:hover{
+
+background:#0847aa;
+
+}
 
 /* ===========================
    CUSTOM CHEMISTRY TOOLBAR
 =========================== */
-
-.chem-editor-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 12px;
-    border: 1px solid #dbeafe;
-    border-radius: 10px;
-    background: #ffffff;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
 .custom-editor-toolbar {
     display: flex;
     flex-wrap: nowrap;
     gap: 8px;
     padding: 8px 10px;
     background: #f8fbff;
-    border-bottom: 1px solid #dbeafe;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-.custom-editor-toolbar::-webkit-scrollbar {
-    height: 6px;
-}
-.custom-editor-toolbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-
-.toolbar-group {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    border-right: 1px solid #e2e8f0;
-    padding-right: 10px;
-}
-.toolbar-group:last-child {
-    border-right: none;
-    padding-right: 0;
-}
-
-.group-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #64748b;
-    margin-right: 6px;
-}
-
-.toolbar-btn {
-    padding: 6px 8px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #334155;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.toolbar-btn:hover {
-    background: #eff6ff;
-    color: #2563eb;
-    border-color: #bfdbfe;
-}
-
-.chem-editor-wrapper textarea.chem-editor {
-    border: none !important;
-    border-radius: 0 0 10px 10px !important;
-    margin: 0 !important;
-    width: 100%;
-    max-width: 100%;
-    padding: 14px;
-    font-size: 16px !important;
-    font-family: 'Poppins', sans-serif;
-    background: #ffffff;
-    resize: vertical;
-    outline: none;
-    box-sizing: border-box;
-}
-.chem-editor-wrapper textarea.chem-editor:focus {
-    background: #fafcff;
-}
-
-/* Dark Mode Overrides for Toolbar */
-body.dark .chem-editor-wrapper {
-    background: #1d1d1d;
-    border-color: #444;
-}
-body.dark .custom-editor-toolbar {
-    background: #2b2b2b;
-    border-color: #444;
-}
-body.dark .toolbar-group {
-    border-color: #444;
-}
-body.dark .toolbar-btn {
-    background: #1d1d1d;
-    color: #e2e8f0;
-    border-color: #444;
-}
-body.dark .toolbar-btn:hover {
-    background: #3b82f6;
-    color: #fff;
-    border-color: #60a5fa;
-}
-body.dark .chem-editor-wrapper textarea.chem-editor {
-    background: #1d1d1d;
-    color: #fff;
-}
-body.dark .chem-editor-wrapper textarea.chem-editor:focus {
-    background: #252525;
-}
-/* ===========================
-   CUSTOM CHEMISTRY TOOLBAR
-=========================== */
-.chem-editor-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 15px;
     border: 1px solid #dbeafe;
-    border-radius: 10px;
-    background: #ffffff;
-    overflow: hidden;
-}
-
-.custom-editor-toolbar {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
-    padding: 8px 10px;
-    background: #f8fbff;
-    border-bottom: 1px solid #dbeafe;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -2689,16 +2594,16 @@ body.dark .chem-editor-wrapper textarea.chem-editor:focus {
 }
 
 textarea.chem-editor {
-    border: none !important;
+    border: 1px solid #dbeafe !important;
     border-radius: 0 0 10px 10px !important;
-    margin-bottom: 0 !important;
+    margin-bottom: 15px !important;
     width: 100%;
     padding: 14px;
-    font-size: 16px !important; /* Forces iOS to behave */
+    font-size: 16px !important; /* Fixes iOS zoom */
     font-family: 'Poppins', sans-serif;
     background: #ffffff;
     resize: vertical;
     outline: none;
     min-height: 100px;
 }
-textarea.chem-editor:focus { background: #fafcff; }
+textarea.chem-editor:focus { background: #fafcff; border-color: #bfdbfe !important; }
