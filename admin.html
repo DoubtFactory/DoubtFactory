@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- FIXED: Added maximum-scale=1.0 and user-scalable=no to strictly prevent accidental pinching/zooming on mobile -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Panel | Doubt Factory</title>
 <meta name="description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
@@ -26,8 +25,7 @@
 <body class="admin-page">
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<!-- FIXED: Restored the proper site-header so it gets the blue background and white text styling -->
-<header class="site-header">
+<header class="site-header admin-header">
     <a href="index.html" class="logo">
         <h2>Doubt Factory</h2>
         <p>Admin Panel</p>
@@ -35,7 +33,7 @@
     <nav aria-label="Admin navigation">
         <a href="index.html">Home</a>
         <a href="admin.html">Admin</a>
-        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:600; cursor:pointer; font-size:14px;">
             Logout
         </button>
         <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" style="margin-left:5px;">
@@ -181,53 +179,61 @@
 
 <label for="question">Question</label>
 <div class="chem-editor-wrapper">
-    <textarea id="question" class="chem-editor" rows="8" placeholder="Enter Question"></textarea>
+    <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
 </div>
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadQuestionImage">Upload Image</button>
+    <button type="button" id="uploadQuestionImage" class="upload-btn">Upload Image</button>
 </div>
 
 <div class="form-grid">
-    <label class="sr-only" for="optionA">Option A</label>
-    <div class="chem-editor-wrapper">
-        <textarea id="optionA" class="chem-editor" rows="4" placeholder="Enter Option A"></textarea>
+    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+        <label for="optionA">Option A</label>
+        <div class="chem-editor-wrapper">
+            <textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea>
+        </div>
     </div>
     <div class="form-group">
         <label>Option A Image</label>
         <input type="text" id="optionAImage" readonly>
-        <button type="button" id="uploadOptionAImage">Upload Image</button>
+        <button type="button" id="uploadOptionAImage" class="upload-btn">Upload Image</button>
     </div>
 
-    <label class="sr-only" for="optionB">Option B</label>
-    <div class="chem-editor-wrapper">
-        <textarea id="optionB" class="chem-editor" rows="4" placeholder="Enter Option B"></textarea>
+    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+        <label for="optionB">Option B</label>
+        <div class="chem-editor-wrapper">
+            <textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea>
+        </div>
     </div>
     <div class="form-group">
         <label>Option B Image</label>
         <input type="text" id="optionBImage" readonly>
-        <button type="button" id="uploadOptionBImage">Upload Image</button>
+        <button type="button" id="uploadOptionBImage" class="upload-btn">Upload Image</button>
     </div>
 
-    <label class="sr-only" for="optionC">Option C</label>
-    <div class="chem-editor-wrapper">
-        <textarea id="optionC" class="chem-editor" rows="4" placeholder="Enter Option C"></textarea>
+    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+        <label for="optionC">Option C</label>
+        <div class="chem-editor-wrapper">
+            <textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea>
+        </div>
     </div>
     <div class="form-group">
         <label>Option C Image</label>
         <input type="text" id="optionCImage" readonly>
-        <button type="button" id="uploadOptionCImage">Upload Image</button>
+        <button type="button" id="uploadOptionCImage" class="upload-btn">Upload Image</button>
     </div>
 
-    <label class="sr-only" for="optionD">Option D</label>
-    <div class="chem-editor-wrapper">
-        <textarea id="optionD" class="chem-editor" rows="4" placeholder="Enter Option D"></textarea>
+    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+        <label for="optionD">Option D</label>
+        <div class="chem-editor-wrapper">
+            <textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea>
+        </div>
     </div>
     <div class="form-group">
         <label>Option D Image</label>
         <input type="text" id="optionDImage" readonly>
-        <button type="button" id="uploadOptionDImage">Upload Image</button>
+        <button type="button" id="uploadOptionDImage" class="upload-btn">Upload Image</button>
     </div>
 </div>
 
@@ -250,18 +256,18 @@
 
 <label for="solution">Solution</label>
 <div class="chem-editor-wrapper">
-    <textarea id="solution" class="chem-editor" rows="8" placeholder="Enter Solution"></textarea>
+    <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
 </div>
 <div class="form-group">
     <label>Solution Image</label>
     <input type="text" id="solutionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadSolutionImage">Upload Image</button>
+    <button type="button" id="uploadSolutionImage" class="upload-btn">Upload Image</button>
 </div>
 
 <div class="form-actions">
 <button type="submit" id="saveButton">Save Question</button>
 <button type="button" id="clearButton">Clear</button>
-<span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b; font-weight: bold;"></span>
+<span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b; font-weight: bold; font-size: 13px;"></span>
 </div>
 
 <div id="formError" class="form-error"></div>
