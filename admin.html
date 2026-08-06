@@ -25,21 +25,24 @@
 <body class="admin-page">
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<header class="site-header admin-header">
-    <a href="index.html" class="logo">
-        <h2>Doubt Factory</h2>
-        <p>Admin Panel</p>
-    </a>
-    <nav aria-label="Admin navigation">
-        <a href="index.html">Home</a>
-        <a href="admin.html">Admin</a>
-        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:600; cursor:pointer; font-size:14px;">
-            Logout
-        </button>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode" style="margin-left:5px;">
-            🌙
-        </button>
-    </nav>
+<header class="navbar">
+<div class="container admin-nav">
+
+<h2>Doubt Factory Admin</h2>
+
+<nav aria-label="Admin navigation">
+    <a href="index.html">Home</a>
+    <a href="admin.html">Admin</a>
+
+    <button id="logoutBtn" class="btn btn-danger">
+        Logout
+    </button>
+<button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+    🌙
+</button>
+</nav>
+
+</div>
 </header>
 
 <main id="mainContent" class="container admin-shell">
@@ -179,95 +182,83 @@
 
 <label for="question">Question</label>
 <div class="chem-editor-wrapper">
-    <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
+    <textarea id="question" class="chem-editor" rows="8" placeholder="Enter Question"></textarea>
 </div>
 <div class="form-group">
     <label>Question Image</label>
     <input type="text" id="questionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadQuestionImage" class="upload-btn">Upload Image</button>
+    <button type="button" id="uploadQuestionImage">Upload Image</button>
 </div>
 
 <div class="form-grid">
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionA">Option A</label>
-        <div class="chem-editor-wrapper">
-            <textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea>
-        </div>
+    <label class="sr-only" for="optionA">Option A</label>
+    <div class="chem-editor-wrapper">
+        <textarea id="optionA" class="chem-editor" rows="4" placeholder="Enter Option A"></textarea>
     </div>
     <div class="form-group">
         <label>Option A Image</label>
         <input type="text" id="optionAImage" readonly>
-        <button type="button" id="uploadOptionAImage" class="upload-btn">Upload Image</button>
+        <button type="button" id="uploadOptionAImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionB">Option B</label>
-        <div class="chem-editor-wrapper">
-            <textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea>
-        </div>
+    <label class="sr-only" for="optionB">Option B</label>
+    <div class="chem-editor-wrapper">
+        <textarea id="optionB" class="chem-editor" rows="4" placeholder="Enter Option B"></textarea>
     </div>
     <div class="form-group">
         <label>Option B Image</label>
         <input type="text" id="optionBImage" readonly>
-        <button type="button" id="uploadOptionBImage" class="upload-btn">Upload Image</button>
+        <button type="button" id="uploadOptionBImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionC">Option C</label>
-        <div class="chem-editor-wrapper">
-            <textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea>
-        </div>
+    <label class="sr-only" for="optionC">Option C</label>
+    <div class="chem-editor-wrapper">
+        <textarea id="optionC" class="chem-editor" rows="4" placeholder="Enter Option C"></textarea>
     </div>
     <div class="form-group">
         <label>Option C Image</label>
         <input type="text" id="optionCImage" readonly>
-        <button type="button" id="uploadOptionCImage" class="upload-btn">Upload Image</button>
+        <button type="button" id="uploadOptionCImage">Upload Image</button>
     </div>
 
-    <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-        <label for="optionD">Option D</label>
-        <div class="chem-editor-wrapper">
-            <textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea>
-        </div>
+    <label class="sr-only" for="optionD">Option D</label>
+    <div class="chem-editor-wrapper">
+        <textarea id="optionD" class="chem-editor" rows="4" placeholder="Enter Option D"></textarea>
     </div>
     <div class="form-group">
         <label>Option D Image</label>
         <input type="text" id="optionDImage" readonly>
-        <button type="button" id="uploadOptionDImage" class="upload-btn">Upload Image</button>
+        <button type="button" id="uploadOptionDImage">Upload Image</button>
     </div>
 </div>
 
 <div class="form-grid">
-    <div class="form-group">
-        <label for="answer">Correct Answer</label>
-        <select id="answer">
-            <option value="0">A</option>
-            <option value="1">B</option>
-            <option value="2">C</option>
-            <option value="3">D</option>
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label for="youtube" style="display:block;">YouTube video URL</label>
-        <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
-    </div>
+    <label for="answer">Correct Answer</label>
+    <select id="answer">
+        <option value="0">A</option>
+        <option value="1">B</option>
+        <option value="2">C</option>
+        <option value="3">D</option>
+    </select>
+
+    <label class="sr-only" for="youtube">YouTube video URL</label>
+    <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
 </div>
 
-<label for="solution">Solution</label>
+<label class="sr-only" for="solution">Solution</label>
 <div class="chem-editor-wrapper">
-    <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
+    <textarea id="solution" class="chem-editor" rows="8" placeholder="Enter Solution"></textarea>
 </div>
 <div class="form-group">
     <label>Solution Image</label>
     <input type="text" id="solutionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadSolutionImage" class="upload-btn">Upload Image</button>
+    <button type="button" id="uploadSolutionImage">Upload Image</button>
 </div>
 
 <div class="form-actions">
 <button type="submit" id="saveButton">Save Question</button>
 <button type="button" id="clearButton">Clear</button>
-<span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b; font-weight: bold; font-size: 13px;"></span>
+<span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b;"></span>
 </div>
 
 <div id="formError" class="form-error"></div>
