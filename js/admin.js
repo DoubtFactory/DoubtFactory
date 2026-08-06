@@ -693,3 +693,120 @@ window.editQuestion = async function(id) {
         alert(err.message);
     }
 };
+/* ===========================================
+   CUSTOM CHEMISTRY EDITOR ENGINE
+=========================================== */
+class EditorHistory {
+    constructor() { this.undoStack = []; this.redoStack = []; }
+    save(state) {
+        if (this.undoStack.length > 0 && this.undoStack[this.undoStack.length - 1] === state) return;
+        this.undoStack.push(state);
+        this.redoStack = [];
+    }
+    undo(currentState) {
+        if (this.undoStack.length === 0) return currentState;
+        this.redoStack.push(currentState);
+        return this.undoStack.pop();
+    }
+    redo(currentState) {
+        if (this.redoStack.length === 0) return currentState;
+        this.undoStack.push(currentState);
+        return this.redoStack.pop();
+    }
+}
+
+const editorHistories = {};
+
+const toolbarConfig = [
+    { name: "Format", items: [
+        { label: "B", action: "wrap", args: ["<b>", "</b>"] },
+        { label: "I", action: "wrap", args: ["<i>", "</i>"] },
+        { label: "U", action: "wrap", args: ["<u>", "</u>"] },
+        { label: "X₂", action: "wrap", args: ["<sub>", "</sub>"] },
+        { label: "X²", action: "wrap", args: ["<sup>", "</sup>"] },
+        { label: "Undo", action: "undo" },
+        { label: "Redo", action: "redo" }
+    ]},
+    { name: "Arrows", items: ["→", "←", "⇌", "⇋", "↑", "↓"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Charges", items: ["+", "−", "²⁺", "³⁺", "⁻", "²⁻", "³⁻", "δ+", "δ−"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Sub/Sup", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉", "⁰", "¹", "²", "³", "⁴", "⁵"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Greek", items: ["α", "β", "γ", "δ", "ε", "λ", "μ", "π", "σ", "θ", "ω", "Ω"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Symbols", items: ["Δ", "∇", "√", "∞", "≈", "≠", "≤", "≥", "±", "×", "÷", "∝", "∴", "∵", "°"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Organic", items: ["CH₃", "CH₂", "COOH", "CHO", "NH₂", "NO₂", "CN", "OR", "Ph", "Ar", "Me", "Et", "Bu", "Pr"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Ions", items: ["H⁺", "OH⁻", "NH₄⁺", "SO₄²⁻", "NO₃⁻", "CO₃²⁻", "PO₄³⁻", "Cl⁻", "Br⁻", "I⁻", "MnO₄⁻", "Cr₂O₇²⁻"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Metals", items: ["Na⁺", "K⁺", "Mg²⁺", "Ca²⁺", "Al³⁺", "Fe²⁺", "Fe³⁺", "Cu²⁺", "Ag⁺", "Zn²⁺", "Pb²⁺"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Thermo/Kinetics", items: ["ΔH", "ΔS", "ΔG", "Ea", "Kc", "Kp", "Ka", "Kb", "Kw", "pH", "pOH"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Lab", items: ["heat", "catalyst", "pressure", "aq", "l", "g", "s", "conc.", "dil."].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Templates", items: [
+        { label: "Match Column", action: "insert", args: ["<table border=\"1\" style=\"width:100%;text-align:center;\">\n<tbody>\n<tr><td>(A) </td><td>(p) </td></tr>\n<tr><td>(B) </td><td>(q) </td></tr>\n<tr><td>(C) </td><td>(r) </td></tr>\n<tr><td>(D) </td><td>(s) </td></tr>\n</tbody>\n</table>"] },
+        { label: "Assertion/Reason", action: "insert", args: ["<div><b>Assertion (A):</b> </div>\n<div><b>Reason (R):</b> </div>"] }
+    ]}
+];
+
+function buildToolbar(textarea) {
+    editorHistories[textarea.id] = new EditorHistory();
+    const toolbar = document.createElement("div");
+    toolbar.className = "custom-editor-toolbar";
+
+    toolbarConfig.forEach(group => {
+        const groupDiv = document.createElement("div");
+        groupDiv.className = "toolbar-group";
+        
+        const groupLabel = document.createElement("span");
+        groupLabel.className = "group-label";
+        groupLabel.textContent = group.name;
+        groupDiv.appendChild(groupLabel);
+
+        group.items.forEach(item => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "toolbar-btn";
+            btn.textContent = item.label;
+            
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                textarea.focus();
+                
+                const history = editorHistories[textarea.id];
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const text = textarea.value;
+                
+                if (item.action !== "undo" && item.action !== "redo") history.save(text);
+
+                let newCursorPos = start;
+                if (item.action === "insert") {
+                    const insertStr = item.args[0];
+                    textarea.value = text.substring(0, start) + insertStr + text.substring(end);
+                    newCursorPos = start + insertStr.length;
+                } else if (item.action === "wrap") {
+                    textarea.value = text.substring(0, start) + item.args[0] + text.substring(start, end) + item.args[1] + text.substring(end);
+                    newCursorPos = start + item.args[0].length + (end - start);
+                } else if (item.action === "undo") {
+                    textarea.value = history.undo(text);
+                } else if (item.action === "redo") {
+                    textarea.value = history.redo(text);
+                }
+                
+                if (item.action !== "undo" && item.action !== "redo") {
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
+                }
+                textarea.dispatchEvent(new Event('input'));
+            });
+            groupDiv.appendChild(btn);
+        });
+        toolbar.appendChild(groupDiv);
+    });
+
+    textarea.parentNode.insertBefore(toolbar, textarea);
+
+    textarea.addEventListener("input", () => {
+        clearTimeout(textarea.historyTimeout);
+        textarea.historyTimeout = setTimeout(() => {
+            editorHistories[textarea.id].save(textarea.value);
+        }, 500);
+    });
+}
+
+// Initialize all textareas
+document.querySelectorAll(".chem-editor").forEach(textarea => buildToolbar(textarea));
