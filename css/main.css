@@ -2626,3 +2626,79 @@ body.dark .chem-editor-wrapper textarea.chem-editor {
 body.dark .chem-editor-wrapper textarea.chem-editor:focus {
     background: #252525;
 }
+/* ===========================
+   CUSTOM CHEMISTRY TOOLBAR
+=========================== */
+.chem-editor-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.custom-editor-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #f8fbff;
+    border-bottom: 1px solid #dbeafe;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.custom-editor-toolbar::-webkit-scrollbar { height: 6px; }
+.custom-editor-toolbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+.toolbar-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 10px;
+}
+.toolbar-group:last-child { border-right: none; padding-right: 0; }
+
+.group-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-right: 6px;
+}
+
+.toolbar-btn {
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.toolbar-btn:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+textarea.chem-editor {
+    border: none !important;
+    border-radius: 0 0 10px 10px !important;
+    margin-bottom: 0 !important;
+    width: 100%;
+    padding: 14px;
+    font-size: 16px !important; /* Forces iOS to behave */
+    font-family: 'Poppins', sans-serif;
+    background: #ffffff;
+    resize: vertical;
+    outline: none;
+    min-height: 100px;
+}
+textarea.chem-editor:focus { background: #fafcff; }
