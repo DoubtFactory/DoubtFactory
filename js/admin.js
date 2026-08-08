@@ -91,15 +91,8 @@ class EditorHistory {
 
 const editorHistories = {};
 
+// PERFECTLY LEAN TOOLBAR: Only the exact requested symbols
 const toolbarConfig = [
-    { name: "Format", items: [
-        { label: "B", action: "wrap", args: ["<b>", "</b>"] },
-        { label: "I", action: "wrap", args: ["<i>", "</i>"] },
-        { label: "U", action: "wrap", args: ["<u>", "</u>"] },
-        { label: "Undo", action: "undo", args: [] },
-        { label: "Redo", action: "redo", args: [] },
-        { label: "Clear", action: "clear", args: [] }
-    ]},
     { name: "Sub (Neutral)", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (+)", items: ["₊", "⁰₊", "₁₊", "₂₊", "₃₊", "₄₊", "₅₊", "₆₊", "₇₊", "₈₊", "₉₊"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (-)", items: ["₋", "⁰₋", "₁₋", "₂₋", "₃₋", "₄₋", "₅₋", "₆₋", "₇₋", "₈₋", "₉₋"].map(s => ({ label: s, action: "insert", args: [s] })) },
