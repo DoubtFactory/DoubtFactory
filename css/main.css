@@ -2607,3 +2607,16 @@ textarea.chem-editor {
     min-height: 100px;
 }
 textarea.chem-editor:focus { background: #fafcff; border-color: #bfdbfe !important; }
+/* Admin page normal desktop scale */
+@media (min-width: 1000px) {
+    body.admin-page {
+        font-size: 15px;
+    }
+
+    body.admin-page .container,
+    body.admin-page .admin-container {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
