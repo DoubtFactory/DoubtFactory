@@ -1,6 +1,6 @@
 import { uploadImage } from "./cloudinary.js";
-import { getQuestions, db, auth, onAuthStateChanged, signOut } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getQuestions } from "./firebase.js";
+import { auth, onAuthStateChanged, signOut } from "./firebase.js";
 
 onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -8,19 +8,38 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+import { db } from "./firebase.js";
+import {
+    collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const STORAGE_KEY = "doubtFactoryAdminDraft";
+const toast = document.getElementById("toast");
+const formError = document.getElementById("formError");
+const saveButton = document.getElementById("saveButton");
+const clearButton = document.getElementById("clearButton");
+const statusLabel = document.getElementById("saveStatus");
+const subjectSelect = document.getElementById("subject");
+const chapterSelect = document.getElementById("chapter");
+const questionForm = document.getElementById("questionForm");
+const output = document.getElementById("output");
+
 /* ===========================================
    UI & TAB NAVIGATION (BULLETPROOF)
 =========================================== */
 window.switchTab = function(targetId) {
+    // Hide all sections
     document.querySelectorAll('.view-section').forEach(sec => {
         sec.style.display = 'none';
     });
     
+    // Show target section
     const targetSection = document.getElementById(targetId);
     if (targetSection) {
         targetSection.style.display = 'block';
     }
 
+    // Update sidebar highlights
     document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('data-target') === targetId) {
@@ -36,9 +55,16 @@ document.addEventListener('click', function(e) {
         const targetId = trigger.getAttribute('data-target');
         window.switchTab(targetId);
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        
+        // Close mobile menu if it is open
+        const appSidebar = document.getElementById("appSidebar");
+        if(appSidebar && appSidebar.classList.contains("open")) {
+            appSidebar.classList.remove("open");
+        }
     }
 });
 
+// Live Clock
 setInterval(() => {
     const now = new Date();
     const dateText = document.getElementById('dateText');
@@ -47,33 +73,14 @@ setInterval(() => {
     if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
 }, 1000);
 
-const STORAGE_KEY = "doubtFactoryAdminDraft";
-
-// 3. Live Clock
-setInterval(() => {
-    const now = new Date();
-    const dateText = document.getElementById('dateText');
-    const timeText = document.getElementById('timeText');
-    if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-    if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
-}, 1000);
-
-const STORAGE_KEY = "doubtFactoryAdminDraft";
-
-const toast = document.getElementById("toast");
-const formError = document.getElementById("formError");
-
-const saveButton = document.getElementById("saveButton");
-const clearButton = document.getElementById("clearButton");
-
-const statusLabel = document.getElementById("saveStatus");
-
-const subjectSelect = document.getElementById("subject");
-const chapterSelect = document.getElementById("chapter");
-
-const questionForm = document.getElementById("questionForm");
-
-const output = document.getElementById("output");
+// Mobile Sidebar Toggle
+const menuToggle = document.getElementById("menuToggle");
+const appSidebar = document.getElementById("appSidebar");
+if(menuToggle && appSidebar) {
+    menuToggle.addEventListener("click", () => {
+        appSidebar.classList.toggle("open");
+    });
+}
 
 /* ===========================================
    CUSTOM CHEMISTRY EDITOR ENGINE
@@ -117,7 +124,7 @@ const toolbarConfig = [
     { name: "Organic", items: ["CH₃", "CH₂", "COOH", "CHO", "NH₂", "NO₂", "CN", "OR", "Ph", "Ar", "Me", "Et", "Bu", "Pr"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Ions", items: ["H⁺", "OH⁻", "NH₄⁺", "SO₄²⁻", "NO₃⁻", "CO₃²⁻", "PO₄³⁻", "Cl⁻", "Br⁻", "I⁻", "MnO₄⁻", "Cr₂O₇²⁻"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Metals", items: ["Na⁺", "K⁺", "Mg²⁺", "Ca²⁺", "Al³⁺", "Fe²⁺", "Fe³⁺", "Cu²⁺", "Ag⁺", "Zn²⁺", "Pb²⁺"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Thermo/Kinetics", items: ["ΔH", "ΔS", "ΔG", "Ea", "Kc", "Kp", "Ka", "Kb", "Kw", "pH", "pOH"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Thermo", items: ["ΔH", "ΔS", "ΔG", "Ea", "Kc", "Kp", "Ka", "Kb", "Kw", "pH", "pOH"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Lab", items: ["heat", "catalyst", "pressure", "aq", "l", "g", "s", "conc.", "dil."].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Templates", items: [
         { label: "Match Column", action: "insert", args: ["<table border=\"1\" style=\"width:100%;text-align:center;\">\n<tbody>\n<tr><td>(A) </td><td>(p) </td></tr>\n<tr><td>(B) </td><td>(q) </td></tr>\n<tr><td>(C) </td><td>(r) </td></tr>\n<tr><td>(D) </td><td>(s) </td></tr>\n</tbody>\n</table>"] },
@@ -190,29 +197,21 @@ function buildToolbar(textarea) {
     });
 }
 
-// Initialize all textareas after DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".chem-editor").forEach(textarea => buildToolbar(textarea));
 });
 
 /* ===========================================
-   EDIT MODE
+   FIREBASE LOGIC & UTILS
 =========================================== */
 
 let editingDocId = null;
-
 let isEditing = false;
 
 function extractVideoId(url) {
-
     if (!url || url.trim() === "") return "";
-
-    const match = url.match(
-        /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/]+)/
-    );
-
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/]+)/);
     return match ? match[1] : url;
-
 }
 
 function showToast(message, type = "success") {
@@ -225,41 +224,19 @@ function showToast(message, type = "success") {
 }
 
 function setSavingState(isSaving) {
-
-    saveButton.disabled = isSaving;
-
-    if (isSaving) {
-
-        saveButton.textContent =
-            isEditing
-                ? "Updating..."
-                : "Saving...";
-
-    } else {
-
-        saveButton.textContent =
-            isEditing
-                ? "Update Question"
-                : "Save Question";
-
+    if(saveButton) {
+        saveButton.disabled = isSaving;
+        saveButton.textContent = isSaving ? (isEditing ? "Updating..." : "Saving...") : (isEditing ? "Update Question" : "Save Question");
     }
-
 }
 
 function updateStatus(message) {
-
-    const statusLabel = document.getElementById("status");
-
-    if (statusLabel) {
-        statusLabel.textContent = message;
-    }
-
+    if (statusLabel) statusLabel.textContent = message;
 }
 
 async function updateDashboard() {
     const questions = await getQuestions();
     
-    // Update Stats Cards
     const totalQuestions = document.getElementById("totalQuestions");
     if (totalQuestions) totalQuestions.textContent = questions.length;
 
@@ -268,7 +245,7 @@ async function updateDashboard() {
     
     const draftsCount = document.getElementById("draftQuestions");
     if (draftsCount) {
-        const localDraft = localStorage.getItem("doubtFactoryAdminDraft");
+        const localDraft = localStorage.getItem(STORAGE_KEY);
         draftsCount.textContent = localDraft ? "1" : "0";
     }
     
@@ -298,6 +275,7 @@ function renderRecentActivity(questions) {
         return `
             <div class="activity-item">
                 <div class="activity-left">
+                    <div class="act-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
                     <div class="act-text">
                         <strong>${qText}...</strong>
                         <p>${question.subject || "Subject"} • ${question.exam || "Exam"}</p>
@@ -364,56 +342,7 @@ function renderQuestionTypePieChart(questions) {
     legendElement.innerHTML = legendHTML;
 }
 
-function renderAnalytics(questions) {
-    const subjectContainer = document.getElementById("subjectAnalytics");
-    const examContainer = document.getElementById("examAnalytics");
-
-    if (!subjectContainer || !examContainer) return;
-
-    const subjectGroups = groupCounts(questions, "subject");
-    const examGroups = groupCounts(questions, "exam");
-
-    if (!subjectGroups.length && !examGroups.length) {
-        subjectContainer.innerHTML = '<div class="empty-panel">No analytics available yet.</div>';
-        examContainer.innerHTML = '<div class="empty-panel">No analytics available yet.</div>';
-        return;
-    }
-
-    subjectContainer.innerHTML = subjectGroups.length
-        ? subjectGroups.map(item => renderBar(item.label, item.count)).join("")
-        : '<div class="empty-panel">No analytics available yet.</div>';
-
-    examContainer.innerHTML = examGroups.length
-        ? examGroups.map(item => renderBar(item.label, item.count)).join("")
-        : '<div class="empty-panel">No analytics available yet.</div>';
-}
-
-function groupCounts(items, key) {
-    const grouped = items.reduce((accumulator, item) => {
-        const label = item[key] || "Unknown";
-        accumulator[label] = (accumulator[label] || 0) + 1;
-        return accumulator;
-    }, {});
-
-    return Object.entries(grouped)
-        .sort((a, b) => b[1] - a[1])
-        .map(([label, count]) => ({ label, count }));
-}
-
-function renderBar(label, count) {
-    return `
-        <div class="analytics-row">
-            <div class="analytics-meta">
-                <strong>${label}</strong>
-                <span>${count} questions</span>
-            </div>
-            <div class="analytics-bar"><span style="width:${Math.max(16, count * 20)}%"></span></div>
-        </div>
-    `;
-}
-
 const chapters = {
-
     "Physical Chemistry": [
         "Some Basic Concepts of Chemistry (Mole Concept)",
         "Atomic Structure",
@@ -429,7 +358,6 @@ const chapters = {
         "Surface Chemistry",
         "Solid State"
     ],
-
     "Organic Chemistry": [
         "General Organic Chemistry (GOC)",
         "Nomenclature",
@@ -445,7 +373,6 @@ const chapters = {
         "Chemistry in Everyday Life",
         "Practical Organic Chemistry"
     ],
-
     "Inorganic Chemistry": [
         "Periodic Table",
         "Chemical Bonding",
@@ -459,95 +386,57 @@ const chapters = {
         "Qualitative Analysis",
         "Environmental Chemistry"
     ]
-
 };
 
-subjectSelect.addEventListener("change", () => {
-
-    chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-
-    const list = chapters[subjectSelect.value];
-
-    if (!list) return;
-
-    list.forEach(chapter => {
-        const option = document.createElement("option");
-        option.value = chapter;
-        option.textContent = chapter;
-        chapterSelect.appendChild(option);
+if(subjectSelect) {
+    subjectSelect.addEventListener("change", () => {
+        chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+        const list = chapters[subjectSelect.value];
+        if (!list) return;
+        list.forEach(chapter => {
+            const option = document.createElement("option");
+            option.value = chapter;
+            option.textContent = chapter;
+            chapterSelect.appendChild(option);
+        });
     });
-
-});
+}
 
 function collectFormData() {
-
     return {
-
         id: Date.now(),
-
         subject: document.getElementById("subject").value,
-
         chapter: document.getElementById("chapter").value,
-
         exam: document.getElementById("exam").value,
-
         year: Number(document.getElementById("year").value),
-
         difficulty: document.getElementById("difficulty").value,
-
         type: document.getElementById("type").value,
-
-        // Question
         question: document.getElementById("question").value,
-
         questionImage: document.getElementById("questionImage").value,
-
-        // Options
         options: [
-
             document.getElementById("optionA").value,
-
             document.getElementById("optionB").value,
-
             document.getElementById("optionC").value,
-
             document.getElementById("optionD").value
-
         ],
-
         optionImages: {
-
             A: document.getElementById("optionAImage").value,
-
             B: document.getElementById("optionBImage").value,
-
             C: document.getElementById("optionCImage").value,
-
             D: document.getElementById("optionDImage").value
-
         },
-
         answer: Number(document.getElementById("answer").value),
-
-        // Solution
         solution: document.getElementById("solution").value,
-
         solutionImage: document.getElementById("solutionImage").value,
-
         youtube: extractVideoId(document.getElementById("youtube").value),
-
         views: 0,
-
         likes: 0
-
     };
-
 }
 
 function validateForm() {
     const formValues = collectFormData();
     const errors = [];
-
     if (!formValues.subject) errors.push("Please select a subject.");
     if (!formValues.chapter) errors.push("Please select a chapter.");
     if (!formValues.exam) errors.push("Please select an exam.");
@@ -557,11 +446,12 @@ function validateForm() {
     if (!formValues.question.trim()) errors.push("Please enter the question text.");
     if (formValues.answer < 0 || formValues.answer > 3) errors.push("Correct option index should be between 0 and 3.");
 
-    formError.textContent = errors.join(" ");
+    if(formError) formError.textContent = errors.join(" ");
     return errors.length === 0;
 }
 
 function saveDraft() {
+    if(!document.getElementById("subject")) return;
     const draft = {
         subject: document.getElementById("subject").value,
         chapter: document.getElementById("chapter").value,
@@ -580,6 +470,7 @@ function saveDraft() {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
     updateStatus("Draft saved");
+    updateDashboard(); 
 }
 
 function loadDraft() {
@@ -587,185 +478,104 @@ function loadDraft() {
     if (!raw) return;
     try {
         const draft = JSON.parse(raw);
-        document.getElementById("subject").value = draft.subject || "";
-        document.getElementById("chapter").value = draft.chapter || "";
-        document.getElementById("exam").value = draft.exam || "";
-        document.getElementById("year").value = draft.year || "";
-        document.getElementById("difficulty").value = draft.difficulty || "";
-        document.getElementById("type").value = draft.type || "";
-        document.getElementById("question").value = draft.question || "";
-        document.getElementById("optionA").value = draft.optionA || "";
-        document.getElementById("optionB").value = draft.optionB || "";
-        document.getElementById("optionC").value = draft.optionC || "";
-        document.getElementById("optionD").value = draft.optionD || "";
-        document.getElementById("answer").value = draft.answer || "";
-        document.getElementById("solution").value = draft.solution || "";
-        document.getElementById("youtube").value = draft.youtube || "";
-        updatePreview();
+        if(document.getElementById("subject")) {
+            document.getElementById("subject").value = draft.subject || "";
+            subjectSelect.dispatchEvent(new Event("change"));
+            setTimeout(() => { document.getElementById("chapter").value = draft.chapter || ""; }, 100);
+            document.getElementById("exam").value = draft.exam || "";
+            document.getElementById("year").value = draft.year || "";
+            document.getElementById("difficulty").value = draft.difficulty || "";
+            document.getElementById("type").value = draft.type || "";
+            document.getElementById("question").value = draft.question || "";
+            document.getElementById("optionA").value = draft.optionA || "";
+            document.getElementById("optionB").value = draft.optionB || "";
+            document.getElementById("optionC").value = draft.optionC || "";
+            document.getElementById("optionD").value = draft.optionD || "";
+            document.getElementById("answer").value = draft.answer || "";
+            document.getElementById("solution").value = draft.solution || "";
+            document.getElementById("youtube").value = draft.youtube || "";
+        }
     } catch (error) {
         console.error(error);
     }
 }
 
 function clearDraft() {
-
     localStorage.removeItem(STORAGE_KEY);
-
-    document.getElementById("questionForm").reset();
-    document.getElementById("question").value = "";
-    document.getElementById("optionA").value = "";
-    document.getElementById("optionB").value = "";
-    document.getElementById("optionC").value = "";
-    document.getElementById("optionD").value = "";
-    document.getElementById("solution").value = "";
-
-    chapterSelect.innerHTML =
-        '<option value="">Select Chapter</option>';
-
-    formError.textContent = "";
-
+    if(questionForm) {
+        questionForm.reset();
+        document.getElementById("question").value = "";
+        document.getElementById("optionA").value = "";
+        document.getElementById("optionB").value = "";
+        document.getElementById("optionC").value = "";
+        document.getElementById("optionD").value = "";
+        document.getElementById("solution").value = "";
+        chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+        if(formError) formError.textContent = "";
+    }
     editingDocId = null;
-
     isEditing = false;
-
-    saveButton.textContent = "Save Question";
-
-    updatePreview();
-
+    if(saveButton) saveButton.textContent = "Save Question";
     updateStatus("Form cleared");
-
+    updateDashboard();
 }
 
-document.getElementById("questionForm").addEventListener("submit", async function(e) {
+if(questionForm) {
+    questionForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        formError.textContent = "";
 
-    e.preventDefault();
+        if (!validateForm()) {
+            showToast("Please fix the highlighted issues.", "error");
+            return;
+        }
 
-    formError.textContent = "";
+        const question = collectFormData();
+        setSavingState(true);
+        updateStatus("Saving question...");
 
-    if (!validateForm()) {
-        showToast("Please fix the highlighted issues.", "error");
-        return;
-    }
+        try {
+            if (isEditing && editingDocId) {
+                await updateDoc(doc(db, "questions", editingDocId), question);
+                showToast("Question updated successfully.", "success");
+                updateStatus("Question updated");
+            } else {
+                await addDoc(collection(db, "questions"), question);
+                showToast("Question saved successfully.", "success");
+                updateStatus("Saved to Firebase");
+            }
 
-    const question = collectFormData();
+            clearDraft();
 
-    setSavingState(true);
-    updateStatus("Saving question...");
-
-    try {
-        if (isEditing && editingDocId) {
-
-    await updateDoc(
-        doc(db, "questions", editingDocId),
-        question
-    );
-
-    showToast("Question updated successfully.", "success");
-
-    updateStatus("Question updated");
-
-} else {
-
-    await addDoc(
-        collection(db, "questions"),
-        question
-    );
-
-    showToast("Question saved successfully.", "success");
-
-    updateStatus("Saved to Firebase");
-
+            try { await loadQuestionsTable(); } catch(e) { console.error("loadQuestionsTable()", e); }
+            try { await updateDashboard(); } catch(e) { console.error("updateDashboard()", e); }
+        } catch (error) {
+            console.error(error);
+            showToast("Error saving question.", "error");
+            updateStatus("Save failed");
+        } finally {
+            setSavingState(false);
+        }
+        if(output) output.textContent = JSON.stringify(question, null, 2);
+    });
 }
-
-localStorage.removeItem(STORAGE_KEY);
-
-document.getElementById("questionForm").reset();
-document.getElementById("question").value = "";
-document.getElementById("optionA").value = "";
-document.getElementById("optionB").value = "";
-document.getElementById("optionC").value = "";
-document.getElementById("optionD").value = "";
-document.getElementById("solution").value = "";
-
-chapterSelect.innerHTML =
-    '<option value="">Select Chapter</option>';
-
-editingDocId = null;
-
-isEditing = false;
-
-saveButton.textContent = "Save Question";
-
-try {
-    updatePreview();
-} catch(e) {
-    console.error("updatePreview()", e);
-}
-
-try {
-    await loadQuestionsTable();
-} catch(e) {
-    console.error("loadQuestionsTable()", e);
-}
-
-try {
-    await updateDashboard();
-} catch(e) {
-    console.error("updateDashboard()", e);
-}
-    } catch (error) {
-        console.error(error);
-        showToast("Error saving question.", "error");
-        updateStatus("Save failed");
-    } finally {
-        setSavingState(false);
-    }
-
-    document.getElementById("output").textContent = JSON.stringify(question, null, 2);
-
-});
 
 const fields = [
-    "exam",
-    "chapter",
-    "difficulty",
-    "question",
-    "subject",
-    "year",
-    "type",
-    "optionA",
-    "optionB",
-    "optionC",
-    "optionD",
-    "answer",
-    "solution",
-    "youtube"
+    "exam", "chapter", "difficulty", "question", "subject", "year", "type",
+    "optionA", "optionB", "optionC", "optionD", "answer", "solution", "youtube"
 ];
 
 fields.forEach(id => {
     const element = document.getElementById(id);
     if (!element) return;
-    element.addEventListener("input", () => {
-        saveDraft();
-        updatePreview();
-    });
-    element.addEventListener("change", () => {
-        saveDraft();
-        updatePreview();
-    });
+    element.addEventListener("input", saveDraft);
+    element.addEventListener("change", saveDraft);
 });
 
-function updatePreview() {
-    // Live Preview removed
-    return;
-}
-
 async function loadQuestionsTable() {
-
     const snapshot = await getDocs(collection(db, "questions"));
-
     const tbody = document.getElementById("questionsTableBody");
-
+    if(!tbody) return;
     tbody.innerHTML = "";
 
     snapshot.forEach(documentItem => {
@@ -776,31 +586,17 @@ async function loadQuestionsTable() {
                 <td>${q.chapter || ""}</td>
                 <td>${q.year || ""}</td>
                 <td>
-
-    <button
-        class="edit-btn"
-        onclick="editQuestion('${documentItem.id}')">
-        Edit
-    </button>
-
-    <button
-        class="delete-btn"
-        onclick="deleteQuestion('${documentItem.id}')">
-        Delete
-    </button>
-
-</td>
+                    <button class="edit-btn" onclick="editQuestion('${documentItem.id}')">Edit</button>
+                    <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">Delete</button>
+                </td>
             </tr>
         `;
     });
-
 }
 
 window.deleteQuestion = async function(id) {
-
     const confirmed = confirm("Delete this question?");
     if (!confirmed) return;
-
     try {
         await deleteDoc(doc(db, "questions", id));
         showToast("Question deleted.", "success");
@@ -810,18 +606,17 @@ window.deleteQuestion = async function(id) {
         console.error(error);
         showToast("Unable to delete question.", "error");
     }
-
 }
 
-clearButton.addEventListener("click", clearDraft);
+if(clearButton) clearButton.addEventListener("click", clearDraft);
 
 loadDraft();
 updateDashboard();
 loadQuestionsTable();
 
-console.log("admin.js loaded");
-const logoutBtn = document.getElementById("logoutBtn");
+console.log("admin.js loaded without errors!");
 
+const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
         try {
@@ -833,36 +628,27 @@ if (logoutBtn) {
         }
     });
 }
-function connectUploader(buttonId, inputId) {
 
+function connectUploader(buttonId, inputId) {
     const button = document.getElementById(buttonId);
     const input = document.getElementById(inputId);
-
     if (!button || !input) return;
-
     button.addEventListener("click", () => {
-
         uploadImage((url) => {
-
             input.value = url;
-
         });
-
     });
-
 }
 
 connectUploader("uploadQuestionImage", "questionImage");
-
 connectUploader("uploadOptionAImage", "optionAImage");
 connectUploader("uploadOptionBImage", "optionBImage");
 connectUploader("uploadOptionCImage", "optionCImage");
 connectUploader("uploadOptionDImage", "optionDImage");
-
 connectUploader("uploadSolutionImage", "solutionImage");
+
 window.editQuestion = async function(id) {
     try {
-        // Automatically switch to the Create/Edit Form tab
         if (window.switchTab) {
             window.switchTab("formSection");
         }
@@ -876,48 +662,42 @@ window.editQuestion = async function(id) {
         }
 
         const q = docSnap.data();
-
         editingDocId = id;
         isEditing = true;
-
-        saveButton.textContent = "Update Question";
+        if(saveButton) saveButton.textContent = "Update Question";
 
         const subject = document.getElementById("subject");
-        subject.value = q.subject || "";
+        if(subject) {
+            subject.value = q.subject || "";
+            subject.dispatchEvent(new Event("change"));
 
-        subject.dispatchEvent(new Event("change"));
+            setTimeout(() => {
+                if(chapterSelect) chapterSelect.value = q.chapter || "";
+            }, 300);
+        }
 
-        setTimeout(() => {
-            chapterSelect.value = q.chapter || "";
-        }, 300);
+        if(document.getElementById("exam")) document.getElementById("exam").value = q.exam || "";
+        if(document.getElementById("year")) document.getElementById("year").value = q.year || "";
+        if(document.getElementById("difficulty")) document.getElementById("difficulty").value = q.difficulty || "";
+        if(document.getElementById("type")) document.getElementById("type").value = q.type || "";
 
-        document.getElementById("exam").value = q.exam || "";
-        document.getElementById("year").value = q.year || "";
-        document.getElementById("difficulty").value = q.difficulty || "";
-        document.getElementById("type").value = q.type || "";
+        if(document.getElementById("question")) document.getElementById("question").value = q.question || "";
+        if(document.getElementById("optionA")) document.getElementById("optionA").value = q.options?.[0] || "";
+        if(document.getElementById("optionB")) document.getElementById("optionB").value = q.options?.[1] || "";
+        if(document.getElementById("optionC")) document.getElementById("optionC").value = q.options?.[2] || "";
+        if(document.getElementById("optionD")) document.getElementById("optionD").value = q.options?.[3] || "";
+        if(document.getElementById("solution")) document.getElementById("solution").value = q.solution || "";
 
-        // TEXTAREA EDITORS
-        document.getElementById("question").value = q.question || "";
-        document.getElementById("optionA").value = q.options?.[0] || "";
-        document.getElementById("optionB").value = q.options?.[1] || "";
-        document.getElementById("optionC").value = q.options?.[2] || "";
-        document.getElementById("optionD").value = q.options?.[3] || "";
-        document.getElementById("solution").value = q.solution || "";
+        if(document.getElementById("questionImage")) document.getElementById("questionImage").value = q.questionImage || "";
+        if(document.getElementById("optionAImage")) document.getElementById("optionAImage").value = q.optionImages?.A || "";
+        if(document.getElementById("optionBImage")) document.getElementById("optionBImage").value = q.optionImages?.B || "";
+        if(document.getElementById("optionCImage")) document.getElementById("optionCImage").value = q.optionImages?.C || "";
+        if(document.getElementById("optionDImage")) document.getElementById("optionDImage").value = q.optionImages?.D || "";
+        if(document.getElementById("answer")) document.getElementById("answer").value = q.answer;
+        if(document.getElementById("solutionImage")) document.getElementById("solutionImage").value = q.solutionImage || "";
+        if(document.getElementById("youtube")) document.getElementById("youtube").value = q.youtube || "";
 
-        document.getElementById("questionImage").value = q.questionImage || "";
-        document.getElementById("optionAImage").value = q.optionImages?.A || "";
-        document.getElementById("optionBImage").value = q.optionImages?.B || "";
-        document.getElementById("optionCImage").value = q.optionImages?.C || "";
-        document.getElementById("optionDImage").value = q.optionImages?.D || "";
-
-        document.getElementById("answer").value = q.answer;
-        document.getElementById("solutionImage").value = q.solutionImage || "";
-        document.getElementById("youtube").value = q.youtube || "";
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
     } catch(err){
         console.error(err);
