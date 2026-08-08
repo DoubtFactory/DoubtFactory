@@ -1,49 +1,26 @@
 import { uploadImage } from "./cloudinary.js";
-import { getQuestions } from "./firebase.js";
-import {
-    auth,
-    onAuthStateChanged,
-    signOut
-} from "./firebase.js";
+import { getQuestions, db, auth, onAuthStateChanged, signOut } from "./firebase.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 onAuthStateChanged(auth, (user) => {
-
     if (!user) {
         window.location.href = "login.html";
     }
-
 });
-import { db } from "./firebase.js";
-
-import {
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc,
-    getDoc,
-    updateDoc
-
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 /* ===========================================
    UI & TAB NAVIGATION (BULLETPROOF)
 =========================================== */
-
-// 1. Create a global function to handle tab switching
 window.switchTab = function(targetId) {
-    // Hide all view sections
     document.querySelectorAll('.view-section').forEach(sec => {
         sec.style.display = 'none';
     });
     
-    // Show the target section
     const targetSection = document.getElementById(targetId);
     if (targetSection) {
         targetSection.style.display = 'block';
     }
 
-    // Update the sidebar menu active state
     document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('data-target') === targetId) {
@@ -52,18 +29,25 @@ window.switchTab = function(targetId) {
     });
 };
 
-// 2. Attach ONE click listener to the entire document
 document.addEventListener('click', function(e) {
-    // Check if the clicked element (or its parent) has a data-target attribute
     const trigger = e.target.closest('[data-target]');
-    
     if (trigger) {
-        e.preventDefault(); // Stop the link from jumping the page
+        e.preventDefault(); 
         const targetId = trigger.getAttribute('data-target');
         window.switchTab(targetId);
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll smoothly to top
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }
 });
+
+setInterval(() => {
+    const now = new Date();
+    const dateText = document.getElementById('dateText');
+    const timeText = document.getElementById('timeText');
+    if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+    if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+}, 1000);
+
+const STORAGE_KEY = "doubtFactoryAdminDraft";
 
 // 3. Live Clock
 setInterval(() => {
