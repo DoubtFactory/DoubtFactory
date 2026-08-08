@@ -29,32 +29,39 @@ import {
 /* ===========================================
    UI & TAB NAVIGATION
 =========================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    const menuItems = document.querySelectorAll(".menu-item[data-target]");
-    const navTriggers = document.querySelectorAll(".nav-trigger");
-    const sections = document.querySelectorAll(".view-section");
-    
-    function switchTab(targetId) {
-        sections.forEach(sec => {
-            sec.style.display = sec.id === targetId ? "block" : "none";
-        });
-        menuItems.forEach(item => {
-            if (item.dataset.target === targetId) item.classList.add("active");
-            else item.classList.remove("active");
-        });
-    }
+const menuItems = document.querySelectorAll(".menu-item[data-target]");
+const navTriggers = document.querySelectorAll(".nav-trigger");
+const sections = document.querySelectorAll(".view-section");
 
-    menuItems.forEach(item => item.addEventListener("click", (e) => { e.preventDefault(); switchTab(item.dataset.target); }));
-    navTriggers.forEach(trigger => trigger.addEventListener("click", (e) => { e.preventDefault(); switchTab(trigger.dataset.target); }));
+// Made globally available so other functions can trigger tab switches
+window.switchTab = function(targetId) {
+    sections.forEach(sec => {
+        sec.style.display = sec.id === targetId ? "block" : "none";
+    });
+    menuItems.forEach(item => {
+        if (item.dataset.target === targetId) item.classList.add("active");
+        else item.classList.remove("active");
+    });
+};
 
-    // Clock
-    setInterval(() => {
-        const now = new Date();
-        const dateText = document.getElementById('dateText');
-        const timeText = document.getElementById('timeText');
-        if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-        if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB');
-    }, 1000);
+menuItems.forEach(item => item.addEventListener("click", (e) => { 
+    e.preventDefault(); 
+    switchTab(item.dataset.target); 
+}));
+
+navTriggers.forEach(trigger => trigger.addEventListener("click", (e) => { 
+    e.preventDefault(); 
+    switchTab(trigger.dataset.target); 
+}));
+
+// Clock
+setInterval(() => {
+    const now = new Date();
+    const dateText = document.getElementById('dateText');
+    const timeText = document.getElementById('timeText');
+    if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+    if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB');
+}, 1000);
 });
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 
@@ -859,8 +866,11 @@ connectUploader("uploadOptionDImage", "optionDImage");
 
 connectUploader("uploadSolutionImage", "solutionImage");
 window.editQuestion = async function(id) {
-
     try {
+        // Automatically switch to the Create/Edit Form tab
+        if (window.switchTab) {
+            window.switchTab("formSection");
+        }
 
         const docRef = doc(db, "questions", id);
         const docSnap = await getDoc(docRef);
@@ -891,43 +901,23 @@ window.editQuestion = async function(id) {
         document.getElementById("difficulty").value = q.difficulty || "";
         document.getElementById("type").value = q.type || "";
 
-        // ==========================
         // TEXTAREA EDITORS
-        // ==========================
-
         document.getElementById("question").value = q.question || "";
-
         document.getElementById("optionA").value = q.options?.[0] || "";
         document.getElementById("optionB").value = q.options?.[1] || "";
         document.getElementById("optionC").value = q.options?.[2] || "";
         document.getElementById("optionD").value = q.options?.[3] || "";
-
         document.getElementById("solution").value = q.solution || "";
 
-        // ==========================
-
-        document.getElementById("questionImage").value =
-            q.questionImage || "";
-
-        document.getElementById("optionAImage").value =
-            q.optionImages?.A || "";
-
-        document.getElementById("optionBImage").value =
-            q.optionImages?.B || "";
-
-        document.getElementById("optionCImage").value =
-            q.optionImages?.C || "";
-
-        document.getElementById("optionDImage").value =
-            q.optionImages?.D || "";
+        document.getElementById("questionImage").value = q.questionImage || "";
+        document.getElementById("optionAImage").value = q.optionImages?.A || "";
+        document.getElementById("optionBImage").value = q.optionImages?.B || "";
+        document.getElementById("optionCImage").value = q.optionImages?.C || "";
+        document.getElementById("optionDImage").value = q.optionImages?.D || "";
 
         document.getElementById("answer").value = q.answer;
-
-        document.getElementById("solutionImage").value =
-            q.solutionImage || "";
-
-        document.getElementById("youtube").value =
-            q.youtube || "";
+        document.getElementById("solutionImage").value = q.solutionImage || "";
+        document.getElementById("youtube").value = q.youtube || "";
 
         window.scrollTo({
             top: 0,
@@ -935,10 +925,7 @@ window.editQuestion = async function(id) {
         });
 
     } catch(err){
-
         console.error(err);
         alert(err.message);
-
     }
-
 };
