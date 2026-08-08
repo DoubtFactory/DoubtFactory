@@ -428,6 +428,50 @@
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
+<script>
+// This script runs completely independently, so database errors cannot break your links!
+document.addEventListener("DOMContentLoaded", function() {
+    function switchTab(targetId) {
+        // Hide all sections
+        document.querySelectorAll('.view-section').forEach(sec => {
+            sec.style.display = 'none';
+        });
+        
+        // Show target section
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
 
+        // Highlight the active link in the sidebar
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-target') === targetId) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    // Listen for clicks on anything with a "data-target"
+    document.addEventListener('click', function(e) {
+        const trigger = e.target.closest('[data-target]');
+        if (trigger) {
+            e.preventDefault(); 
+            const targetId = trigger.getAttribute('data-target');
+            switchTab(targetId);
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            
+            // Close mobile menu if it is open
+            const appSidebar = document.getElementById("appSidebar");
+            if(appSidebar && appSidebar.classList.contains("open")) {
+                appSidebar.classList.remove("open");
+            }
+        }
+    });
+
+    // Make the function global so the "Edit" button in the table can use it too
+    window.switchTab = switchTab;
+});
+</script>
 </body>
 </html>
