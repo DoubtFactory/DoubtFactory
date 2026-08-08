@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- Added this line to stop mobile phones from zooming in when you tap a text box -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Admin Panel | Doubt Factory</title>
@@ -20,8 +19,10 @@
 <meta name="twitter:description" content="Manage chemistry questions, drafts, and previews from the Doubt Factory admin dashboard.">
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/png" href="images/favicon.png">
-
 </head>
+
+<body class="admin-page">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <div class="app-layout">
     <!-- Top Navigation Bar -->
@@ -72,7 +73,7 @@
         <!-- Main Content Area -->
         <main class="app-content" id="mainContent">
             
-            <!-- Dashboard View -->
+            <!-- 1. DASHBOARD VIEW -->
             <div id="dashboardSection" class="view-section active">
                 <div class="dash-header">
                     <div>
@@ -84,7 +85,6 @@
                     </div>
                 </div>
 
-                <!-- 4 Top Cards -->
                 <div class="dash-stats">
                     <div class="stat-card">
                         <div class="stat-info"><h4>Total Questions</h4><h2 id="totalQuestions">0</h2></div>
@@ -105,7 +105,6 @@
                 </div>
 
                 <div class="dash-grid-layout">
-                    <!-- Recent Activity -->
                     <div class="dash-panel panel-large">
                         <div class="panel-head"><h3>Recent Activity</h3><span class="subtitle">Latest 5 questions</span></div>
                         <div class="activity-wrapper" id="recentActivityList"></div>
@@ -113,7 +112,6 @@
                     </div>
 
                     <div class="panel-col">
-                        <!-- Quick Actions -->
                         <div class="dash-panel">
                             <div class="panel-head"><h3>Quick Actions</h3></div>
                             <div class="quick-btn-grid">
@@ -124,7 +122,6 @@
                             </div>
                         </div>
 
-                        <!-- Pie Chart -->
                         <div class="dash-panel">
                             <div class="panel-head"><h3>Question Type Distribution</h3></div>
                             <div class="pie-chart-container">
@@ -136,18 +133,193 @@
                 </div>
             </div>
 
-            <!-- Keep your existing Form and Table sections here, just wrap them in these divs -->
+            <!-- 2. CREATE QUESTION VIEW (FORM) -->
             <div id="formSection" class="view-section" style="display: none;">
-               <!-- YOUR EXISTING <form id="questionForm"> CODE GOES HERE -->
+                <div class="dash-header">
+                    <div>
+                        <h1>Create Question</h1>
+                        <p>Add a new chemistry question to the database.</p>
+                    </div>
+                </div>
+
+                <form id="questionForm" class="admin-form-card" aria-label="Create a question">
+                    <h3>Basic Information</h3>
+                    <div class="form-grid">
+                        <label class="sr-only" for="subject">Subject</label>
+                        <select id="subject" required>
+                        <option value="">Select Subject</option>
+                        <option>Physical Chemistry</option>
+                        <option>Organic Chemistry</option>
+                        <option>Inorganic Chemistry</option>
+                        </select>
+
+                        <label class="sr-only" for="chapter">Chapter</label>
+                        <select id="chapter" required>
+                            <option value="">Select Chapter</option>
+                        </select>
+
+                        <label class="sr-only" for="exam">Exam</label>
+                        <select id="exam" required>
+                        <option value="">Select Exam</option>
+                        <option>JEE Main</option>
+                        <option>JEE Advanced</option>
+                        <option>NEET</option>
+                        </select>
+
+                        <label class="sr-only" for="year">Year</label>
+                        <input type="number" id="year" placeholder="Year" required>
+
+                        <label class="sr-only" for="difficulty">Difficulty</label>
+                        <select id="difficulty" required>
+                        <option value="">Difficulty</option>
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                        </select>
+
+                        <label class="sr-only" for="type">Question type</label>
+                        <select id="type" required>
+                        <option value="">Question Type</option>
+                        <option>Single Correct</option>
+                        <option>Multiple Correct</option>
+                        <option>Integer Type</option>
+                        <option>Assertion Reason</option>
+                        <option>Match the Column</option>
+                        <option>Paragraph Based</option>
+                        </select>
+                    </div>
+
+                    <h3>Question Content</h3>
+                    <label for="question">Question</label>
+                    <div class="chem-editor-wrapper">
+                        <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Question Image</label>
+                        <input type="text" id="questionImage" readonly placeholder="No image selected">
+                        <button type="button" id="uploadQuestionImage" class="upload-btn">Upload Image</button>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+                            <label for="optionA">Option A</label>
+                            <div class="chem-editor-wrapper">
+                                <textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Option A Image</label>
+                            <input type="text" id="optionAImage" readonly>
+                            <button type="button" id="uploadOptionAImage" class="upload-btn">Upload Image</button>
+                        </div>
+
+                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+                            <label for="optionB">Option B</label>
+                            <div class="chem-editor-wrapper">
+                                <textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Option B Image</label>
+                            <input type="text" id="optionBImage" readonly>
+                            <button type="button" id="uploadOptionBImage" class="upload-btn">Upload Image</button>
+                        </div>
+
+                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+                            <label for="optionC">Option C</label>
+                            <div class="chem-editor-wrapper">
+                                <textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Option C Image</label>
+                            <input type="text" id="optionCImage" readonly>
+                            <button type="button" id="uploadOptionCImage" class="upload-btn">Upload Image</button>
+                        </div>
+
+                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
+                            <label for="optionD">Option D</label>
+                            <div class="chem-editor-wrapper">
+                                <textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Option D Image</label>
+                            <input type="text" id="optionDImage" readonly>
+                            <button type="button" id="uploadOptionDImage" class="upload-btn">Upload Image</button>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="answer">Correct Answer</label>
+                            <select id="answer">
+                                <option value="0">A</option>
+                                <option value="1">B</option>
+                                <option value="2">C</option>
+                                <option value="3">D</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="youtube" style="display:block;">YouTube video URL</label>
+                            <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
+                        </div>
+                    </div>
+
+                    <label for="solution">Solution</label>
+                    <div class="chem-editor-wrapper">
+                        <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Solution Image</label>
+                        <input type="text" id="solutionImage" readonly placeholder="No image selected">
+                        <button type="button" id="uploadSolutionImage" class="upload-btn">Upload Image</button>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="saveButton" class="btn-primary">Save Question</button>
+                        <button type="button" id="clearButton" class="btn-secondary">Clear</button>
+                        <span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b; font-weight: bold; font-size: 13px;"></span>
+                    </div>
+                    <div id="formError" class="form-error"></div>
+                </form>
             </div>
 
+            <!-- 3. MANAGE QUESTIONS VIEW (TABLE) -->
             <div id="tableSection" class="view-section" style="display: none;">
-               <!-- YOUR EXISTING <table id="questionsTable"> CODE GOES HERE -->
+                <div class="dash-header">
+                    <div>
+                        <h1>Manage Questions</h1>
+                        <p>View, edit, and delete existing questions from the database.</p>
+                    </div>
+                </div>
+                <section class="table-card" aria-labelledby="questionsTableHeading">
+                    <table id="questionsTable" class="question-table" aria-label="Question list">
+                        <thead>
+                            <tr>
+                                <th>Exam</th>
+                                <th>Chapter</th>
+                                <th>Year</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questionsTableBody"></tbody>
+                    </table>
+                </section>
+                
+                <section class="json-card" aria-labelledby="jsonHeading" style="margin-top: 20px;">
+                    <h2 id="jsonHeading">Generated JSON</h2>
+                    <pre id="output"></pre>
+                </section>
             </div>
 
         </main>
     </div>
 </div>
+
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
 
