@@ -26,22 +26,26 @@
 <body class="admin-page">
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<header class="navbar">
-<div class="container admin-nav">
+<header class="site-header">
+<div class="container admin-nav" style="width: 100%;">
 
-<h2>Doubt Factory Admin</h2>
+    <a href="admin.html" class="logo">
+        <h2 style="margin: 0;">Doubt Factory Admin</h2>
+    </a>
 
-<nav aria-label="Admin navigation">
-    <a href="index.html">Home</a>
-    <a href="admin.html">Admin</a>
+    <nav aria-label="Admin navigation" style="align-items: center;">
+        <a href="index.html">Home</a>
+        <a href="admin.html">Admin</a>
 
-    <button id="logoutBtn" class="btn btn-danger">
-        Logout
-    </button>
-<button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-    🌙
-</button>
-</nav>
+        <!-- Added a red background to make the logout button look professional -->
+        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+            Logout
+        </button>
+        
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+            🌙
+        </button>
+    </nav>
 
 </div>
 </header>
