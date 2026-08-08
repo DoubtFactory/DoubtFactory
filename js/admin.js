@@ -73,7 +73,7 @@ setInterval(() => {
     if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
     if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
 }, 1000);
-});
+
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 
 const toast = document.getElementById("toast");
