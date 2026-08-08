@@ -27,40 +27,51 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 /* ===========================================
-   UI & TAB NAVIGATION
+   UI & TAB NAVIGATION (BULLETPROOF)
 =========================================== */
-const menuItems = document.querySelectorAll(".menu-item[data-target]");
-const navTriggers = document.querySelectorAll(".nav-trigger");
-const sections = document.querySelectorAll(".view-section");
 
-// Made globally available so other functions can trigger tab switches
+// 1. Create a global function to handle tab switching
 window.switchTab = function(targetId) {
-    sections.forEach(sec => {
-        sec.style.display = sec.id === targetId ? "block" : "none";
+    // Hide all view sections
+    document.querySelectorAll('.view-section').forEach(sec => {
+        sec.style.display = 'none';
     });
-    menuItems.forEach(item => {
-        if (item.dataset.target === targetId) item.classList.add("active");
-        else item.classList.remove("active");
+    
+    // Show the target section
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+
+    // Update the sidebar menu active state
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-target') === targetId) {
+            item.classList.add('active');
+        }
     });
 };
 
-menuItems.forEach(item => item.addEventListener("click", (e) => { 
-    e.preventDefault(); 
-    switchTab(item.dataset.target); 
-}));
+// 2. Attach ONE click listener to the entire document
+document.addEventListener('click', function(e) {
+    // Check if the clicked element (or its parent) has a data-target attribute
+    const trigger = e.target.closest('[data-target]');
+    
+    if (trigger) {
+        e.preventDefault(); // Stop the link from jumping the page
+        const targetId = trigger.getAttribute('data-target');
+        window.switchTab(targetId);
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll smoothly to top
+    }
+});
 
-navTriggers.forEach(trigger => trigger.addEventListener("click", (e) => { 
-    e.preventDefault(); 
-    switchTab(trigger.dataset.target); 
-}));
-
-// Clock
+// 3. Live Clock
 setInterval(() => {
     const now = new Date();
     const dateText = document.getElementById('dateText');
     const timeText = document.getElementById('timeText');
     if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-    if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB');
+    if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
 }, 1000);
 });
 const STORAGE_KEY = "doubtFactoryAdminDraft";
