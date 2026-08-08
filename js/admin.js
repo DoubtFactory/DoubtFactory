@@ -1,28 +1,13 @@
 import { uploadImage } from "./cloudinary.js";
-import { getQuestions } from "./firebase.js";
-import { auth, onAuthStateChanged, signOut } from "./firebase.js";
+import { getQuestions, auth, onAuthStateChanged, signOut, db } from "./firebase.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+// --- AUTHENTICATION CHECK ---
 onAuthStateChanged(auth, (user) => {
     if (!user) {
         window.location.href = "login.html";
     }
 });
-
-import { db } from "./firebase.js";
-import {
-    collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-const STORAGE_KEY = "doubtFactoryAdminDraft";
-const toast = document.getElementById("toast");
-const formError = document.getElementById("formError");
-const saveButton = document.getElementById("saveButton");
-const clearButton = document.getElementById("clearButton");
-const statusLabel = document.getElementById("saveStatus");
-const subjectSelect = document.getElementById("subject");
-const chapterSelect = document.getElementById("chapter");
-const questionForm = document.getElementById("questionForm");
-const output = document.getElementById("output");
 
 /* ===========================================
    UI & TAB NAVIGATION (BULLETPROOF)
@@ -107,22 +92,23 @@ class EditorHistory {
 const editorHistories = {};
 
 const toolbarConfig = [
-    // --- SUBSCRIPTS (0 to 9) ---
+    { name: "Format", items: [
+        { label: "B", action: "wrap", args: ["<b>", "</b>"] },
+        { label: "I", action: "wrap", args: ["<i>", "</i>"] },
+        { label: "U", action: "wrap", args: ["<u>", "</u>"] },
+        { label: "Undo", action: "undo", args: [] },
+        { label: "Redo", action: "redo", args: [] },
+        { label: "Clear", action: "clear", args: [] }
+    ]},
     { name: "Sub (Neutral)", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (+)", items: ["₊", "⁰₊", "₁₊", "₂₊", "₃₊", "₄₊", "₅₊", "₆₊", "₇₊", "₈₊", "₉₊"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (-)", items: ["₋", "⁰₋", "₁₋", "₂₋", "₃₋", "₄₋", "₅₋", "₆₋", "₇₋", "₈₋", "₉₋"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    
-    // --- SUPERSCRIPTS (0 to 9) ---
     { name: "Sup (Neutral)", items: ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sup (+)", items: ["⁺", "⁰⁺", "¹⁺", "²⁺", "³⁺", "⁴⁺", "⁵⁺", "⁶⁺", "⁷⁺", "⁸⁺", "⁹⁺"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sup (-)", items: ["⁻", "⁰⁻", "¹⁻", "²⁻", "³⁻", "⁴⁻", "⁵⁻", "⁶⁻", "⁷⁻", "⁸⁻", "⁹⁻"].map(s => ({ label: s, action: "insert", args: [s] })) },
-
-    // --- YOUR SPECIFIC SYMBOLS ---
     { name: "Arrows & Misc", items: ["→", "←", "⇌", "⇋", "°", "↑", "↓", "δ+", "δ−"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Greek", items: ["α", "β", "γ", "δ", "ε", "λ", "μ", "π", "σ", "θ", "ω", "Ω"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Math", items: ["Δ", "∇", "√", "∞", "≈", "≠", "≤", "≥", "±", "×", "÷", "∝", "∴", "∵"].map(s => ({ label: s, action: "insert", args: [s] })) }
-];       { label: "Assertion/Reason", action: "insert", args: ["<div><b>Assertion (A):</b> </div>\n<div><b>Reason (R):</b> </div>"] }
-    ]}
 ];
 
 function buildToolbar(textarea) {
@@ -153,17 +139,26 @@ function buildToolbar(textarea) {
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
                 const text = textarea.value;
+                const beforeText = text.substring(0, start);
+                const selectedText = text.substring(start, end);
+                const afterText = text.substring(end);
                 
                 if (item.action !== "undo" && item.action !== "redo") history.save(text);
 
                 let newCursorPos = start;
                 if (item.action === "insert") {
                     const insertStr = item.args[0];
-                    textarea.value = text.substring(0, start) + insertStr + text.substring(end);
+                    textarea.value = beforeText + insertStr + afterText;
                     newCursorPos = start + insertStr.length;
                 } else if (item.action === "wrap") {
-                    textarea.value = text.substring(0, start) + item.args[0] + text.substring(start, end) + item.args[1] + text.substring(end);
-                    newCursorPos = start + item.args[0].length + (end - start);
+                    const prefix = item.args[0];
+                    const suffix = item.args[1];
+                    textarea.value = beforeText + prefix + selectedText + suffix + afterText;
+                    newCursorPos = start + prefix.length + selectedText.length;
+                } else if (item.action === "clear") {
+                    const cleanText = selectedText.replace(/<[^>]*>?/gm, '');
+                    textarea.value = beforeText + cleanText + afterText;
+                    newCursorPos = start + cleanText.length;
                 } else if (item.action === "undo") {
                     textarea.value = history.undo(text);
                 } else if (item.action === "redo") {
@@ -195,8 +190,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================
-   FIREBASE LOGIC & UTILS
+   FIREBASE LOGIC & DASHBOARD
 =========================================== */
+
+const STORAGE_KEY = "doubtFactoryAdminDraft";
+const toast = document.getElementById("toast");
+const formError = document.getElementById("formError");
+const saveButton = document.getElementById("saveButton");
+const clearButton = document.getElementById("clearButton");
+const statusLabel = document.getElementById("saveStatus");
+const subjectSelect = document.getElementById("subject");
+const chapterSelect = document.getElementById("chapter");
+const questionForm = document.getElementById("questionForm");
+const output = document.getElementById("output");
 
 let editingDocId = null;
 let isEditing = false;
@@ -208,6 +214,7 @@ function extractVideoId(url) {
 }
 
 function showToast(message, type = "success") {
+    if(!toast) return;
     toast.textContent = message;
     toast.className = `toast show ${type}`;
     clearTimeout(showToast.timeout);
@@ -228,28 +235,32 @@ function updateStatus(message) {
 }
 
 async function updateDashboard() {
-    const questions = await getQuestions();
-    
-    const totalQuestions = document.getElementById("totalQuestions");
-    if (totalQuestions) totalQuestions.textContent = questions.length;
+    try {
+        const questions = await getQuestions();
+        
+        const totalQuestions = document.getElementById("totalQuestions");
+        if (totalQuestions) totalQuestions.textContent = questions.length;
 
-    const publishedQuestions = document.getElementById("publishedQuestions");
-    if (publishedQuestions) publishedQuestions.textContent = questions.length;
-    
-    const draftsCount = document.getElementById("draftQuestions");
-    if (draftsCount) {
-        const localDraft = localStorage.getItem(STORAGE_KEY);
-        draftsCount.textContent = localDraft ? "1" : "0";
-    }
-    
-    const totalViewsEl = document.getElementById("totalViews");
-    if (totalViewsEl) {
-        const totalViews = questions.reduce((sum, q) => sum + (q.views || 0), 0);
-        totalViewsEl.textContent = totalViews;
-    }
+        const publishedQuestions = document.getElementById("publishedQuestions");
+        if (publishedQuestions) publishedQuestions.textContent = questions.length;
+        
+        const draftsCount = document.getElementById("draftQuestions");
+        if (draftsCount) {
+            const localDraft = localStorage.getItem(STORAGE_KEY);
+            draftsCount.textContent = localDraft ? "1" : "0";
+        }
+        
+        const totalViewsEl = document.getElementById("totalViews");
+        if (totalViewsEl) {
+            const totalViews = questions.reduce((sum, q) => sum + (q.views || 0), 0);
+            totalViewsEl.textContent = totalViews;
+        }
 
-    renderRecentActivity(questions);
-    renderQuestionTypePieChart(questions);
+        renderRecentActivity(questions);
+        renderQuestionTypePieChart(questions);
+    } catch (e) {
+        console.error("Error updating dashboard:", e);
+    }
 }
 
 function renderRecentActivity(questions) {
@@ -383,15 +394,17 @@ const chapters = {
 
 if(subjectSelect) {
     subjectSelect.addEventListener("change", () => {
-        chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-        const list = chapters[subjectSelect.value];
-        if (!list) return;
-        list.forEach(chapter => {
-            const option = document.createElement("option");
-            option.value = chapter;
-            option.textContent = chapter;
-            chapterSelect.appendChild(option);
-        });
+        if(chapterSelect) {
+            chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+            const list = chapters[subjectSelect.value];
+            if (!list) return;
+            list.forEach(chapter => {
+                const option = document.createElement("option");
+                option.value = chapter;
+                option.textContent = chapter;
+                chapterSelect.appendChild(option);
+            });
+        }
     });
 }
 
@@ -474,19 +487,19 @@ function loadDraft() {
         if(document.getElementById("subject")) {
             document.getElementById("subject").value = draft.subject || "";
             subjectSelect.dispatchEvent(new Event("change"));
-            setTimeout(() => { document.getElementById("chapter").value = draft.chapter || ""; }, 100);
-            document.getElementById("exam").value = draft.exam || "";
-            document.getElementById("year").value = draft.year || "";
-            document.getElementById("difficulty").value = draft.difficulty || "";
-            document.getElementById("type").value = draft.type || "";
-            document.getElementById("question").value = draft.question || "";
-            document.getElementById("optionA").value = draft.optionA || "";
-            document.getElementById("optionB").value = draft.optionB || "";
-            document.getElementById("optionC").value = draft.optionC || "";
-            document.getElementById("optionD").value = draft.optionD || "";
-            document.getElementById("answer").value = draft.answer || "";
-            document.getElementById("solution").value = draft.solution || "";
-            document.getElementById("youtube").value = draft.youtube || "";
+            setTimeout(() => { if(chapterSelect) chapterSelect.value = draft.chapter || ""; }, 100);
+            if(document.getElementById("exam")) document.getElementById("exam").value = draft.exam || "";
+            if(document.getElementById("year")) document.getElementById("year").value = draft.year || "";
+            if(document.getElementById("difficulty")) document.getElementById("difficulty").value = draft.difficulty || "";
+            if(document.getElementById("type")) document.getElementById("type").value = draft.type || "";
+            if(document.getElementById("question")) document.getElementById("question").value = draft.question || "";
+            if(document.getElementById("optionA")) document.getElementById("optionA").value = draft.optionA || "";
+            if(document.getElementById("optionB")) document.getElementById("optionB").value = draft.optionB || "";
+            if(document.getElementById("optionC")) document.getElementById("optionC").value = draft.optionC || "";
+            if(document.getElementById("optionD")) document.getElementById("optionD").value = draft.optionD || "";
+            if(document.getElementById("answer")) document.getElementById("answer").value = draft.answer || "";
+            if(document.getElementById("solution")) document.getElementById("solution").value = draft.solution || "";
+            if(document.getElementById("youtube")) document.getElementById("youtube").value = draft.youtube || "";
         }
     } catch (error) {
         console.error(error);
@@ -497,13 +510,13 @@ function clearDraft() {
     localStorage.removeItem(STORAGE_KEY);
     if(questionForm) {
         questionForm.reset();
-        document.getElementById("question").value = "";
-        document.getElementById("optionA").value = "";
-        document.getElementById("optionB").value = "";
-        document.getElementById("optionC").value = "";
-        document.getElementById("optionD").value = "";
-        document.getElementById("solution").value = "";
-        chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+        if(document.getElementById("question")) document.getElementById("question").value = "";
+        if(document.getElementById("optionA")) document.getElementById("optionA").value = "";
+        if(document.getElementById("optionB")) document.getElementById("optionB").value = "";
+        if(document.getElementById("optionC")) document.getElementById("optionC").value = "";
+        if(document.getElementById("optionD")) document.getElementById("optionD").value = "";
+        if(document.getElementById("solution")) document.getElementById("solution").value = "";
+        if(chapterSelect) chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
         if(formError) formError.textContent = "";
     }
     editingDocId = null;
@@ -566,25 +579,29 @@ fields.forEach(id => {
 });
 
 async function loadQuestionsTable() {
-    const snapshot = await getDocs(collection(db, "questions"));
-    const tbody = document.getElementById("questionsTableBody");
-    if(!tbody) return;
-    tbody.innerHTML = "";
+    try {
+        const snapshot = await getDocs(collection(db, "questions"));
+        const tbody = document.getElementById("questionsTableBody");
+        if(!tbody) return;
+        tbody.innerHTML = "";
 
-    snapshot.forEach(documentItem => {
-        const q = documentItem.data();
-        tbody.innerHTML += `
-            <tr>
-                <td>${q.exam || ""}</td>
-                <td>${q.chapter || ""}</td>
-                <td>${q.year || ""}</td>
-                <td>
-                    <button class="edit-btn" onclick="editQuestion('${documentItem.id}')">Edit</button>
-                    <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">Delete</button>
-                </td>
-            </tr>
-        `;
-    });
+        snapshot.forEach(documentItem => {
+            const q = documentItem.data();
+            tbody.innerHTML += `
+                <tr>
+                    <td>${q.exam || ""}</td>
+                    <td>${q.chapter || ""}</td>
+                    <td>${q.year || ""}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editQuestion('${documentItem.id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch(err) {
+        console.error("Failed to load table", err);
+    }
 }
 
 window.deleteQuestion = async function(id) {
@@ -603,11 +620,10 @@ window.deleteQuestion = async function(id) {
 
 if(clearButton) clearButton.addEventListener("click", clearDraft);
 
+// Initialize data
 loadDraft();
 updateDashboard();
 loadQuestionsTable();
-
-console.log("admin.js loaded without errors!");
 
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
