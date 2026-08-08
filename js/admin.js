@@ -107,28 +107,21 @@ class EditorHistory {
 const editorHistories = {};
 
 const toolbarConfig = [
-    { name: "Format", items: [
-        { label: "B", action: "wrap", args: ["<b>", "</b>"] },
-        { label: "I", action: "wrap", args: ["<i>", "</i>"] },
-        { label: "U", action: "wrap", args: ["<u>", "</u>"] },
-        { label: "X₂", action: "wrap", args: ["<sub>", "</sub>"] },
-        { label: "X²", action: "wrap", args: ["<sup>", "</sup>"] },
-        { label: "Undo", action: "undo" },
-        { label: "Redo", action: "redo" }
-    ]},
-    { name: "Arrows", items: ["→", "←", "⇌", "⇋", "↑", "↓"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Charges", items: ["+", "−", "²⁺", "³⁺", "⁻", "²⁻", "³⁻", "δ+", "δ−"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Sub/Sup", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉", "⁰", "¹", "²", "³", "⁴", "⁵"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    // --- SUBSCRIPTS (0 to 9) ---
+    { name: "Sub (Neutral)", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Sub (+)", items: ["₊", "⁰₊", "₁₊", "₂₊", "₃₊", "₄₊", "₅₊", "₆₊", "₇₊", "₈₊", "₉₊"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Sub (-)", items: ["₋", "⁰₋", "₁₋", "₂₋", "₃₋", "₄₋", "₅₋", "₆₋", "₇₋", "₈₋", "₉₋"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    
+    // --- SUPERSCRIPTS (0 to 9) ---
+    { name: "Sup (Neutral)", items: ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Sup (+)", items: ["⁺", "⁰⁺", "¹⁺", "²⁺", "³⁺", "⁴⁺", "⁵⁺", "⁶⁺", "⁷⁺", "⁸⁺", "⁹⁺"].map(s => ({ label: s, action: "insert", args: [s] })) },
+    { name: "Sup (-)", items: ["⁻", "⁰⁻", "¹⁻", "²⁻", "³⁻", "⁴⁻", "⁵⁻", "⁶⁻", "⁷⁻", "⁸⁻", "⁹⁻"].map(s => ({ label: s, action: "insert", args: [s] })) },
+
+    // --- YOUR SPECIFIC SYMBOLS ---
+    { name: "Arrows & Misc", items: ["→", "←", "⇌", "⇋", "°", "↑", "↓", "δ+", "δ−"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Greek", items: ["α", "β", "γ", "δ", "ε", "λ", "μ", "π", "σ", "θ", "ω", "Ω"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Symbols", items: ["Δ", "∇", "√", "∞", "≈", "≠", "≤", "≥", "±", "×", "÷", "∝", "∴", "∵", "°"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Organic", items: ["CH₃", "CH₂", "COOH", "CHO", "NH₂", "NO₂", "CN", "OR", "Ph", "Ar", "Me", "Et", "Bu", "Pr"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Ions", items: ["H⁺", "OH⁻", "NH₄⁺", "SO₄²⁻", "NO₃⁻", "CO₃²⁻", "PO₄³⁻", "Cl⁻", "Br⁻", "I⁻", "MnO₄⁻", "Cr₂O₇²⁻"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Metals", items: ["Na⁺", "K⁺", "Mg²⁺", "Ca²⁺", "Al³⁺", "Fe²⁺", "Fe³⁺", "Cu²⁺", "Ag⁺", "Zn²⁺", "Pb²⁺"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Thermo", items: ["ΔH", "ΔS", "ΔG", "Ea", "Kc", "Kp", "Ka", "Kb", "Kw", "pH", "pOH"].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Lab", items: ["heat", "catalyst", "pressure", "aq", "l", "g", "s", "conc.", "dil."].map(s => ({ label: s, action: "insert", args: [s] })) },
-    { name: "Templates", items: [
-        { label: "Match Column", action: "insert", args: ["<table border=\"1\" style=\"width:100%;text-align:center;\">\n<tbody>\n<tr><td>(A) </td><td>(p) </td></tr>\n<tr><td>(B) </td><td>(q) </td></tr>\n<tr><td>(C) </td><td>(r) </td></tr>\n<tr><td>(D) </td><td>(s) </td></tr>\n</tbody>\n</table>"] },
-        { label: "Assertion/Reason", action: "insert", args: ["<div><b>Assertion (A):</b> </div>\n<div><b>Reason (R):</b> </div>"] }
+    { name: "Math", items: ["Δ", "∇", "√", "∞", "≈", "≠", "≤", "≥", "±", "×", "÷", "∝", "∴", "∵"].map(s => ({ label: s, action: "insert", args: [s] })) }
+];       { label: "Assertion/Reason", action: "insert", args: ["<div><b>Assertion (A):</b> </div>\n<div><b>Reason (R):</b> </div>"] }
     ]}
 ];
 
