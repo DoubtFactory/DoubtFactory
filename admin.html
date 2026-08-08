@@ -23,283 +23,131 @@
 
 </head>
 
-<body class="admin-page">
-<a class="skip-link" href="#mainContent">Skip to main content</a>
-
-<header class="site-header">
-<div class="container admin-nav" style="width: 100%;">
-
-    <a href="admin.html" class="logo">
-        <h2 style="margin: 0;">Doubt Factory Admin</h2>
-    </a>
-
-    <nav aria-label="Admin navigation" style="align-items: center;">
-        <a href="index.html">Home</a>
-        <a href="admin.html">Admin</a>
-
-        <!-- Added a red background to make the logout button look professional -->
-        <button id="logoutBtn" style="background:#dc2626; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
-            Logout
-        </button>
-        
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-            🌙
-        </button>
-    </nav>
-
-</div>
-</header>
-
-<main id="mainContent" class="container admin-shell">
-
-<aside class="admin-sidebar" aria-label="Admin tools">
-    <h3>Admin Tools</h3>
-    <a href="#formSection">Create Question</a>
-    <a href="#tableSection">Manage Questions</a>
-    <a href="#previewSection">Preview</a>
-</aside>
-
-<section class="admin-main" aria-label="Admin workspace">
-
-<section class="admin-dashboard" aria-label="Admin overview statistics">
-
-    <div class="dashboard-card">
-        <div class="dashboard-icon">📝</div>
-        <h3>Total Questions</h3>
-        <h2 id="totalQuestions">0</h2>
-    </div>
-
-    <div class="dashboard-card">
-        <div class="dashboard-icon">📚</div>
-        <h3>Chapters</h3>
-        <h2 id="chapterCount">0</h2>
-    </div>
-
-    <div class="dashboard-card">
-        <div class="dashboard-icon">🎥</div>
-        <h3>Video Solutions</h3>
-        <h2 id="totalVideos">0</h2>
-    </div>
-
-    <div class="dashboard-card">
-        <div class="dashboard-icon">💬</div>
-        <h3>Comments</h3>
-        <h2 id="commentCount">0</h2>
-    </div>
-
-</section>
-
-<section class="dashboard-grid">
-    <div class="dashboard-panel">
-        <div class="panel-heading">
-            <h3>Recent Activity</h3>
-            <span>Latest uploads</span>
+<div class="app-layout">
+    <!-- Top Navigation Bar -->
+    <header class="app-topbar">
+        <div class="topbar-left">
+            <a href="index.html" class="app-logo">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6v4l-4 10h-2l-4-10z"></path><path d="M12 17v-4"></path><path d="M10 21h4"></path></svg>
+                <div class="logo-text">
+                    <h2>Doubt Factory Admin</h2>
+                    <p>Turning doubts into Clarity</p>
+                </div>
+            </a>
         </div>
-        <div id="recentActivity" class="activity-list"></div>
-    </div>
-
-    <div class="dashboard-panel">
-        <div class="panel-heading">
-            <h3>Quick Actions</h3>
-            <span>Jump to tools</span>
+        <div class="topbar-right">
+            <a href="index.html" class="topbar-link">Home</a>
+            <a href="admin.html" class="topbar-link active">Admin</a>
+            <button id="themeToggle" class="theme-btn">🌙</button>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
         </div>
-        <div class="quick-actions">
-            <a class="quick-card" href="#formSection">Add Question</a>
-            <a class="quick-card" href="manage.html">Manage Questions</a>
-            <a class="quick-card" href="index.html">View Homepage</a>
-            <a class="quick-card" href="search.html">Search Questions</a>
-        </div>
-    </div>
-</section>
+    </header>
 
-<section class="dashboard-grid analytics-grid">
-    <div class="dashboard-panel">
-        <div class="panel-heading">
-            <h3>Questions by Subject</h3>
-            <span>Overview</span>
-        </div>
-        <div id="subjectAnalytics" class="analytics-list"></div>
-    </div>
+    <div class="app-body">
+        <!-- Left Sidebar -->
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">ADMIN TOOLS</div>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="menu-item active" data-target="dashboardSection">Dashboard</a></li>
+                    <li><a href="#" class="menu-item" data-target="formSection">Create Question</a></li>
+                    <li><a href="#" class="menu-item" data-target="tableSection">Manage Questions</a></li>
+                    <li><a href="#" class="menu-item">Preview Questions</a></li>
+                    <li><a href="#" class="menu-item">Drafts</a></li>
+                    <li><a href="#" class="menu-item">Categories</a></li>
+                    <li><a href="#" class="menu-item">Analytics</a></li>
+                    <li><a href="#" class="menu-item">Settings</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">QUICK LINKS</div>
+                <ul class="sidebar-menu">
+                    <li><a href="index.html" class="menu-item">View Website</a></li>
+                    <li><a href="search.html" class="menu-item">Search Questions</a></li>
+                    <li><a href="index.html" class="menu-item">Question Bank</a></li>
+                </ul>
+            </div>
+        </aside>
 
-    <div class="dashboard-panel">
-        <div class="panel-heading">
-            <h3>Questions by Exam</h3>
-            <span>Overview</span>
-        </div>
-        <div id="examAnalytics" class="analytics-list"></div>
-    </div>
-</section>
+        <!-- Main Content Area -->
+        <main class="app-content" id="mainContent">
+            
+            <!-- Dashboard View -->
+            <div id="dashboardSection" class="view-section active">
+                <div class="dash-header">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Welcome back, Admin! Here's what's happening with Doubt Factory.</p>
+                    </div>
+                    <div class="dash-clock" id="liveClock">
+                        <span id="dateText">Loading...</span> | <span id="timeText">--:--:--</span>
+                    </div>
+                </div>
 
-<div id="toast" class="toast" aria-live="polite"></div>
+                <!-- 4 Top Cards -->
+                <div class="dash-stats">
+                    <div class="stat-card">
+                        <div class="stat-info"><h4>Total Questions</h4><h2 id="totalQuestions">0</h2></div>
+                        <div class="stat-bottom"><a href="#" class="nav-trigger" data-target="tableSection">View all →</a></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info"><h4 style="color:#10b981;">Published</h4><h2 style="color:#10b981;" id="publishedQuestions">0</h2></div>
+                        <div class="stat-bottom"><a href="#" class="nav-trigger" data-target="tableSection" style="color:#10b981;">View all →</a></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info"><h4 style="color:#f59e0b;">Drafts</h4><h2 style="color:#f59e0b;" id="draftQuestions">0</h2></div>
+                        <div class="stat-bottom"><a href="#" style="color:#f59e0b;">View drafts →</a></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info"><h4 style="color:#8b5cf6;">Total Views</h4><h2 style="color:#8b5cf6;" id="totalViews">0</h2></div>
+                        <div class="stat-bottom"><a href="#" style="color:#8b5cf6;">View analytics →</a></div>
+                    </div>
+                </div>
 
-<section class="admin-grid" id="formSection" aria-label="Question creation and preview">
+                <div class="dash-grid-layout">
+                    <!-- Recent Activity -->
+                    <div class="dash-panel panel-large">
+                        <div class="panel-head"><h3>Recent Activity</h3><span class="subtitle">Latest 5 questions</span></div>
+                        <div class="activity-wrapper" id="recentActivityList"></div>
+                        <div class="panel-foot"><a href="#" class="nav-trigger" data-target="tableSection">View all questions →</a></div>
+                    </div>
 
-<form id="questionForm" class="admin-form-card" aria-label="Create a question">
+                    <div class="panel-col">
+                        <!-- Quick Actions -->
+                        <div class="dash-panel">
+                            <div class="panel-head"><h3>Quick Actions</h3></div>
+                            <div class="quick-btn-grid">
+                                <a href="#" class="q-btn btn-blue nav-trigger" data-target="formSection">Create Question</a>
+                                <a href="#" class="q-btn btn-green nav-trigger" data-target="tableSection">Manage Questions</a>
+                                <a href="#" class="q-btn btn-yellow">View Drafts</a>
+                                <a href="#" class="q-btn btn-purple">Preview Questions</a>
+                            </div>
+                        </div>
 
-<h3>Basic Information</h3>
+                        <!-- Pie Chart -->
+                        <div class="dash-panel">
+                            <div class="panel-head"><h3>Question Type Distribution</h3></div>
+                            <div class="pie-chart-container">
+                                <div class="pie-chart" id="typePieChart"></div>
+                                <div class="pie-legend" id="typeLegend"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<div class="form-grid">
-    <label class="sr-only" for="subject">Subject</label>
-    <select id="subject" required>
-    <option value="">Select Subject</option>
-    <option>Physical Chemistry</option>
-    <option>Organic Chemistry</option>
-    <option>Inorganic Chemistry</option>
-    </select>
+            <!-- Keep your existing Form and Table sections here, just wrap them in these divs -->
+            <div id="formSection" class="view-section" style="display: none;">
+               <!-- YOUR EXISTING <form id="questionForm"> CODE GOES HERE -->
+            </div>
 
-    <label class="sr-only" for="chapter">Chapter</label>
-    <select id="chapter" required>
-        <option value="">Select Chapter</option>
-    </select>
+            <div id="tableSection" class="view-section" style="display: none;">
+               <!-- YOUR EXISTING <table id="questionsTable"> CODE GOES HERE -->
+            </div>
 
-    <label class="sr-only" for="exam">Exam</label>
-    <select id="exam" required>
-    <option value="">Select Exam</option>
-    <option>JEE Main</option>
-    <option>JEE Advanced</option>
-    <option>NEET</option>
-    </select>
-
-    <label class="sr-only" for="year">Year</label>
-    <input type="number" id="year" placeholder="Year" required>
-
-    <label class="sr-only" for="difficulty">Difficulty</label>
-    <select id="difficulty" required>
-    <option value="">Difficulty</option>
-    <option>Easy</option>
-    <option>Medium</option>
-    <option>Hard</option>
-    </select>
-
-    <label class="sr-only" for="type">Question type</label>
-    <select id="type" required>
-    <option value="">Question Type</option>
-    <option>Single Correct</option>
-    <option>Multiple Correct</option>
-    <option>Integer Type</option>
-    <option>Assertion Reason</option>
-    <option>Match the Column</option>
-    <option>Paragraph Based</option>
-    </select>
-</div>
-
-<h3>Question Content</h3>
-
-<div class="form-group">
-    <label for="question">Question</label>
-    <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
-</div>
-<div class="form-group">
-    <label>Question Image</label>
-    <input type="text" id="questionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadQuestionImage">Upload Image</button>
-</div>
-
-<div class="form-grid">
-    <div class="form-group" style="grid-column: 1 / -1;">
-        <label for="optionA">Option A</label>
-        <textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Option A Image</label>
-        <input type="text" id="optionAImage" readonly>
-        <button type="button" id="uploadOptionAImage">Upload Image</button>
-    </div>
-
-    <div class="form-group" style="grid-column: 1 / -1;">
-        <label for="optionB">Option B</label>
-        <textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Option B Image</label>
-        <input type="text" id="optionBImage" readonly>
-        <button type="button" id="uploadOptionBImage">Upload Image</button>
-    </div>
-
-    <div class="form-group" style="grid-column: 1 / -1;">
-        <label for="optionC">Option C</label>
-        <textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Option C Image</label>
-        <input type="text" id="optionCImage" readonly>
-        <button type="button" id="uploadOptionCImage">Upload Image</button>
-    </div>
-
-    <div class="form-group" style="grid-column: 1 / -1;">
-        <label for="optionD">Option D</label>
-        <textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Option D Image</label>
-        <input type="text" id="optionDImage" readonly>
-        <button type="button" id="uploadOptionDImage">Upload Image</button>
+        </main>
     </div>
 </div>
-
-<div class="form-grid">
-<label for="answer">Correct Answer</label>
-
-<select id="answer">
-
-    <option value="0">A</option>
-
-    <option value="1">B</option>
-
-    <option value="2">C</option>
-
-    <option value="3">D</option>
-
-</select>
-<label class="sr-only" for="youtube">YouTube video URL</label>
-<input type="url" id="youtube" placeholder="Paste YouTube Video URL">
-</div>
-
-<div class="form-group">
-    <label for="solution">Solution</label>
-    <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
-</div>
-<div class="form-group">
-    <label>Solution Image</label>
-    <input type="text" id="solutionImage" readonly placeholder="No image selected">
-    <button type="button" id="uploadSolutionImage">Upload Image</button>
-</div>
-
-
-<div class="form-actions">
-<button type="submit" id="saveButton">Save Question</button>
-<button type="button" id="clearButton">Clear</button>
-</div>
-
-<div id="formError" class="form-error"></div>
-
-</form>
-
-</section>
-
-<section class="table-card" id="tableSection" aria-labelledby="questionsTableHeading">
-<h2 id="questionsTableHeading">All Questions</h2>
-<table id="questionsTable" class="question-table" aria-label="Question list">
-    <thead>
-        <tr>
-            <th>Exam</th>
-            <th>Chapter</th>
-            <th>Year</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="questionsTableBody"></tbody>
-</table>
-</section>
-
-<section class="json-card" aria-labelledby="jsonHeading">
-<h2 id="jsonHeading">Generated JSON</h2>
-<pre id="output"></pre>
-</section>
-
-</section>
-</main>
-<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 <script type="module" src="js/theme.js"></script>
 

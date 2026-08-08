@@ -26,7 +26,36 @@ import {
 
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+/* ===========================================
+   UI & TAB NAVIGATION
+=========================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const menuItems = document.querySelectorAll(".menu-item[data-target]");
+    const navTriggers = document.querySelectorAll(".nav-trigger");
+    const sections = document.querySelectorAll(".view-section");
+    
+    function switchTab(targetId) {
+        sections.forEach(sec => {
+            sec.style.display = sec.id === targetId ? "block" : "none";
+        });
+        menuItems.forEach(item => {
+            if (item.dataset.target === targetId) item.classList.add("active");
+            else item.classList.remove("active");
+        });
+    }
 
+    menuItems.forEach(item => item.addEventListener("click", (e) => { e.preventDefault(); switchTab(item.dataset.target); }));
+    navTriggers.forEach(trigger => trigger.addEventListener("click", (e) => { e.preventDefault(); switchTab(trigger.dataset.target); }));
+
+    // Clock
+    setInterval(() => {
+        const now = new Date();
+        const dateText = document.getElementById('dateText');
+        const timeText = document.getElementById('timeText');
+        if (dateText) dateText.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+        if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB');
+    }, 1000);
+});
 const STORAGE_KEY = "doubtFactoryAdminDraft";
 
 const toast = document.getElementById("toast");
@@ -226,77 +255,111 @@ function updateStatus(message) {
 }
 
 async function updateDashboard() {
-
     const questions = await getQuestions();
-
-    const uniqueSubjects = [...new Set(questions.map(q => q.subject).filter(Boolean))];
-    const uniqueChapters = [...new Set(questions.map(q => q.chapter).filter(Boolean))];
-    const uniqueExams = [...new Set(questions.map(q => q.exam).filter(Boolean))];
-    const totalVideos = questions.filter(q => q.youtube && q.youtube.trim() !== "").length;
-
+    
+    // Update Stats Cards
     const totalQuestions = document.getElementById("totalQuestions");
-    if (totalQuestions) {
-        totalQuestions.textContent = questions.length;
-    }
+    if (totalQuestions) totalQuestions.textContent = questions.length;
 
-    const subjectCount = document.getElementById("subjectCount");
-    if (subjectCount) {
-        subjectCount.textContent = uniqueSubjects.length;
+    const publishedQuestions = document.getElementById("publishedQuestions");
+    if (publishedQuestions) publishedQuestions.textContent = questions.length;
+    
+    const draftsCount = document.getElementById("draftQuestions");
+    if (draftsCount) {
+        const localDraft = localStorage.getItem("doubtFactoryAdminDraft");
+        draftsCount.textContent = localDraft ? "1" : "0";
     }
-
-    const chapterCount = document.getElementById("chapterCount");
-    if (chapterCount) {
-        chapterCount.textContent = uniqueChapters.length;
-    }
-
-    const examCount = document.getElementById("examCount");
-    if (examCount) {
-        examCount.textContent = uniqueExams.length;
-    }
-
-    const totalVideosEl = document.getElementById("totalVideos");
-    if (totalVideosEl) {
-        totalVideosEl.textContent = totalVideos;
-    }
-
-    const commentCount = document.getElementById("commentCount");
-    if (commentCount) {
-        commentCount.textContent =
-            questions.length > 0
-                ? Math.max(1, Math.round(questions.length / 3))
-                : 0;
+    
+    const totalViewsEl = document.getElementById("totalViews");
+    if (totalViewsEl) {
+        const totalViews = questions.reduce((sum, q) => sum + (q.views || 0), 0);
+        totalViewsEl.textContent = totalViews;
     }
 
     renderRecentActivity(questions);
-    renderAnalytics(questions);
+    renderQuestionTypePieChart(questions);
 }
 
 function renderRecentActivity(questions) {
-    const container = document.getElementById("recentActivity");
-
+    const container = document.getElementById("recentActivityList");
     if (!container) return;
 
-    const recent = [...questions]
-    .reverse()
-    .slice(0, 4);
+    const recent = [...questions].reverse().slice(0, 5);
 
     if (!recent.length) {
-        container.innerHTML = '<div class="empty-panel">No recent activity yet.</div>';
+        container.innerHTML = '<div style="padding: 16px; color:#64748b;">No recent activity yet.</div>';
         return;
     }
 
     container.innerHTML = recent.map(question => {
-        const timestamp = question.year ? `${question.year}` : "Recently added";
+        const qText = question.question ? question.question.replace(/<[^>]*>?/gm, '').slice(0, 60) : "Untitled question";
         return `
             <div class="activity-item">
-                <div>
-                    <strong>${question.question ? question.question.slice(0, 70) : "Untitled question"}</strong>
-                    <p>${question.subject || "Subject"} • ${question.exam || "Exam"}</p>
+                <div class="activity-left">
+                    <div class="act-text">
+                        <strong>${qText}...</strong>
+                        <p>${question.subject || "Subject"} • ${question.exam || "Exam"}</p>
+                    </div>
                 </div>
-                <span>${timestamp}</span>
+                <div class="activity-right" style="text-align: right;">
+                    <span class="act-badge published">Published</span>
+                </div>
             </div>
         `;
     }).join("");
+}
+
+function renderQuestionTypePieChart(questions) {
+    const chartElement = document.getElementById('typePieChart');
+    const legendElement = document.getElementById('typeLegend');
+    if(!chartElement || !legendElement) return;
+
+    const types = {
+        "Single Correct": { count: 0, color: "#1a56db" },
+        "Multiple Correct": { count: 0, color: "#10b981" },
+        "Integer Type": { count: 0, color: "#f59e0b" },
+        "Match the Column": { count: 0, color: "#8b5cf6" },
+        "Assertion Reason": { count: 0, color: "#0ea5e9" }
+    };
+
+    let total = 0;
+    questions.forEach(q => {
+        if(q.type && types[q.type] !== undefined) {
+            types[q.type].count++;
+            total++;
+        }
+    });
+
+    if(total === 0) {
+        chartElement.style.background = "#e2e8f0";
+        legendElement.innerHTML = "<p>No data</p>";
+        return;
+    }
+
+    let gradientString = [];
+    let currentPercentage = 0;
+    let legendHTML = "";
+
+    Object.entries(types).forEach(([name, data]) => {
+        if(data.count > 0) {
+            const percentage = (data.count / total) * 100;
+            gradientString.push(`${data.color} ${currentPercentage}% ${currentPercentage + percentage}%`);
+            currentPercentage += percentage;
+            
+            legendHTML += `
+                <div class="legend-item">
+                    <div style="display:flex; align-items:center;">
+                        <div class="legend-color" style="background: ${data.color}"></div>
+                        <span>${name}</span>
+                    </div>
+                    <span class="legend-value">${data.count} (${percentage.toFixed(0)}%)</span>
+                </div>
+            `;
+        }
+    });
+
+    chartElement.style.background = `conic-gradient(${gradientString.join(', ')})`;
+    legendElement.innerHTML = legendHTML;
 }
 
 function renderAnalytics(questions) {
