@@ -251,6 +251,7 @@ async function updateDashboard() {
 
         renderRecentActivity(questions);
         renderQuestionTypePieChart(questions);
+	renderExamStats(questions);
     } catch (e) {
         console.error("Error updating dashboard:", e);
     }
@@ -337,6 +338,54 @@ function renderQuestionTypePieChart(questions) {
 
     chartElement.style.background = `conic-gradient(${gradientString.join(', ')})`;
     legendElement.innerHTML = legendHTML;
+}
+function renderExamStats(questions) {
+    const container = document.getElementById("examStatsList");
+    if (!container) return;
+
+    // Set up our counters
+    const counts = { "NEET": 0, "JEE Main": 0, "JEE Advanced": 0 };
+    let maxCount = 0;
+
+    // Tally up the questions
+    questions.forEach(q => {
+        if (q.exam && counts[q.exam] !== undefined) {
+            counts[q.exam]++;
+        } else if (q.exam) {
+            counts[q.exam] = 1; 
+        }
+    });
+
+    // Find the highest count to scale the progress bars properly
+    Object.values(counts).forEach(count => {
+        if (count > maxCount) maxCount = count;
+    });
+
+    if (questions.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-size: 13px;">No data available.</div>';
+        return;
+    }
+
+    // Build the visual progress bars
+    let html = "";
+    Object.entries(counts).forEach(([exam, count]) => {
+        // Ensure even empty bars have a tiny sliver of width so they look nice
+        const percentage = maxCount === 0 ? 0 : Math.max(3, (count / maxCount) * 100);
+        
+        html += `
+            <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                    <strong style="color: #0f172a;">${exam}</strong>
+                    <span style="color: #64748b; font-weight: 600;">${count}</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                    <span style="display: block; height: 100%; width: ${percentage}%; background: linear-gradient(90deg, #10b981 0%, #34d399 100%); border-radius: 999px;"></span>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
 }
 
 const chapters = {
