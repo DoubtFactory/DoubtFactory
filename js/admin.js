@@ -697,7 +697,14 @@ window.editQuestion = async function(id) {
         if(document.getElementById("optionDImage")) document.getElementById("optionDImage").value = q.optionImages?.D || "";
         if(document.getElementById("answer")) document.getElementById("answer").value = q.answer;
         if(document.getElementById("solutionImage")) document.getElementById("solutionImage").value = q.solutionImage || "";
-        if(document.getElementById("youtube")) document.getElementById("youtube").value = q.youtube || "";
+        if(document.getElementById("youtube")) {
+            let ytValue = q.youtube || "";
+            // If the database only saved the ID, convert it back to a full URL for the text box
+            if (ytValue && !ytValue.includes("http")) {
+                ytValue = "https://www.youtube.com/watch?v=" + ytValue;
+            }
+            document.getElementById("youtube").value = ytValue;
+        }
 
         window.scrollTo({ top: 0, behavior: "smooth" });
 
