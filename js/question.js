@@ -56,65 +56,51 @@ function showQuestion() {
     document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
-   document.getElementById("questionText").innerHTML = `
-<math-field readonly>
-${q.question || ""}
-</math-field>
-`;
-const questionImageContainer = document.getElementById("questionImageContainer");
+    
+    // Render clean text without MathLive
+    document.getElementById("questionText").innerHTML = q.question || "";
+    
+    const questionImageContainer = document.getElementById("questionImageContainer");
 
-if (questionImageContainer) {
-
-    questionImageContainer.innerHTML = "";
-
-    if (q.questionImage) {
-
-        questionImageContainer.innerHTML = `
-            <img
-                src="${q.questionImage}"
-                class="question-image"
-                alt="Question Image">
-        `;
-
+    if (questionImageContainer) {
+        questionImageContainer.innerHTML = "";
+        if (q.questionImage) {
+            questionImageContainer.innerHTML = `
+                <img
+                    src="${q.questionImage}"
+                    class="question-image"
+                    alt="Question Image">
+            `;
+        }
     }
-
-}
+    
     document.getElementById("breadcrumb").innerHTML = `Home > ${q.subject || "Subject"} > ${q.chapter || "Chapter"}`;
     document.getElementById("questionCounter").textContent = `Question ${currentIndex + 1} of ${questions.length}`;
 
     options.innerHTML = "";
 
-   q.options.forEach((option, index) => {
+    q.options.forEach((option, index) => {
+        const key = ["A","B","C","D"][index];
+        const image = q.optionImages?.[key] || "";
 
-    const key = ["A","B","C","D"][index];
+        const label = document.createElement("label");
+        label.className = "option-card";
 
-    const image = q.optionImages?.[key] || "";
+        label.innerHTML = `
+            <input type="radio" name="answer" value="${index}">
+            <div class="option-content">
+                ${image ? `
+                    <img
+                        src="${image}"
+                        class="option-image"
+                        alt="Option ${key}">
+                ` : ""}
+               <div class="option-text">${option}</div>
+            </div>
+        `;
 
-    const label = document.createElement("label");
-    label.className = "option-card";
-
-    label.innerHTML = `
-        <input type="radio" name="answer" value="${index}">
-
-        <div class="option-content">
-
-            ${image ? `
-                <img
-                    src="${image}"
-                    class="option-image"
-                    alt="Option ${key}">
-            ` : ""}
-
-           <math-field readonly>
-${option}
-</math-field>
-
-        </div>
-    `;
-
-    options.appendChild(label);
-
-});
+        options.appendChild(label);
+    });
 
     document.querySelectorAll('input[name="answer"]').forEach(radio => {
         radio.addEventListener("change", () => {
@@ -132,62 +118,44 @@ ${option}
         resultMessage.className = "result-message";
     }
 
-   const views = document.getElementById("views");
-const likes = document.getElementById("likes");
-const comments = document.getElementById("comments");
+    const views = document.getElementById("views");
+    const likes = document.getElementById("likes");
+    const comments = document.getElementById("comments");
 
-if (views) views.textContent = q.views ?? 0;
-if (likes) likes.textContent = q.likes ?? 0;
-if (comments) comments.textContent = 0;
+    if (views) views.textContent = q.views ?? 0;
+    if (likes) likes.textContent = q.likes ?? 0;
+    if (comments) comments.textContent = 0;
 
-console.log("YouTube value from Firebase:", q.youtube);
-console.log(q);
-   const video = document.getElementById("videoContainer");
+    const video = document.getElementById("videoContainer");
 
-if (video) {
-
-    let videoId = "";
-
-    if (q.youtube) {
-
-        const url = q.youtube.trim();
-
-        if (url.includes("watch?v=")) {
-
-            videoId = url.split("watch?v=")[1].split("&")[0];
-
-        } else if (url.includes("youtu.be/")) {
-
-            videoId = url.split("youtu.be/")[1].split("?")[0];
-
-        } else {
-
-            videoId = url;
-
+    if (video) {
+        let videoId = "";
+        if (q.youtube) {
+            const url = q.youtube.trim();
+            if (url.includes("watch?v=")) {
+                videoId = url.split("watch?v=")[1].split("&")[0];
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0];
+            } else {
+                videoId = url;
+            }
         }
 
+        if (videoId) {
+            video.innerHTML = `
+                <iframe
+                    width="100%"
+                    height="400"
+                    src="https://www.youtube.com/embed/${videoId}"
+                    title="Video Solution"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            `;
+        } else {
+            video.innerHTML = `<p class="empty-state">No video available.</p>`;
+        }
     }
-
-    if (videoId) {
-
-        video.innerHTML = `
-            <iframe
-                width="100%"
-                height="400"
-                src="https://www.youtube.com/embed/${videoId}"
-                title="Video Solution"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
-        `;
-
-    } else {
-
-        video.innerHTML = `<p class="empty-state">No video available.</p>`;
-
-    }
-
-}
 
     const prevButton = document.getElementById("prevQuestion");
     const nextButton = document.getElementById("nextQuestion");
@@ -213,59 +181,33 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
 
     const solution = document.getElementById("solutionText");
 
-if (solution) {
-
-    if (
-        q.solution &&
-        q.solution.trim() !== ""
-    ) {
-
-        solution.innerHTML = `
-<math-field readonly>
-${q.solution || ""}
-</math-field>
-`;
-
-    } else if (
-        !q.solutionImage ||
-        q.solutionImage.trim() === ""
-    ) {
-
-        solution.textContent = "No solution available.";
-
-    } else {
-
-        solution.textContent = "";
-
+    if (solution) {
+        if (q.solution && q.solution.trim() !== "") {
+            // Render clean text without MathLive
+            solution.innerHTML = q.solution || "";
+        } else if (!q.solutionImage || q.solutionImage.trim() === "") {
+            solution.textContent = "No solution available.";
+        } else {
+            solution.textContent = "";
+        }
     }
 
-}
+    const solutionImageContainer = document.getElementById("solutionImageContainer");
 
-const solutionImageContainer =
-    document.getElementById("solutionImageContainer");
-
-if (solutionImageContainer) {
-
-    solutionImageContainer.innerHTML = "";
-
-    if (q.solutionImage) {
-
-        solutionImageContainer.innerHTML = `
-            <img
-                src="${q.solutionImage}"
-                class="solution-image"
-                alt="Solution Image">
-        `;
-
+    if (solutionImageContainer) {
+        solutionImageContainer.innerHTML = "";
+        if (q.solutionImage) {
+            solutionImageContainer.innerHTML = `
+                <img
+                    src="${q.solutionImage}"
+                    class="solution-image"
+                    alt="Solution Image">
+            `;
+        }
     }
 
-}
-
-const solutionBox =
-    document.getElementById("solutionBox");
-
-if (solutionBox)
-    solutionBox.style.display = "block";
+    const solutionBox = document.getElementById("solutionBox");
+    if (solutionBox) solutionBox.style.display = "block";
 });
 
 document.getElementById("prevQuestion").addEventListener("click", () => {

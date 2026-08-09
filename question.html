@@ -26,12 +26,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.core.css">
-<link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.css">
 
-<script type="module">
-import "https://unpkg.com/mathlive?module";
-</script>
 </head>
 
 <body class="question-page">
@@ -86,7 +81,7 @@ Home
 
 </div>
 
-<h2 id="questionText">
+<h2 id="questionText" style="line-height: 1.6; font-weight: 500;">
 Loading question...
 </h2>
 <div id="questionImageContainer"></div>
@@ -106,7 +101,7 @@ Submit Answer
 
     <h3>Explanation</h3>
 
-    <p id="solutionText"></p>
+    <div id="solutionText" style="line-height: 1.6; margin-bottom: 15px;"></div>
 
     <div id="solutionImageContainer"></div>
 
@@ -171,8 +166,6 @@ Submit Answer
 </div>
 
 </div>
-
-
 
 </main>
 
