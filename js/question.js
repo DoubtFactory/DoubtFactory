@@ -102,7 +102,11 @@ function showQuestion() {
         }
     }
     
-    document.getElementById("breadcrumb").innerHTML = `Home > ${q.subject || "Subject"} > ${q.chapter || "Chapter"}`;
+    document.getElementById("breadcrumb").innerHTML = `
+        <a href="index.html" style="color: inherit; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Home</a> > 
+        <a href="subject.html" style="color: inherit; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${q.subject || "Subject"}</a> > 
+        <a href="search.html?q=${encodeURIComponent(q.chapter || "")}" style="color: inherit; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${q.chapter || "Chapter"}</a>
+    `;
     document.getElementById("questionCounter").textContent = `Question ${currentIndex + 1} of ${questions.length}`;
 
     options.innerHTML = "";
