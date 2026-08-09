@@ -100,7 +100,7 @@ if (keyword !== "") {
         <div class="question-header">
 
             <span class="exam-tag">
-                ${q.exam}
+                ${q.exam || "Exam"} ${q.year || ""}
             </span>
 
             <span class="chapter-tag">
@@ -123,22 +123,14 @@ if (keyword !== "") {
 
         </p>
 
-        <div class="question-meta">
+        <div style="margin-top: 25px;">
+            <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}"
+               class="primary-btn">
 
-            <span>📅 ${q.year}</span>
+               Solve Question →
 
-            <span>👁 ${q.views}</span>
-
-            <span>👍 ${q.likes}</span>
-
+            </a>
         </div>
-
-        <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}"
-           class="primary-btn">
-
-           Solve Question →
-
-        </a>
 
     </div>
 
