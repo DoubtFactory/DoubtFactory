@@ -1740,14 +1740,35 @@ textarea.chem-editor { border: none !important; border-radius: 0 0 8px 8px !impo
     .dash-grid-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-    .menu-toggle { display: block; }
+    /* 1. TOPBAR FIXES: Shrink elements so they fit on one line */
+    .app-topbar { padding: 0 12px; gap: 8px; }
+    .topbar-left { gap: 8px; }
+    .logo-text h2 { font-size: 15px; }
+    .logo-text p { display: none; } /* Hides the subtitle to save space */
+    
+    .topbar-right { gap: 8px; }
     .topbar-right .topbar-link { display: none; }
-    .app-sidebar { position: fixed; left: -250px; top: 64px; height: calc(100vh - 64px); box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+    
+    /* Turns the Logout button into a small square icon without text */
+    .logout-btn { padding: 8px; font-size: 0; } 
+    .logout-btn svg { width: 18px; height: 18px; margin: 0; }
+    
+    .menu-toggle { display: block; padding: 4px; }
+    
+    /* 2. SIDEBAR FIXES */
+    .app-sidebar { position: fixed; left: -250px; top: 64px; height: calc(100vh - 64px); z-index: 100; box-shadow: 4px 0 10px rgba(0,0,0,0.2); }
     .app-sidebar.open { transform: translateX(250px); }
+    
+    /* 3. DASHBOARD COMPRESSION FIXES */
     .app-content { padding: 20px 16px; }
-    .dash-stats { grid-template-columns: 1fr; }
-    .pie-chart-container { flex-direction: column; }
-    .act-text strong { max-width: 200px; }
+    
+    /* Moves the clock below the Dashboard title */
+    .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .dash-clock { width: 100%; justify-content: center; }
+    
+    .dash-stats { grid-template-columns: 1fr; gap: 16px; }
+    .pie-chart-container { flex-direction: column; gap: 16px; }
+    .act-text strong { max-width: 220px; }
 }
 
 /* Dark Mode */
