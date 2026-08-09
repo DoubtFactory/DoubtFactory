@@ -26,40 +26,52 @@ function setCommentFeedback(text, type = "") {
 }
 
 async function loadQuestion() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-    const question = await getQuestionById(id);
-    questions = await getQuestions();
-
-    if (!question) {
-        const target = document.getElementById("questionText");
-        if (target) target.textContent = "Question not found.";
-        return;
-    }
-
-    currentIndex = questions.findIndex(q => q.docId === id);
-
-    if (currentIndex === -1) {
-        const target = document.getElementById("questionText");
-        if (target) target.textContent = "Question not found.";
-        return;
-    }
-
-    // --- INCREMENT VIEW COUNT IN DATABASE ---
     try {
-        const currentViews = Number(question.views) || 0;
-        const newViews = currentViews + 1;
-        await updateDoc(doc(db, "questions", id), {
-            views: newViews
-        });
-        // Update the local array so the UI reflects the new count instantly
-        questions[currentIndex].views = newViews;
-    } catch (error) {
-        console.log("Error updating views:", error);
-    }
-    // ----------------------------------------
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        
+        if (!id) {
+            document.getElementById("questionText").textContent = "No question ID provided.";
+            return;
+        }
 
-    showQuestion();
+        const question = await getQuestionById(id);
+        questions = await getQuestions();
+
+        if (!question) {
+            document.getElementById("questionText").textContent = "Question not found.";
+            return;
+        }
+
+        // Support for both common Firebase ID property names
+        currentIndex = questions.findIndex(q => q.docId === id || q.id === id);
+
+        if (currentIndex === -1) {
+            document.getElementById("questionText").textContent = "Question not found in database.";
+            return;
+        }
+
+        // --- INCREMENT VIEW COUNT IN DATABASE ---
+        try {
+            const currentViews = Number(question.views) || 0;
+            const newViews = currentViews + 1;
+            await updateDoc(doc(db, "questions", id), {
+                views: newViews
+            });
+            // Update the local array so the UI reflects the new count instantly
+            questions[currentIndex].views = newViews;
+        } catch (error) {
+            console.log("Could not update view count (this is normal if testing locally):", error);
+        }
+        // ----------------------------------------
+
+        showQuestion();
+        
+    } catch (err) {
+        console.error("Critical error in loadQuestion:", err);
+        const target = document.getElementById("questionText");
+        if (target) target.textContent = "Error loading question. Please try again.";
+    }
 }
 
 function showQuestion() {
@@ -85,7 +97,8 @@ function showQuestion() {
                 <img
                     src="${q.questionImage}"
                     class="question-image"
-                    alt="Question Image">
+                    alt="Question Image"
+                    style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
             `;
         }
     }
@@ -95,36 +108,39 @@ function showQuestion() {
 
     options.innerHTML = "";
 
-    q.options.forEach((option, index) => {
-        const key = ["A","B","C","D"][index];
-        const image = q.optionImages?.[key] || "";
+    if (q.options && Array.isArray(q.options)) {
+        q.options.forEach((option, index) => {
+            const key = ["A","B","C","D"][index];
+            const image = q.optionImages?.[key] || "";
 
-        const label = document.createElement("label");
-        label.className = "option-card";
+            const label = document.createElement("label");
+            label.className = "option-card";
 
-        label.innerHTML = `
-            <input type="radio" name="answer" value="${index}">
-            <div class="option-content">
-                ${image ? `
-                    <img
-                        src="${image}"
-                        class="option-image"
-                        alt="Option ${key}">
-                ` : ""}
-               <div class="option-text">${option}</div>
-            </div>
-        `;
+            label.innerHTML = `
+                <input type="radio" name="answer" value="${index}">
+                <div class="option-content">
+                    ${image ? `
+                        <img
+                            src="${image}"
+                            class="option-image"
+                            alt="Option ${key}"
+                            style="max-width: 100%; border-radius: 8px; margin-bottom: 10px;">
+                    ` : ""}
+                   <div class="option-text">${option}</div>
+                </div>
+            `;
 
-        options.appendChild(label);
-    });
-
-    document.querySelectorAll('input[name="answer"]').forEach(radio => {
-        radio.addEventListener("change", () => {
-            selectedAnswer = Number(radio.value);
-            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
-            radio.closest('.option-card').classList.add('selected');
+            options.appendChild(label);
         });
-    });
+
+        document.querySelectorAll('input[name="answer"]').forEach(radio => {
+            radio.addEventListener("change", () => {
+                selectedAnswer = Number(radio.value);
+                document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+                radio.closest('.option-card').classList.add('selected');
+            });
+        });
+    }
 
     const solutionBox = document.getElementById("solutionBox");
     const resultMessage = document.getElementById("resultMessage");
@@ -144,7 +160,20 @@ function showQuestion() {
 
     const video = document.getElementById("videoContainer");
 
-    if (videoId) {
+    if (video) {
+        let videoId = "";
+        if (q.youtube) {
+            const url = q.youtube.trim();
+            if (url.includes("watch?v=")) {
+                videoId = url.split("watch?v=")[1].split("&")[0];
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0];
+            } else {
+                videoId = url;
+            }
+        }
+
+        if (videoId) {
             video.innerHTML = `
                 <div style="display: flex; justify-content: center; width: 100%; padding: 15px 0;">
                     <iframe
@@ -155,22 +184,6 @@ function showQuestion() {
                         allowfullscreen>
                     </iframe>
                 </div>
-            `;
-        } else {
-                videoId = url;
-            }
-        }
-
-        if (videoId) {
-            video.innerHTML = `
-                <iframe
-                    width="100%"
-                    height="400"
-                    src="https://www.youtube.com/embed/${videoId}"
-                    title="Video Solution"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
             `;
         } else {
             video.innerHTML = `<p class="empty-state">No video available.</p>`;
@@ -220,7 +233,8 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
                 <img
                     src="${q.solutionImage}"
                     class="solution-image"
-                    alt="Solution Image">
+                    alt="Solution Image"
+                    style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
             `;
         }
     }
@@ -232,20 +246,20 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
 document.getElementById("prevQuestion").addEventListener("click", () => {
     if (currentIndex > 0) {
         const prevQuestion = questions[currentIndex - 1];
-        window.location.href = `question.html?id=${prevQuestion.docId}&subject=${encodeURIComponent(prevQuestion.subject)}&chapter=${encodeURIComponent(prevQuestion.chapter)}`;
+        window.location.href = `question.html?id=${prevQuestion.docId || prevQuestion.id}&subject=${encodeURIComponent(prevQuestion.subject)}&chapter=${encodeURIComponent(prevQuestion.chapter)}`;
     }
 });
 
 document.getElementById("nextQuestion").addEventListener("click", () => {
     if (currentIndex < questions.length - 1) {
         const nextQuestion = questions[currentIndex + 1];
-        window.location.href = `question.html?id=${nextQuestion.docId}&subject=${encodeURIComponent(nextQuestion.subject)}&chapter=${encodeURIComponent(nextQuestion.chapter)}`;
+        window.location.href = `question.html?id=${nextQuestion.docId || nextQuestion.id}&subject=${encodeURIComponent(nextQuestion.subject)}&chapter=${encodeURIComponent(nextQuestion.chapter)}`;
     }
 });
 
 async function loadComments() {
     const q = questions[currentIndex];
-    const comments = await getComments(q.docId);
+    const comments = await getComments(q.docId || q.id);
     const list = document.getElementById("commentsList");
 
     if (!list) return;
@@ -270,7 +284,7 @@ document.getElementById("postComment").addEventListener("click", async () => {
     }
 
     await addComment({
-        questionId: q.docId,
+        questionId: q.docId || q.id,
         name,
         comment,
         time: new Date()
