@@ -177,7 +177,7 @@ function showQuestion() {
             video.innerHTML = `
                 <div style="display: flex; justify-content: center; width: 100%; padding: 15px 0;">
                     <iframe
-                        style="width: 100%; max-width: 360px; aspect-ratio: 9/16; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"
+                        style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"
                         src="https://www.youtube.com/embed/${videoId}"
                         title="Video Solution"
                         frameborder="0"
