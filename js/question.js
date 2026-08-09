@@ -43,7 +43,6 @@ async function loadQuestion() {
             return;
         }
 
-        // Support for both common Firebase ID property names
         currentIndex = questions.findIndex(q => q.docId === id || q.id === id);
 
         if (currentIndex === -1) {
@@ -58,10 +57,9 @@ async function loadQuestion() {
             await updateDoc(doc(db, "questions", id), {
                 views: newViews
             });
-            // Update the local array so the UI reflects the new count instantly
             questions[currentIndex].views = newViews;
         } catch (error) {
-            console.log("Could not update view count (this is normal if testing locally):", error);
+            console.log("Could not update view count:", error);
         }
         // ----------------------------------------
 
@@ -80,6 +78,7 @@ function showQuestion() {
 
     if (!q || !options) return;
 
+    // Combined Exam and Year Tag
     document.getElementById("examTag").textContent = (q.exam || "Exam") + (q.year ? " " + q.year : "");
     document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
@@ -160,7 +159,21 @@ function showQuestion() {
 
     const video = document.getElementById("videoContainer");
 
-    if (videoId) {
+    if (video) {
+        let videoId = "";
+        if (q.youtube) {
+            const url = q.youtube.trim();
+            if (url.includes("watch?v=")) {
+                videoId = url.split("watch?v=")[1].split("&")[0];
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0];
+            } else {
+                videoId = url;
+            }
+        }
+
+        if (videoId) {
+            // Flawless 16:9 Widescreen wrapper
             video.innerHTML = `
                 <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 15px 0;">
                     <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
@@ -171,23 +184,6 @@ function showQuestion() {
                             allowfullscreen>
                         </iframe>
                     </div>
-                </div>
-            `;
-        } else {
-                videoId = url;
-            }
-        }
-
-        if (videoId) {
-            video.innerHTML = `
-                <div style="display: flex; justify-content: center; width: 100%; padding: 15px 0;">
-                    <iframe
-                        style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"
-                        src="https://www.youtube.com/embed/${videoId}"
-                        title="Video Solution"
-                        frameborder="0"
-                        allowfullscreen>
-                    </iframe>
                 </div>
             `;
         } else {
