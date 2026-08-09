@@ -32,7 +32,7 @@ function renderLatestQuestions(questions, container) {
         card.className = "question-preview";
         card.innerHTML = `
             <div class="question-header">
-                <span class="exam-tag">${q.exam || "Exam"}</span>
+                <span class="exam-tag">${q.exam || "Exam"} ${q.year || ""}</span>
                 <span class="chapter-tag">${q.chapter || "Chapter"}</span>
                 <span class="difficulty ${difficultyClass}">${q.difficulty || "Medium"}</span>
             </div>
@@ -44,10 +44,6 @@ ${
 }
 </h3>
             <div class="question-meta">
-
-    <span class="meta-year">
-        📅 ${q.year || "N/A"}
-    </span>
 
     <span class="meta-type">
         ${q.type || "Question"}

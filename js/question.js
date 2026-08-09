@@ -80,7 +80,7 @@ function showQuestion() {
 
     if (!q || !options) return;
 
-    document.getElementById("examTag").textContent = q.exam || "Exam";
+    document.getElementById("examTag").textContent = (q.exam || "Exam") + (q.year ? " " + q.year : "");
     document.getElementById("chapterTag").textContent = q.chapter || "Chapter";
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
