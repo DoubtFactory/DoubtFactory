@@ -144,15 +144,19 @@ function showQuestion() {
 
     const video = document.getElementById("videoContainer");
 
-    if (video) {
-        let videoId = "";
-        if (q.youtube) {
-            const url = q.youtube.trim();
-            if (url.includes("watch?v=")) {
-                videoId = url.split("watch?v=")[1].split("&")[0];
-            } else if (url.includes("youtu.be/")) {
-                videoId = url.split("youtu.be/")[1].split("?")[0];
-            } else {
+    if (videoId) {
+            video.innerHTML = `
+                <div style="display: flex; justify-content: center; width: 100%; padding: 15px 0;">
+                    <iframe
+                        style="width: 100%; max-width: 360px; aspect-ratio: 9/16; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"
+                        src="https://www.youtube.com/embed/${videoId}"
+                        title="Video Solution"
+                        frameborder="0"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+        } else {
                 videoId = url;
             }
         }
