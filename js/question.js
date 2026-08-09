@@ -2,8 +2,10 @@
     getQuestionById,
     getQuestions,
     getComments,
-    addComment
+    addComment,
+    db
 } from "./firebase.js";
+import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 let questions = [];
 let currentIndex = 0;
@@ -43,6 +45,20 @@ async function loadQuestion() {
         return;
     }
 
+    // --- INCREMENT VIEW COUNT IN DATABASE ---
+    try {
+        const currentViews = Number(question.views) || 0;
+        const newViews = currentViews + 1;
+        await updateDoc(doc(db, "questions", id), {
+            views: newViews
+        });
+        // Update the local array so the UI reflects the new count instantly
+        questions[currentIndex].views = newViews;
+    } catch (error) {
+        console.log("Error updating views:", error);
+    }
+    // ----------------------------------------
+
     showQuestion();
 }
 
@@ -57,7 +73,7 @@ function showQuestion() {
     document.getElementById("difficultyTag").textContent = q.difficulty || "Medium";
     document.getElementById("typeTag").textContent = q.type || "Question";
     
-    // Render clean text without MathLive
+    // Render clean text
     document.getElementById("questionText").innerHTML = q.question || "";
     
     const questionImageContainer = document.getElementById("questionImageContainer");
@@ -183,7 +199,6 @@ document.getElementById("submitAnswer").addEventListener("click", () => {
 
     if (solution) {
         if (q.solution && q.solution.trim() !== "") {
-            // Render clean text without MathLive
             solution.innerHTML = q.solution || "";
         } else if (!q.solutionImage || q.solutionImage.trim() === "") {
             solution.textContent = "No solution available.";
