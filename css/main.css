@@ -1771,6 +1771,7 @@ textarea.chem-editor { border: none !important; border-radius: 0 0 8px 8px !impo
     .act-text strong { max-width: 220px; }
 }
 
+
 /* Dark Mode */
 body.dark .admin-body, body.dark .app-content { background: #121212; }
 body.dark .app-topbar { background: #0f172a; border-bottom: 1px solid #1e293b; }
