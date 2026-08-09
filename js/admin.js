@@ -245,7 +245,7 @@ async function updateDashboard() {
         
         const totalViewsEl = document.getElementById("totalViews");
         if (totalViewsEl) {
-            const totalViews = questions.reduce((sum, q) => sum + (q.views || 0), 0);
+            const totalViews = questions.reduce((sum, q) => sum + (Number(q.views) || 0), 0);
             totalViewsEl.textContent = totalViews;
         }
 
