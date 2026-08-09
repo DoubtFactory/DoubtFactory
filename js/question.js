@@ -160,15 +160,20 @@ function showQuestion() {
 
     const video = document.getElementById("videoContainer");
 
-    if (video) {
-        let videoId = "";
-        if (q.youtube) {
-            const url = q.youtube.trim();
-            if (url.includes("watch?v=")) {
-                videoId = url.split("watch?v=")[1].split("&")[0];
-            } else if (url.includes("youtu.be/")) {
-                videoId = url.split("youtu.be/")[1].split("?")[0];
-            } else {
+    if (videoId) {
+            video.innerHTML = `
+                <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 15px 0;">
+                    <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                        <iframe
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                            src="https://www.youtube.com/embed/${videoId}"
+                            title="Video Solution"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            `;
+        } else {
                 videoId = url;
             }
         }
