@@ -1794,11 +1794,13 @@ body.dark .toolbar-group { border-color: #334155; }
 body.dark .question-table th { background: #0f172a; color: #94a3b8; border-color: #334155; }
 body.dark .question-table td { color: #cbd5e1; border-color: #334155; }
 body.dark .app-footer { border-color: #334155; }
-/* Enforce Blue Header on all pages */
+/* Enforce Blue Header and White Text on all pages */
 .site-header {
     background-color: #1565C0 !important;
 }
+
 .site-header .logo h2,
-.site-header .logo p {
+.site-header .logo p,
+.site-header nav a {
     color: #ffffff !important;
 }
