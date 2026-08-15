@@ -242,6 +242,24 @@ function showQuestion() {
     scriptSchema.text = JSON.stringify(schemaData);
     document.head.appendChild(scriptSchema);
     // ------------------------------------
+// --- 1. DYNAMIC IMAGE ALT TEXT FOR SEO ---
+    // Wait a brief moment to ensure the question HTML has fully rendered on the page
+    setTimeout(() => {
+        // Find every single image inside the question and solution areas
+        const contentImages = document.querySelectorAll('.question-content img, .solution-content img, #questionContainer img');
+        
+        contentImages.forEach((img, index) => {
+            // If the image has no alt text, or a generic one like "image.png"
+            if (!img.alt || img.alt.toLowerCase().includes('image') || img.alt.trim() === '') {
+                // Inject a precise, keyword-rich description for Google Images
+                img.alt = `${q.chapter || "Chemistry"} technical diagram for JEE/NEET Chemistry - Figure ${index + 1}`;
+            }
+            // Optional: Ensure the images don't break the layout on mobile
+            img.style.maxWidth = "100%";
+            img.style.height = "auto";
+        });
+    }, 100);
+    // -----------------------------------------
 }
 
 document.getElementById("submitAnswer").addEventListener("click", () => {
