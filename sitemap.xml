@@ -1,37 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/search.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/subject.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/chapter.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/questions.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/question.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/login.html</loc>
-</url>
-
-<url>
-<loc>https://doubtfactory.github.io/DoubtFactory/admin.html</loc>
-</url>
-
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/index.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/exam.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/subject.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/search.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=3MM5m8VhVpVJd1RARLTr&amp;subject=Physical%20Chemistry&amp;chapter=Ionic%20Equilibrium</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=4eThZcqKaTZnCDKRYPze&amp;subject=Inorganic%20Chemistry&amp;chapter=Coordination%20Compounds</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=59bRIoyTdAquAAL8alW7&amp;subject=Physical%20Chemistry&amp;chapter=Solutions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=5QWOonPbC5k33uksqsI7&amp;subject=Inorganic%20Chemistry&amp;chapter=Qualitative%20Analysis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=Rib8SvjRqggSXsOcRwXf&amp;subject=Physical%20Chemistry&amp;chapter=Chemical%20Equilibrium</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=Sb42joX00kQCJ90qiHgI&amp;subject=Physical%20Chemistry&amp;chapter=Chemical%20Kinetics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=UuvHHSGvzo4fIm3sb1X9&amp;subject=Organic%20Chemistry&amp;chapter=Biomolecules</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=h3Pf0VHlZNUGedqQ9Umu&amp;subject=Inorganic%20Chemistry&amp;chapter=Chemical%20Bonding</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=jXxRDSQF0aUXPHoNgn3M&amp;subject=Physical%20Chemistry&amp;chapter=Electrochemistry</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=qs5ALTSR5P40ECgkTysL&amp;subject=Physical%20Chemistry&amp;chapter=Thermodynamics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://doubtfactory.github.io/DoubtFactory/question.html?id=se4vid2VPf4xf3fwJId9&amp;subject=Physical%20Chemistry&amp;chapter=Chemical%20Kinetics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
