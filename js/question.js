@@ -285,6 +285,50 @@ function showQuestion() {
     // If you ever create a default 9:16 vertical or notebook-style logo, you can link it here:
     // setOpenGraphTag('og:image', 'https://doubtfactory.github.io/DoubtFactory/images/social-share-banner.jpg');
     // ---------------------------------------------------------
+// --- BOOKMARK FOR REVISION SYSTEM ---
+    const bookmarkBtn = document.getElementById('bookmarkBtn');
+    
+    if (bookmarkBtn) {
+        // Get the specific question ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentQuestionId = urlParams.get('id');
+
+        // Load existing bookmarks from the browser's local storage
+        let savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
+
+        // Check if this question is already bookmarked
+        if (savedBookmarks.includes(currentQuestionId)) {
+            bookmarkBtn.innerHTML = '⭐ Bookmarked';
+            bookmarkBtn.style.background = '#e0f2fe';
+            bookmarkBtn.style.borderColor = '#0284c7';
+            bookmarkBtn.style.color = '#0369a1';
+        }
+
+        // Handle the click event to save or remove
+        bookmarkBtn.addEventListener('click', () => {
+            savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
+            
+            if (savedBookmarks.includes(currentQuestionId)) {
+                // Remove bookmark
+                savedBookmarks = savedBookmarks.filter(id => id !== currentQuestionId);
+                bookmarkBtn.innerHTML = '☆ Bookmark for Revision';
+                bookmarkBtn.style.background = '#f1f5f9';
+                bookmarkBtn.style.borderColor = '#cbd5e1';
+                bookmarkBtn.style.color = '#334155';
+            } else {
+                // Add bookmark
+                savedBookmarks.push(currentQuestionId);
+                bookmarkBtn.innerHTML = '⭐ Bookmarked';
+                bookmarkBtn.style.background = '#e0f2fe';
+                bookmarkBtn.style.borderColor = '#0284c7';
+                bookmarkBtn.style.color = '#0369a1';
+            }
+            
+            // Save the updated list back to the browser
+            localStorage.setItem('df_bookmarks', JSON.stringify(savedBookmarks));
+        });
+    }
+    // ------------------------------------
 }
 
 document.getElementById("submitAnswer").addEventListener("click", () => {
