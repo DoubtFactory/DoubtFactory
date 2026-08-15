@@ -200,6 +200,48 @@ function showQuestion() {
     if (nextButton) nextButton.disabled = currentIndex === questions.length - 1;
 
     loadComments();
+// --- Q&A SCHEMA MARKUP FOR GOOGLE ---
+    // 1. Remove any old schema if the student clicked "Next Question"
+    const existingSchema = document.getElementById("qa-schema");
+    if (existingSchema) {
+        existingSchema.remove();
+    }
+
+    // 2. Clean HTML tags out of the question and answer for Google's bots
+    const cleanQText = (q.question || "").replace(/<[^>]*>?/gm, '').trim();
+    const shortQName = cleanQText.length > 60 ? cleanQText.substring(0, 60) + "..." : cleanQText;
+    
+    // 3. Find the correct text for the answer
+    let correctOptionText = "Answer provided in detailed video/text solution.";
+    if (q.options && q.options[q.answer]) {
+        correctOptionText = q.options[q.answer].replace(/<[^>]*>?/gm, '').trim();
+    }
+
+    let fullSolution = q.solution ? q.solution.replace(/<[^>]*>?/gm, '').trim() : correctOptionText;
+
+    // 4. Build the structured data JSON for Google
+    const schemaData = {
+        "@context": "https://schema.org",
+        "@type": "QAPage",
+        "mainEntity": {
+            "@type": "Question",
+            "name": shortQName,
+            "text": cleanQText,
+            "answerCount": 1,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": fullSolution
+            }
+        }
+    };
+
+    // 5. Inject the code invisibly into the page
+    const scriptSchema = document.createElement("script");
+    scriptSchema.id = "qa-schema";
+    scriptSchema.type = "application/ld+json";
+    scriptSchema.text = JSON.stringify(schemaData);
+    document.head.appendChild(scriptSchema);
+    // ------------------------------------
 }
 
 document.getElementById("submitAnswer").addEventListener("click", () => {
