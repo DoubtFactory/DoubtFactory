@@ -260,6 +260,31 @@ function showQuestion() {
         });
     }, 100);
     // -----------------------------------------
+// --- 2. DYNAMIC SOCIAL META TAGS (WHATSAPP / TELEGRAM) ---
+    // Helper function to create or update meta tags easily
+    const setOpenGraphTag = (property, content) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        if (!tag) {
+            tag = document.createElement('meta');
+            tag.setAttribute('property', property);
+            document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
+    };
+
+    // Use the short title snippet we created earlier for the Google SEO title
+    setOpenGraphTag('og:title', `${shortTitleSnippet} | ${q.chapter} for JEE/NEET Chemistry`);
+    
+    // Create a clean description for the chat preview bubble
+    setOpenGraphTag('og:description', `Practice this ${q.difficulty || "Medium"} ${q.chapter} question on Doubt Factory. Check out the step-by-step solution!`);
+    
+    // Set the exact URL so the link shares correctly
+    setOpenGraphTag('og:url', window.location.href);
+    setOpenGraphTag('og:type', 'website');
+    
+    // If you ever create a default 9:16 vertical or notebook-style logo, you can link it here:
+    // setOpenGraphTag('og:image', 'https://doubtfactory.github.io/DoubtFactory/images/social-share-banner.jpg');
+    // ---------------------------------------------------------
 }
 
 document.getElementById("submitAnswer").addEventListener("click", () => {
