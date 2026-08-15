@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookmarks | Doubt Factory</title>
+    <meta name="robots" content="noindex"> <!-- Keeps student dashboards off Google -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <style>
+        .bookmark-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .bookmark-card h3 { margin-top: 0; color: #1e293b; }
+        .bookmark-card p { color: #64748b; font-size: 14px; }
+        .solve-btn {
+            display: inline-block;
+            background: #1565C0;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .solve-btn:hover { background: #0d47a1; }
+        .remove-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <h2>Doubt Factory</h2>
+        <p>Turning Doubts into Clarity</p>
+    </a>
+    <nav aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="exam.html">Exams</a>
+        <a href="subject.html">Subjects</a>
+        <a href="search.html">Search</a>
+        <a href="bookmarks.html" style="font-weight: bold; text-decoration: underline;">Bookmarks</a>
+    </nav>
+</header>
+
+<main class="container" style="max-width: 800px; margin-top: 40px; min-height: 60vh;">
+    <h1 style="color: #1565C0;">⭐ My Revision Bookmarks</h1>
+    <p style="color: #64748b; margin-bottom: 30px;">Review your saved JEE/NEET chemistry questions here.</p>
+
+    <div id="bookmarksList">
+        <p>Loading your saved questions...</p>
+    </div>
+</main>
+
+<script type="module" src="js/bookmarks.js"></script>
+</body>
+</html>
