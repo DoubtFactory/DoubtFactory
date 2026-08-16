@@ -1869,3 +1869,35 @@ body.dark .app-footer { border-color: #334155; }
         display: none; /* Hides the ugly scrollbar on mobile */
     }
 }
+/* =========================================
+   GLOBAL MOBILE DIMENSION & OVERFLOW FIX
+   ========================================= */
+html, body {
+    overflow-x: hidden !important; /* Strictly prevents horizontal scrolling */
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure all elements calculate padding and borders safely inside the screen width */
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Force all main containers to stay within the screen padding */
+.container, main, .search-shell, .search-page, .question-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    box-sizing: border-box !important;
+    overflow-wrap: break-word !important; /* Breaks long chemical formulas so they don't stretch the screen */
+}
+
+/* Make absolutely sure iframes (YouTube) and images never break the boundary */
+iframe, img, video {
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
