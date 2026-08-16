@@ -59,6 +59,22 @@
             <button class="chip" data-filter="JEE Advanced">JEE Advanced</button>
             <button class="chip" data-filter="NEET">NEET</button>
         </div>
+<!-- New Dropdown Filters for Subject and Difficulty -->
+        <div class="search-dropdowns" style="display: flex; gap: 15px; margin-top: 15px; justify-content: center; flex-wrap: wrap;">
+            <select id="subjectFilter" aria-label="Filter by Subject" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; background: white; min-width: 180px;">
+                <option value="">All Branches</option>
+                <option value="Physical Chemistry">Physical Chemistry</option>
+                <option value="Organic Chemistry">Organic Chemistry</option>
+                <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+            </select>
+
+            <select id="difficultyFilter" aria-label="Filter by Difficulty" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; background: white; min-width: 180px;">
+                <option value="">Any Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        </div>
 
         <div class="search-meta" id="searchMeta" aria-live="polite"></div>
         <div id="searchResults" aria-live="polite"></div>
