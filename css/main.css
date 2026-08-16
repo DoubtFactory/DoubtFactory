@@ -1901,3 +1901,42 @@ iframe, img, video {
     max-width: 100% !important;
     box-sizing: border-box;
 }
+@media (max-width: 768px) {
+    /* --- 1. Fix the Giant Homepage Search Box --- */
+    /* Target the exact search input to lock its height */
+    input[placeholder*="Search Chemistry"] {
+        height: 55px !important;
+        max-height: 55px !important; /* Prevents it from stretching into a massive square */
+        border-radius: 8px !important;
+        width: 100% !important;
+        margin-bottom: 10px !important; /* Adds breathing room above the yellow button */
+    }
+
+    /* Target the yellow search button to match */
+    input[placeholder*="Search Chemistry"] + button,
+    .hero-search button,
+    .search-input-wrap button {
+        height: 55px !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+    }
+
+    /* --- 2. Fix the Cut-Off Navigation Menu --- */
+    .site-header {
+        padding: 15px !important;
+        width: 100vw !important;
+        box-sizing: border-box !important;
+    }
+
+    nav[aria-label="Primary navigation"] {
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+        justify-content: flex-start !important;
+    }
+    
+    /* Ensure the very first link (Home) doesn't get pushed off-screen */
+    nav[aria-label="Primary navigation"] a:first-child {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
+}
