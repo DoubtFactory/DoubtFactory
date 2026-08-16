@@ -1805,6 +1805,44 @@ body.dark .app-footer { border-color: #334155; }
     color: #ffffff !important;
 }
 /* =========================================
+   GLOBAL DESKTOP & LAYOUT FIXES
+   ========================================= */
+
+/* 1. Remove browser default margins to eliminate white side lines */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* 2. Force header and blue hero sections to stretch edge-to-edge */
+.site-header, .hero-section, .hero, header {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* 3. Widen the main layout so it doesn't look squeezed on desktop */
+.container, main {
+    max-width: 1200px !important; /* Expands the boundary for wide monitors */
+    width: 100% !important;
+    margin: 0 auto !important; /* Keeps everything perfectly centered */
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+/* 4. Widen the individual question cards */
+.question-card, .latest-question {
+    max-width: 1000px !important; /* Un-squeezes the question boxes */
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+/* =========================================
    MOBILE POLISH & TOUCH OPTIMIZATIONS
    ========================================= */
 @media (max-width: 768px) {
