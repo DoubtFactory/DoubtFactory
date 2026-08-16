@@ -281,6 +281,16 @@ function showQuestion() {
     // Set the exact URL so the link shares correctly
     setOpenGraphTag('og:url', window.location.href);
     setOpenGraphTag('og:type', 'website');
+// --- 3. DYNAMIC CANONICAL TAG ---
+    let canonicalTag = document.querySelector("link[rel='canonical']");
+    if (!canonicalTag) {
+        canonicalTag = document.createElement("link");
+        canonicalTag.setAttribute("rel", "canonical");
+        document.head.appendChild(canonicalTag);
+    }
+    // Set the clean, official URL without any extra tracking junk
+    canonicalTag.setAttribute("href", `https://doubtfactory.github.io/DoubtFactory/question.html?id=${id}&subject=${encodeURIComponent(q.subject || "")}&chapter=${encodeURIComponent(q.chapter || "")}`);
+    // ---------------------------------
     
     // If you ever create a default 9:16 vertical or notebook-style logo, you can link it here:
     // setOpenGraphTag('og:image', 'https://doubtfactory.github.io/DoubtFactory/images/social-share-banner.jpg');
