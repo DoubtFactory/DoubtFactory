@@ -2048,3 +2048,25 @@ html, body {
         display: flex !important;
     }
 }
+/* =========================================
+   MOBILE DROPDOWN VISIBILITY FIX
+   ========================================= */
+@media (max-width: 768px) {
+    /* This forces the dropdown to break out of the scrollable menu and float over the screen */
+    .site-header .nav-item-dropdown .drop-menu {
+        position: fixed !important;
+        top: 135px !important; /* Places it cleanly right under your blue navigation bar */
+        left: 5vw !important;
+        width: 90vw !important;
+        height: auto !important;
+        max-height: 60vh !important;
+        overflow-y: auto !important; /* Allows scrolling inside the dropdown if it gets too long */
+        z-index: 999999 !important;
+    }
+    
+    /* Ensure the trigger acts like a real button on iOS/Android */
+    .drop-trigger {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+}
