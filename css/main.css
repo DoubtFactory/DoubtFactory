@@ -1902,41 +1902,72 @@ iframe, img, video {
     box-sizing: border-box;
 }
 @media (max-width: 768px) {
-    /* --- 1. Fix the Giant Homepage Search Box --- */
-    /* Target the exact search input to lock its height */
-    input[placeholder*="Search Chemistry"] {
-        height: 55px !important;
-        max-height: 55px !important; /* Prevents it from stretching into a massive square */
-        border-radius: 8px !important;
-        width: 100% !important;
-        margin-bottom: 10px !important; /* Adds breathing room above the yellow button */
+    
+    /* --- 1. Fix the Cut-Off Navigation Menu --- */
+    .site-header {
+        padding: 15px 0 !important; /* Removes side padding so the menu can swipe edge-to-edge */
+        width: 100vw !important;
+        box-sizing: border-box !important;
     }
 
-    /* Target the yellow search button to match */
+    nav[aria-label="Primary navigation"] {
+        display: flex !important;
+        flex-wrap: nowrap !important; /* Forces all links onto a single horizontal line */
+        overflow-x: auto !important; /* Enables horizontal swiping */
+        -webkit-overflow-scrolling: touch !important; /* Smooth momentum scrolling on iPhones */
+        justify-content: flex-start !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+        width: 100% !important;
+    }
+    
+    /* This prevents the text inside the links from squishing! */
+    nav[aria-label="Primary navigation"] a {
+        flex-shrink: 0 !important; 
+    }
+    
+    /* Hides the ugly horizontal scrollbar */
+    nav[aria-label="Primary navigation"]::-webkit-scrollbar {
+        display: none !important; 
+    }
+
+    /* --- 2. Remove White Gaps & Un-squeeze Content --- */
+    /* Forces the main layout to stretch to the exact edges of the phone */
+    .container, main, .search-shell {
+        width: 100% !important;
+        max-width: 100vw !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* If your blue hero section has a specific class, this forces it to remove side margins */
+    .hero, .hero-section, .search-hero {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 0 !important; /* Removes rounded corners so it sits flush with the screen edges */
+        box-sizing: border-box !important;
+    }
+    
+    /* --- 3. Fix the Giant Homepage Search Box --- */
+    input[placeholder*="Search Chemistry"] {
+        height: 55px !important;
+        max-height: 55px !important; 
+        border-radius: 8px !important;
+        width: 100% !important;
+        margin-bottom: 10px !important; 
+        box-sizing: border-box !important;
+    }
+
     input[placeholder*="Search Chemistry"] + button,
     .hero-search button,
     .search-input-wrap button {
         height: 55px !important;
         border-radius: 8px !important;
         width: 100% !important;
-    }
-
-    /* --- 2. Fix the Cut-Off Navigation Menu --- */
-    .site-header {
-        padding: 15px !important;
-        width: 100vw !important;
         box-sizing: border-box !important;
-    }
-
-    nav[aria-label="Primary navigation"] {
-        padding-left: 0 !important;
-        margin-left: 0 !important;
-        justify-content: flex-start !important;
-    }
-    
-    /* Ensure the very first link (Home) doesn't get pushed off-screen */
-    nav[aria-label="Primary navigation"] a:first-child {
-        margin-left: 0 !important;
-        padding-left: 0 !important;
     }
 }
