@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# Keep the bots out of the admin and dashboard areas
+Disallow: /admin.html
+Disallow: /bookmarks.html
+Disallow: /generate-sitemap.html
+
+# Point directly to your dynamic roadmap
 Sitemap: https://doubtfactory.github.io/DoubtFactory/sitemap.xml
