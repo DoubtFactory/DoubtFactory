@@ -1805,207 +1805,111 @@ body.dark .app-footer { border-color: #334155; }
     color: #ffffff !important;
 }
 /* =========================================
-   GLOBAL DESKTOP & LAYOUT FIXES
+   UNIFIED LAYOUT & MOBILE FIXES
    ========================================= */
 
-/* 1. Remove browser default margins to eliminate white side lines */
+/* 1. Global Edge-to-Edge & Margin Resets */
 html, body {
     margin: 0 !important;
     padding: 0 !important;
-    width: 100%;
-    overflow-x: hidden;
-}
-
-/* 2. Force header and blue hero sections to stretch edge-to-edge */
-.site-header, .hero-section, .hero, header {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    border-radius: 0 !important;
-}
-
-/* 3. Widen the main layout so it doesn't look squeezed on desktop */
-.container, main {
-    max-width: 1200px !important; /* Expands the boundary for wide monitors */
-    width: 100% !important;
-    margin: 0 auto !important; /* Keeps everything perfectly centered */
-    padding-left: 20px;
-    padding-right: 20px;
-    box-sizing: border-box;
-}
-
-/* 4. Widen the individual question cards */
-.question-card, .latest-question {
-    max-width: 1000px !important; /* Un-squeezes the question boxes */
-    width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-/* =========================================
-   MOBILE POLISH & TOUCH OPTIMIZATIONS
-   ========================================= */
-@media (max-width: 768px) {
-    
-    /* 1. Expand Touch Targets for Thumbs (Apple's 44px minimum rule) */
-    button, 
-    .chip, 
-    .solve-btn,
-    select, 
-    input[type="text"] {
-        min-height: 48px !important;
-        font-size: 16px !important; /* Prevents iPhones from auto-zooming on inputs */
-    }
-
-    /* 2. Optimize Vertical Images & Notebook Diagrams */
-    .question-image, 
-    .solution-image, 
-    .option-image {
-        width: 100% !important;
-        height: auto !important;
-        max-width: 100% !important;
-        border-radius: 12px; /* Smoother, app-like corners */
-        margin: 15px 0;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Adds depth to diagrams */
-    }
-
-    /* 3. Stack the Advanced Search Filters Neatly */
-    .search-dropdowns, 
-    .search-filters {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 10px;
-        padding: 15px !important;
-    }
-    
-    .search-dropdowns select {
-        width: 100%; /* Full width for easy tapping */
-    }
-
-    /* 4. Tidy Up the Question Options */
-    .option-card {
-        padding: 15px !important;
-        margin-bottom: 12px !important;
-        border-radius: 10px !important;
-    }
-
-    /* 5. Clean up Header & Navigation for Small Screens */
-    .site-header {
-        padding: 15px 20px !important;
-    }
-    
-    nav[aria-label="Primary navigation"] {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto; /* Allows smooth horizontal scrolling if menu gets too wide */
-        padding-bottom: 10px;
-        -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
-        gap: 15px;
-    }
-    
-    nav[aria-label="Primary navigation"]::-webkit-scrollbar {
-        display: none; /* Hides the ugly scrollbar on mobile */
-    }
-}
-/* =========================================
-   GLOBAL MOBILE DIMENSION & OVERFLOW FIX
-   ========================================= */
-html, body {
-    overflow-x: hidden !important; /* Strictly prevents horizontal scrolling */
     width: 100% !important;
     max-width: 100vw !important;
-    margin: 0;
-    padding: 0;
+    overflow-x: hidden !important;
     box-sizing: border-box;
 }
 
-/* Ensure all elements calculate padding and borders safely inside the screen width */
 *, *::before, *::after {
     box-sizing: inherit;
 }
 
-/* Force all main containers to stay within the screen padding */
-.container, main, .search-shell, .search-page, .question-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
+/* 2. Breakout Headers & Hero Banners to forcefully fill the screen */
+.site-header, .hero-section, .hero, header, .home-page .site-header, .home-page .hero {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    border-radius: 0 !important;
     box-sizing: border-box !important;
-    overflow-wrap: break-word !important; /* Breaks long chemical formulas so they don't stretch the screen */
+    padding-left: max(20px, 8%) !important;
+    padding-right: max(20px, 8%) !important;
 }
 
-/* Make absolutely sure iframes (YouTube) and images never break the boundary */
-iframe, img, video {
-    max-width: 100% !important;
-    box-sizing: border-box;
+/* 3. Widen Desktop Containers */
+.container, main, .search-shell {
+    max-width: 1200px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
 }
+
+/* 4. Widen ALL question cards (including homepage previews) */
+.question-card, .latest-question, .question-preview, .question-item {
+    max-width: 1000px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 5. Mobile Polish & Navigation Fixes */
 @media (max-width: 768px) {
     
-    /* --- 1. Fix the Cut-Off Navigation Menu --- */
+    /* Expand Touch Targets */
+    button, .chip, .solve-btn, select, input[type="text"] {
+        min-height: 48px !important;
+        font-size: 16px !important;
+    }
+
+    /* Responsive Images */
+    .question-image, .solution-image, .option-image {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 12px !important;
+    }
+
+    /* Stack Filters */
+    .search-dropdowns, .search-filters {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    
+    /* Swipeable Horizontal Navigation */
     .site-header {
-        padding: 15px 0 !important; /* Removes side padding so the menu can swipe edge-to-edge */
-        width: 100vw !important;
-        box-sizing: border-box !important;
+        padding: 15px 0 !important; 
     }
 
     nav[aria-label="Primary navigation"] {
         display: flex !important;
-        flex-wrap: nowrap !important; /* Forces all links onto a single horizontal line */
-        overflow-x: auto !important; /* Enables horizontal swiping */
-        -webkit-overflow-scrolling: touch !important; /* Smooth momentum scrolling on iPhones */
+        flex-wrap: nowrap !important; 
+        overflow-x: auto !important; 
+        -webkit-overflow-scrolling: touch !important; 
         justify-content: flex-start !important;
         gap: 20px !important;
         padding: 0 15px !important;
-        width: 100% !important;
     }
     
-    /* This prevents the text inside the links from squishing! */
     nav[aria-label="Primary navigation"] a {
         flex-shrink: 0 !important; 
     }
     
-    /* Hides the ugly horizontal scrollbar */
     nav[aria-label="Primary navigation"]::-webkit-scrollbar {
         display: none !important; 
     }
 
-    /* --- 2. Remove White Gaps & Un-squeeze Content --- */
-    /* Forces the main layout to stretch to the exact edges of the phone */
-    .container, main, .search-shell {
-        width: 100% !important;
-        max-width: 100vw !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* If your blue hero section has a specific class, this forces it to remove side margins */
-    .hero, .hero-section, .search-hero {
-        width: 100% !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        border-radius: 0 !important; /* Removes rounded corners so it sits flush with the screen edges */
-        box-sizing: border-box !important;
-    }
-    
-    /* --- 3. Fix the Giant Homepage Search Box --- */
+    /* Fix Giant Search Box */
     input[placeholder*="Search Chemistry"] {
         height: 55px !important;
         max-height: 55px !important; 
         border-radius: 8px !important;
         width: 100% !important;
         margin-bottom: 10px !important; 
-        box-sizing: border-box !important;
     }
 
     input[placeholder*="Search Chemistry"] + button,
-    .hero-search button,
-    .search-input-wrap button {
+    .hero-search button, .search-input-wrap button {
         height: 55px !important;
         border-radius: 8px !important;
         width: 100% !important;
-        box-sizing: border-box !important;
     }
 }
