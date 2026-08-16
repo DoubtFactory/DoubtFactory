@@ -242,12 +242,6 @@ async function updateDashboard() {
             const localDraft = localStorage.getItem(STORAGE_KEY);
             draftsCount.textContent = localDraft ? "1" : "0";
         }
-        
-        const totalViewsEl = document.getElementById("totalViews");
-        if (totalViewsEl) {
-            const totalViews = questions.reduce((sum, q) => sum + (Number(q.views) || 0), 0);
-            totalViewsEl.textContent = totalViews;
-        }
 
         renderRecentActivity(questions);
         renderQuestionTypePieChart(questions);
