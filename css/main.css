@@ -2042,3 +2042,9 @@ html, body {
     background: #f1f5f9 !important;
     color: #2563eb !important;
 }
+@media (max-width: 768px) {
+    /* When the mobile-open class is applied via tap, force the menu to display */
+    .nav-item-dropdown.mobile-open .drop-menu {
+        display: flex !important;
+    }
+}

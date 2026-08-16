@@ -78,7 +78,28 @@
 </main>
 
 <script src="js/subjects.js"></script>
-
+<script>
+    // Make dropdowns fully touch-friendly on mobile devices
+    document.querySelectorAll('.drop-trigger').forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            // Check if we are on mobile/tablet screen width
+            if (window.innerWidth <= 768) {
+                e.preventDefault(); // Stop the link from navigating away immediately
+                const parentDropdown = this.parentElement;
+                
+                // Toggle an 'active' class on this dropdown
+                parentDropdown.classList.toggle('mobile-open');
+                
+                // Close other open dropdowns
+                document.querySelectorAll('.nav-item-dropdown').forEach(item => {
+                    if (item !== parentDropdown) {
+                        item.classList.remove('mobile-open');
+                    }
+                });
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
