@@ -50,19 +50,6 @@ async function loadQuestion() {
             return;
         }
 
-        // --- INCREMENT VIEW COUNT IN DATABASE ---
-        try {
-            const currentViews = Number(question.views) || 0;
-            const newViews = currentViews + 1;
-            await updateDoc(doc(db, "questions", id), {
-                views: newViews
-            });
-            questions[currentIndex].views = newViews;
-        } catch (error) {
-            console.log("Could not update view count:", error);
-        }
-        // ----------------------------------------
-
         showQuestion();
         
     } catch (err) {
