@@ -1852,6 +1852,66 @@ html, body {
     margin-right: auto !important;
 }
 
+/* =========================================
+   NAVIGATION DROPDOWNS
+   ========================================= */
+.site-header {
+    position: relative; /* Acts as the anchor for mobile dropdowns */
+}
+
+.nav-item-dropdown {
+    position: relative; /* Acts as the anchor for desktop dropdowns */
+    display: flex;
+    align-items: center;
+}
+
+.drop-trigger {
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.drop-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    min-width: 200px;
+    z-index: 9999;
+    flex-direction: column;
+    padding: 8px 0;
+    margin-top: 5px;
+}
+
+/* Style the links inside the dropdown */
+.drop-menu a {
+    color: #334155 !important;
+    padding: 12px 20px !important;
+    margin: 0 !important;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: normal !important;
+    text-align: left;
+}
+
+.drop-menu a:last-child {
+    border-bottom: none;
+}
+
+.drop-menu a:hover {
+    background: #f8fafc;
+    color: #0284c7 !important;
+}
+
+/* Magically open the dropdown on hover (Desktop) or tap (Mobile) */
+.nav-item-dropdown:hover .drop-menu,
+.nav-item-dropdown:active .drop-menu,
+.nav-item-dropdown:focus-within .drop-menu {
+    display: flex;
+}
 /* 5. Mobile Polish & Navigation Fixes */
 /* =========================================
    MOBILE POLISH & TOUCH OPTIMIZATIONS
@@ -1922,5 +1982,21 @@ html, body {
         border-radius: 8px !important;
         width: 100% !important;
         box-sizing: border-box !important;
+    }
+	/* --- 4. Dropdown Mobile Fix --- */
+    .nav-item-dropdown {
+        position: static !important; /* Lets the dropdown escape the horizontal scroll menu */
+    }
+    
+    .drop-menu {
+        top: 100%; /* Snaps cleanly directly under the blue header */
+        left: 5vw !important;
+        width: 90vw !important;
+        margin-top: -10px;
+    }
+    
+    .drop-menu a {
+        text-align: center !important; /* Centers text for easier thumb tapping */
+        padding: 15px !important;
     }
 }
