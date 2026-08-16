@@ -1804,3 +1804,68 @@ body.dark .app-footer { border-color: #334155; }
 .site-header nav a {
     color: #ffffff !important;
 }
+/* =========================================
+   MOBILE POLISH & TOUCH OPTIMIZATIONS
+   ========================================= */
+@media (max-width: 768px) {
+    
+    /* 1. Expand Touch Targets for Thumbs (Apple's 44px minimum rule) */
+    button, 
+    .chip, 
+    .solve-btn,
+    select, 
+    input[type="text"] {
+        min-height: 48px !important;
+        font-size: 16px !important; /* Prevents iPhones from auto-zooming on inputs */
+    }
+
+    /* 2. Optimize Vertical Images & Notebook Diagrams */
+    .question-image, 
+    .solution-image, 
+    .option-image {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        border-radius: 12px; /* Smoother, app-like corners */
+        margin: 15px 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Adds depth to diagrams */
+    }
+
+    /* 3. Stack the Advanced Search Filters Neatly */
+    .search-dropdowns, 
+    .search-filters {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px;
+        padding: 15px !important;
+    }
+    
+    .search-dropdowns select {
+        width: 100%; /* Full width for easy tapping */
+    }
+
+    /* 4. Tidy Up the Question Options */
+    .option-card {
+        padding: 15px !important;
+        margin-bottom: 12px !important;
+        border-radius: 10px !important;
+    }
+
+    /* 5. Clean up Header & Navigation for Small Screens */
+    .site-header {
+        padding: 15px 20px !important;
+    }
+    
+    nav[aria-label="Primary navigation"] {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto; /* Allows smooth horizontal scrolling if menu gets too wide */
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+        gap: 15px;
+    }
+    
+    nav[aria-label="Primary navigation"]::-webkit-scrollbar {
+        display: none; /* Hides the ugly scrollbar on mobile */
+    }
+}
