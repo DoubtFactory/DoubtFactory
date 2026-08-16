@@ -6,6 +6,8 @@ const suggestions = document.getElementById("suggestions");
 const searchMeta = document.getElementById("searchMeta");
 const searchButton = document.getElementById("searchButton");
 const filterChips = document.querySelectorAll(".chip");
+const subjectFilter = document.getElementById("subjectFilter");
+const difficultyFilter = document.getElementById("difficultyFilter");
 
 let questions = [];
 let activeFilter = "All";
@@ -38,6 +40,10 @@ function normalizeText(value) {
 
 function getFilteredQuestions(keyword) {
     const term = normalizeText(keyword);
+    
+    // Grab the current values from the new dropdowns
+    const activeSubject = subjectFilter ? subjectFilter.value.toLowerCase() : "";
+    const activeDifficulty = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
 
     return questions.filter(q => {
         const question = normalizeText(q.question);
@@ -46,11 +52,22 @@ function getFilteredQuestions(keyword) {
         const exam = normalizeText(q.exam);
         const difficulty = normalizeText(q.difficulty);
 
-        const matchesFilter = activeFilter === "All" || exam === activeFilter.toLowerCase();
+        // 1. Exam Match (from your existing chips)
+        const matchesExam = activeFilter === "All" || exam === activeFilter.toLowerCase();
+        
+        // 2. Subject Match
+        const matchesSubject = !activeSubject || subject === activeSubject;
+        
+        // 3. Difficulty Match
+        const matchesDifficulty = !activeDifficulty || difficulty === activeDifficulty;
 
-        if (!matchesFilter) return false;
+        // If a question fails ANY of the active filters, hide it
+        if (!matchesExam || !matchesSubject || !matchesDifficulty) return false;
+        
+        // If there is no typed keyword, show all questions that pass the filters above
         if (!term) return true;
 
+        // Otherwise, check if the keyword matches text
         return question.includes(term) || chapter.includes(term) || subject.includes(term) || exam.includes(term) || difficulty.includes(term);
     });
 }
@@ -177,5 +194,10 @@ filterChips.forEach(chip => {
         renderResults();
     });
 });
-
+if (subjectFilter) {
+    subjectFilter.addEventListener("change", renderResults);
+}
+if (difficultyFilter) {
+    difficultyFilter.addEventListener("change", renderResults);
+}
 load();
