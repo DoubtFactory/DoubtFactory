@@ -200,32 +200,40 @@ function showQuestion() {
     if (nextButton) nextButton.disabled = currentIndex === questions.length - 1;
 
     loadComments();
-// --- Q&A SCHEMA MARKUP FOR GOOGLE ---
-    // 1. Remove any old schema if the student clicked "Next Question"
-    const existingSchema = document.getElementById("qa-schema");
-    if (existingSchema) {
-        existingSchema.remove();
-    }
-
-    // 2. Clean HTML tags out of the question and answer for Google's bots
+// --- 1. DYNAMIC SEO UPDATE & Q&A SCHEMA ---
     const cleanQText = (q.question || "").replace(/<[^>]*>?/gm, '').trim();
-    const shortQName = cleanQText.length > 60 ? cleanQText.substring(0, 60) + "..." : cleanQText;
-    
-    // 3. Find the correct text for the answer
+    const shortTitleSnippet = cleanQText.length > 40 ? cleanQText.substring(0, 40) + "..." : cleanQText;
+
+    // Automatically update the Browser Tab & Google Search Title
+    document.title = `${shortTitleSnippet} | ${q.chapter} for JEE/NEET Chemistry`;
+
+    // Automatically update the Meta Description for Google Search Results
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+        metaDescription = document.createElement('meta');
+        metaDescription.name = "description";
+        document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = `Practice this ${q.difficulty || "Medium"} ${q.chapter} question for JEE/NEET Chemistry on Doubt Factory. ${cleanQText.substring(0, 120)}...`;
+
+    // Remove old schema if the student clicked "Next Question"
+    const existingSchema = document.getElementById("qa-schema");
+    if (existingSchema) existingSchema.remove();
+
+    // Find correct text for schema answer
     let correctOptionText = "Answer provided in detailed video/text solution.";
     if (q.options && q.options[q.answer]) {
         correctOptionText = q.options[q.answer].replace(/<[^>]*>?/gm, '').trim();
     }
-
     let fullSolution = q.solution ? q.solution.replace(/<[^>]*>?/gm, '').trim() : correctOptionText;
 
-    // 4. Build the structured data JSON for Google
+    // Build & Inject structured data JSON for Google
     const schemaData = {
         "@context": "https://schema.org",
         "@type": "QAPage",
         "mainEntity": {
             "@type": "Question",
-            "name": shortQName,
+            "name": shortTitleSnippet,
             "text": cleanQText,
             "answerCount": 1,
             "acceptedAnswer": {
@@ -234,34 +242,25 @@ function showQuestion() {
             }
         }
     };
-
-    // 5. Inject the code invisibly into the page
     const scriptSchema = document.createElement("script");
     scriptSchema.id = "qa-schema";
     scriptSchema.type = "application/ld+json";
     scriptSchema.text = JSON.stringify(schemaData);
     document.head.appendChild(scriptSchema);
-    // ------------------------------------
-// --- 1. DYNAMIC IMAGE ALT TEXT FOR SEO ---
-    // Wait a brief moment to ensure the question HTML has fully rendered on the page
+
+    // --- 2. DYNAMIC IMAGE ALT TEXT ---
     setTimeout(() => {
-        // Find every single image inside the question and solution areas
         const contentImages = document.querySelectorAll('.question-content img, .solution-content img, #questionContainer img');
-        
         contentImages.forEach((img, index) => {
-            // If the image has no alt text, or a generic one like "image.png"
             if (!img.alt || img.alt.toLowerCase().includes('image') || img.alt.trim() === '') {
-                // Inject a precise, keyword-rich description for Google Images
                 img.alt = `${q.chapter || "Chemistry"} technical diagram for JEE/NEET Chemistry - Figure ${index + 1}`;
             }
-            // Optional: Ensure the images don't break the layout on mobile
             img.style.maxWidth = "100%";
             img.style.height = "auto";
         });
     }, 100);
-    // -----------------------------------------
-// --- 2. DYNAMIC SOCIAL META TAGS (WHATSAPP / TELEGRAM) ---
-    // Helper function to create or update meta tags easily
+
+    // --- 3. DYNAMIC SOCIAL META TAGS ---
     const setOpenGraphTag = (property, content) => {
         let tag = document.querySelector(`meta[property="${property}"]`);
         if (!tag) {
@@ -272,41 +271,28 @@ function showQuestion() {
         tag.setAttribute('content', content);
     };
 
-    // Use the short title snippet we created earlier for the Google SEO title
     setOpenGraphTag('og:title', `${shortTitleSnippet} | ${q.chapter} for JEE/NEET Chemistry`);
-    
-    // Create a clean description for the chat preview bubble
     setOpenGraphTag('og:description', `Practice this ${q.difficulty || "Medium"} ${q.chapter} question on Doubt Factory. Check out the step-by-step solution!`);
-    
-    // Set the exact URL so the link shares correctly
     setOpenGraphTag('og:url', window.location.href);
     setOpenGraphTag('og:type', 'website');
-// --- 3. DYNAMIC CANONICAL TAG ---
+
+    // --- 4. DYNAMIC CANONICAL TAG ---
     let canonicalTag = document.querySelector("link[rel='canonical']");
     if (!canonicalTag) {
         canonicalTag = document.createElement("link");
         canonicalTag.setAttribute("rel", "canonical");
         document.head.appendChild(canonicalTag);
     }
-    // Set the clean, official URL without any extra tracking junk
-    canonicalTag.setAttribute("href", `https://doubtfactory.github.io/DoubtFactory/question.html?id=${id}&subject=${encodeURIComponent(q.subject || "")}&chapter=${encodeURIComponent(q.chapter || "")}`);
-    // ---------------------------------
-    
-    // If you ever create a default 9:16 vertical or notebook-style logo, you can link it here:
-    // setOpenGraphTag('og:image', 'https://doubtfactory.github.io/DoubtFactory/images/social-share-banner.jpg');
-    // ---------------------------------------------------------
-// --- BOOKMARK FOR REVISION SYSTEM ---
+    const currentUrlId = q.docId || q.id || new URLSearchParams(window.location.search).get('id');
+    canonicalTag.setAttribute("href", `https://doubtfactory.github.io/DoubtFactory/question.html?id=${currentUrlId}&subject=${encodeURIComponent(q.subject || "")}&chapter=${encodeURIComponent(q.chapter || "")}`);
+
+    // --- 5. BOOKMARK FOR REVISION SYSTEM ---
     const bookmarkBtn = document.getElementById('bookmarkBtn');
-    
     if (bookmarkBtn) {
-        // Get the specific question ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const currentQuestionId = urlParams.get('id');
-
-        // Load existing bookmarks from the browser's local storage
         let savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
 
-        // Check if this question is already bookmarked
         if (savedBookmarks.includes(currentQuestionId)) {
             bookmarkBtn.innerHTML = '⭐ Bookmarked';
             bookmarkBtn.style.background = '#e0f2fe';
@@ -314,31 +300,28 @@ function showQuestion() {
             bookmarkBtn.style.color = '#0369a1';
         }
 
-        // Handle the click event to save or remove
-        bookmarkBtn.addEventListener('click', () => {
+        // Must remove old listener before adding a new one to prevent double-firing on "Next Question" clicks
+        const newBookmarkBtn = bookmarkBtn.cloneNode(true);
+        bookmarkBtn.parentNode.replaceChild(newBookmarkBtn, bookmarkBtn);
+        
+        newBookmarkBtn.addEventListener('click', () => {
             savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
-            
             if (savedBookmarks.includes(currentQuestionId)) {
-                // Remove bookmark
                 savedBookmarks = savedBookmarks.filter(id => id !== currentQuestionId);
-                bookmarkBtn.innerHTML = '☆ Bookmark for Revision';
-                bookmarkBtn.style.background = '#f1f5f9';
-                bookmarkBtn.style.borderColor = '#cbd5e1';
-                bookmarkBtn.style.color = '#334155';
+                newBookmarkBtn.innerHTML = '☆ Bookmark for Revision';
+                newBookmarkBtn.style.background = '#f1f5f9';
+                newBookmarkBtn.style.borderColor = '#cbd5e1';
+                newBookmarkBtn.style.color = '#334155';
             } else {
-                // Add bookmark
                 savedBookmarks.push(currentQuestionId);
-                bookmarkBtn.innerHTML = '⭐ Bookmarked';
-                bookmarkBtn.style.background = '#e0f2fe';
-                bookmarkBtn.style.borderColor = '#0284c7';
-                bookmarkBtn.style.color = '#0369a1';
+                newBookmarkBtn.innerHTML = '⭐ Bookmarked';
+                newBookmarkBtn.style.background = '#e0f2fe';
+                newBookmarkBtn.style.borderColor = '#0284c7';
+                newBookmarkBtn.style.color = '#0369a1';
             }
-            
-            // Save the updated list back to the browser
             localStorage.setItem('df_bookmarks', JSON.stringify(savedBookmarks));
         });
     }
-    // ------------------------------------
 }
 
 document.getElementById("submitAnswer").addEventListener("click", () => {
