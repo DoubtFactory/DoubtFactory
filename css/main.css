@@ -1995,8 +1995,26 @@ html, body {
         margin-top: -10px;
     }
     
-    .drop-menu a {
-        text-align: center !important; /* Centers text for easier thumb tapping */
-        padding: 15px !important;
-    }
+    /* Style the links inside the dropdown */
+.drop-menu a {
+    color: #1e293b !important; /* Deep dark slate color so the text is clearly visible */
+    background-color: #ffffff !important; /* Pure white background */
+    padding: 12px 20px !important;
+    margin: 0 !important;
+    font-size: 15px;
+    font-weight: 500 !important;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: nowrap !important;
+    text-align: left;
+    display: block !important;
+}
+
+.drop-menu a:last-child {
+    border-bottom: none;
+}
+
+.drop-menu a:hover {
+    background-color: #f8fafc !important;
+    color: #0284c7 !important; /* Turns bright blue on hover */
+}
 }
