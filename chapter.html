@@ -78,12 +78,14 @@
 
 <script src="js/chapter.js"></script>
 <script>
-    // Ultimate Mobile Dropdown Teleporter
+    // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
     document.querySelectorAll('.drop-trigger').forEach(trigger => {
+        // Find the menu IMMEDIATELY when the page loads, before it teleports anywhere
+        const dropMenu = trigger.nextElementSibling;
+        
         trigger.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                const dropMenu = this.nextElementSibling;
                 
                 // If the menu is already open, close it
                 if (dropMenu.classList.contains('mobile-popup-active')) {
@@ -92,19 +94,21 @@
                     // Close any other menus that might be open
                     document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
                     
-                    // TELEPORTATION: Move the menu out of the trapped nav bar and into the main body
+                    // TELEPORTATION: Move the menu to the main body if it isn't there already
                     if (dropMenu.parentElement !== document.body) {
                         document.body.appendChild(dropMenu);
                     }
                     
-                    // Activate the popup
-                    dropMenu.classList.add('mobile-popup-active');
+                    // A tiny 10-millisecond delay forces the browser to register the tap instantly
+                    setTimeout(() => {
+                        dropMenu.classList.add('mobile-popup-active');
+                    }, 10);
                 }
             }
         });
     });
 
-    // Bonus: Close the menu if the student taps anywhere outside of it
+    // Close the menu if the student taps anywhere in the dark background
     document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
             document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));

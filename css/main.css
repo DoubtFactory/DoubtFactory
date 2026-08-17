@@ -1906,11 +1906,13 @@ html, body {
     color: #0284c7 !important;
 }
 
-/* Magically open the dropdown on hover (Desktop) or tap (Mobile) */
-.nav-item-dropdown:hover .drop-menu,
-.nav-item-dropdown:active .drop-menu,
-.nav-item-dropdown:focus-within .drop-menu {
-    display: flex;
+/* Magically open the dropdown on hover ONLY on desktop */
+@media (min-width: 769px) {
+    .nav-item-dropdown:hover .drop-menu,
+    .nav-item-dropdown:active .drop-menu,
+    .nav-item-dropdown:focus-within .drop-menu {
+        display: flex;
+    }
 }
 /* 5. Mobile Polish & Navigation Fixes */
 /* =========================================
