@@ -5,28 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Exam | Doubt Factory</title>
-<meta name="description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
-<meta name="keywords" content="JEE Main, JEE Advanced, NEET, exam preparation, chemistry practice">
-<meta name="robots" content="index,follow">
-<link rel="canonical" href="exam.html">
-<meta property="og:title" content="Select Exam | Doubt Factory">
-<meta property="og:description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://doubtfactory.example.com/exam.html">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Select Exam | Doubt Factory">
-<meta name="twitter:description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
+    <meta name="description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
+    <meta name="keywords" content="JEE Main, JEE Advanced, NEET, exam preparation, chemistry practice">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="exam.html">
+    <meta property="og:title" content="Select Exam | Doubt Factory">
+    <meta property="og:description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://doubtfactory.example.com/exam.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Select Exam | Doubt Factory">
+    <meta name="twitter:description" content="Choose your target exam and practice chemistry questions tailored to JEE Main, JEE Advanced, or NEET.">
     <link rel="stylesheet" href="css/main.css">
-<link rel="icon" type="image/png" href="images/favicon.png">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
 </head>
 
 <body>
@@ -43,12 +43,10 @@
     <a href="index.html">Home</a>
     
     <!-- EXAMS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Exams ▾</a>
-        <div class="drop-menu">
-            <a href="exam.html">JEE Main</a>
-            <a href="exam.html">JEE Advanced</a>
-            <a href="exam.html">NEET</a>
+    <div class="drop-menu">
+            <a href="exam.html?type=JEE Main">JEE Main</a>
+            <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+            <a href="exam.html?type=NEET">NEET</a>
         </div>
     </div>
 
@@ -68,44 +66,39 @@
 
 </header>
 
-<main id="mainContent" class="container">
+<main id="mainContent" class="container" style="margin-top: 40px; margin-bottom: 40px;">
+    
+    <div class="exam-page-header" style="text-align: center; margin-bottom: 40px;">
+        <h1 id="examTitle" style="color: #0f172a; font-size: 32px; margin-bottom: 10px;">Select an Exam</h1>
+        <p style="color: #64748b; font-size: 16px;">Practice previous year questions and our latest additions.</p>
+    </div>
 
-<section class="exam-section">
-
-<h1>Select Your Exam</h1>
-
-<div id="examGrid" class="chapter-grid">
-
-</div>
-
-</section>
+    <!-- The Javascript will inject the grouped questions here -->
+    <div id="examQuestionsContainer">
+        <p style="text-align: center; color: #64748b;">Loading questions...</p>
+    </div>
 
 </main>
 
-<script src="js/exam.js"></script>
+<script type="module" src="js/exam.js"></script>
 <script>
-    // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
+    // Ultimate Mobile Dropdown Teleporter
     document.querySelectorAll('.drop-trigger').forEach(trigger => {
-        // Find the menu IMMEDIATELY when the page loads, before it teleports anywhere
         const dropMenu = trigger.nextElementSibling;
         
         trigger.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
                 
-                // If the menu is already open, close it
                 if (dropMenu.classList.contains('mobile-popup-active')) {
                     dropMenu.classList.remove('mobile-popup-active');
                 } else {
-                    // Close any other menus that might be open
                     document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
                     
-                    // TELEPORTATION: Move the menu to the main body if it isn't there already
                     if (dropMenu.parentElement !== document.body) {
                         document.body.appendChild(dropMenu);
                     }
                     
-                    // A tiny 10-millisecond delay forces the browser to register the tap instantly
                     setTimeout(() => {
                         dropMenu.classList.add('mobile-popup-active');
                     }, 10);
@@ -114,7 +107,6 @@
         });
     });
 
-    // Close the menu if the student taps anywhere in the dark background
     document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
             document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
