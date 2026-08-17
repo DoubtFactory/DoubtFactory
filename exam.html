@@ -24,7 +24,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-T43GPM3CQJ');
     </script>
 </head>
@@ -33,37 +32,38 @@
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <header class="site-header">
-
     <a href="index.html" class="logo">
         <h2>Doubt Factory</h2>
         <p>Turning Doubts into Clarity</p>
     </a>
 
+    <!-- FULL NAVIGATION BAR (Restored!) -->
     <nav aria-label="Primary navigation">
-    <a href="index.html">Home</a>
-    
-    <!-- EXAMS DROPDOWN -->
-    <div class="drop-menu">
-            <a href="exam.html?type=JEE Main">JEE Main</a>
-            <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-            <a href="exam.html?type=NEET">NEET</a>
+        <a href="index.html">Home</a>
+        
+        <!-- EXAMS DROPDOWN -->
+        <div class="nav-item-dropdown">
+            <a tabindex="0" class="drop-trigger">Exams ▾</a>
+            <div class="drop-menu">
+                <a href="exam.html?type=JEE Main">JEE Main</a>
+                <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                <a href="exam.html?type=NEET">NEET</a>
+            </div>
         </div>
-    </div>
 
-    <!-- SUBJECTS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-        <div class="drop-menu">
-            <a href="subject.html">Physical Chemistry</a>
-            <a href="subject.html">Organic Chemistry</a>
-            <a href="subject.html">Inorganic Chemistry</a>
+        <!-- SUBJECTS DROPDOWN -->
+        <div class="nav-item-dropdown">
+            <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+            <div class="drop-menu">
+                <a href="subject.html">Physical Chemistry</a>
+                <a href="subject.html">Organic Chemistry</a>
+                <a href="subject.html">Inorganic Chemistry</a>
+            </div>
         </div>
-    </div>
 
-    <a href="search.html">Search</a>
-    <a href="bookmarks.html">Bookmarks</a>
-</nav>
-
+        <a href="search.html">Search</a>
+        <a href="bookmarks.html">Bookmarks</a>
+    </nav>
 </header>
 
 <main id="mainContent" class="container" style="margin-top: 40px; margin-bottom: 40px;">
@@ -73,11 +73,25 @@
         <p style="color: #64748b; font-size: 16px;">Practice previous year questions and our latest additions.</p>
     </div>
 
-    <!-- The Javascript will inject the grouped questions here -->
-    <div id="examQuestionsContainer">
-        <p style="text-align: center; color: #64748b;">Loading questions...</p>
-    </div>
+    <!-- NEW SIDEBAR LAYOUT -->
+    <div class="exam-layout" style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+        
+        <!-- Sidebar for Years -->
+        <aside class="year-sidebar" style="flex: 1 1 250px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; position: sticky; top: 20px;">
+            <h3 style="margin-top: 0; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px;">Filter by Year</h3>
+            <div id="yearFilters" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- JS will inject buttons here -->
+            </div>
+        </aside>
 
+        <!-- Main Questions Container -->
+        <div class="exam-content" style="flex: 3 1 600px; width: 100%;">
+            <div id="examQuestionsContainer">
+                <p style="text-align: center; color: #64748b;">Loading questions...</p>
+            </div>
+        </div>
+
+    </div>
 </main>
 
 <script type="module" src="js/exam.js"></script>
@@ -85,20 +99,16 @@
     // Ultimate Mobile Dropdown Teleporter
     document.querySelectorAll('.drop-trigger').forEach(trigger => {
         const dropMenu = trigger.nextElementSibling;
-        
         trigger.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                
                 if (dropMenu.classList.contains('mobile-popup-active')) {
                     dropMenu.classList.remove('mobile-popup-active');
                 } else {
                     document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                    
                     if (dropMenu.parentElement !== document.body) {
                         document.body.appendChild(dropMenu);
                     }
-                    
                     setTimeout(() => {
                         dropMenu.classList.add('mobile-popup-active');
                     }, 10);

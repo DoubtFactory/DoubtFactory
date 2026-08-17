@@ -1,12 +1,12 @@
 import { getQuestions } from "./firebase.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Read the URL to see which exam was clicked
     const urlParams = new URLSearchParams(window.location.search);
     const selectedExam = urlParams.get('type'); 
     
     const titleElement = document.getElementById("examTitle");
     const container = document.getElementById("examQuestionsContainer");
+    const yearFiltersContainer = document.getElementById("yearFilters"); 
 
     if (!selectedExam) {
         titleElement.textContent = "All Chemistry Exams";
@@ -15,10 +15,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        // Fetch all questions from your Firebase database
         const questions = await getQuestions();
         
-        // 2. Filter the questions
         let filteredQuestions = questions.filter(q => {
             if (!selectedExam) return true; 
             const searchableText = `${q.exam || ''} ${q.tags || ''} ${q.chapter || ''}`.toLowerCase();
@@ -27,16 +25,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (filteredQuestions.length === 0) {
             container.innerHTML = `<p style="text-align:center; padding:40px; background:#f8fafc; border-radius:12px; color:#64748b;">No questions uploaded for this exam yet. Check back soon!</p>`;
+            if (yearFiltersContainer) yearFiltersContainer.innerHTML = "<p style='color:#64748b;'>No years available</p>";
             return;
         }
 
-        // 3. Group the questions by Year
         const questionsByYear = {};
         
         filteredQuestions.forEach(q => {
             const combinedText = `${q.exam || ''} ${q.tags || ''} ${q.year || ''}`;
             const yearMatch = combinedText.match(/(20\d{2})/); 
-            
             let year = yearMatch ? yearMatch[0] : "General Practice";
             
             if (!questionsByYear[year]) {
@@ -45,7 +42,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             questionsByYear[year].push(q);
         });
 
-        // 4. Sort the years from Newest to Oldest (e.g., 2026 first)
         const sortedYears = Object.keys(questionsByYear).sort((a, b) => {
             if (a === "General Practice") return 1; 
             if (b === "General Practice") return -1;
@@ -53,10 +49,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         container.innerHTML = ""; 
+        if (yearFiltersContainer) yearFiltersContainer.innerHTML = "";
         
-        // 5. Generate the HTML Cards
+        // Build the Sidebar Buttons
+        const allBtn = document.createElement("button");
+        allBtn.textContent = "All Years";
+        // Default "All Years" to blue (active)
+        allBtn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: none; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 5px; transition: all 0.2s;";
+        allBtn.onclick = () => filterByYear("All", allBtn);
+        if (yearFiltersContainer) yearFiltersContainer.appendChild(allBtn);
+
+        // Build HTML Cards & Year Filter Buttons
         sortedYears.forEach(year => {
+            
+            if (yearFiltersContainer) {
+                const btn = document.createElement("button");
+                btn.textContent = year;
+                btn.className = "year-filter-btn";
+                // Default specific years to white (inactive)
+                btn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: 1px solid #cbd5e1; background: white; color: #334155; border-radius: 8px; cursor: pointer; font-weight: 500; margin-bottom: 5px; transition: all 0.2s;";
+                btn.onclick = () => filterByYear(year, btn);
+                yearFiltersContainer.appendChild(btn);
+            }
+
             const yearBlock = document.createElement("div");
+            yearBlock.className = "year-section-block"; 
+            yearBlock.dataset.year = year; 
             yearBlock.style.marginBottom = "40px";
             
             const yearHeading = document.createElement("h2");
@@ -71,7 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             yearQuestions.forEach(q => {
                 const qCard = document.createElement("a");
-                // Uses the proper docId to link to the question solving page
                 qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
                 qCard.style.cssText = "display: block; padding: 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: box-shadow 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
                 
@@ -94,6 +111,34 @@ document.addEventListener("DOMContentLoaded", async () => {
             yearBlock.appendChild(questionGrid);
             container.appendChild(yearBlock);
         });
+
+        // The Filtering Magic
+        function filterByYear(targetYear, activeBtn) {
+            // Reset all buttons to white
+            const allButtons = yearFiltersContainer.querySelectorAll("button");
+            allButtons.forEach(b => {
+                b.style.background = "white";
+                b.style.color = "#334155";
+                b.style.border = "1px solid #cbd5e1";
+                b.style.fontWeight = "500";
+            });
+            
+            // Turn the clicked button Blue
+            activeBtn.style.background = "#2563eb";
+            activeBtn.style.color = "white";
+            activeBtn.style.border = "none";
+            activeBtn.style.fontWeight = "600";
+
+            // Hide/Show the corresponding year blocks
+            const allBlocks = container.querySelectorAll(".year-section-block");
+            allBlocks.forEach(block => {
+                if (targetYear === "All" || block.dataset.year === targetYear) {
+                    block.style.display = "block";
+                } else {
+                    block.style.display = "none";
+                }
+            });
+        }
     } catch (error) {
         console.error("Error loading exam questions:", error);
         container.innerHTML = `<p style="text-align:center; color:red;">Failed to load questions. Please check your connection.</p>`;
