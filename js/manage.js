@@ -1,3 +1,5 @@
+import { getQuestions } from "./firebase.js";
+
 let allQuestions = [];
 let filteredQuestions = [];
 let currentPage = 1;
@@ -10,10 +12,7 @@ async function loadTable() {
     showLoading(true);
 
     try {
-        import { getQuestions } from "./firebase.js";
-
-const questions = await getQuestions();
-        allQuestions = await response.json();
+        allQuestions = await getQuestions();
         populateFilters();
         applyFilters();
         showLoading(false);
@@ -22,6 +21,7 @@ const questions = await getQuestions();
         showLoading(false);
         showEmptyState("Unable to load questions right now.");
         showToast("Unable to load questions.", "error");
+        console.error("Error loading questions: ", error);
     }
 }
 
@@ -172,7 +172,7 @@ function renderTable(data) {
     pageItems.forEach(q => {
         body.innerHTML += `
             <tr>
-                <td>${q.question || "Untitled question"}</td>
+                <td>${(q.question || "Untitled question").substring(0, 50)}...</td>
                 <td>${q.subject || "—"}</td>
                 <td>${q.chapter || "—"}</td>
                 <td>${q.exam || "—"}</td>
@@ -267,7 +267,7 @@ function handleActionClick(event) {
 
     if (action === "preview") {
         const previewText = question.question || "No question available";
-        showToast(`Preview: ${previewText}`, "success");
+        showToast(`Preview: ${previewText.substring(0, 40)}...`, "success");
         return;
     }
 
@@ -333,6 +333,71 @@ document.querySelector(".manage-table-card").addEventListener("click", function 
     sortDirection = sortDirection === "asc" ? "desc" : "asc";
     filteredQuestions = sortQuestions(filteredQuestions);
     renderTable(filteredQuestions);
+});
+
+// ==========================================
+// XML SITEMAP GENERATOR
+// ==========================================
+document.getElementById('generateSitemapBtn').addEventListener('click', async () => {
+    try {
+        // Change button text to show it's working
+        const btn = document.getElementById('generateSitemapBtn');
+        const originalText = btn.textContent;
+        btn.textContent = "Generating...";
+        btn.disabled = true;
+
+        // Using the questions already loaded in the table
+        const questions = allQuestions;
+
+        // 1. Define your website's main URL (Ensure this matches your GitHub Pages URL exactly)
+        const baseUrl = 'https://doubtfactory.github.io/DoubtFactory/';
+
+        // 2. Start the XML structure
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+        xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+        // 3. Add your main static pages
+        const staticPages = ['', 'index.html', 'exam.html', 'subject.html', 'search.html', 'questions.html', 'chapter.html'];
+        staticPages.forEach(page => {
+            xml += `  <url>\n    <loc>${baseUrl}${page}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+        });
+
+        // 4. Loop through every single question in your database and create a unique link
+        questions.forEach(q => {
+            const qId = q.docId || q.id;
+            // We use encodeURIComponent to ensure spaces in chapters/subjects don't break the XML
+            const subject = encodeURIComponent(q.subject || 'Chemistry');
+            const chapter = encodeURIComponent(q.chapter || '');
+            
+            // XML requires the "&" symbol to be written as "&amp;"
+            const url = `${baseUrl}question.html?id=${qId}&amp;subject=${subject}&amp;chapter=${chapter}`;
+            
+            xml += `  <url>\n    <loc>${url}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+        });
+
+        // 5. Close the XML structure
+        xml += `</urlset>`;
+
+        // 6. Trigger the automatic download
+        const blob = new Blob([xml], { type: 'application/xml' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'sitemap.xml';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Reset button
+        btn.textContent = "✅ Downloaded!";
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 3000);
+
+    } catch (error) {
+        console.error("Error generating sitemap:", error);
+        alert("Failed to generate sitemap. Check console for errors.");
+    }
 });
 
 loadTable();
