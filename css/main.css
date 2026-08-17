@@ -2049,51 +2049,39 @@ html, body {
     }
 }
 /* =========================================
-   ULTIMATE MOBILE DROPDOWN FIX
+   MOBILE POPUP DROPDOWN (TELEPORTED)
    ========================================= */
 @media (max-width: 768px) {
-    /* 1. Strip the "trapping" behavior from all parent containers */
-    .site-header, 
-    nav[aria-label="Primary navigation"], 
-    .nav-item-dropdown {
-        position: static !important; 
-    }
-
-    /* 2. Force the menu to float freely over the entire page */
-    .site-header .nav-item-dropdown .drop-menu {
-        position: absolute !important;
-        top: 140px !important; /* Pushes it down safely below the blue header */
-        left: 5vw !important;
-        width: 90vw !important;
-        background: #ffffff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
-        display: none !important; /* Hidden until tapped */
-        flex-direction: column !important;
-        z-index: 999999 !important;
-        overflow: hidden !important; /* Keeps the rounded corners clean */
-        padding: 0 !important;
-    }
-
-    /* 3. Reveal the menu when the JavaScript registers a tap */
-    .nav-item-dropdown.mobile-open .drop-menu {
+    /* Style the menu as a beautiful, centered app modal */
+    .drop-menu.mobile-popup-active {
         display: flex !important;
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important; /* Centers it perfectly */
+        width: 85vw !important;
+        background: #ffffff !important;
+        border-radius: 16px !important;
+        /* The massive shadow creates a dark overlay behind the menu! */
+        box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        z-index: 9999999 !important;
+        flex-direction: column !important;
+        padding: 10px 0 !important;
     }
 
-    /* 4. Force the links inside to be fully visible, large, and readable */
-    .site-header .nav-item-dropdown .drop-menu a {
+    /* Style the links inside the new popup */
+    .drop-menu.mobile-popup-active a {
         display: block !important;
-        padding: 18px 20px !important;
+        padding: 16px 20px !important;
         color: #0f172a !important;
         font-size: 16px !important;
         font-weight: 600 !important;
         text-align: center !important;
         border-bottom: 1px solid #e2e8f0 !important;
-        white-space: normal !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        height: auto !important;
-        line-height: 1.5 !important;
         margin: 0 !important;
+    }
+
+    .drop-menu.mobile-popup-active a:last-child {
+        border-bottom: none !important;
     }
 }
