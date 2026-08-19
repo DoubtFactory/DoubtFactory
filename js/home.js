@@ -6,8 +6,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     // If we aren't on the homepage, stop the script
     if (!container) return;
 
+    // 1. Widen the parent container specifically for this section to remove the empty side spaces
+    const parentSection = container.closest('.container');
+    if (parentSection) {
+        parentSection.style.maxWidth = '1400px'; 
+        parentSection.style.width = '95%';
+    }
+
     try {
-        // 1. Fetch all questions from your Firebase database
         const questions = await getQuestions();
         
         if (!questions || questions.length === 0) {
@@ -16,29 +22,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // 2. Sort to get the absolute newest questions
-        // We reverse the array and grab the top 6 most recently added questions
+        // Sort to get the absolute newest questions
         const latestQuestions = [...questions].reverse().slice(0, 6);
 
-        // 3. Clear the skeleton loading animation
         container.innerHTML = "";
         container.classList.remove("loading-stack");
 
-        // 4. Create a responsive CSS grid for the cards
+        // 2. Adjust the grid layout to comfortably fit 3 cards across the wider screen
         const grid = document.createElement("div");
-        grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;";
+        grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px;";
 
-        // 5. Build a beautiful card for each of the latest questions
         latestQuestions.forEach(q => {
             const qCard = document.createElement("a");
             
-            // Link directly to the solving page using the question's ID
             qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
             
-            // Card Styling
             qCard.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%;";
             
-            // Hover Effects
             qCard.onmouseover = () => {
                 qCard.style.boxShadow = "0 12px 20px rgba(0,0,0,0.06)";
                 qCard.style.transform = "translateY(-4px)";
@@ -50,16 +50,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                 qCard.style.borderColor = "#e2e8f0";
             };
 
-            // Truncate the question text so the cards look uniform
             const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
 
-            // Inject the data into the card HTML
+            // 3. Inject the Year into the Blue Tag (e.g., "NEET 2026")
             qCard.innerHTML = `
                 <div>
                     <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
-                        <span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.exam || 'JEE/NEET'}</span>
-                        <span style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;">${q.chapter || 'Chemistry'}</span>
-                        <span style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
+                        <span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                            ${q.exam || 'Exam'} ${q.year || ''}
+                        </span>
+                        <span style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;">
+                            ${q.chapter || 'Chemistry'}
+                        </span>
+                        <span style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                            ${q.difficulty || 'Medium'}
+                        </span>
                     </div>
                     <h3 style="font-size: 16px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.6; font-weight: 600;">${snippet}</h3>
                 </div>
@@ -71,7 +76,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             grid.appendChild(qCard);
         });
 
-        // 6. Inject the finished grid into the homepage
         container.appendChild(grid);
 
     } catch (error) {
