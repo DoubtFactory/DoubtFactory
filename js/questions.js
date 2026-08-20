@@ -1,155 +1,121 @@
 import { getQuestions } from "./firebase.js";
+
 let allQuestions = [];
 
-async function loadQuestions() {
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Read the subject and chapter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const subject = urlParams.get("subject");
+    const chapter = urlParams.get("chapter");
 
-    const params = new URLSearchParams(window.location.search);
+    const titleEl = document.getElementById("chapterTitle");
+    if (titleEl) {
+        titleEl.textContent = chapter ? `${chapter} Questions` : "All Practice Questions";
+    }
 
-    const subject = params.get("subject");
-    const chapter = params.get("chapter");
+    const list = document.getElementById("questionList");
+    if (!list) return;
 
-    document.getElementById("chapterTitle").textContent = chapter;
+    list.innerHTML = "<p style='text-align:center; color:#64748b; padding:40px;'>Loading questions from database...</p>";
 
-    allQuestions = await getQuestions();
+    try {
+        const questions = await getQuestions();
+        
+        // 2. Filter down strictly to the chosen Subject & Chapter
+        allQuestions = questions.filter(q => {
+            const matchSubject = !subject || q.subject === subject;
+            const matchChapter = !chapter || q.chapter === chapter;
+            return matchSubject && matchChapter;
+        });
 
-    // Only questions from this subject & chapter
-    allQuestions = allQuestions.filter(q =>
-        q.subject === subject &&
-        q.chapter === chapter
-    );
+        populateYearFilter();
+        renderQuestions();
 
-    populateYearFilter();
+        // 3. Connect the Dropdowns & Search Bar to the filter function
+        document.getElementById("examFilter")?.addEventListener("change", renderQuestions);
+        document.getElementById("yearFilter")?.addEventListener("change", renderQuestions);
+        document.getElementById("difficultyFilter")?.addEventListener("change", renderQuestions);
+        document.getElementById("searchQuestion")?.addEventListener("input", renderQuestions);
 
-    renderQuestions();
-}
+    } catch (err) {
+        console.error("Error loading questions:", err);
+        list.innerHTML = "<p style='text-align:center; color:#ef4444;'>Failed to load questions. Check your connection.</p>";
+    }
+});
 
 function populateYearFilter() {
-
     const yearFilter = document.getElementById("yearFilter");
+    if (!yearFilter) return;
 
-    const years = [...new Set(allQuestions.map(q => q.year))]
-        .sort((a,b)=>b-a);
+    // Extract unique years from the questions
+    const years = [...new Set(allQuestions.map(q => {
+        const combined = `${q.exam || ''} ${q.tags || ''} ${q.year || ''}`;
+        const match = combined.match(/(20\d{2})/);
+        return match ? match[0] : (q.year || "Practice");
+    }))].filter(y => y !== "Practice").sort((a,b) => b - a);
 
     years.forEach(year => {
-
-        yearFilter.innerHTML +=
-            `<option value="${year}">${year}</option>`;
-
+        yearFilter.innerHTML += `<option value="${year}">${year}</option>`;
     });
-
 }
 
 function renderQuestions() {
+    // Read the current state of all dropdowns
+    const examVal = document.getElementById("examFilter")?.value || "All";
+    const yearVal = document.getElementById("yearFilter")?.value || "All";
+    const diffVal = document.getElementById("difficultyFilter")?.value || "All";
+    const searchVal = document.getElementById("searchQuestion")?.value.toLowerCase().trim() || "";
 
-    const exam = document.getElementById("examFilter").value;
-    const year = document.getElementById("yearFilter").value;
-    const difficulty = document.getElementById("difficultyFilter").value;
-const keyword = document
-    .getElementById("searchQuestion")
-    .value
-    .toLowerCase()
-    .trim();
+    // Filter the questions dynamically
+    let result = allQuestions.filter(q => {
+        const combinedYear = `${q.exam || ''} ${q.tags || ''} ${q.year || ''}`;
+        const extractedYear = (combinedYear.match(/(20\d{2})/) || [])[0] || "Practice";
 
-    let questions = allQuestions;
+        const matchExam = examVal === "All" || (q.exam && q.exam.includes(examVal));
+        const matchYear = yearVal === "All" || extractedYear === yearVal || String(q.year) === yearVal;
+        const matchDiff = diffVal === "All" || q.difficulty === diffVal;
+        const matchSearch = searchVal === "" || (q.question && q.question.toLowerCase().includes(searchVal));
 
-    if(exam !== "All"){
-
-        questions = questions.filter(q=>q.exam===exam);
-
-    }
-
-    if(year !== "All"){
-
-        questions = questions.filter(q=>String(q.year)===year);
-
-    }
-
-    if(difficulty !== "All"){
-
-        questions = questions.filter(q=>q.difficulty===difficulty);
-
-    }
-if (keyword !== "") {
-
-    questions = questions.filter(q =>
-        q.question.toLowerCase().includes(keyword)
-    );
-
-}
+        return matchExam && matchYear && matchDiff && matchSearch;
+    });
 
     const list = document.getElementById("questionList");
-
     list.innerHTML = "";
 
-    if(questions.length===0){
-
-        list.innerHTML = `
-        <h3>No questions found.</h3>
-        `;
-
+    if (result.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:40px; background:#f8fafc; border-radius:12px; border: 1px dashed #cbd5e1; margin-top:20px;">
+            <h3 style="color:#334155; margin-bottom:10px;">No matches found</h3>
+            <p style="color:#64748b; margin:0;">Try adjusting your filters or search term to see more questions.</p>
+        </div>`;
         return;
-
     }
 
-   questions.forEach((q,index)=>{
+    // Generate the CSS Grid for the beautiful cards
+    const grid = document.createElement("div");
+    grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top:20px; margin-bottom: 40px;";
 
-    list.innerHTML += `
+    result.forEach((q, index) => {
+        const qCard = document.createElement("a");
+        qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
+        qCard.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%;";
+        
+        qCard.onmouseover = () => { qCard.style.boxShadow = "0 10px 15px rgba(0,0,0,0.05)"; qCard.style.transform = "translateY(-4px)"; qCard.style.borderColor = "#bae6fd"; };
+        qCard.onmouseout = () => { qCard.style.boxShadow = "0 4px 6px rgba(0,0,0,0.02)"; qCard.style.transform = "translateY(0)"; qCard.style.borderColor = "#e2e8f0"; };
 
-    <div class="question-preview">
+        const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
 
-        <div class="question-header">
+        qCard.innerHTML = `
+            <div>
+                <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.exam || 'JEE/NEET'} ${q.year || ''}</span>
+                    <span style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
+                </div>
+                <h3 style="font-size: 16px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.6; font-weight: 600;">Q${index + 1}: ${snippet}</h3>
+            </div>
+            <div style="margin-top: auto; font-size: 14px; color: #2563eb; font-weight: 600;">Solve Question →</div>
+        `;
+        grid.appendChild(qCard);
+    });
 
-            <span class="exam-tag">
-                ${q.exam || "Exam"} ${q.year || ""}
-            </span>
-
-            <span class="chapter-tag">
-                ${q.chapter}
-            </span>
-
-            <span class="${q.difficulty.toLowerCase()} difficulty">
-                ${q.difficulty}
-            </span>
-
-        </div>
-
-        <h3>
-            Question ${index+1}
-        </h3>
-
-        <p>
-
-            ${q.question}
-
-        </p>
-
-        <div style="margin-top: 25px;">
-            <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}"
-               class="primary-btn">
-
-               Solve Question →
-
-            </a>
-        </div>
-
-    </div>
-
-    `;
-
-});
-
+    list.appendChild(grid);
 }
-
-document.getElementById("examFilter")
-.addEventListener("change",renderQuestions);
-
-document.getElementById("yearFilter")
-.addEventListener("change",renderQuestions);
-
-document.getElementById("difficultyFilter")
-.addEventListener("change",renderQuestions);
-
-document.getElementById("searchQuestion")
-.addEventListener("input", renderQuestions);
-
-loadQuestions();
