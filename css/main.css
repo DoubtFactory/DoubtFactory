@@ -2087,3 +2087,37 @@ html, body {
         border-bottom: none !important;
     }
 }
+/* =========================================
+   GLOBAL HEADER HOVER ANIMATION FIX
+   ========================================= */
+.site-header nav a, 
+.site-header nav .drop-trigger {
+    position: relative;
+}
+
+/* Creates the yellow underline */
+.site-header nav a::after, 
+.site-header nav .drop-trigger::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #fbbf24; /* Yellow color */
+    transition: width 0.3s ease;
+}
+
+/* Triggers the sliding animation on hover */
+.site-header nav a:hover::after, 
+.site-header nav .drop-trigger:hover::after,
+.nav-item-dropdown:hover .drop-trigger::after {
+    width: 100%;
+}
+
+/* Changes text color to yellow on hover */
+.site-header nav a:hover, 
+.site-header nav .drop-trigger:hover,
+.nav-item-dropdown:hover .drop-trigger {
+    color: #fbbf24 !important;
+}
