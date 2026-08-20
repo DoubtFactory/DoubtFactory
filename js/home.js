@@ -1,12 +1,33 @@
 import { getQuestions } from "./firebase.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    
+    // ==========================================
+    // 1. HOMEPAGE SEARCH BAR LOGIC
+    // ==========================================
+    const searchForm = document.querySelector('.search-box');
+    const searchInput = document.getElementById('homeSearch');
+
+    if (searchForm && searchInput) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Stop the page from just refreshing
+            const query = searchInput.value.trim();
+            if (query) {
+                // Redirect the student to the search page with their query attached
+                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            }
+        });
+    }
+
+    // ==========================================
+    // 2. LATEST QUESTIONS FEED
+    // ==========================================
     const container = document.getElementById("latestQuestions");
 
-    // If we aren't on the homepage, stop the script
+    // If we aren't on the homepage, stop the script here
     if (!container) return;
 
-    // 1. Widen the parent container specifically for this section to remove the empty side spaces
+    // Widen the parent container specifically for this section
     const parentSection = container.closest('.container');
     if (parentSection) {
         parentSection.style.maxWidth = '1400px'; 
@@ -28,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = "";
         container.classList.remove("loading-stack");
 
-        // 2. Adjust the grid layout to comfortably fit 3 cards across the wider screen
+        // Adjust the grid layout to comfortably fit 3 cards across the wider screen
         const grid = document.createElement("div");
         grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px;";
 
@@ -52,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
 
-            // 3. Inject the Year into the Blue Tag (e.g., "NEET 2026")
+            // Inject the Year into the Blue Tag
             qCard.innerHTML = `
                 <div>
                     <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
