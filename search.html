@@ -29,6 +29,41 @@
 </head>
 <body>
 <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+<!-- ADDED THE GLOBAL HEADER & NAVIGATION HERE -->
+<header class="site-header">
+    <a href="index.html" class="logo">
+        <h2>Doubt Factory</h2>
+        <p>Turning Doubts into Clarity</p>
+    </a>
+    <nav aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        
+        <!-- EXAMS DROPDOWN -->
+        <div class="nav-item-dropdown">
+            <a tabindex="0" class="drop-trigger">Exams ▾</a>
+            <div class="drop-menu">
+                <a href="exam.html?type=JEE Main">JEE Main</a>
+                <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                <a href="exam.html?type=NEET">NEET</a>
+            </div>
+        </div>
+
+        <!-- SUBJECTS DROPDOWN -->
+        <div class="nav-item-dropdown">
+            <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+            <div class="drop-menu">
+                <a href="chapter.html?subject=Physical%20Chemistry">Physical Chemistry</a>
+                <a href="chapter.html?subject=Organic%20Chemistry">Organic Chemistry</a>
+                <a href="chapter.html?subject=Inorganic%20Chemistry">Inorganic Chemistry</a>
+            </div>
+        </div>
+
+        <a href="search.html" style="font-weight: bold; text-decoration: underline;">Search</a>
+        <a href="bookmarks.html">Bookmarks</a>
+    </nav>
+</header>
+
 <div class="search-page">
 
     <main id="mainContent" class="container search-shell">
@@ -59,7 +94,8 @@
             <button class="chip" data-filter="JEE Advanced">JEE Advanced</button>
             <button class="chip" data-filter="NEET">NEET</button>
         </div>
-<!-- New Dropdown Filters for Subject and Difficulty -->
+
+        <!-- Dropdown Filters for Subject and Difficulty -->
         <div class="search-dropdowns" style="display: flex; gap: 15px; margin-top: 15px; justify-content: center; flex-wrap: wrap;">
             <select id="subjectFilter" aria-label="Filter by Subject" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; background: white; min-width: 180px;">
                 <option value="">All Branches</option>
@@ -85,5 +121,38 @@
 
 <script type="module" src="js/search.js"></script>
 <script type="module" src="js/theme.js"></script>
+
+<!-- Mobile Dropdown Fix Added Here -->
+<script>
+    document.querySelectorAll('.drop-trigger').forEach(trigger => {
+        const dropMenu = trigger.nextElementSibling;
+        
+        trigger.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                
+                if (dropMenu.classList.contains('mobile-popup-active')) {
+                    dropMenu.classList.remove('mobile-popup-active');
+                } else {
+                    document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+                    
+                    if (dropMenu.parentElement !== document.body) {
+                        document.body.appendChild(dropMenu);
+                    }
+                    
+                    setTimeout(() => {
+                        dropMenu.classList.add('mobile-popup-active');
+                    }, 10);
+                }
+            }
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
+            document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+        }
+    });
+</script>
 </body>
 </html>
