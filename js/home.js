@@ -43,8 +43,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // Sort to get the absolute newest questions
-        const latestQuestions = [...questions].reverse().slice(0, 6);
+       // Sort safely by timestamp to guarantee the newest are always first
+        let latestQuestions;
+        
+        // Check if your database saves a creation time
+        const hasTimestamps = questions.some(q => q.timestamp || q.createdAt);
+        
+        if (hasTimestamps) {
+            latestQuestions = [...questions].sort((a, b) => {
+                const timeA = a.timestamp || a.createdAt || 0;
+                const timeB = b.timestamp || b.createdAt || 0;
+                return timeB - timeA; // Puts the newest at the top
+            }).slice(0, 6);
+        } else {
+            // Fallback if no timestamps exist
+            latestQuestions = [...questions].reverse().slice(0, 6);
+        }
 
         container.innerHTML = "";
         container.classList.remove("loading-stack");
