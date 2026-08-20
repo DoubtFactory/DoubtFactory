@@ -2121,3 +2121,17 @@ html, body {
 .nav-item-dropdown:hover .drop-trigger {
     color: #fbbf24 !important;
 }
+/* =========================================
+   GLOBAL PREMIUM HEADER & LOGO FIX
+   ========================================= */
+.site-header {
+    padding: 18px 8% !important;
+    background: linear-gradient(135deg, #1565C0 0%, #1d4ed8 100%) !important;
+    box-shadow: 0 20px 45px rgba(21, 101, 192, 0.18) !important;
+}
+
+.site-header .logo h2 {
+    font-size: 1.9rem !important;
+    letter-spacing: -0.02em !important;
+    font-family: 'Poppins', sans-serif !important;
+}
