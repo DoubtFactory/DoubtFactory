@@ -2121,3 +2121,30 @@ html, body {
 .nav-item-dropdown:hover .drop-trigger {
     color: #fbbf24 !important;
 }
+/* =========================================
+   INTERNAL PAGE HEADER & ACTIVE LINK FIX
+   ========================================= */
+
+/* 1. Add a premium drop-shadow to internal headers so they float elegantly above the white page */
+body:not(.home-page) .site-header {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* 2. Strip away the ugly hardcoded underlines from the HTML files */
+.site-header nav a {
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+/* 3. Convert the active page links to perfectly match the smooth yellow hover style */
+.site-header nav a[style*="underline"] {
+    color: #fbbf24 !important;
+}
+
+/* Keep the yellow animated bar permanently expanded for the active page */
+.site-header nav a[style*="underline"]::after {
+    width: 100% !important; 
+}
