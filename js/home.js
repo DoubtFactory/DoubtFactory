@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // 1. Bulletproof Sorting: Safely handles numbers, strings, and missing data
+        // 1. Bulletproof Sorting: Uses timestamp for new uploads, falls back to Exam Year for older ones
         const latestQuestions = [...questions].sort((a, b) => {
             const getTime = (q) => {
-                if (q.timestamp) return Number(q.timestamp); // Use our new timestamp if it exists
-                if (typeof q.id === 'number') return q.id; // Use old numeric IDs if they exist
-                if (typeof q.id === 'string' && !isNaN(q.id)) return Number(q.id); // Catch numbers saved as text
-                return 0; // Ignore Firebase string IDs (like "aB7x9Fp") so it doesn't crash
+                if (q.timestamp) return Number(q.timestamp); 
+                if (typeof q.id === 'number') return q.id; 
+                if (q.year) return Number(q.year); // Fallback to Year (e.g. 2026) so old questions still sort logically
+                return 0; 
             };
             return getTime(b) - getTime(a); // Puts newest at the top
         }).slice(0, 6);
@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             // Strip HTML tags so the preview text looks clean
             const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
             
+            // CREATE THE EXAM + YEAR TAG (e.g., "NEET-2026")
+            const examTag = q.year ? `${q.exam || 'JEE/NEET'}-${q.year}` : (q.exam || 'JEE/NEET');
+
             const card = document.createElement("a");
             card.href = `question.html?id=${docId}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
             card.className = "question-preview";
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             card.innerHTML = `
                 <div>
                     <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.exam || 'JEE/NEET'}</span>
+                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${examTag}</span>
                         <span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
                     </div>
                     <h3 style="font-size: 17px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.5; font-weight: 600;">${snippet}</h3>
