@@ -1,115 +1,76 @@
 import { getQuestions } from "./firebase.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    
-    // ==========================================
-    // 1. HOMEPAGE SEARCH BAR LOGIC
-    // ==========================================
-    const searchForm = document.querySelector('.search-box');
-    const searchInput = document.getElementById('homeSearch');
-
-    if (searchForm && searchInput) {
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Stop the page from just refreshing
-            const query = searchInput.value.trim();
-            if (query) {
-                // Redirect the student to the search page with their query attached
-                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-            }
-        });
-    }
-
-    // ==========================================
-    // 2. LATEST QUESTIONS FEED
-    // ==========================================
     const container = document.getElementById("latestQuestions");
-
-    // If we aren't on the homepage, stop the script here
     if (!container) return;
-
-    // Widen the parent container specifically for this section
-    const parentSection = container.closest('.container');
-    if (parentSection) {
-        parentSection.style.maxWidth = '1400px'; 
-        parentSection.style.width = '95%';
-    }
 
     try {
         const questions = await getQuestions();
-        
+
         if (!questions || questions.length === 0) {
-            container.innerHTML = `<p style="text-align: center; color: #64748b; padding: 40px; background: #f8fafc; border-radius: 12px;">No questions available yet. Check back soon!</p>`;
-            container.classList.remove("loading-stack", "aria-busy");
+            container.innerHTML = "<p style='text-align:center; color:#64748b; padding: 40px;'>No questions available yet. Check back soon!</p>";
+            container.classList.remove("loading-stack");
             return;
         }
 
-       // Sort safely by timestamp (for new questions) OR id (for old questions)
+        // 1. Bulletproof Sorting: Safely handles numbers, strings, and missing data
         const latestQuestions = [...questions].sort((a, b) => {
-            const timeA = a.timestamp || a.id || 0;
-            const timeB = b.timestamp || b.id || 0;
-            return timeB - timeA; // Forces the highest/newest time to the very top
+            const getTime = (q) => {
+                if (q.timestamp) return Number(q.timestamp); // Use our new timestamp if it exists
+                if (typeof q.id === 'number') return q.id; // Use old numeric IDs if they exist
+                if (typeof q.id === 'string' && !isNaN(q.id)) return Number(q.id); // Catch numbers saved as text
+                return 0; // Ignore Firebase string IDs (like "aB7x9Fp") so it doesn't crash
+            };
+            return getTime(b) - getTime(a); // Puts newest at the top
         }).slice(0, 6);
-        } else {
-            // Fallback if no timestamps exist
-            latestQuestions = [...questions].reverse().slice(0, 6);
-        }
 
+        // 2. Clear the skeleton loaders
         container.innerHTML = "";
         container.classList.remove("loading-stack");
+        
+        // 3. Setup the grid layout
+        container.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;";
 
-        // Adjust the grid layout to comfortably fit 3 cards across the wider screen
-        const grid = document.createElement("div");
-        grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px;";
-
-        latestQuestions.forEach(q => {
-            const qCard = document.createElement("a");
+        // 4. Draw the question cards
+        latestQuestions.forEach((q) => {
+            const docId = q.docId || q.id;
             
-            qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
-            
-            qCard.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%;";
-            
-            qCard.onmouseover = () => {
-                qCard.style.boxShadow = "0 12px 20px rgba(0,0,0,0.06)";
-                qCard.style.transform = "translateY(-4px)";
-                qCard.style.borderColor = "#bae6fd";
-            };
-            qCard.onmouseout = () => {
-                qCard.style.boxShadow = "0 4px 6px rgba(0,0,0,0.02)";
-                qCard.style.transform = "translateY(0)";
-                qCard.style.borderColor = "#e2e8f0";
-            };
-
+            // Strip HTML tags so the preview text looks clean
             const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
+            
+            const card = document.createElement("a");
+            card.href = `question.html?id=${docId}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
+            card.className = "question-preview";
+            card.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: inherit; height: 100%; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; background: #fff; transition: transform 0.2s ease, box-shadow 0.2s ease;";
+            
+            card.onmouseover = () => { 
+                card.style.transform = "translateY(-4px)"; 
+                card.style.boxShadow = "0 12px 24px rgba(0,0,0,0.06)"; 
+                card.style.borderColor = "#bae6fd";
+            };
+            card.onmouseout = () => { 
+                card.style.transform = "translateY(0)"; 
+                card.style.boxShadow = "none"; 
+                card.style.borderColor = "#e2e8f0";
+            };
 
-            // Inject the Year into the Blue Tag
-            qCard.innerHTML = `
+            card.innerHTML = `
                 <div>
-                    <div style="display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap;">
-                        <span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
-                            ${q.exam || 'Exam'} ${q.year || ''}
-                        </span>
-                        <span style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;">
-                            ${q.chapter || 'Chemistry'}
-                        </span>
-                        <span style="background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
-                            ${q.difficulty || 'Medium'}
-                        </span>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.exam || 'JEE/NEET'}</span>
+                        <span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
                     </div>
-                    <h3 style="font-size: 16px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.6; font-weight: 600;">${snippet}</h3>
+                    <h3 style="font-size: 17px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.5; font-weight: 600;">${snippet}</h3>
                 </div>
-                <div style="margin-top: auto; font-size: 15px; color: #2563eb; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                    Solve Question <span>→</span>
-                </div>
+                <div style="font-size: 13px; color: #64748b; font-weight: 600; margin-top: auto;">${q.chapter || 'Chemistry Topic'}</div>
             `;
             
-            grid.appendChild(qCard);
+            container.appendChild(card);
         });
 
-        container.appendChild(grid);
-
     } catch (error) {
-        console.error("Error loading latest questions:", error);
-        container.innerHTML = `<p style="text-align:center; color:#ef4444; padding: 20px;">Failed to load latest questions. Please check your internet connection.</p>`;
+        console.error("Critical error loading questions:", error);
+        container.innerHTML = "<p style='text-align:center; color:#ef4444; padding: 40px;'>Failed to load latest questions. Please refresh the page.</p>";
         container.classList.remove("loading-stack");
     }
 });
