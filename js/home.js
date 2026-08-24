@@ -43,18 +43,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-       // Sort safely by timestamp to guarantee the newest are always first
-        let latestQuestions;
-        
-        // Check if your database saves a creation time
-        const hasTimestamps = questions.some(q => q.timestamp || q.createdAt);
-        
-        if (hasTimestamps) {
-            latestQuestions = [...questions].sort((a, b) => {
-                const timeA = a.timestamp || a.createdAt || 0;
-                const timeB = b.timestamp || b.createdAt || 0;
-                return timeB - timeA; // Puts the newest at the top
-            }).slice(0, 6);
+       // Sort safely by timestamp (for new questions) OR id (for old questions)
+        const latestQuestions = [...questions].sort((a, b) => {
+            const timeA = a.timestamp || a.id || 0;
+            const timeB = b.timestamp || b.id || 0;
+            return timeB - timeA; // Forces the highest/newest time to the very top
+        }).slice(0, 6);
         } else {
             // Fallback if no timestamps exist
             latestQuestions = [...questions].reverse().slice(0, 6);
