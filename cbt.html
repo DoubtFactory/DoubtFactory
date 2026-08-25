@@ -79,18 +79,18 @@
         </div>
     </div>
 
-    <script type="module">
+      <script type="module">
         import { getQuestions } from "./js/firebase.js";
 
         let allQuestions = [];
         let testQuestions = [];
         let currentIndex = 0;
-        let userResponses = []; // Stores the state for every question
+        let userResponses = []; 
         
-                // 1. Load the test
+        // 1. Load the test and the custom timer
         async function initTest() {
             const savedIds = JSON.parse(sessionStorage.getItem('df_cbt_test') || '[]');
-            const savedDuration = parseInt(sessionStorage.getItem('df_cbt_duration') || '60', 10); // Defaults to 60 if none selected
+            const savedDuration = parseInt(sessionStorage.getItem('df_cbt_duration') || '60', 10);
 
             if (savedIds.length === 0) {
                 alert("No questions found. Redirecting to setup.");
@@ -102,10 +102,11 @@
                 allQuestions = await getQuestions();
                 testQuestions = savedIds.map(id => allQuestions.find(q => (q.docId || q.id) === id)).filter(Boolean);
                 
-                // Initialize state tracking array (NTA defaults all to unvisited)
                 userResponses = testQuestions.map(() => ({ selectedOption: null, state: 'unvisited' }));
                 
-                // Start the timer by converting the saved minutes into seconds
+                // Immediately update the display so there is no 1-second delay showing 00:00:00
+                updateTimerDisplay(savedDuration * 60);
+                
                 startTimer(savedDuration * 60); 
                 buildPalette();
                 loadQuestion(0);
@@ -113,7 +114,6 @@
                 console.error(err);
             }
         }
-
 
         // 2. Build the right-side grid
         function buildPalette() {
@@ -130,7 +130,6 @@
 
         // 3. Render a specific question
         window.loadQuestion = function(index) {
-            // If leaving an unvisited question without answering, it turns red (unanswered)
             if (userResponses[currentIndex].state === 'unvisited') {
                 userResponses[currentIndex].state = 'unanswered';
             }
@@ -139,7 +138,6 @@
             const q = testQuestions[currentIndex];
             const content = document.getElementById('qContent');
             
-            // Build the HTML for the options
             let optionsHTML = '';
             q.options.forEach((opt, i) => {
                 const isChecked = userResponses[currentIndex].selectedOption === i ? 'checked' : '';
@@ -157,10 +155,10 @@
                 <div>${optionsHTML}</div>
             `;
             
-            buildPalette(); // Refresh grid colors
+            buildPalette(); 
         }
 
-        // 4. Handle Buttons (Save, Review, Clear)
+        // 4. Handle Buttons
         window.handleAction = function(action) {
             const selected = document.querySelector('input[name="cbtOption"]:checked');
             const stateObj = userResponses[currentIndex];
@@ -168,7 +166,7 @@
             if (action === 'clear') {
                 stateObj.selectedOption = null;
                 stateObj.state = 'unanswered';
-                loadQuestion(currentIndex); // reload to uncheck
+                loadQuestion(currentIndex); 
                 return;
             }
 
@@ -190,43 +188,45 @@
                 }
             }
 
-            // Move to next question automatically
             if (currentIndex < testQuestions.length - 1) {
                 loadQuestion(currentIndex + 1);
             } else {
-                buildPalette(); // Refresh colors if it's the last question
+                buildPalette(); 
             }
         }
 
         // 5. Timer Logic
+        function updateTimerDisplay(secondsTotal) {
+            const hours = String(Math.floor(secondsTotal / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((secondsTotal % 3600) / 60)).padStart(2, '0');
+            const seconds = String(secondsTotal % 60).padStart(2, '0');
+            document.getElementById('timeDisplay').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
         function startTimer(duration) {
             let timer = duration;
             setInterval(() => {
-                const hours = String(Math.floor(timer / 3600)).padStart(2, '0');
-                const minutes = String(Math.floor((timer % 3600) / 60)).padStart(2, '0');
-                const seconds = String(timer % 60).padStart(2, '0');
-                document.getElementById('timeDisplay').textContent = `${hours}:${minutes}:${seconds}`;
-                if (--timer < 0) submitTest();
+                if (--timer < 0) {
+                    submitTest();
+                } else {
+                    updateTimerDisplay(timer);
+                }
             }, 1000);
         }
 
-                window.submitTest = function() {
-            // Package the questions and the student's exact responses
+        // 6. Submit to Scorecard
+        window.submitTest = function() {
             const testData = {
                 questions: testQuestions,
                 responses: userResponses
             };
             
-            // Save it securely to the browser's memory
             sessionStorage.setItem('df_cbt_results', JSON.stringify(testData));
-            
-            // Teleport the student to the scorecard
             window.location.href = "test-result.html"; 
         }
 
-
-        // Boot it up
         document.addEventListener("DOMContentLoaded", initTest);
     </script>
+
 </body>
 </html>
