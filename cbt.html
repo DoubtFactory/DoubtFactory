@@ -206,11 +206,20 @@
             }, 1000);
         }
 
-        window.submitTest = function() {
-            alert("Test Submitted! Calculating Score...");
-            // Next step: Build the scorecard logic!
-            window.location.href = "index.html"; 
+                window.submitTest = function() {
+            // Package the questions and the student's exact responses
+            const testData = {
+                questions: testQuestions,
+                responses: userResponses
+            };
+            
+            // Save it securely to the browser's memory
+            sessionStorage.setItem('df_cbt_results', JSON.stringify(testData));
+            
+            // Teleport the student to the scorecard
+            window.location.href = "test-result.html"; 
         }
+
 
         // Boot it up
         document.addEventListener("DOMContentLoaded", initTest);
