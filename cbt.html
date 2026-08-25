@@ -128,7 +128,7 @@
             });
         }
 
-        // 3. Render a specific question
+                // 3. Render a specific question (NOW WITH IMAGES)
         window.loadQuestion = function(index) {
             if (userResponses[currentIndex].state === 'unvisited') {
                 userResponses[currentIndex].state = 'unanswered';
@@ -138,25 +138,50 @@
             const q = testQuestions[currentIndex];
             const content = document.getElementById('qContent');
             
+            // 3A. Handle the Main Question Image
+            let questionImageHTML = '';
+            if (q.questionImage && q.questionImage.trim() !== '') {
+                questionImageHTML = `<img src="${q.questionImage}" alt="Question Image" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px; border: 1px solid #e2e8f0;">`;
+            }
+
+            // 3B. Handle the Options (Text + Images)
             let optionsHTML = '';
-            q.options.forEach((opt, i) => {
+            const optionLetters = ['A', 'B', 'C', 'D']; // Maps index 0-3 to database image keys
+
+            q.options.forEach((optText, i) => {
                 const isChecked = userResponses[currentIndex].selectedOption === i ? 'checked' : '';
+                const letter = optionLetters[i];
+                
+                // Check if this specific option has an image attached
+                let optImageHTML = '';
+                if (q.optionImages && q.optionImages[letter] && q.optionImages[letter].trim() !== '') {
+                    optImageHTML = `<img src="${q.optionImages[letter]}" alt="Option ${letter}" style="max-width: 250px; height: auto; display: block; margin-top: 8px; border-radius: 6px;">`;
+                }
+
+                // Only render text if it exists (prevents blank spaces)
+                let optTextHTML = optText ? `<span style="font-size: 16px;">${optText}</span>` : '';
+
                 optionsHTML += `
-                    <label class="option-label">
-                        <input type="radio" name="cbtOption" value="${i}" ${isChecked}> 
-                        ${opt}
+                    <label class="option-label" style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+                        <input type="radio" name="cbtOption" value="${i}" ${isChecked} style="margin-top: 4px; width: 16px; height: 16px; cursor: pointer;">
+                        <div style="flex: 1;">
+                            ${optTextHTML}
+                            ${optImageHTML}
+                        </div>
                     </label>
                 `;
             });
 
             content.innerHTML = `
-                <div style="font-weight:bold; margin-bottom: 20px; font-size: 18px;">Question ${currentIndex + 1}</div>
-                <div style="margin-bottom: 30px;">${q.question}</div>
-                <div>${optionsHTML}</div>
+                <div style="font-weight:bold; margin-bottom: 20px; font-size: 18px; color: #1e3a8a;">Question ${currentIndex + 1}</div>
+                <div style="margin-bottom: 10px; font-size: 16px;">${q.question}</div>
+                ${questionImageHTML}
+                <div style="margin-top: 25px;">${optionsHTML}</div>
             `;
             
             buildPalette(); 
         }
+
 
         // 4. Handle Buttons
         window.handleAction = function(action) {
