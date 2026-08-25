@@ -87,9 +87,11 @@
         let currentIndex = 0;
         let userResponses = []; // Stores the state for every question
         
-        // 1. Load the test
+                // 1. Load the test
         async function initTest() {
             const savedIds = JSON.parse(sessionStorage.getItem('df_cbt_test') || '[]');
+            const savedDuration = parseInt(sessionStorage.getItem('df_cbt_duration') || '60', 10); // Defaults to 60 if none selected
+
             if (savedIds.length === 0) {
                 alert("No questions found. Redirecting to setup.");
                 window.location.href = "test-setup.html";
@@ -103,13 +105,15 @@
                 // Initialize state tracking array (NTA defaults all to unvisited)
                 userResponses = testQuestions.map(() => ({ selectedOption: null, state: 'unvisited' }));
                 
-                startTimer(60 * 60); // 1 hour mock timer
+                // Start the timer by converting the saved minutes into seconds
+                startTimer(savedDuration * 60); 
                 buildPalette();
                 loadQuestion(0);
             } catch (err) {
                 console.error(err);
             }
         }
+
 
         // 2. Build the right-side grid
         function buildPalette() {
