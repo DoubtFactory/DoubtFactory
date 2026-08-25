@@ -475,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <!-- Script to load Firebase messages into the Feedback tab -->
 <script type="module">
     import { db } from "./js/firebase.js";
-    import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
     async function loadFeedback() {
         const inbox = document.getElementById('messagesInbox');
