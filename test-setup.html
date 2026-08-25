@@ -6,66 +6,153 @@
     <title>Test Setup | Doubt Factory</title>
     <link rel="stylesheet" href="css/main.css">
     <style>
-        .setup-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 40px auto; }
-        .setup-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-weight: bold; color: #64748b; }
+        .setup-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 40px auto; border-top: 6px solid #1565C0; }
+        .setup-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
+        .tab-btn { flex: 1; padding: 12px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-weight: bold; color: #64748b; font-size: 15px; transition: 0.2s; }
+        .tab-btn:hover { border-color: #cbd5e1; }
         .tab-btn.active { border-color: #1565C0; background: #eff6ff; color: #1565C0; }
-        .setup-section { display: none; }
+        .setup-section { display: none; animation: fadeIn 0.3s ease; }
         .setup-section.active { display: block; }
-        .start-btn { width: 100%; background: #10b981; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { font-weight: 600; margin-bottom: 8px; display: block; color: #334155; font-size: 14px; }
+        .input-group select { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; color: #0f172a; background: #fff; cursor: pointer; outline: none; }
+        .input-group select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .start-btn { width: 100%; background: #10b981; color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        .start-btn:hover { background: #059669; transform: translateY(-2px); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <header class="site-header">
-        <a href="index.html" class="logo"><h2>Doubt Factory</h2></a>
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
     </header>
 
     <main class="container">
         <div class="setup-card">
-            <h2 style="text-align: center; color: #0f172a; margin-bottom: 20px;">Configure Practice Test</h2>
+            <h2 style="text-align: center; color: #0f172a; margin-bottom: 25px; font-size: 24px;">Configure Practice Test</h2>
             
             <div class="setup-tabs">
                 <button class="tab-btn active" onclick="switchMode('pyq')">PYQ Paper Mode</button>
-                <button class="tab-btn" onclick="switchMode('custom')">Custom Chapter Mode</button>
+                <button class="tab-btn" onclick="switchMode('custom')">Custom Practice</button>
             </div>
 
             <!-- PYQ Mode -->
             <div id="pyqMode" class="setup-section active">
-                <label style="font-weight: bold; margin-bottom: 8px; display: block;">Select Exam Year</label>
-                <select id="pyqYear" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 15px;">
-                    <option value="2024">JEE/NEET 2024</option>
-                    <option value="2023">JEE/NEET 2023</option>
-                </select>
+                <div class="input-group">
+                    <label>Select Target Exam</label>
+                    <select id="pyqExam">
+                        <option value="JEE Main">JEE Main</option>
+                        <option value="JEE Advanced">JEE Advanced</option>
+                        <option value="NEET">NEET</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Select Exam Year</label>
+                    <select id="pyqYear">
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Custom Mode -->
             <div id="customMode" class="setup-section">
-                <label style="font-weight: bold; margin-bottom: 8px; display: block;">Select Chapter</label>
-                <select id="customChapter" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 15px;">
-                    <option value="Thermodynamics">Thermodynamics</option>
-                    <option value="Chemical Kinetics">Chemical Kinetics</option>
-                    <option value="Coordination Compounds">Coordination Compounds</option>
-                </select>
+                <div class="input-group">
+                    <label>Select Subject</label>
+                    <select id="customSubject">
+                        <option value="All">All Chemistry Branches</option>
+                        <option value="Physical Chemistry">Physical Chemistry</option>
+                        <option value="Organic Chemistry">Organic Chemistry</option>
+                        <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Select Chapter</label>
+                    <select id="customChapter">
+                        <option value="All">All Chapters</option>
+                        <!-- Injected via JS based on Subject -->
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Difficulty Level</label>
+                    <select id="customDifficulty">
+                        <option value="All">Mixed Difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
             </div>
 
             <button class="start-btn" id="startTestBtn">Start CBT Simulator</button>
-            <p id="setupError" style="color: red; text-align: center; margin-top: 10px;"></p>
+            <p id="setupError" style="color: #dc2626; text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; height: 20px;"></p>
         </div>
     </main>
 
     <script type="module">
         import { getQuestions } from "./js/firebase.js";
         
+        // Full Chemistry Syllabus from your Admin Panel
+        const chapterList = {
+            "Physical Chemistry": [
+                "Some Basic Concepts of Chemistry (Mole Concept)", "Atomic Structure", "States of Matter (Gaseous State)", 
+                "Thermodynamics", "Thermochemistry", "Chemical Equilibrium", "Ionic Equilibrium", "Redox Reactions", 
+                "Electrochemistry", "Chemical Kinetics", "Solutions", "Surface Chemistry", "Solid State"
+            ],
+            "Organic Chemistry": [
+                "General Organic Chemistry (GOC)", "Nomenclature", "Isomerism", "Hydrocarbons", "Haloalkanes and Haloarenes", 
+                "Alcohols, Phenols and Ethers", "Aldehydes and Ketones", "Carboxylic Acids and Derivatives", "Amines", 
+                "Biomolecules", "Polymers", "Chemistry in Everyday Life", "Practical Organic Chemistry"
+            ],
+            "Inorganic Chemistry": [
+                "Periodic Table", "Chemical Bonding", "Hydrogen", "s-Block Elements", "p-Block Elements", 
+                "d-Block Elements", "f-Block Elements", "Coordination Compounds", "Metallurgy", 
+                "Qualitative Analysis", "Environmental Chemistry"
+            ]
+        };
+
+        // Tab Switcher
         window.switchMode = function(mode) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.setup-section').forEach(sec => sec.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(mode + 'Mode').classList.add('active');
+            document.getElementById('setupError').textContent = ""; // Clear errors on switch
         };
 
+        // Dynamic Chapter Dropdown Logic
+        const subjectSelect = document.getElementById('customSubject');
+        const chapterSelect = document.getElementById('customChapter');
+
+        subjectSelect.addEventListener('change', () => {
+            chapterSelect.innerHTML = '<option value="All">All Chapters</option>';
+            const selectedSubject = subjectSelect.value;
+            
+            if (selectedSubject !== "All" && chapterList[selectedSubject]) {
+                chapterList[selectedSubject].forEach(chapter => {
+                    const opt = document.createElement('option');
+                    opt.value = chapter;
+                    opt.textContent = chapter;
+                    chapterSelect.appendChild(opt);
+                });
+            }
+        });
+
+        // Launch Test Logic
         document.getElementById('startTestBtn').addEventListener('click', async () => {
             const errorText = document.getElementById('setupError');
-            errorText.textContent = "Loading questions...";
+            errorText.textContent = "Loading questions from database...";
+            errorText.style.color = "#2563eb"; // Blue for loading
             
             try {
                 const questions = await getQuestions();
@@ -73,19 +160,37 @@
                 let filtered = [];
 
                 if (isPyq) {
-                    const year = document.getElementById('pyqYear').value;
-                    filtered = questions.filter(q => String(q.year) === year);
+                    const targetExam = document.getElementById('pyqExam').value;
+                    const targetYear = document.getElementById('pyqYear').value;
+                    
+                    filtered = questions.filter(q => 
+                        (q.exam === targetExam) && 
+                        (String(q.year) === targetYear)
+                    );
                 } else {
-                    const chapter = document.getElementById('customChapter').value;
-                    filtered = questions.filter(q => q.chapter === chapter);
+                    const targetSubject = document.getElementById('customSubject').value;
+                    const targetChapter = document.getElementById('customChapter').value;
+                    const targetDiff = document.getElementById('customDifficulty').value;
+                    
+                    filtered = questions.filter(q => {
+                        let match = true;
+                        if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
+                        if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
+                        if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
+                        return match;
+                    });
                 }
 
                 if (filtered.length === 0) {
-                    errorText.textContent = "No questions found for this selection. Try another.";
+                    errorText.style.color = "#dc2626"; // Red for error
+                    errorText.textContent = "No questions found for this exact selection yet!";
                     return;
                 }
 
-                // Extract just the IDs and save to browser memory
+                // Shuffle the questions so custom tests feel fresh!
+                filtered = filtered.sort(() => 0.5 - Math.random());
+
+                // Extract IDs and save to browser memory
                 const questionIds = filtered.map(q => q.docId || q.id);
                 sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
                 
@@ -94,7 +199,8 @@
 
             } catch (err) {
                 console.error(err);
-                errorText.textContent = "Database error. Check your connection.";
+                errorText.style.color = "#dc2626";
+                errorText.textContent = "Database error. Please check your connection.";
             }
         });
     </script>
