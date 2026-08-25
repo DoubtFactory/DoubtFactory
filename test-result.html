@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scorecard | Doubt Factory</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .result-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .score-card { background: white; border-radius: 16px; padding: 40px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 6px solid #1565C0; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #eff6ff; border: 8px solid #3b82f6; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px; }
+        .score-circle h1 { font-size: 42px; margin: 0; color: #1e3a8a; line-height: 1; }
+        .score-circle span { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 30px; }
+        .stat-box { padding: 20px; border-radius: 12px; font-weight: bold; }
+        .stat-correct { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+        .stat-incorrect { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .stat-unattempted { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+        .stat-box h2 { font-size: 28px; margin: 5px 0 0; }
+        
+        .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+        .btn-home { padding: 12px 24px; background: #f1f5f9; color: #334155; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .btn-retry { padding: 12px 24px; background: #1565C0; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="index.html" class="logo"><h2>Doubt Factory</h2></a>
+    </header>
+
+    <main class="result-container">
+        <div class="score-card">
+            <h2 style="color: #0f172a; margin-bottom: 20px;">Performance Report</h2>
+            
+            <div class="score-circle">
+                <h1 id="finalScore">0</h1>
+                <span>Final Score</span>
+            </div>
+            
+            <p style="color: #64748b; font-size: 16px;">Based on the standard JEE/NEET marking scheme (+4 / -1)</p>
+
+            <div class="stats-grid">
+                <div class="stat-box stat-correct">
+                    <div>Correct (+4)</div>
+                    <h2 id="correctCount">0</h2>
+                </div>
+                <div class="stat-box stat-incorrect">
+                    <div>Incorrect (-1)</div>
+                    <h2 id="incorrectCount">0</h2>
+                </div>
+                <div class="stat-box stat-unattempted">
+                    <div>Unattempted (0)</div>
+                    <h2 id="skippedCount">0</h2>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="index.html" class="btn-home">Back to Home</a>
+                <a href="test-setup.html" class="btn-retry">Start New Practice</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Retrieve the saved test data
+            const rawData = sessionStorage.getItem('df_cbt_results');
+            if (!rawData) {
+                window.location.href = "test-setup.html";
+                return;
+            }
+
+            const { questions, responses } = JSON.parse(rawData);
+            
+            let correct = 0;
+            let incorrect = 0;
+            let skipped = 0;
+
+            // 2. Evaluate the responses based on NTA rules
+            responses.forEach((res, index) => {
+                const q = questions[index];
+                
+                // NTA Rule: Only 'answered' or 'review-ans' (Answered & Marked for Review) are evaluated
+                const isEvaluated = (res.state === 'answered' || res.state === 'review-ans');
+
+                if (isEvaluated && res.selectedOption !== null) {
+                    if (res.selectedOption === q.answer) {
+                        correct++;
+                    } else {
+                        incorrect++;
+                    }
+                } else {
+                    skipped++;
+                }
+            });
+
+            // 3. Calculate Final Score
+            const totalScore = (correct * 4) - (incorrect * 1);
+
+            // 4. Update the UI
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('skippedCount').textContent = skipped;
+            
+            // Animate the score counter for a premium feel
+            let currentScore = 0;
+            const scoreEl = document.getElementById('finalScore');
+            const duration = 1000; // 1 second animation
+            const steps = 30;
+            const increment = totalScore / steps;
+            
+            if (totalScore === 0) {
+                scoreEl.textContent = "0";
+            } else {
+                const timer = setInterval(() => {
+                    currentScore += increment;
+                    if ((increment > 0 && currentScore >= totalScore) || (increment < 0 && currentScore <= totalScore)) {
+                        scoreEl.textContent = totalScore;
+                        clearInterval(timer);
+                    } else {
+                        scoreEl.textContent = Math.round(currentScore);
+                    }
+                }, duration / steps);
+            }
+            
+            // Clean up the memory so they can't refresh and cheat the system
+            sessionStorage.removeItem('df_cbt_test');
+        });
+    </script>
+</body>
+</html>
