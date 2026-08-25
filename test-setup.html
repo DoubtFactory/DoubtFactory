@@ -17,8 +17,10 @@
         .input-group label { font-weight: 600; margin-bottom: 8px; display: block; color: #334155; font-size: 14px; }
         .input-group select { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; color: #0f172a; background: #fff; cursor: pointer; outline: none; }
         .input-group select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .input-group select:disabled { background: #f1f5f9; cursor: not-allowed; color: #94a3b8; }
         .start-btn { width: 100%; background: #10b981; color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .start-btn:hover { background: #059669; transform: translateY(-2px); }
+        .start-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -51,16 +53,9 @@
                 </div>
                 <div class="input-group">
                     <label>Select Exam Year</label>
+                    <!-- Empty initially, populated by JS -->
                     <select id="pyqYear">
-                        <option value="2026">2026</option>
-                        <option value="2025">2025</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
+                        <option value="">Loading available years...</option>
                     </select>
                 </div>
             </div>
@@ -78,8 +73,9 @@
                 </div>
                 <div class="input-group">
                     <label>Select Chapter</label>
+                    <!-- Empty initially, populated by JS -->
                     <select id="customChapter">
-                        <option value="All">All Chapters</option>
+                        <option value="All">Loading available chapters...</option>
                     </select>
                 </div>
                 <div class="input-group">
@@ -104,7 +100,7 @@
                 </select>
             </div>
 
-            <button class="start-btn" id="startTestBtn">Start CBT Simulator</button>
+            <button class="start-btn" id="startTestBtn" disabled>Loading Database...</button>
             <p id="setupError" style="color: #dc2626; text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; height: 20px;"></p>
         </div>
     </main>
@@ -112,24 +108,9 @@
     <script type="module">
         import { getQuestions } from "./js/firebase.js";
         
-        const chapterList = {
-            "Physical Chemistry": [
-                "Some Basic Concepts of Chemistry (Mole Concept)", "Atomic Structure", "States of Matter (Gaseous State)", 
-                "Thermodynamics", "Thermochemistry", "Chemical Equilibrium", "Ionic Equilibrium", "Redox Reactions", 
-                "Electrochemistry", "Chemical Kinetics", "Solutions", "Surface Chemistry", "Solid State"
-            ],
-            "Organic Chemistry": [
-                "General Organic Chemistry (GOC)", "Nomenclature", "Isomerism", "Hydrocarbons", "Haloalkanes and Haloarenes", 
-                "Alcohols, Phenols and Ethers", "Aldehydes and Ketones", "Carboxylic Acids and Derivatives", "Amines", 
-                "Biomolecules", "Polymers", "Chemistry in Everyday Life", "Practical Organic Chemistry"
-            ],
-            "Inorganic Chemistry": [
-                "Periodic Table", "Chemical Bonding", "Hydrogen", "s-Block Elements", "p-Block Elements", 
-                "d-Block Elements", "f-Block Elements", "Coordination Compounds", "Metallurgy", 
-                "Qualitative Analysis", "Environmental Chemistry"
-            ]
-        };
+        let allQuestions = []; // Will store the master list from Firebase
 
+        // Tab Switcher
         window.switchMode = function(mode) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.setup-section').forEach(sec => sec.classList.remove('active'));
@@ -138,77 +119,143 @@
             document.getElementById('setupError').textContent = ""; 
         };
 
+        const pyqExamSelect = document.getElementById('pyqExam');
+        const pyqYearSelect = document.getElementById('pyqYear');
         const subjectSelect = document.getElementById('customSubject');
         const chapterSelect = document.getElementById('customChapter');
+        const startBtn = document.getElementById('startTestBtn');
+        const errorText = document.getElementById('setupError');
 
-        subjectSelect.addEventListener('change', () => {
-            chapterSelect.innerHTML = '<option value="All">All Chapters</option>';
-            const selectedSubject = subjectSelect.value;
+        // 1. Fetch database exactly once when the page opens
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                allQuestions = await getQuestions();
+                
+                // Immediately build the dropdown menus based on what we found
+                updatePyqYears();
+                updateCustomChapters();
+                
+                // Unlock the Start button
+                startBtn.textContent = "Start CBT Simulator";
+                startBtn.disabled = false;
+            } catch (err) {
+                console.error(err);
+                startBtn.textContent = "Database Error";
+                errorText.textContent = "Failed to load database. Check your connection.";
+            }
+        });
+
+        // 2. Dynamically build the Year Dropdown based on the selected Exam
+        function updatePyqYears() {
+            const selectedExam = pyqExamSelect.value;
             
-            if (selectedSubject !== "All" && chapterList[selectedSubject]) {
-                chapterList[selectedSubject].forEach(chapter => {
+            // Scan questions, filter by exam, extract the year, and remove duplicates
+            const availableYears = [...new Set(allQuestions
+                .filter(q => q.exam === selectedExam && q.year)
+                .map(q => String(q.year))
+            )].sort((a, b) => b - a); // Sort highest to lowest
+
+            pyqYearSelect.innerHTML = '';
+            
+            if (availableYears.length === 0) {
+                pyqYearSelect.innerHTML = '<option value="">No questions uploaded yet</option>';
+                pyqYearSelect.disabled = true;
+            } else {
+                pyqYearSelect.disabled = false;
+                availableYears.forEach(year => {
+                    const opt = document.createElement('option');
+                    opt.value = year;
+                    opt.textContent = year;
+                    pyqYearSelect.appendChild(opt);
+                });
+            }
+        }
+        
+        // Listen for exam changes to update the years
+        pyqExamSelect.addEventListener('change', updatePyqYears);
+
+        // 3. Dynamically build the Chapter Dropdown based on selected Subject
+        function updateCustomChapters() {
+            const selectedSubject = subjectSelect.value;
+            let availableChapters = [];
+            
+            // Scan questions, filter by subject, extract chapters, and remove duplicates
+            if (selectedSubject === "All") {
+                availableChapters = [...new Set(allQuestions.filter(q => q.chapter).map(q => q.chapter))].sort();
+            } else {
+                availableChapters = [...new Set(allQuestions
+                    .filter(q => q.subject === selectedSubject && q.chapter)
+                    .map(q => q.chapter)
+                )].sort();
+            }
+
+            chapterSelect.innerHTML = '<option value="All">All Available Chapters</option>';
+            
+            if (availableChapters.length === 0) {
+                chapterSelect.innerHTML = '<option value="All">No chapters uploaded yet</option>';
+                chapterSelect.disabled = true;
+            } else {
+                chapterSelect.disabled = false;
+                availableChapters.forEach(chapter => {
                     const opt = document.createElement('option');
                     opt.value = chapter;
                     opt.textContent = chapter;
                     chapterSelect.appendChild(opt);
                 });
             }
-        });
+        }
 
-        document.getElementById('startTestBtn').addEventListener('click', async () => {
-            const errorText = document.getElementById('setupError');
-            errorText.textContent = "Loading questions from database...";
-            errorText.style.color = "#2563eb";
-            
-            try {
-                const questions = await getQuestions();
-                const isPyq = document.getElementById('pyqMode').classList.contains('active');
-                let filtered = [];
+        // Listen for subject changes to update the chapters
+        subjectSelect.addEventListener('change', updateCustomChapters);
 
-                if (isPyq) {
-                    const targetExam = document.getElementById('pyqExam').value;
-                    const targetYear = document.getElementById('pyqYear').value;
-                    
-                    filtered = questions.filter(q => 
-                        (q.exam === targetExam) && 
-                        (String(q.year) === targetYear)
-                    );
-                } else {
-                    const targetSubject = document.getElementById('customSubject').value;
-                    const targetChapter = document.getElementById('customChapter').value;
-                    const targetDiff = document.getElementById('customDifficulty').value;
-                    
-                    filtered = questions.filter(q => {
-                        let match = true;
-                        if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
-                        if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
-                        if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
-                        return match;
-                    });
-                }
+        // 4. Launch Test Logic
+        startBtn.addEventListener('click', () => {
+            const isPyq = document.getElementById('pyqMode').classList.contains('active');
+            let filtered = [];
 
-                if (filtered.length === 0) {
-                    errorText.style.color = "#dc2626";
-                    errorText.textContent = "No questions found for this exact selection yet!";
+            if (isPyq) {
+                const targetExam = pyqExamSelect.value;
+                const targetYear = pyqYearSelect.value;
+                
+                if (!targetYear) {
+                    errorText.textContent = "Please select a valid year.";
                     return;
                 }
-
-                filtered = filtered.sort(() => 0.5 - Math.random());
-
-                const questionIds = filtered.map(q => q.docId || q.id);
-                const timeSelected = document.getElementById('testDuration').value;
-
-                // Save both the IDs and the selected Time Limit to memory
-                sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
-                sessionStorage.setItem('df_cbt_duration', timeSelected);
                 
-                window.location.href = "cbt.html";
-
-            } catch (err) {
-                console.error(err);
-                errorText.style.color = "#dc2626";
-                errorText.textContent = "Database error. Please check your connection.";
+                filtered = allQuestions.filter(q => (q.exam === targetExam) && (String(q.year) === targetYear));
+            } else {
+                const targetSubject = subjectSelect.value;
+                const targetChapter = chapterSelect.value;
+                const targetDiff = document.getElementById('customDifficulty').value;
+                
+                filtered = allQuestions.filter(q => {
+                    let match = true;
+                    if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
+                    if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
+                    if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
+                    return match;
+                });
             }
+
+            if (filtered.length === 0) {
+                errorText.textContent = "No questions found for this exact selection!";
+                return;
+            }
+
+            // Shuffle custom mode questions so they don't play the exact same test twice
+            if (!isPyq) {
+                filtered = filtered.sort(() => 0.5 - Math.random());
+            }
+
+            // Extract IDs and save to browser memory
+            const questionIds = filtered.map(q => q.docId || q.id);
+            const timeSelected = document.getElementById('testDuration').value;
+
+            sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
+            sessionStorage.setItem('df_cbt_duration', timeSelected);
+            
+            // Launch the simulator!
+            window.location.href = "cbt.html";
         });
     </script>
 </body>
