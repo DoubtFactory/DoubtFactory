@@ -537,5 +537,73 @@ document.addEventListener("DOMContentLoaded", function() {
 
     loadFeedback();
 </script>
+<script>
+// Automatically append letters and HTML wrappers to toolbars
+document.addEventListener("DOMContentLoaded", () => {
+    // Wait 1 second to ensure your existing admin.js has finished building the initial toolbars
+    setTimeout(() => {
+        const toolbars = document.querySelectorAll('.chem-editor-wrapper > div:first-child, .chem-toolbar');
+        
+        toolbars.forEach(toolbar => {
+            // 1. Add a vertical divider
+            const sep = document.createElement('span');
+            sep.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
+            toolbar.appendChild(sep);
+
+            // 2. Add common Unicode letters
+            const chars = [
+                { label: 'ᵃ', val: 'ᵃ' }, { label: 'ᵇ', val: 'ᵇ' }, { label: 'ᶜ', val: 'ᶜ' },
+                { label: 'ⁿ', val: 'ⁿ' }, { label: '⁺', val: '⁺' }, { label: '⁻', val: '⁻' },
+                { label: 'ₐ', val: 'ₐ' }, { label: 'ₑ', val: 'ₑ' }, { label: 'ₓ', val: 'ₓ' }
+            ];
+
+            chars.forEach(c => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = c.label;
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    const textarea = toolbar.parentElement.querySelector('textarea');
+                    const start = textarea.selectionStart;
+                    textarea.value = textarea.value.substring(0, start) + c.val + textarea.value.substring(textarea.selectionEnd);
+                    textarea.selectionStart = textarea.selectionEnd = start + c.val.length;
+                    textarea.focus();
+                };
+                toolbar.appendChild(btn);
+            });
+
+            // 3. Add HTML Wrapper buttons for FULL alphabet support (e.g., typing Kb or Kc)
+            const wrapBtns = [
+                { label: 'X²', open: '<sup>', close: '</sup>', title: 'Highlight text, then click to make Superscript' },
+                { label: 'X₂', open: '<sub>', close: '</sub>', title: 'Highlight text, then click to make Subscript' }
+            ];
+
+            wrapBtns.forEach(b => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.innerHTML = b.label;
+                btn.title = b.title;
+                // Highlight these buttons in blue so they stand out
+                btn.style.cssText = "background: #dbeafe !important; color: #1d4ed8 !important; border-color: #bfdbfe !important; margin-left: 5px !important;";
+                
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    const textarea = toolbar.parentElement.querySelector('textarea');
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    // If they didn't highlight anything, default to 'b'
+                    const selected = textarea.value.substring(start, end) || 'b'; 
+                    const insertion = b.open + selected + b.close;
+                    
+                    textarea.value = textarea.value.substring(0, start) + insertion + textarea.value.substring(end);
+                    textarea.focus();
+                };
+                toolbar.appendChild(btn);
+            });
+        });
+    }, 1000); 
+});
+</script>
+
 </body>
 </html>
