@@ -89,13 +89,13 @@
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                         Drafts
                     </a></li>
-                                    <li>
-                    <a href="#" class="menu-item" data-tab="feedbackTab">
-                        <svg viewBox="0 0 24 24" width="18" height="18"><!-- Optional: paste an icon SVG here if you want --></svg>
-                        Student Feedback
-                    </a>
-                </li>
-
+                    <!-- STUDENT FEEDBACK TAB BUTTON -->
+                    <li>
+                        <a href="#" class="menu-item" data-target="feedbackSection">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            Student Feedback
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -176,8 +176,6 @@
                         <p class="stat-sub">Saved as drafts</p>
                         <div class="stat-bottom"><a href="#" class="nav-trigger" data-target="formSection">View drafts <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a></div>
                     </div>
-
-                    
                 </div>
 
                 <div class="dash-grid-layout">
@@ -405,11 +403,26 @@
                     </table>
                 </section>
                 
-                <!-- JSON output kept for debug/reference -->
                 <section class="json-card" aria-labelledby="jsonHeading" style="margin-top: 20px;">
                     <h2 id="jsonHeading">Generated JSON</h2>
                     <pre id="output"></pre>
                 </section>
+            </div>
+
+            <!-- STUDENT FEEDBACK SECTION -->
+            <div id="feedbackSection" class="view-section" style="display: none;">
+                <div class="dash-header">
+                    <div>
+                        <h1>Student Feedback</h1>
+                        <p>Read suggestions, bug reports, and messages sent by website visitors.</p>
+                    </div>
+                </div>
+                
+                <div style="background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid #8b5cf6;">
+                    <div id="messagesInbox" style="display: flex; flex-direction: column; gap: 15px;">
+                        <p style="color: #64748b;">Loading messages...</p>
+                    </div>
+                </div>
             </div>
 
         </main>
@@ -420,21 +433,18 @@
 <script type="module" src="js/admin.js"></script>
 
 <script>
-// This script runs completely independently, so database errors cannot break your links!
+// This script runs independently to manage tab switching and load feedback from Firestore
 document.addEventListener("DOMContentLoaded", function() {
     function switchTab(targetId) {
-        // Hide all sections
         document.querySelectorAll('.view-section').forEach(sec => {
             sec.style.display = 'none';
         });
         
-        // Show target section
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
             targetSection.style.display = 'block';
         }
 
-        // Highlight the active link in the sidebar
         document.querySelectorAll('.menu-item').forEach(item => {
             item.classList.remove('active');
             if (item.getAttribute('data-target') === targetId) {
@@ -443,7 +453,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Listen for clicks on anything with a "data-target"
     document.addEventListener('click', function(e) {
         const trigger = e.target.closest('[data-target]');
         if (trigger) {
@@ -452,7 +461,6 @@ document.addEventListener("DOMContentLoaded", function() {
             switchTab(targetId);
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
             
-            // Close mobile menu if it is open
             const appSidebar = document.getElementById("appSidebar");
             if(appSidebar && appSidebar.classList.contains("open")) {
                 appSidebar.classList.remove("open");
@@ -460,9 +468,50 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Make the function global so the "Edit" button in the table can use it too
     window.switchTab = switchTab;
 });
+</script>
+
+<!-- Script to load Firebase messages into the Feedback tab -->
+<script type="module">
+    import { db } from "./js/firebase.js";
+    import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    async function loadFeedback() {
+        const inbox = document.getElementById('messagesInbox');
+        if (!inbox) return;
+
+        try {
+            const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            
+            inbox.innerHTML = ''; 
+            if (snapshot.empty) {
+                inbox.innerHTML = '<p style="color: #64748b;">No messages or suggestions yet.</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const date = new Date(data.timestamp).toLocaleString('en-IN');
+                
+                inbox.innerHTML += `
+                    <div style="background: #f8fafc; border-left: 4px solid #10b981; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong style="color: #1e3a8a;">${data.name}</strong>
+                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">${date}</span>
+                        </div>
+                        <div style="color: #334155; font-size: 14px; white-space: pre-wrap; line-height: 1.5;">${data.message}</div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error("Error loading messages:", error);
+            inbox.innerHTML = '<p style="color: red;">Failed to load messages. Check console.</p>';
+        }
+    }
+
+    loadFeedback();
 </script>
 </body>
 </html>
