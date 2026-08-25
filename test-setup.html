@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Setup | Doubt Factory</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .setup-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 40px auto; }
+        .setup-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-weight: bold; color: #64748b; }
+        .tab-btn.active { border-color: #1565C0; background: #eff6ff; color: #1565C0; }
+        .setup-section { display: none; }
+        .setup-section.active { display: block; }
+        .start-btn { width: 100%; background: #10b981; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a href="index.html" class="logo"><h2>Doubt Factory</h2></a>
+    </header>
+
+    <main class="container">
+        <div class="setup-card">
+            <h2 style="text-align: center; color: #0f172a; margin-bottom: 20px;">Configure Practice Test</h2>
+            
+            <div class="setup-tabs">
+                <button class="tab-btn active" onclick="switchMode('pyq')">PYQ Paper Mode</button>
+                <button class="tab-btn" onclick="switchMode('custom')">Custom Chapter Mode</button>
+            </div>
+
+            <!-- PYQ Mode -->
+            <div id="pyqMode" class="setup-section active">
+                <label style="font-weight: bold; margin-bottom: 8px; display: block;">Select Exam Year</label>
+                <select id="pyqYear" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 15px;">
+                    <option value="2024">JEE/NEET 2024</option>
+                    <option value="2023">JEE/NEET 2023</option>
+                </select>
+            </div>
+
+            <!-- Custom Mode -->
+            <div id="customMode" class="setup-section">
+                <label style="font-weight: bold; margin-bottom: 8px; display: block;">Select Chapter</label>
+                <select id="customChapter" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 15px;">
+                    <option value="Thermodynamics">Thermodynamics</option>
+                    <option value="Chemical Kinetics">Chemical Kinetics</option>
+                    <option value="Coordination Compounds">Coordination Compounds</option>
+                </select>
+            </div>
+
+            <button class="start-btn" id="startTestBtn">Start CBT Simulator</button>
+            <p id="setupError" style="color: red; text-align: center; margin-top: 10px;"></p>
+        </div>
+    </main>
+
+    <script type="module">
+        import { getQuestions } from "./js/firebase.js";
+        
+        window.switchMode = function(mode) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.setup-section').forEach(sec => sec.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(mode + 'Mode').classList.add('active');
+        };
+
+        document.getElementById('startTestBtn').addEventListener('click', async () => {
+            const errorText = document.getElementById('setupError');
+            errorText.textContent = "Loading questions...";
+            
+            try {
+                const questions = await getQuestions();
+                const isPyq = document.getElementById('pyqMode').classList.contains('active');
+                let filtered = [];
+
+                if (isPyq) {
+                    const year = document.getElementById('pyqYear').value;
+                    filtered = questions.filter(q => String(q.year) === year);
+                } else {
+                    const chapter = document.getElementById('customChapter').value;
+                    filtered = questions.filter(q => q.chapter === chapter);
+                }
+
+                if (filtered.length === 0) {
+                    errorText.textContent = "No questions found for this selection. Try another.";
+                    return;
+                }
+
+                // Extract just the IDs and save to browser memory
+                const questionIds = filtered.map(q => q.docId || q.id);
+                sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
+                
+                // Launch the simulator!
+                window.location.href = "cbt.html";
+
+            } catch (err) {
+                console.error(err);
+                errorText.textContent = "Database error. Check your connection.";
+            }
+        });
+    </script>
+</body>
+</html>
