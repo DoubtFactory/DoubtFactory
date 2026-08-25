@@ -29,29 +29,18 @@
   gtag('config', 'G-T43GPM3CQJ');
 </script>
 <style>
-    /* Force uniform, bold font for all chemistry toolbar buttons */
+    /* Safely force bold on the toolbar buttons without breaking sizes */
     .chem-editor-wrapper > div:first-child button, .chem-toolbar button {
-        font-size: 16px !important;
-        font-weight: 900 !important; 
-        font-family: 'Arial', sans-serif !important;
-        min-width: 34px !important;
-        height: 34px !important;
-        margin: 2px !important;
-        background-color: #f8fafc !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 6px !important;
-        color: #0f172a !important;
-        cursor: pointer !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        font-weight: 900 !important;
+        margin: 2px;
+        border-radius: 4px;
+        cursor: pointer;
     }
-    .chem-editor-wrapper > div:first-child button:hover, .chem-toolbar button:hover {
-        background-color: #e2e8f0 !important;
-        border-color: #94a3b8 !important;
+    .chem-editor-wrapper > div:first-child button sup, 
+    .chem-editor-wrapper > div:first-child button sub {
+        font-weight: 900 !important;
     }
 </style>
-
 </head>
 
 <body class="admin-body">
@@ -537,71 +526,71 @@ document.addEventListener("DOMContentLoaded", function() {
 
     loadFeedback();
 </script>
+
 <script>
-// Automatically append letters and HTML wrappers to toolbars
+// Smart scanner to append full super/subscript alphabets safely
 document.addEventListener("DOMContentLoaded", () => {
-    // Wait 1 second to ensure your existing admin.js has finished building the initial toolbars
-    setTimeout(() => {
-        const toolbars = document.querySelectorAll('.chem-editor-wrapper > div:first-child, .chem-toolbar');
+    const toolbarInterval = setInterval(() => {
+        const toolbars = document.querySelectorAll('.chem-editor-wrapper > div:first-child');
         
-        toolbars.forEach(toolbar => {
-            // 1. Add a vertical divider
-            const sep = document.createElement('span');
-            sep.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
-            toolbar.appendChild(sep);
+        if (toolbars.length > 0 && !toolbars[0].classList.contains('alphabet-added')) {
+            clearInterval(toolbarInterval); 
 
-            // 2. Add common Unicode letters
-            const chars = [
-                { label: 'ᵃ', val: 'ᵃ' }, { label: 'ᵇ', val: 'ᵇ' }, { label: 'ᶜ', val: 'ᶜ' },
-                { label: 'ⁿ', val: 'ⁿ' }, { label: '⁺', val: '⁺' }, { label: '⁻', val: '⁻' },
-                { label: 'ₐ', val: 'ₐ' }, { label: 'ₑ', val: 'ₑ' }, { label: 'ₓ', val: 'ₓ' }
-            ];
+            // Full available Unicode super and sub script arrays
+            const supers = ['ᵃ','ᵇ','ᶜ','ᵈ','ᵉ','ᶠ','ᵍ','ʰ','ⁱ','ʲ','ᵏ','ˡ','ᵐ','ⁿ','ᵒ','ᵖ','ʳ','ˢ','ᵗ','ᵘ','ᵛ','ʷ','ˣ','ʸ','ᶻ'];
+            const subs = ['ₐ','ₑ','ₕ','ᵢ','ⱼ','ₖ','ₗ','ₘ','ₙ','ₒ','ₚ','ᵣ','ₛ','ₜ','ᵤ','ᵥ','ₓ']; 
 
-            chars.forEach(c => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.textContent = c.label;
-                btn.onclick = (e) => {
-                    e.preventDefault();
-                    const textarea = toolbar.parentElement.querySelector('textarea');
-                    const start = textarea.selectionStart;
-                    textarea.value = textarea.value.substring(0, start) + c.val + textarea.value.substring(textarea.selectionEnd);
-                    textarea.selectionStart = textarea.selectionEnd = start + c.val.length;
-                    textarea.focus();
-                };
-                toolbar.appendChild(btn);
-            });
+            toolbars.forEach(toolbar => {
+                toolbar.classList.add('alphabet-added');
 
-            // 3. Add HTML Wrapper buttons for FULL alphabet support (e.g., typing Kb or Kc)
-            const wrapBtns = [
-                { label: 'X²', open: '<sup>', close: '</sup>', title: 'Highlight text, then click to make Superscript' },
-                { label: 'X₂', open: '<sub>', close: '</sub>', title: 'Highlight text, then click to make Subscript' }
-            ];
+                // Separator 1
+                const sep1 = document.createElement('span');
+                sep1.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
+                toolbar.appendChild(sep1);
 
-            wrapBtns.forEach(b => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.innerHTML = b.label;
-                btn.title = b.title;
-                // Highlight these buttons in blue so they stand out
-                btn.style.cssText = "background: #dbeafe !important; color: #1d4ed8 !important; border-color: #bfdbfe !important; margin-left: 5px !important;";
-                
-                btn.onclick = (e) => {
-                    e.preventDefault();
-                    const textarea = toolbar.parentElement.querySelector('textarea');
-                    const start = textarea.selectionStart;
-                    const end = textarea.selectionEnd;
-                    // If they didn't highlight anything, default to 'b'
-                    const selected = textarea.value.substring(start, end) || 'b'; 
-                    const insertion = b.open + selected + b.close;
+                // Add Superscript characters (Blue Buttons)
+                supers.forEach(char => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = char; 
+                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid #bfdbfe; background: #eff6ff; cursor: pointer; color: #1e40af; font-weight: 900; font-size: 14px;";
                     
-                    textarea.value = textarea.value.substring(0, start) + insertion + textarea.value.substring(end);
-                    textarea.focus();
-                };
-                toolbar.appendChild(btn);
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        const textarea = toolbar.parentElement.querySelector('textarea');
+                        const start = textarea.selectionStart;
+                        textarea.value = textarea.value.substring(0, start) + char + textarea.value.substring(textarea.selectionEnd);
+                        textarea.selectionStart = textarea.selectionEnd = start + char.length;
+                        textarea.focus();
+                    };
+                    toolbar.appendChild(btn);
+                });
+
+                // Separator 2
+                const sep2 = document.createElement('span');
+                sep2.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
+                toolbar.appendChild(sep2);
+
+                // Add Subscript characters (Green Buttons)
+                subs.forEach(char => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = char; 
+                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid #bbf7d0; background: #f0fdf4; cursor: pointer; color: #166534; font-weight: 900; font-size: 14px;";
+                    
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        const textarea = toolbar.parentElement.querySelector('textarea');
+                        const start = textarea.selectionStart;
+                        textarea.value = textarea.value.substring(0, start) + char + textarea.value.substring(textarea.selectionEnd);
+                        textarea.selectionStart = textarea.selectionEnd = start + char.length;
+                        textarea.focus();
+                    };
+                    toolbar.appendChild(btn);
+                });
             });
-        });
-    }, 1000); 
+        }
+    }, 500); 
 });
 </script>
 
