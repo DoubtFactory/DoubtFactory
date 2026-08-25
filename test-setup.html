@@ -15,12 +15,20 @@
         .setup-section.active { display: block; }
         .input-group { margin-bottom: 18px; }
         .input-group label { font-weight: 600; margin-bottom: 8px; display: block; color: #334155; font-size: 14px; }
-        .input-group select { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; color: #0f172a; background: #fff; cursor: pointer; outline: none; }
-        .input-group select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-        .input-group select:disabled { background: #f1f5f9; cursor: not-allowed; color: #94a3b8; }
+        
+        /* Unified inputs and selects for a clean look */
+        .input-group select, .input-group input { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; color: #0f172a; background: #fff; outline: none; box-sizing: border-box; }
+        .input-group select:focus, .input-group input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .input-group select:disabled, .input-group input:disabled { background: #f1f5f9; cursor: not-allowed; color: #94a3b8; }
+        
         .start-btn { width: 100%; background: #10b981; color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .start-btn:hover { background: #059669; transform: translateY(-2px); }
         .start-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        
+        /* Live Counter Styling */
+        .live-counter { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
+        .live-counter.error { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -53,7 +61,6 @@
                 </div>
                 <div class="input-group">
                     <label>Select Exam Year</label>
-                    <!-- Empty initially, populated by JS -->
                     <select id="pyqYear">
                         <option value="">Loading available years...</option>
                     </select>
@@ -73,7 +80,6 @@
                 </div>
                 <div class="input-group">
                     <label>Select Chapter</label>
-                    <!-- Empty initially, populated by JS -->
                     <select id="customChapter">
                         <option value="All">Loading available chapters...</option>
                     </select>
@@ -86,6 +92,16 @@
                         <option value="Medium">Medium</option>
                         <option value="Hard">Hard</option>
                     </select>
+                </div>
+
+                <!-- NEW: Live Counter and Question Input -->
+                <div id="availableCounter" class="live-counter">
+                    <span>Available Questions: <strong id="maxCountDisplay">0</strong></span>
+                </div>
+
+                <div class="input-group">
+                    <label>How many questions do you want to practice?</label>
+                    <input type="number" id="practiceCount" min="1" value="10" disabled>
                 </div>
             </div>
 
@@ -108,9 +124,8 @@
     <script type="module">
         import { getQuestions } from "./js/firebase.js";
         
-        let allQuestions = []; // Will store the master list from Firebase
+        let allQuestions = []; 
 
-        // Tab Switcher
         window.switchMode = function(mode) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.setup-section').forEach(sec => sec.classList.remove('active'));
@@ -123,19 +138,23 @@
         const pyqYearSelect = document.getElementById('pyqYear');
         const subjectSelect = document.getElementById('customSubject');
         const chapterSelect = document.getElementById('customChapter');
+        const diffSelect = document.getElementById('customDifficulty');
+        
+        // New elements for custom selection
+        const practiceCountInput = document.getElementById('practiceCount');
+        const availableCounterBox = document.getElementById('availableCounter');
+        const maxCountDisplay = document.getElementById('maxCountDisplay');
         const startBtn = document.getElementById('startTestBtn');
         const errorText = document.getElementById('setupError');
 
-        // 1. Fetch database exactly once when the page opens
         document.addEventListener("DOMContentLoaded", async () => {
             try {
                 allQuestions = await getQuestions();
                 
-                // Immediately build the dropdown menus based on what we found
                 updatePyqYears();
                 updateCustomChapters();
+                updateLiveCounter(); // Trigger the counter check immediately
                 
-                // Unlock the Start button
                 startBtn.textContent = "Start CBT Simulator";
                 startBtn.disabled = false;
             } catch (err) {
@@ -145,15 +164,48 @@
             }
         });
 
-        // 2. Dynamically build the Year Dropdown based on the selected Exam
+        // Calculate available custom questions based on live filters
+        function getFilteredCustomQuestions() {
+            const targetSubject = subjectSelect.value;
+            const targetChapter = chapterSelect.value;
+            const targetDiff = diffSelect.value;
+            
+            return allQuestions.filter(q => {
+                let match = true;
+                if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
+                if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
+                if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
+                return match;
+            });
+        }
+
+        // Update the UI showing how many questions exist
+        function updateLiveCounter() {
+            const availableCount = getFilteredCustomQuestions().length;
+            maxCountDisplay.textContent = availableCount;
+
+            if (availableCount === 0) {
+                availableCounterBox.classList.add('error');
+                practiceCountInput.disabled = true;
+                practiceCountInput.value = 0;
+            } else {
+                availableCounterBox.classList.remove('error');
+                practiceCountInput.disabled = false;
+                practiceCountInput.max = availableCount;
+                
+                // If they previously typed 50 but only 20 exist, lower it to 20
+                if (Number(practiceCountInput.value) > availableCount || Number(practiceCountInput.value) === 0) {
+                    practiceCountInput.value = availableCount > 10 ? 10 : availableCount;
+                }
+            }
+        }
+
         function updatePyqYears() {
             const selectedExam = pyqExamSelect.value;
-            
-            // Scan questions, filter by exam, extract the year, and remove duplicates
             const availableYears = [...new Set(allQuestions
                 .filter(q => q.exam === selectedExam && q.year)
                 .map(q => String(q.year))
-            )].sort((a, b) => b - a); // Sort highest to lowest
+            )].sort((a, b) => b - a);
 
             pyqYearSelect.innerHTML = '';
             
@@ -171,15 +223,12 @@
             }
         }
         
-        // Listen for exam changes to update the years
         pyqExamSelect.addEventListener('change', updatePyqYears);
 
-        // 3. Dynamically build the Chapter Dropdown based on selected Subject
         function updateCustomChapters() {
             const selectedSubject = subjectSelect.value;
             let availableChapters = [];
             
-            // Scan questions, filter by subject, extract chapters, and remove duplicates
             if (selectedSubject === "All") {
                 availableChapters = [...new Set(allQuestions.filter(q => q.chapter).map(q => q.chapter))].sort();
             } else {
@@ -203,12 +252,23 @@
                     chapterSelect.appendChild(opt);
                 });
             }
+            updateLiveCounter(); // Re-check count after chapter updates
         }
 
-        // Listen for subject changes to update the chapters
+        // Add event listeners to all custom filters to trigger the live counter
         subjectSelect.addEventListener('change', updateCustomChapters);
+        chapterSelect.addEventListener('change', updateLiveCounter);
+        diffSelect.addEventListener('change', updateLiveCounter);
+        
+        // Prevent typing a number higher than available
+        practiceCountInput.addEventListener('input', (e) => {
+            const max = parseInt(e.target.max);
+            let val = parseInt(e.target.value);
+            if (val > max) e.target.value = max;
+            if (val < 1) e.target.value = 1;
+        });
 
-        // 4. Launch Test Logic
+        // Launch Test Logic
         startBtn.addEventListener('click', () => {
             const isPyq = document.getElementById('pyqMode').classList.contains('active');
             let filtered = [];
@@ -224,37 +284,29 @@
                 
                 filtered = allQuestions.filter(q => (q.exam === targetExam) && (String(q.year) === targetYear));
             } else {
-                const targetSubject = subjectSelect.value;
-                const targetChapter = chapterSelect.value;
-                const targetDiff = document.getElementById('customDifficulty').value;
+                filtered = getFilteredCustomQuestions();
                 
-                filtered = allQuestions.filter(q => {
-                    let match = true;
-                    if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
-                    if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
-                    if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
-                    return match;
-                });
+                if (filtered.length === 0) {
+                    errorText.textContent = "No questions found for this exact selection!";
+                    return;
+                }
+
+                // Shuffle first, THEN slice down to the exact amount the student requested!
+                const requestedCount = parseInt(practiceCountInput.value);
+                filtered = filtered.sort(() => 0.5 - Math.random()).slice(0, requestedCount);
             }
 
             if (filtered.length === 0) {
-                errorText.textContent = "No questions found for this exact selection!";
+                errorText.textContent = "No questions found!";
                 return;
             }
 
-            // Shuffle custom mode questions so they don't play the exact same test twice
-            if (!isPyq) {
-                filtered = filtered.sort(() => 0.5 - Math.random());
-            }
-
-            // Extract IDs and save to browser memory
             const questionIds = filtered.map(q => q.docId || q.id);
             const timeSelected = document.getElementById('testDuration').value;
 
             sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
             sessionStorage.setItem('df_cbt_duration', timeSelected);
             
-            // Launch the simulator!
             window.location.href = "cbt.html";
         });
     </script>
