@@ -70,6 +70,15 @@
             <!-- Custom Mode -->
             <div id="customMode" class="setup-section">
                 <div class="input-group">
+                    <label>Select Target Exam</label>
+                    <select id="customExam">
+                        <option value="All">All Exams</option>
+                        <option value="JEE Main">JEE Main</option>
+                        <option value="JEE Advanced">JEE Advanced</option>
+                        <option value="NEET">NEET</option>
+                    </select>
+                </div>
+                <div class="input-group">
                     <label>Select Subject</label>
                     <select id="customSubject">
                         <option value="All">All Chemistry Branches</option>
@@ -94,7 +103,7 @@
                     </select>
                 </div>
 
-                <!-- NEW: Live Counter and Question Input -->
+                <!-- Live Counter and Question Input -->
                 <div id="availableCounter" class="live-counter">
                     <span>Available Questions: <strong id="maxCountDisplay">0</strong></span>
                 </div>
@@ -113,7 +122,11 @@
                     <option value="30">30 Minutes (Half Test)</option>
                     <option value="60" selected>1 Hour (Standard)</option>
                     <option value="180">3 Hours (Full Paper)</option>
+                    <option value="custom">Custom Timer...</option>
                 </select>
+                
+                <!-- Hidden input for Custom Minutes -->
+                <input type="number" id="customMinutes" placeholder="Enter custom minutes (e.g., 45)" min="1" style="display: none; margin-top: 10px;">
             </div>
 
             <button class="start-btn" id="startTestBtn" disabled>Loading Database...</button>
@@ -136,16 +149,29 @@
 
         const pyqExamSelect = document.getElementById('pyqExam');
         const pyqYearSelect = document.getElementById('pyqYear');
+        const customExamSelect = document.getElementById('customExam');
         const subjectSelect = document.getElementById('customSubject');
         const chapterSelect = document.getElementById('customChapter');
         const diffSelect = document.getElementById('customDifficulty');
         
-        // New elements for custom selection
         const practiceCountInput = document.getElementById('practiceCount');
         const availableCounterBox = document.getElementById('availableCounter');
         const maxCountDisplay = document.getElementById('maxCountDisplay');
         const startBtn = document.getElementById('startTestBtn');
         const errorText = document.getElementById('setupError');
+        
+        const testDurationSelect = document.getElementById('testDuration');
+        const customMinutesInput = document.getElementById('customMinutes');
+
+        // Toggle Custom Minutes Input
+        testDurationSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'custom') {
+                customMinutesInput.style.display = 'block';
+            } else {
+                customMinutesInput.style.display = 'none';
+                errorText.textContent = ""; // Clear errors if they switch back
+            }
+        });
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
@@ -153,7 +179,7 @@
                 
                 updatePyqYears();
                 updateCustomChapters();
-                updateLiveCounter(); // Trigger the counter check immediately
+                updateLiveCounter(); 
                 
                 startBtn.textContent = "Start CBT Simulator";
                 startBtn.disabled = false;
@@ -164,14 +190,15 @@
             }
         });
 
-        // Calculate available custom questions based on live filters
         function getFilteredCustomQuestions() {
+            const targetExam = customExamSelect.value;
             const targetSubject = subjectSelect.value;
             const targetChapter = chapterSelect.value;
             const targetDiff = diffSelect.value;
             
             return allQuestions.filter(q => {
                 let match = true;
+                if (targetExam !== "All" && q.exam !== targetExam) match = false;
                 if (targetSubject !== "All" && q.subject !== targetSubject) match = false;
                 if (targetChapter !== "All" && q.chapter !== targetChapter) match = false;
                 if (targetDiff !== "All" && q.difficulty !== targetDiff) match = false;
@@ -179,7 +206,6 @@
             });
         }
 
-        // Update the UI showing how many questions exist
         function updateLiveCounter() {
             const availableCount = getFilteredCustomQuestions().length;
             maxCountDisplay.textContent = availableCount;
@@ -193,7 +219,6 @@
                 practiceCountInput.disabled = false;
                 practiceCountInput.max = availableCount;
                 
-                // If they previously typed 50 but only 20 exist, lower it to 20
                 if (Number(practiceCountInput.value) > availableCount || Number(practiceCountInput.value) === 0) {
                     practiceCountInput.value = availableCount > 10 ? 10 : availableCount;
                 }
@@ -252,15 +277,14 @@
                     chapterSelect.appendChild(opt);
                 });
             }
-            updateLiveCounter(); // Re-check count after chapter updates
+            updateLiveCounter(); 
         }
 
-        // Add event listeners to all custom filters to trigger the live counter
+        customExamSelect.addEventListener('change', updateLiveCounter);
         subjectSelect.addEventListener('change', updateCustomChapters);
         chapterSelect.addEventListener('change', updateLiveCounter);
         diffSelect.addEventListener('change', updateLiveCounter);
         
-        // Prevent typing a number higher than available
         practiceCountInput.addEventListener('input', (e) => {
             const max = parseInt(e.target.max);
             let val = parseInt(e.target.value);
@@ -270,6 +294,7 @@
 
         // Launch Test Logic
         startBtn.addEventListener('click', () => {
+            errorText.textContent = "";
             const isPyq = document.getElementById('pyqMode').classList.contains('active');
             let filtered = [];
 
@@ -291,7 +316,6 @@
                     return;
                 }
 
-                // Shuffle first, THEN slice down to the exact amount the student requested!
                 const requestedCount = parseInt(practiceCountInput.value);
                 filtered = filtered.sort(() => 0.5 - Math.random()).slice(0, requestedCount);
             }
@@ -301,8 +325,17 @@
                 return;
             }
 
+            // Determine Time Limit
+            let timeSelected = testDurationSelect.value;
+            if (timeSelected === 'custom') {
+                timeSelected = parseInt(customMinutesInput.value);
+                if (!timeSelected || timeSelected < 1) {
+                    errorText.textContent = "Please enter a valid number of minutes for the custom timer.";
+                    return;
+                }
+            }
+
             const questionIds = filtered.map(q => q.docId || q.id);
-            const timeSelected = document.getElementById('testDuration').value;
 
             sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
             sessionStorage.setItem('df_cbt_duration', timeSelected);
