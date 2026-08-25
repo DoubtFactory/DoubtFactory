@@ -47,46 +47,34 @@
         .submit-bar { padding: 15px; background: #e2e8f0; text-align: center; }
         .btn-submit-test { background: #3b82f6; width: 
             
-                      /* =========================================
-           MOBILE RESPONSIVENESS (FORCE OVERRIDE)
+                     
+        /* =========================================
+           MOBILE RESPONSIVENESS (NATURAL SCROLL)
            ========================================= */
         @media (max-width: 768px) {
-            /* Center header and stack the timer */
-            .nta-header { flex-direction: column !important; padding: 12px !important; gap: 10px !important; text-align: center !important; }
-            .timer-box { width: 100% !important; }
+            /* 1. Unlock the page so it can scroll naturally */
+            body { height: auto !important; overflow: auto !important; display: block !important; }
             
-            /* Break the side-by-side layout into Top/Bottom */
-            .cbt-layout { flex-direction: column !important; }
+            /* 2. Stack the header and make the timer stretch across the screen */
+            .nta-header { flex-direction: column !important; padding: 15px !important; gap: 10px !important; text-align: center !important; }
+            .timer-box { width: 100% !important; padding: 10px !important; font-size: 20px !important; }
             
-            /* Lock the Question Panel to the top 55% of the screen */
-            .question-panel { 
-                width: 100% !important; 
-                height: 55vh !important; 
-                flex: none !important; 
-                border-right: none !important; 
-                border-bottom: 4px solid #cbd5e1 !important; 
-            }
+            /* 3. Stack the main layout vertically */
+            .cbt-layout { flex-direction: column !important; display: flex !important; height: auto !important; overflow: visible !important; }
             
-            /* Lock the Palette to the bottom 45% of the screen */
-            .palette-panel { 
-                width: 100% !important; 
-                height: auto !important;
-                flex: 1 !important; 
-            }
+            /* 4. Let the question content expand as much as it needs */
+            .question-panel { width: 100% !important; flex: none !important; border-right: none !important; }
+            .question-content { overflow-y: visible !important; height: auto !important; padding: 20px 15px !important; }
             
-            /* Wrap action buttons into touch-friendly rows */
-            .action-bar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px !important; }
-            .action-bar .btn { flex: 1 1 45% !important; font-size: 14px !important; padding: 12px 5px !important; text-align: center !important; }
-            .btn-clear { flex: 1 1 100% !important; order: 3 !important; }
+            /* 5. Wrap buttons into a chunky, touch-friendly grid */
+            .action-bar { flex-wrap: wrap !important; gap: 10px !important; padding: 15px !important; border-top: 1px solid #cbd5e1 !important; border-bottom: 8px solid #e2e8f0 !important; }
+            .action-bar .btn { flex: 1 1 45% !important; padding: 15px 5px !important; font-size: 14px !important; line-height: 1.3 !important; }
+            .btn-clear { flex: 1 1 100% !important; order: 3 !important; } /* Pushes 'Clear' to the bottom row */
             
-            /* Smart Grid: Automatically fits the bubbles to the phone width */
-            .palette-grid { 
-                grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)) !important; 
-                gap: 8px !important; 
-                padding: 12px !important; 
-                justify-items: center !important;
-            }
-            .q-bubble { width: 42px !important; height: 42px !important; font-size: 15px !important; }
+            /* 6. Fix the sideways numbering by using an auto-filling grid */
+            .palette-panel { width: 100% !important; flex: none !important; height: auto !important; }
+            .palette-grid { overflow-y: visible !important; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)) !important; padding: 20px !important; gap: 12px !important; justify-content: center !important; }
+            .q-bubble { margin: 0 auto !important; width: 45px !important; height: 45px !important; font-size: 16px !important; }
         }
 
 
