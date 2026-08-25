@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Simulator | Doubt Factory</title>
+    <style>
+        /* Strict NTA-Style CSS Reset */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { display: flex; flex-direction: column; height: 100vh; background: #fff; overflow: hidden; }
+        
+        /* Header */
+        .nta-header { background: #2563eb; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .timer-box { font-size: 18px; font-weight: bold; background: #1e40af; padding: 5px 15px; border-radius: 4px; }
+        
+        /* Layout */
+        .cbt-layout { display: flex; flex: 1; overflow: hidden; }
+        
+        /* Left Panel: Question Area */
+        .question-panel { flex: 1; display: flex; flex-direction: column; border-right: 2px solid #cbd5e1; }
+        .question-content { flex: 1; padding: 30px; overflow-y: auto; font-size: 16px; line-height: 1.6; }
+        .option-label { display: block; padding: 10px; margin: 5px 0; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer; }
+        .option-label:hover { background: #f8fafc; }
+        
+        /* Left Panel: Action Buttons */
+        .action-bar { padding: 15px 20px; background: #f1f5f9; border-top: 1px solid #cbd5e1; display: flex; justify-content: space-between; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; }
+        .btn-save { background: #10b981; }
+        .btn-review { background: #8b5cf6; }
+        .btn-clear { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
+        
+        /* Right Panel: Palette */
+        .palette-panel { width: 300px; background: #f8fafc; display: flex; flex-direction: column; }
+        .palette-header { padding: 15px; background: #e2e8f0; text-align: center; font-weight: bold; }
+        .palette-grid { padding: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; overflow-y: auto; flex: 1; }
+        
+        /* NTA Bubble States */
+        .q-bubble { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border-radius: 5px; color: white; }
+        .state-unvisited { background: #cbd5e1; color: #333; }
+        .state-unanswered { background: #ef4444; border-radius: 50%; padding-bottom: 5px; } /* Red Circle/Dome */
+        .state-answered { background: #10b981; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); } /* Green Hexagon */
+        .state-review { background: #8b5cf6; border-radius: 50%; } /* Purple Circle */
+        .state-review-ans { background: #8b5cf6; border-radius: 50%; position: relative; }
+        .state-review-ans::after { content: ''; position: absolute; bottom: 4px; right: 4px; width: 10px; height: 10px; background: #10b981; border-radius: 50%; }
+        
+        /* Submit Button */
+        .submit-bar { padding: 15px; background: #e2e8f0; text-align: center; }
+        .btn-submit-test { background: #3b82f6; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <header class="nta-header">
+        <h2>Doubt Factory CBT Simulator</h2>
+        <div class="timer-box">Time Left: <span id="timeDisplay">00:00:00</span></div>
+    </header>
+
+    <div class="cbt-layout">
+        <!-- Left Side -->
+        <div class="question-panel">
+            <div class="question-content" id="qContent">
+                <h3 style="color: #64748b; margin-bottom: 20px;">Loading Test Environment...</h3>
+            </div>
+            
+            <div class="action-bar">
+                <button class="btn btn-review" onclick="handleAction('review')">Mark for Review & Next</button>
+                <button class="btn btn-clear" onclick="handleAction('clear')">Clear Response</button>
+                <button class="btn btn-save" onclick="handleAction('save')">Save & Next</button>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="palette-panel">
+            <div class="palette-header">Question Palette</div>
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="submit-bar">
+                <button class="btn btn-submit-test" onclick="submitTest()">Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getQuestions } from "./js/firebase.js";
+
+        let allQuestions = [];
+        let testQuestions = [];
+        let currentIndex = 0;
+        let userResponses = []; // Stores the state for every question
+        
+        // 1. Load the test
+        async function initTest() {
+            const savedIds = JSON.parse(sessionStorage.getItem('df_cbt_test') || '[]');
+            if (savedIds.length === 0) {
+                alert("No questions found. Redirecting to setup.");
+                window.location.href = "test-setup.html";
+                return;
+            }
+
+            try {
+                allQuestions = await getQuestions();
+                testQuestions = savedIds.map(id => allQuestions.find(q => (q.docId || q.id) === id)).filter(Boolean);
+                
+                // Initialize state tracking array (NTA defaults all to unvisited)
+                userResponses = testQuestions.map(() => ({ selectedOption: null, state: 'unvisited' }));
+                
+                startTimer(60 * 60); // 1 hour mock timer
+                buildPalette();
+                loadQuestion(0);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 2. Build the right-side grid
+        function buildPalette() {
+            const grid = document.getElementById('paletteGrid');
+            grid.innerHTML = '';
+            userResponses.forEach((res, index) => {
+                const bubble = document.createElement('div');
+                bubble.textContent = index + 1;
+                bubble.className = `q-bubble state-${res.state}`;
+                bubble.onclick = () => loadQuestion(index);
+                grid.appendChild(bubble);
+            });
+        }
+
+        // 3. Render a specific question
+        window.loadQuestion = function(index) {
+            // If leaving an unvisited question without answering, it turns red (unanswered)
+            if (userResponses[currentIndex].state === 'unvisited') {
+                userResponses[currentIndex].state = 'unanswered';
+            }
+            
+            currentIndex = index;
+            const q = testQuestions[currentIndex];
+            const content = document.getElementById('qContent');
+            
+            // Build the HTML for the options
+            let optionsHTML = '';
+            q.options.forEach((opt, i) => {
+                const isChecked = userResponses[currentIndex].selectedOption === i ? 'checked' : '';
+                optionsHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="cbtOption" value="${i}" ${isChecked}> 
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            content.innerHTML = `
+                <div style="font-weight:bold; margin-bottom: 20px; font-size: 18px;">Question ${currentIndex + 1}</div>
+                <div style="margin-bottom: 30px;">${q.question}</div>
+                <div>${optionsHTML}</div>
+            `;
+            
+            buildPalette(); // Refresh grid colors
+        }
+
+        // 4. Handle Buttons (Save, Review, Clear)
+        window.handleAction = function(action) {
+            const selected = document.querySelector('input[name="cbtOption"]:checked');
+            const stateObj = userResponses[currentIndex];
+
+            if (action === 'clear') {
+                stateObj.selectedOption = null;
+                stateObj.state = 'unanswered';
+                loadQuestion(currentIndex); // reload to uncheck
+                return;
+            }
+
+            if (action === 'save') {
+                if (selected) {
+                    stateObj.selectedOption = Number(selected.value);
+                    stateObj.state = 'answered';
+                } else {
+                    stateObj.state = 'unanswered';
+                }
+            }
+
+            if (action === 'review') {
+                if (selected) {
+                    stateObj.selectedOption = Number(selected.value);
+                    stateObj.state = 'review-ans';
+                } else {
+                    stateObj.state = 'review';
+                }
+            }
+
+            // Move to next question automatically
+            if (currentIndex < testQuestions.length - 1) {
+                loadQuestion(currentIndex + 1);
+            } else {
+                buildPalette(); // Refresh colors if it's the last question
+            }
+        }
+
+        // 5. Timer Logic
+        function startTimer(duration) {
+            let timer = duration;
+            setInterval(() => {
+                const hours = String(Math.floor(timer / 3600)).padStart(2, '0');
+                const minutes = String(Math.floor((timer % 3600) / 60)).padStart(2, '0');
+                const seconds = String(timer % 60).padStart(2, '0');
+                document.getElementById('timeDisplay').textContent = `${hours}:${minutes}:${seconds}`;
+                if (--timer < 0) submitTest();
+            }, 1000);
+        }
+
+        window.submitTest = function() {
+            alert("Test Submitted! Calculating Score...");
+            // Next step: Build the scorecard logic!
+            window.location.href = "index.html"; 
+        }
+
+        // Boot it up
+        document.addEventListener("DOMContentLoaded", initTest);
+    </script>
+</body>
+</html>
