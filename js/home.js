@@ -1,6 +1,7 @@
-import { getQuestions } from "./firebase.js";
+import { getQuestions } from "./firebase.js"; // Fixed the lowercase 'i'
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // Make sure your index.html uses id="latestQuestions" for this to work!
     const container = document.getElementById("latestQuestions");
     if (!container) return;
 
@@ -13,15 +14,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // 1. Bulletproof Sorting: Uses timestamp for new uploads, falls back to Exam Year for older ones
+        // 1. Bulletproof Sorting
         const latestQuestions = [...questions].sort((a, b) => {
             const getTime = (q) => {
                 if (q.timestamp) return Number(q.timestamp); 
                 if (typeof q.id === 'number') return q.id; 
-                if (q.year) return Number(q.year); // Fallback to Year (e.g. 2026) so old questions still sort logically
+                if (q.year) return Number(q.year); 
                 return 0; 
             };
-            return getTime(b) - getTime(a); // Puts newest at the top
+            return getTime(b) - getTime(a); 
         }).slice(0, 6);
 
         // 2. Clear the skeleton loaders
@@ -35,10 +36,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         latestQuestions.forEach((q) => {
             const docId = q.docId || q.id;
             
-            // Strip HTML tags so the preview text looks clean
-            const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
+            // Extra safety: Force q.question to act as a string before replacing HTML tags
+            let snippet = "Chemistry Question...";
+            if (q.question) {
+                snippet = String(q.question).replace(/<[^>]*>?/gm, '').substring(0, 110) + "...";
+            }
             
-            // CREATE THE EXAM + YEAR TAG (e.g., "NEET-2026")
+            // CREATE THE EXAM + YEAR TAG
             const examTag = q.year ? `${q.exam || 'JEE/NEET'}-${q.year}` : (q.exam || 'JEE/NEET');
 
             const card = document.createElement("a");
@@ -73,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     } catch (error) {
         console.error("Critical error loading questions:", error);
-        container.innerHTML = "<p style='text-align:center; color:#ef4444; padding: 40px;'>Failed to load latest questions. Please refresh the page.</p>";
+        container.innerHTML = `<p style='text-align:center; color:#ef4444; padding: 40px;'>Failed to load latest questions. Error: ${error.message}</p>`;
         container.classList.remove("loading-stack");
     }
 });
