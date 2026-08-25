@@ -47,33 +47,48 @@
         .submit-bar { padding: 15px; background: #e2e8f0; text-align: center; }
         .btn-submit-test { background: #3b82f6; width: 
             
-                    /* =========================================
-           MOBILE RESPONSIVENESS (SMARTPHONE LAYOUT)
+                      /* =========================================
+           MOBILE RESPONSIVENESS (FORCE OVERRIDE)
            ========================================= */
         @media (max-width: 768px) {
-            /* Stack the header text and timer neatly */
-            .nta-header { flex-direction: column; gap: 8px; padding: 12px; text-align: center; }
-            .nta-header h2 { font-size: 18px; margin: 0; }
+            /* Center header and stack the timer */
+            .nta-header { flex-direction: column !important; padding: 12px !important; gap: 10px !important; text-align: center !important; }
+            .timer-box { width: 100% !important; }
             
-            /* Change layout from side-by-side to stacked (Top/Bottom) */
-            .cbt-layout { flex-direction: column; }
+            /* Break the side-by-side layout into Top/Bottom */
+            .cbt-layout { flex-direction: column !important; }
             
-            /* Give the question area the top 55% of the screen */
-            .question-panel { border-right: none; flex: 1 1 55%; min-height: 0; }
-            .question-content { padding: 15px; }
+            /* Lock the Question Panel to the top 55% of the screen */
+            .question-panel { 
+                width: 100% !important; 
+                height: 55vh !important; 
+                flex: none !important; 
+                border-right: none !important; 
+                border-bottom: 4px solid #cbd5e1 !important; 
+            }
             
-            /* Wrap the action buttons so they don't shrink off the screen */
-            .action-bar { padding: 10px; gap: 8px; flex-wrap: wrap; justify-content: stretch; }
-            .action-bar .btn { flex: 1 1 45%; font-size: 13px; padding: 12px 5px; text-align: center; }
-            .btn-clear { flex: 1 1 100%; order: 3; margin-top: 5px; } /* Pushes 'Clear' to its own full-width row */
+            /* Lock the Palette to the bottom 45% of the screen */
+            .palette-panel { 
+                width: 100% !important; 
+                height: auto !important;
+                flex: 1 !important; 
+            }
             
-            /* Give the palette area the bottom 45% of the screen */
-            .palette-panel { width: 100%; flex: 1 1 45%; border-top: 4px solid #cbd5e1; min-height: 0; }
-            .palette-grid { padding: 10px; gap: 8px; grid-template-columns: repeat(6, 1fr); }
+            /* Wrap action buttons into touch-friendly rows */
+            .action-bar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px !important; }
+            .action-bar .btn { flex: 1 1 45% !important; font-size: 14px !important; padding: 12px 5px !important; text-align: center !important; }
+            .btn-clear { flex: 1 1 100% !important; order: 3 !important; }
             
-            /* Make bubbles slightly smaller to fit more on a phone screen */
-            .q-bubble { width: 38px; height: 38px; font-size: 14px; }
+            /* Smart Grid: Automatically fits the bubbles to the phone width */
+            .palette-grid { 
+                grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)) !important; 
+                gap: 8px !important; 
+                padding: 12px !important; 
+                justify-items: center !important;
+            }
+            .q-bubble { width: 42px !important; height: 42px !important; font-size: 15px !important; }
         }
+
 
                </style>
 </head>
