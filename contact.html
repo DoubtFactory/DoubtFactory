@@ -44,7 +44,6 @@
             </form>
         </div>
     </main>
-
     <script type="module">
         import { db } from "./js/firebase.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -74,12 +73,16 @@
             } catch (error) {
                 console.error("Error sending message: ", error);
                 status.style.color = "#ef4444";
-                status.textContent = "Failed to send message. Please check your connection.";
+                
+                // THIS WILL PRINT THE EXACT CAUSE OF THE ERROR TO YOUR SCREEN
+                status.textContent = "Error: " + error.message; 
             } finally {
                 btn.textContent = "Send Message";
                 btn.disabled = false;
             }
         });
     </script>
+
+    
 </body>
 </html>
