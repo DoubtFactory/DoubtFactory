@@ -80,7 +80,6 @@
                     <label>Select Chapter</label>
                     <select id="customChapter">
                         <option value="All">All Chapters</option>
-                        <!-- Injected via JS based on Subject -->
                     </select>
                 </div>
                 <div class="input-group">
@@ -94,6 +93,17 @@
                 </div>
             </div>
 
+            <!-- GLOBAL TIME LIMIT (Applies to both modes) -->
+            <div class="input-group" style="border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 10px;">
+                <label>Test Duration</label>
+                <select id="testDuration">
+                    <option value="15">15 Minutes (Quick Practice)</option>
+                    <option value="30">30 Minutes (Half Test)</option>
+                    <option value="60" selected>1 Hour (Standard)</option>
+                    <option value="180">3 Hours (Full Paper)</option>
+                </select>
+            </div>
+
             <button class="start-btn" id="startTestBtn">Start CBT Simulator</button>
             <p id="setupError" style="color: #dc2626; text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; height: 20px;"></p>
         </div>
@@ -102,7 +112,6 @@
     <script type="module">
         import { getQuestions } from "./js/firebase.js";
         
-        // Full Chemistry Syllabus from your Admin Panel
         const chapterList = {
             "Physical Chemistry": [
                 "Some Basic Concepts of Chemistry (Mole Concept)", "Atomic Structure", "States of Matter (Gaseous State)", 
@@ -121,16 +130,14 @@
             ]
         };
 
-        // Tab Switcher
         window.switchMode = function(mode) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.setup-section').forEach(sec => sec.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(mode + 'Mode').classList.add('active');
-            document.getElementById('setupError').textContent = ""; // Clear errors on switch
+            document.getElementById('setupError').textContent = ""; 
         };
 
-        // Dynamic Chapter Dropdown Logic
         const subjectSelect = document.getElementById('customSubject');
         const chapterSelect = document.getElementById('customChapter');
 
@@ -148,11 +155,10 @@
             }
         });
 
-        // Launch Test Logic
         document.getElementById('startTestBtn').addEventListener('click', async () => {
             const errorText = document.getElementById('setupError');
             errorText.textContent = "Loading questions from database...";
-            errorText.style.color = "#2563eb"; // Blue for loading
+            errorText.style.color = "#2563eb";
             
             try {
                 const questions = await getQuestions();
@@ -182,19 +188,20 @@
                 }
 
                 if (filtered.length === 0) {
-                    errorText.style.color = "#dc2626"; // Red for error
+                    errorText.style.color = "#dc2626";
                     errorText.textContent = "No questions found for this exact selection yet!";
                     return;
                 }
 
-                // Shuffle the questions so custom tests feel fresh!
                 filtered = filtered.sort(() => 0.5 - Math.random());
 
-                // Extract IDs and save to browser memory
                 const questionIds = filtered.map(q => q.docId || q.id);
+                const timeSelected = document.getElementById('testDuration').value;
+
+                // Save both the IDs and the selected Time Limit to memory
                 sessionStorage.setItem('df_cbt_test', JSON.stringify(questionIds));
+                sessionStorage.setItem('df_cbt_duration', timeSelected);
                 
-                // Launch the simulator!
                 window.location.href = "cbt.html";
 
             } catch (err) {
