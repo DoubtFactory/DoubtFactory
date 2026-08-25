@@ -622,14 +622,34 @@ async function loadQuestionsTable() {
         if(!tbody) return;
         tbody.innerHTML = "";
 
-        snapshot.forEach(documentItem => {
+        // Sort questions so newest appear at the top of the table
+        const sortedDocs = snapshot.docs.sort((a, b) => {
+            const aTime = a.data().timestamp || 0;
+            const bTime = b.data().timestamp || 0;
+            return bTime - aTime;
+        });
+
+        sortedDocs.forEach(documentItem => {
             const q = documentItem.data();
+            
+            // Generate a clean, 55-character preview snippet of the question
+            let snippet = "No text provided";
+            if (q.question) {
+                // Strip HTML tags and cut it down to size
+                snippet = String(q.question).replace(/<[^>]*>?/gm, '').substring(0, 55).trim();
+                if (String(q.question).replace(/<[^>]*>?/gm, '').length > 55) snippet += "...";
+            }
+
+            // Draw the table row with top-alignment to handle the multiline snippet cleanly
             tbody.innerHTML += `
                 <tr>
-                    <td>${q.exam || ""}</td>
-                    <td>${q.chapter || ""}</td>
-                    <td>${q.year || ""}</td>
-                    <td>
+                    <td style="vertical-align: top; padding-top: 15px;">${q.exam || ""}</td>
+                    <td style="vertical-align: top; padding-top: 15px; min-width: 150px;">
+                        <div style="font-weight: 600; color: #0f172a; margin-bottom: 6px;">${q.chapter || ""}</div>
+                        <div style="font-size: 13px; color: #64748b; line-height: 1.4;">${snippet}</div>
+                    </td>
+                    <td style="vertical-align: top; padding-top: 15px;">${q.year || ""}</td>
+                    <td style="vertical-align: top; padding-top: 15px;">
                         <button class="edit-btn" onclick="editQuestion('${documentItem.id}')">Edit</button>
                         <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">Delete</button>
                     </td>
@@ -640,6 +660,7 @@ async function loadQuestionsTable() {
         console.error("Failed to load table", err);
     }
 }
+
 
 window.deleteQuestion = async function(id) {
     const confirmed = confirm("Delete this question?");
