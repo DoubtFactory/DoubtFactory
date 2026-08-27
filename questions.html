@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Questions | Doubt Factory</title>
-<meta name="description" content="Browse chemistry questions by chapter, exam, and difficulty on Doubt Factory.">
-<meta name="keywords" content="chemistry questions, JEE questions, NEET questions, chapter questions, practice questions">
+<meta name="description" content="Browse questions across Physics, Chemistry, Maths, and Biology by chapter, exam, and difficulty on Doubt Factory.">
+<meta name="keywords" content="JEE questions, NEET questions, chapter questions, practice questions, Physics, Chemistry, Maths, Biology">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="questions.html">
 <meta property="og:title" content="Questions | Doubt Factory">
-<meta property="og:description" content="Browse chemistry questions by chapter, exam, and difficulty on Doubt Factory.">
+<meta property="og:description" content="Browse questions across Physics, Chemistry, Maths, and Biology by chapter, exam, and difficulty on Doubt Factory.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://doubtfactory.example.com/questions.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Questions | Doubt Factory">
-<meta name="twitter:description" content="Browse chemistry questions by chapter, exam, and difficulty on Doubt Factory.">
+<meta name="twitter:description" content="Browse questions across Physics, Chemistry, Maths, and Biology by chapter, exam, and difficulty on Doubt Factory.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,12 +36,13 @@
 
 <header class="site-header">
 
+    <!-- Original Clean Logo -->
     <a href="index.html" class="logo">
         <h2>Doubt Factory</h2>
         <p>Turning Doubts into Clarity</p>
     </a>
 
-      <nav aria-label="Primary navigation">
+    <nav aria-label="Primary navigation">
         <a href="index.html">Home</a>
         
         <!-- EXAMS DROPDOWN -->
@@ -54,17 +55,23 @@
             </div>
         </div>
 
-        <!-- SUBJECTS DROPDOWN -->
+        <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
         <div class="nav-item-dropdown">
             <a tabindex="0" class="drop-trigger">Subjects ▾</a>
             <div class="drop-menu">
-                <a href="chapter.html?subject=Physical%20Chemistry">Physical Chemistry</a>
-                <a href="chapter.html?subject=Organic%20Chemistry">Organic Chemistry</a>
-                <a href="chapter.html?subject=Inorganic%20Chemistry">Inorganic Chemistry</a>
+                <a href="search.html?subject=Physics">Physics</a>
+                <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
+                <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                <a href="search.html?subject=Maths">Maths</a>
+                <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
+                <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
             </div>
         </div>
 
-        <!-- NEW MOCK TESTS LINK -->
+        <!-- MOCK TESTS LINK -->
         <a href="test-setup.html">Mock Tests</a>
 
         <a href="search.html">Search</a>
