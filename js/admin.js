@@ -28,7 +28,7 @@ if(menuToggle && appSidebar) {
 }
 
 /* ===========================================
-   CUSTOM CHEMISTRY EDITOR ENGINE
+   CUSTOM TEXT EDITOR ENGINE
 =========================================== */
 class EditorHistory {
     constructor() { this.undoStack = []; this.redoStack = []; }
