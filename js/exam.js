@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const yearFiltersContainer = document.getElementById("yearFilters"); 
 
     if (!selectedExam) {
-        titleElement.textContent = "All Chemistry Exams";
+        titleElement.textContent = "All Exams";
     } else {
         titleElement.textContent = `${selectedExam} Previous Year Questions`;
     }
@@ -89,17 +89,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             yearQuestions.forEach(q => {
                 const qCard = document.createElement("a");
-                qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
+                qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}`;
                 qCard.style.cssText = "display: block; padding: 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: box-shadow 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
                 
                 qCard.onmouseover = () => qCard.style.boxShadow = "0 10px 15px rgba(0,0,0,0.05)";
                 qCard.onmouseout = () => qCard.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02)";
 
-                const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..." : "Chemistry Question...";
+                const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..." : "Practice Question...";
 
                 qCard.innerHTML = `
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.chapter || 'Chemistry'}</span>
+                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.chapter || q.subject || 'Topic'}</span>
                         <span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
                     </div>
                     <h3 style="font-size: 16px; color: #334155; margin: 0; line-height: 1.5; font-weight: 500;">${snippet}</h3>
