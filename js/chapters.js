@@ -1,24 +1,51 @@
-async function loadChapters(){
+async function loadChapters() {
+    try {
+        const response = await fetch("data/chapters.json");
+        const data = await response.json();
+        const grid = document.getElementById("chapterGrid");
+        
+        if (!grid) return;
 
-    const response = await fetch("data/chapters.json");
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedSubject = urlParams.get('subject');
 
-    const data = await response.json();
+        grid.innerHTML = "";
 
-    const grid = document.getElementById("chapterGrid");
+        // Filter data if a subject is selected
+        const targetSubjects = selectedSubject 
+            ? data.filter(s => s.subject.toLowerCase() === selectedSubject.toLowerCase())
+            : data;
 
-    data[0].chapters.forEach(chapter=>{
+        if (targetSubjects.length === 0) {
+            grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #64748b;'>No chapters found for this subject.</p>";
+            return;
+        }
 
-        grid.innerHTML += `
-        <a href="search.html?chapter=${encodeURIComponent(chapter)}"
-           class="chapter-card">
+        targetSubjects.forEach(section => {
+            // If showing multiple subjects, add a section heading
+            if (!selectedSubject && data.length > 1) {
+                const heading = document.createElement("h3");
+                heading.textContent = section.subject;
+                heading.style.cssText = "grid-column: 1 / -1; margin-top: 25px; margin-bottom: 10px; color: #1565C0; font-size: 22px; font-weight: 700;";
+                grid.appendChild(heading);
+            }
 
-            ${chapter}
+            section.chapters.forEach(chapter => {
+                const card = document.createElement("a");
+                card.href = `questions.html?subject=${encodeURIComponent(section.subject)}&chapter=${encodeURIComponent(chapter)}`;
+                card.className = "chapter-card";
+                card.textContent = chapter;
+                grid.appendChild(card);
+            });
+        });
 
-        </a>
-        `;
-
-    });
-
+    } catch (error) {
+        console.error("Error loading chapters:", error);
+        const grid = document.getElementById("chapterGrid");
+        if (grid) {
+            grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #ef4444;'>Failed to load chapters.</p>";
+        }
+    }
 }
 
 loadChapters();
