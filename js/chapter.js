@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // 2. Instantly update the title
         if (!selectedSubject) {
-            titleElement.textContent = "All Chemistry Chapters";
+            titleElement.textContent = "All Chapters";
         } else {
             titleElement.textContent = `${selectedSubject} Chapters`;
         }
@@ -40,14 +40,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // 5. Count Chapters
+        // 5. Count Chapters and map subjects per chapter
         const chapterCounts = {};
+        const chapterSubjects = {};
         relevantQuestions.forEach(q => {
             if (q.chapter) {
-                // Remove weird whitespace that might break the object keys
                 const cleanChapter = q.chapter.trim(); 
                 if (!chapterCounts[cleanChapter]) {
                     chapterCounts[cleanChapter] = 0;
+                    chapterSubjects[cleanChapter] = q.subject || selectedSubject || '';
                 }
                 chapterCounts[cleanChapter]++;
             }
@@ -61,9 +62,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         uniqueChapters.forEach(chapter => {
             const count = chapterCounts[chapter];
+            const cardSubject = chapterSubjects[chapter];
             const card = document.createElement("a");
             
-            card.href = `questions.html?subject=${encodeURIComponent(selectedSubject || 'Chemistry')}&chapter=${encodeURIComponent(chapter)}`;
+            card.href = `questions.html?subject=${encodeURIComponent(cardSubject)}&chapter=${encodeURIComponent(chapter)}`;
             card.style.cssText = `display: block; padding: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);`;
             
             card.onmouseover = () => {
