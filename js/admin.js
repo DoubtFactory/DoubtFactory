@@ -1,6 +1,6 @@
 import { uploadImage } from "./cloudinary.js";
 import { getQuestions, auth, onAuthStateChanged, signOut, db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // --- AUTHENTICATION CHECK ---
 onAuthStateChanged(auth, (user) => {
