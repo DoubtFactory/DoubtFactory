@@ -1,13 +1,15 @@
+import { getQuestions } from "./firebase.js";
+
 let questions = [];
 
-async function loadQuestions() {
+export async function loadQuestions() {
+    if (questions.length > 0) return questions;
 
-    if (questions.length > 0) return;
-
-    import { getQuestions } from "./firebase.js";
-
-const questions = await getQuestions();
-
-    questions = await response.json();
-
+    try {
+        questions = await getQuestions();
+        return questions;
+    } catch (error) {
+        console.error("Error loading questions from database:", error);
+        return [];
+    }
 }
