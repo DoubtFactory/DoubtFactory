@@ -366,7 +366,7 @@ document.getElementById('generateSitemapBtn').addEventListener('click', async ()
         questions.forEach(q => {
             const qId = q.docId || q.id;
             // We use encodeURIComponent to ensure spaces in chapters/subjects don't break the XML
-            const subject = encodeURIComponent(q.subject || 'Chemistry');
+            const subject = encodeURIComponent(q.subject || 'General');
             const chapter = encodeURIComponent(q.chapter || '');
             
             // XML requires the "&" symbol to be written as "&amp;"
