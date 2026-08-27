@@ -1,5 +1,5 @@
 /* ===========================
-   DOUBT FACTORY v1.0
+   DOUBT FACTORY v1.1 - MULTI-SUBJECT
 =========================== */
 
 *{
@@ -298,48 +298,39 @@ footer{
 }
 
 @media(max-width:768px){
-
-header{
-    flex-direction:column;
-    gap:15px;
-    padding:16px 20px;
-}
-
-nav{
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-}
-
-nav a{
-    padding:8px 12px;
-}
-
-.hero{
-    padding:64px 20px 80px;
-}
-
-.search-box{
-    flex-direction:column;
-}
-
-.search-box input,
-.search-box button{
-    width:100%;
-    border-radius:12px;
-}
-
-.search-box input{
-    margin-bottom:10px;
-}
-
+    header{
+        flex-direction:column;
+        gap:15px;
+        padding:16px 20px;
+    }
+    nav{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+    }
+    nav a{
+        padding:8px 12px;
+    }
+    .hero{
+        padding:64px 20px 80px;
+    }
+    .search-box{
+        flex-direction:column;
+    }
+    .search-box input,
+    .search-box button{
+        width:100%;
+        border-radius:12px;
+    }
+    .search-box input{
+        margin-bottom:10px;
+    }
 }
 
 @media(max-width:480px){
     .hero{
         padding:56px 16px 72px;
     }
-
     .subjects,
     .latest,
     .exam-section,
@@ -348,7 +339,6 @@ nav a{
         padding-left:16px;
         padding-right:16px;
     }
-
     .question-card,
     .subject-card,
     .exam-card,
@@ -366,6 +356,7 @@ nav a{
         scroll-behavior:auto !important;
     }
 }
+
 /* ===========================
    Subject Cards
 =========================== */
@@ -416,6 +407,7 @@ nav a{
     color:#1565C0;
     font-weight:700;
 }
+
 /* ===========================
    Exam Selection
 =========================== */
@@ -497,240 +489,158 @@ nav a{
 .exam-card button:hover{
     background:#0D47A1;
 }
+
 /* ===========================
    Question Types
 =========================== */
 
 .question-types{
-
     padding:80px 8%;
     background:#f5f8fd;
-
 }
 
 .type-grid{
-
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
     gap:25px;
-
 }
 
 .type-card{
-
     background:#fff;
     border-radius:18px;
     padding:30px;
     text-align:center;
-
     box-shadow:0 10px 30px rgba(0,0,0,.08);
-
     transition:.3s;
-
 }
 
 .type-card:hover{
-
     transform:translateY(-8px);
-
 }
 
 .type-card span{
-
     font-size:48px;
-
 }
 
 .type-card h3{
-
     margin:20px 0 10px;
     color:#1565C0;
-
 }
 
 .type-card p{
-
     color:#666;
-
 }
+
 /* ===========================
    Question Cards
 =========================== */
 
 .question-preview{
-
     background:#ffffff;
     border-radius:20px;
     padding:35px;
     margin-bottom:35px;
-
     box-shadow:0 10px 35px rgba(0,0,0,.08);
-
     transition:.3s;
-
 }
 
 .question-preview:hover{
-
     transform:translateY(-8px);
-
     box-shadow:0 18px 45px rgba(37,99,235,.18);
-
 }
 
 .question-header{
-
     display:flex;
-
     gap:10px;
-
     flex-wrap:wrap;
-
     margin-bottom:18px;
-
 }
 
 .exam-tag,
 .chapter-tag,
 .difficulty{
-
     padding:8px 15px;
-
     border-radius:30px;
-
     font-size:14px;
-
     font-weight:600;
-
 }
 
 .exam-tag{
-
     background:#E3F2FD;
-
     color:#1565C0;
-
 }
 
 .chapter-tag{
-
     background:#F3E5F5;
-
     color:#7B1FA2;
-
 }
 
 .easy{
-
     background:#E8F5E9;
-
     color:#2E7D32;
-
 }
 
 .medium{
-
     background:#FFF8E1;
-
     color:#F57F17;
-
 }
 
 .hard{
-
     background:#FFEBEE;
-
     color:#C62828;
-
 }
 
 .question-preview h3{
-
     font-size:32px;
-
     margin-bottom:20px;
-
     color:#111827;
-
 }
 
 .question-meta{
-
     display:flex;
-
     gap:25px;
-
     flex-wrap:wrap;
-
     margin:25px 0;
-
     color:#666;
-
     font-size:17px;
-
 }
 
 .question-buttons{
-
     display:flex;
-
     gap:15px;
-
     flex-wrap:wrap;
-
 }
 
 .primary-btn{
-
     display:inline-block;
-
     background:#2563EB;
-
     color:white;
-
     padding:15px 30px;
-
     border-radius:10px;
-
     font-weight:600;
-
     transition:.3s;
-
 }
 
 .primary-btn:hover{
-
     background:#1D4ED8;
-
     transform:translateY(-2px);
-
 }
 
 .secondary-btn{
-
     background:#fff;
-
     color:#1565C0;
-
     border:2px solid #1565C0;
-
     padding:14px 28px;
-
     border-radius:10px;
-
     cursor:pointer;
-
     font-size:16px;
-
 }
 
 .secondary-btn:hover{
-
     background:#1565C0;
-
     color:#fff;
-
 }
+
 .chapter-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -756,6 +666,7 @@ nav a{
     background:#2563eb;
     color:#fff;
 }
+
 #questionList{
     margin-top:30px;
 }
@@ -777,6 +688,7 @@ nav a{
     color:#666;
     margin-bottom:20px;
 }
+
 /* ==========================
    Question Filters
 ========================== */
@@ -806,6 +718,7 @@ nav a{
     border-radius:10px;
     font-size:16px;
 }
+
 /* ===========================
    Question List Cards v1.1
 =========================== */
@@ -1717,7 +1630,7 @@ body.dark footer{
 .question-table th, .question-table td { text-align: left; padding: 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; color: #334155; }
 .question-table th { background: #f8fafc; color: #64748b; font-weight: 600; font-size: 12px; text-transform: uppercase; }
 
-/* Custom Toolbar CSS */
+/* Custom Toolbar CSS (Universal Equation/Text Editor) */
 .chem-editor-wrapper { display: flex; flex-direction: column; width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; overflow: hidden; }
 .chem-editor-wrapper:focus-within { border-color: #1a56db; }
 .custom-editor-toolbar { display: flex; flex-wrap: nowrap; gap: 4px; padding: 6px 8px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1914,7 +1827,7 @@ html, body {
         display: flex;
     }
 }
-/* 5. Mobile Polish & Navigation Fixes */
+
 /* =========================================
    MOBILE POLISH & TOUCH OPTIMIZATIONS
    ========================================= */
@@ -1938,7 +1851,7 @@ html, body {
         box-sizing: border-box !important;
     }
     
-    nav[aria-label="Primary navigation"] a {
+    nav[aria-label="Primary navigation"] a, nav[aria-label="Primary navigation"] .nav-item-dropdown {
         flex: 0 0 auto !important;
         white-space: nowrap !important;
         margin: 0 10px 0 0 !important;
@@ -1968,7 +1881,7 @@ html, body {
     }
     
     /* --- 3. Fix the Giant Homepage Search Box --- */
-    input[placeholder*="Search Chemistry"] {
+    input[placeholder*="Search"] {
         height: 55px !important;
         max-height: 55px !important; 
         border-radius: 8px !important;
@@ -1977,7 +1890,7 @@ html, body {
         box-sizing: border-box !important;
     }
 
-    input[placeholder*="Search Chemistry"] + button,
+    input[placeholder*="Search"] + button,
     .hero-search button,
     .search-input-wrap button {
         height: 55px !important;
