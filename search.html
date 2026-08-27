@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search Chemistry Questions | Doubt Factory</title>
-<meta name="description" content="Search chemistry questions quickly by topic, chapter, exam, or keyword on Doubt Factory.">
-<meta name="keywords" content="search chemistry questions, chemistry search, JEE search, NEET search, question lookup">
+<title>Search Questions | Doubt Factory</title>
+<meta name="description" content="Search questions quickly by topic, chapter, exam, or keyword across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
+<meta name="keywords" content="search questions, JEE search, NEET search, question lookup, Physics, Chemistry, Maths, Biology">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="search.html">
-<meta property="og:title" content="Search Chemistry Questions | Doubt Factory">
-<meta property="og:description" content="Search chemistry questions quickly by topic, chapter, exam, or keyword on Doubt Factory.">
+<meta property="og:title" content="Search Questions | Doubt Factory">
+<meta property="og:description" content="Search questions quickly by topic, chapter, exam, or keyword across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://doubtfactory.example.com/search.html">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Search Chemistry Questions | Doubt Factory">
-<meta name="twitter:description" content="Search chemistry questions quickly by topic, chapter, exam, or keyword on Doubt Factory.">
+<meta name="twitter:title" content="Search Questions | Doubt Factory">
+<meta name="twitter:description" content="Search questions quickly by topic, chapter, exam, or keyword across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,6 +36,7 @@
 <!-- ADDED THE GLOBAL HEADER & NAVIGATION HERE -->
 <header class="site-header">
 
+    <!-- Original Clean Logo -->
     <a href="index.html" class="logo">
         <h2>Doubt Factory</h2>
         <p>Turning Doubts into Clarity</p>
@@ -54,13 +55,19 @@
             </div>
         </div>
 
-        <!-- SUBJECTS DROPDOWN -->
+        <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
         <div class="nav-item-dropdown">
             <a tabindex="0" class="drop-trigger">Subjects ▾</a>
             <div class="drop-menu">
-                <a href="chapter.html?subject=Physical%20Chemistry">Physical Chemistry</a>
-                <a href="chapter.html?subject=Organic%20Chemistry">Organic Chemistry</a>
-                <a href="chapter.html?subject=Inorganic%20Chemistry">Inorganic Chemistry</a>
+                <a href="search.html?subject=Physics">Physics</a>
+                <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
+                <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                <a href="search.html?subject=Maths">Maths</a>
+                <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
+                <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
             </div>
         </div>
 
@@ -79,21 +86,21 @@
     <main id="mainContent" class="container search-shell">
 
         <div class="search-hero">
-            <h2>Search Chemistry Questions</h2>
+            <h2>Search Questions</h2>
             <p>Find the right question quickly by topic, chapter, exam, or keyword.</p>
         </div>
 
         <form class="search-input-wrap" role="search">
-            <label class="sr-only" for="searchBox">Search chemistry questions</label>
+            <label class="sr-only" for="searchBox">Search questions</label>
             <input
                 type="text"
                 id="searchBox"
-                placeholder="Search any chemistry question..."
+                placeholder="Search Physics, Chemistry, Maths, Biology..."
                 autocomplete="off"
-                aria-label="Search chemistry questions"
+                aria-label="Search questions"
                 aria-controls="searchResults"
             >
-            <button type="submit" id="searchButton" aria-label="Search chemistry questions">Search</button>
+            <button type="submit" id="searchButton" aria-label="Search questions">Search</button>
         </form>
 
         <div class="search-suggestions" id="suggestions"></div>
@@ -108,10 +115,18 @@
         <!-- Dropdown Filters for Subject and Difficulty -->
         <div class="search-dropdowns" style="display: flex; gap: 15px; margin-top: 15px; justify-content: center; flex-wrap: wrap;">
             <select id="subjectFilter" aria-label="Filter by Subject" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; background: white; min-width: 180px;">
-                <option value="">All Branches</option>
-                <option value="Physical Chemistry">Physical Chemistry</option>
-                <option value="Organic Chemistry">Organic Chemistry</option>
-                <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                <option value="">All Subjects</option>
+                <option value="Physics">Physics</option>
+                <optgroup label="Chemistry">
+                    <option value="Physical Chemistry">Physical Chemistry</option>
+                    <option value="Organic Chemistry">Organic Chemistry</option>
+                    <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                </optgroup>
+                <option value="Maths">Maths</option>
+                <optgroup label="Biology">
+                    <option value="Botany">Botany</option>
+                    <option value="Zoology">Zoology</option>
+                </optgroup>
             </select>
 
             <select id="difficultyFilter" aria-label="Filter by Difficulty" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; background: white; min-width: 180px;">
