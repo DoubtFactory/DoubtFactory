@@ -778,3 +778,116 @@ window.editQuestion = async function(id) {
         alert(err.message);
     }
 };
+/* ===========================================
+   BULK JSON IMPORTER (BATCH FIRESTORE)
+=========================================== */
+const bulkUploadBtn = document.getElementById("startBulkUploadBtn");
+const bulkJsonInput = document.getElementById("bulkJsonInput");
+const clearBulkBtn = document.getElementById("clearBulkBtn");
+const bulkStatus = document.getElementById("bulkStatusText");
+const bulkProgressContainer = document.getElementById("bulkProgressBarContainer");
+const bulkProgressBar = document.getElementById("bulkProgressBar");
+
+if (clearBulkBtn && bulkJsonInput) {
+    clearBulkBtn.addEventListener("click", () => {
+        bulkJsonInput.value = "";
+        if (bulkStatus) bulkStatus.textContent = "";
+        if (bulkProgressContainer) bulkProgressContainer.style.display = "none";
+    });
+}
+
+if (bulkUploadBtn && bulkJsonInput) {
+    bulkUploadBtn.addEventListener("click", async () => {
+        const rawText = bulkJsonInput.value.trim();
+        if (!rawText) {
+            alert("Please paste a valid JSON array first.");
+            return;
+        }
+
+        let parsedData;
+        try {
+            parsedData = JSON.parse(rawText);
+            if (!Array.isArray(parsedData)) {
+                throw new Error("JSON root must be an array of questions [ { ... }, { ... } ].");
+            }
+        } catch (err) {
+            alert("Invalid JSON format: " + err.message);
+            return;
+        }
+
+        if (parsedData.length === 0) {
+            alert("The JSON array is empty.");
+            return;
+        }
+
+        const confirmUpload = confirm(`Ready to upload ${parsedData.length} questions to Firebase?`);
+        if (!confirmUpload) return;
+
+        bulkUploadBtn.disabled = true;
+        bulkUploadBtn.style.opacity = "0.6";
+        if (bulkProgressContainer) bulkProgressContainer.style.display = "block";
+        if (bulkProgressBar) bulkProgressBar.style.width = "0%";
+        if (bulkStatus) bulkStatus.textContent = `Uploading 0 of ${parsedData.length}...`;
+
+        try {
+            const batchSize = 400; // Firestore limit is 500 per batch
+            let uploadedCount = 0;
+
+            for (let i = 0; i < parsedData.length; i += batchSize) {
+                const chunk = parsedData.slice(i, i + batchSize);
+                const batch = writeBatch(db);
+
+                chunk.forEach((item, idx) => {
+                    const docRef = doc(collection(db, "questions"));
+                    
+                    // Normalize data to match Doubt Factory schema
+                    const standardizedDoc = {
+                        id: Date.now() + (i + idx),
+                        timestamp: Date.now() + (i + idx),
+                        subject: item.subject || "Chemistry",
+                        chapter: item.chapter || "General",
+                        exam: item.exam || "JEE/NEET",
+                        year: Number(item.year) || new Date().getFullYear(),
+                        difficulty: item.difficulty || "Medium",
+                        type: item.type || "Single Correct",
+                        question: item.question || "",
+                        questionImage: item.questionImage || "",
+                        options: Array.isArray(item.options) ? item.options : ["", "", "", ""],
+                        optionImages: item.optionImages || { A: "", B: "", C: "", D: "" },
+                        answer: typeof item.answer === "number" ? item.answer : 0,
+                        solution: item.solution || "",
+                        solutionImage: item.solutionImage || "",
+                        youtube: item.youtube ? extractVideoId(item.youtube) : "",
+                        views: 0,
+                        likes: 0
+                    };
+
+                    batch.set(docRef, standardizedDoc);
+                });
+
+                await batch.commit();
+                uploadedCount += chunk.length;
+
+                const percent = Math.round((uploadedCount / parsedData.length) * 100);
+                if (bulkProgressBar) bulkProgressBar.style.width = `${percent}%`;
+                if (bulkStatus) bulkStatus.textContent = `Uploaded ${uploadedCount} of ${parsedData.length} (${percent}%)...`;
+            }
+
+            if (bulkStatus) bulkStatus.textContent = `✅ Successfully imported ${parsedData.length} questions!`;
+            showToast(`Imported ${parsedData.length} questions successfully!`, "success");
+            bulkJsonInput.value = "";
+
+            // Refresh table and dashboard
+            try { await loadQuestionsTable(); } catch(e) {}
+            try { await updateDashboard(); } catch(e) {}
+
+        } catch (error) {
+            console.error("Bulk upload failed:", error);
+            if (bulkStatus) bulkStatus.textContent = "❌ Upload failed: " + error.message;
+            alert("Error during bulk upload: " + error.message);
+        } finally {
+            bulkUploadBtn.disabled = false;
+            bulkUploadBtn.style.opacity = "1";
+        }
+    });
+}
