@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             ` : '';
 
             const card = document.createElement("a");
-            card.href = `question.html?id=${docId}&subject=${encodeURIComponent(q.subject || 'Physics')}&chapter=${encodeURIComponent(q.chapter || '')}`;
+            card.href = `question.html?id=${docId}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}`;
             card.className = "question-preview";
             card.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: inherit; height: 100%; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; background: #fff; transition: transform 0.2s ease, box-shadow 0.2s ease;";
 
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                     <h3 style="font-size: 17px; color: #0f172a; margin: 0 0 15px 0; line-height: 1.5; font-weight: 600;">${snippet}</h3>
                 </div>
-                <div style="font-size: 13px; color: #64748b; font-weight: 600; margin-top: auto;">${q.chapter || 'Topic'}</div>
+                <div style="font-size: 13px; color: #64748b; font-weight: 600; margin-top: auto;">${q.chapter || q.subject || 'Topic'}</div>
             `;
             container.appendChild(card);
         });
