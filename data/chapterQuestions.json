@@ -9,18 +9,34 @@
   },
   {
     "id": 2,
-    "subject": "Physical Chemistry",
-    "chapter": "Thermodynamics",
+    "subject": "Physics",
+    "chapter": "Electrostatics",
     "exam": "JEE Advanced",
     "year": 2023,
-    "title": "A Carnot engine operates between two heat reservoirs."
+    "title": "Two point charges q1 and q2 are placed at a distance r in a vacuum. Calculate the electrostatic force."
   },
   {
     "id": 3,
-    "subject": "Physical Chemistry",
-    "chapter": "Thermodynamics",
-    "exam": "NEET",
+    "subject": "Maths",
+    "chapter": "Calculus",
+    "exam": "JEE Main",
     "year": 2022,
-    "title": "Calculate the work done during reversible expansion."
+    "title": "Evaluate the definite integral of f(x) = x^2 * e^x from 0 to 1."
+  },
+  {
+    "id": 4,
+    "subject": "Botany",
+    "chapter": "Plant Physiology",
+    "exam": "NEET",
+    "year": 2024,
+    "title": "Which of the following molecules acts as the primary CO2 acceptor in the C4 pathway?"
+  },
+  {
+    "id": 5,
+    "subject": "Zoology",
+    "chapter": "Human Reproduction",
+    "exam": "NEET",
+    "year": 2023,
+    "title": "Identify the correct sequence of cell stages during the process of spermatogenesis."
   }
 ]
