@@ -24,7 +24,7 @@ async function load() {
         '<div class="empty-state loading">Loading questions…</div>';
 
     questions = await getQuestions();
-console.log("Questions loaded:", questions);
+    console.log("Questions loaded:", questions);
 
     if (searchBox && initialQuery) {
         searchBox.value = initialQuery;
@@ -41,7 +41,7 @@ function normalizeText(value) {
 function getFilteredQuestions(keyword) {
     const term = normalizeText(keyword);
     
-    // Grab the current values from the new dropdowns
+    // Grab the current values from the dropdowns
     const activeSubject = subjectFilter ? subjectFilter.value.toLowerCase() : "";
     const activeDifficulty = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
 
@@ -52,7 +52,7 @@ function getFilteredQuestions(keyword) {
         const exam = normalizeText(q.exam);
         const difficulty = normalizeText(q.difficulty);
 
-        // 1. Exam Match (from your existing chips)
+        // 1. Exam Match (from filter chips)
         const matchesExam = activeFilter === "All" || exam === activeFilter.toLowerCase();
         
         // 2. Subject Match
@@ -158,7 +158,7 @@ function renderResults() {
                 <span>${q.subject || "Subject"}</span>
                 <span>${q.difficulty || "Medium"}</span>
             </div>
-            <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject)}&chapter=${encodeURIComponent(q.chapter)}">Solve Question →</a>
+            <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}">Solve Question →</a>
         `;
         fragment.appendChild(card);
     });
