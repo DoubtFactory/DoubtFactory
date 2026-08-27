@@ -96,13 +96,13 @@ function renderQuestions() {
 
     result.forEach((q, index) => {
         const qCard = document.createElement("a");
-        qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'Chemistry')}&chapter=${encodeURIComponent(q.chapter || '')}`;
+        qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}`;
         qCard.style.cssText = "display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 100%;";
         
         qCard.onmouseover = () => { qCard.style.boxShadow = "0 10px 15px rgba(0,0,0,0.05)"; qCard.style.transform = "translateY(-4px)"; qCard.style.borderColor = "#bae6fd"; };
         qCard.onmouseout = () => { qCard.style.boxShadow = "0 4px 6px rgba(0,0,0,0.02)"; qCard.style.transform = "translateY(0)"; qCard.style.borderColor = "#e2e8f0"; };
 
-        const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Chemistry Question...";
+        const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Practice Question...";
 
         qCard.innerHTML = `
             <div>
