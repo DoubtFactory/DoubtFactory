@@ -7,53 +7,80 @@
     "chapter": "Thermodynamics",
     "difficulty": "Medium",
     "type": "Single Correct",
-
     "question": "One mole of an ideal gas expands isothermally from 10 L to 20 L at 300 K. The work done is:",
-
     "options": [
       "0",
       "nRT ln2",
       "300 J",
       "600 J"
     ],
-
     "answer": 1,
-
     "solution": "For reversible isothermal expansion, W = nRT ln(V₂/V₁)=nRT ln2.",
-
-    "youtube":"dQw4w9WgXcQ",
-
-    "views": 0,
-
-    "likes": 0
+    "youtube": "dQw4w9WgXcQ",
+    "views": 150,
+    "likes": 12
   },
-
   {
     "id": 2,
     "exam": "NEET",
     "year": 2023,
-    "subject": "Physical Chemistry",
-    "chapter": "Thermodynamics",
+    "subject": "Physics",
+    "chapter": "Electrostatics",
     "difficulty": "Easy",
     "type": "Single Correct",
-
-    "question": "The SI unit of entropy is:",
-
+    "question": "The electric field inside a uniformly charged spherical shell is:",
     "options": [
-      "J K⁻¹ mol⁻¹",
-      "J",
-      "cal",
-      "atm"
+      "Zero",
+      "Constant but non-zero",
+      "Directly proportional to the radius",
+      "Inversely proportional to the square of radius"
     ],
-
     "answer": 0,
-
-    "solution": "The SI unit of molar entropy is J mol⁻¹ K⁻¹.",
-
-    "youtube":"dQw4w9WgXcQ",
-
-    "views": 0,
-
-    "likes": 0
+    "solution": "According to Gauss's Law, the charge enclosed by a Gaussian surface inside a uniformly charged spherical shell is zero. Therefore, the electric field is zero everywhere inside the shell.",
+    "youtube": "dQw4w9WgXcQ",
+    "views": 85,
+    "likes": 5
+  },
+  {
+    "id": 3,
+    "exam": "JEE Advanced",
+    "year": 2022,
+    "subject": "Maths",
+    "chapter": "Calculus",
+    "difficulty": "Hard",
+    "type": "Single Correct",
+    "question": "What is the derivative of e^x with respect to x?",
+    "options": [
+      "x * e^(x-1)",
+      "e^x",
+      "ln(x)",
+      "1/x"
+    ],
+    "answer": 1,
+    "solution": "A unique property of the exponential function e^x is that it is its own derivative.",
+    "youtube": "dQw4w9WgXcQ",
+    "views": 210,
+    "likes": 18
+  },
+  {
+    "id": 4,
+    "exam": "NEET",
+    "year": 2024,
+    "subject": "Zoology",
+    "chapter": "Human Reproduction",
+    "difficulty": "Medium",
+    "type": "Single Correct",
+    "question": "The process of release of an ovum from a mature Graafian follicle is called:",
+    "options": [
+      "Implantation",
+      "Gestation",
+      "Ovulation",
+      "Parturition"
+    ],
+    "answer": 2,
+    "solution": "Ovulation is the process where a mature Graafian follicle ruptures to release the secondary oocyte (ovum) from the ovary.",
+    "youtube": "dQw4w9WgXcQ",
+    "views": 45,
+    "likes": 2
   }
 ]
