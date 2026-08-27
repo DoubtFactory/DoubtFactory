@@ -1,5 +1,10 @@
 [
   {
+    "name": "Physics",
+    "icon": "🧲",
+    "color": "#ef4444"
+  },
+  {
     "name": "Physical Chemistry",
     "icon": "⚛️",
     "color": "#2563eb"
@@ -11,7 +16,22 @@
   },
   {
     "name": "Inorganic Chemistry",
-    "icon": "🧬",
+    "icon": "🔬",
     "color": "#7c3aed"
+  },
+  {
+    "name": "Maths",
+    "icon": "📐",
+    "color": "#f59e0b"
+  },
+  {
+    "name": "Botany",
+    "icon": "🌿",
+    "color": "#10b981"
+  },
+  {
+    "name": "Zoology",
+    "icon": "🧬",
+    "color": "#06b6d4"
   }
 ]
