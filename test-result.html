@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Scorecard | Doubt Factory</title>
+    <meta name="description" content="View your performance report and test scorecard for your JEE or NEET practice session on Doubt Factory.">
+    <meta name="keywords" content="test result, scorecard, JEE practice, NEET practice, mock test results, performance report">
+    <meta name="robots" content="noindex,follow"> <!-- Keeps student scorecards off Google search results -->
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
+
     <style>
         .result-container { max-width: 800px; margin: 40px auto; padding: 20px; }
         .score-card { background: white; border-radius: 16px; padding: 40px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 6px solid #1565C0; }
@@ -19,7 +37,7 @@
         .stat-unattempted { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
         .stat-box h2 { font-size: 28px; margin: 5px 0 0; }
         
-        .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+        .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
         .btn-home { padding: 12px 24px; background: #f1f5f9; color: #334155; border-radius: 8px; text-decoration: none; font-weight: 600; }
         .btn-retry { padding: 12px 24px; background: #1565C0; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; }
     </style>
@@ -27,7 +45,45 @@
 <body>
 
     <header class="site-header">
-        <a href="index.html" class="logo"><h2>Doubt Factory</h2></a>
+        <!-- Original Clean Logo -->
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+
+        <nav aria-label="Primary navigation">
+            <a href="index.html">Home</a>
+            
+            <!-- EXAMS DROPDOWN -->
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
+
+            <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="search.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
+                    <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <a href="search.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
+                    <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                    <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                </div>
+            </div>
+
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
     </header>
 
     <main class="result-container">
@@ -40,7 +96,6 @@
             </div>
             
             <p style="color: #64748b; font-size: 16px;">Based on the standard marking scheme (+4/-1)</p>
-
 
             <div class="stats-grid">
                 <div class="stat-box stat-correct">
@@ -128,6 +183,39 @@
             
             // Clean up the memory so they can't refresh and cheat the system
             sessionStorage.removeItem('df_cbt_test');
+        });
+    </script>
+    
+    <script>
+        // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
+        document.querySelectorAll('.drop-trigger').forEach(trigger => {
+            const dropMenu = trigger.nextElementSibling;
+            
+            trigger.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    
+                    if (dropMenu.classList.contains('mobile-popup-active')) {
+                        dropMenu.classList.remove('mobile-popup-active');
+                    } else {
+                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+                        
+                        if (dropMenu.parentElement !== document.body) {
+                            document.body.appendChild(dropMenu);
+                        }
+                        
+                        setTimeout(() => {
+                            dropMenu.classList.add('mobile-popup-active');
+                        }, 10);
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
+                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+            }
         });
     </script>
 </body>
