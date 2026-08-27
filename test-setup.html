@@ -4,7 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Setup | Doubt Factory</title>
+    <meta name="description" content="Configure a custom practice test or PYQ paper across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
+    <meta name="keywords" content="test setup, mock test generator, JEE practice test, NEET mock test, Physics, Chemistry, Maths, Biology">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="test-setup.html">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
+
     <style>
         .setup-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 40px auto; border-top: 6px solid #1565C0; }
         .setup-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
@@ -34,10 +49,47 @@
 </head>
 <body>
     <header class="site-header">
+        <!-- Original Clean Logo -->
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
+
+        <nav aria-label="Primary navigation">
+            <a href="index.html">Home</a>
+            
+            <!-- EXAMS DROPDOWN -->
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
+
+            <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="search.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
+                    <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <a href="search.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
+                    <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                    <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                </div>
+            </div>
+
+            <!-- MOCK TESTS LINK -->
+            <a href="test-setup.html">Mock Tests</a>
+
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
     </header>
 
     <main class="container">
@@ -81,10 +133,18 @@
                 <div class="input-group">
                     <label>Select Subject</label>
                     <select id="customSubject">
-                        <option value="All">All Chemistry Branches</option>
-                        <option value="Physical Chemistry">Physical Chemistry</option>
-                        <option value="Organic Chemistry">Organic Chemistry</option>
-                        <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                        <option value="All">All Subjects</option>
+                        <option value="Physics">Physics</option>
+                        <optgroup label="Chemistry">
+                            <option value="Physical Chemistry">Physical Chemistry</option>
+                            <option value="Organic Chemistry">Organic Chemistry</option>
+                            <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                        </optgroup>
+                        <option value="Maths">Maths</option>
+                        <optgroup label="Biology">
+                            <option value="Botany">Botany</option>
+                            <option value="Zoology">Zoology</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="input-group">
@@ -341,6 +401,35 @@
             sessionStorage.setItem('df_cbt_duration', timeSelected);
             
             window.location.href = "cbt.html";
+        });
+    </script>
+    
+    <script>
+        // Ultimate Mobile Dropdown Teleporter
+        document.querySelectorAll('.drop-trigger').forEach(trigger => {
+            const dropMenu = trigger.nextElementSibling;
+            trigger.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    if (dropMenu.classList.contains('mobile-popup-active')) {
+                        dropMenu.classList.remove('mobile-popup-active');
+                    } else {
+                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+                        if (dropMenu.parentElement !== document.body) {
+                            document.body.appendChild(dropMenu);
+                        }
+                        setTimeout(() => {
+                            dropMenu.classList.add('mobile-popup-active');
+                        }, 10);
+                    }
+                }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
+                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+            }
         });
     </script>
 </body>
