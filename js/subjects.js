@@ -14,9 +14,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // 2. Tally up how many questions exist for each subject
         const counts = {
+            "Physics": 0,
             "Physical Chemistry": 0,
             "Organic Chemistry": 0,
-            "Inorganic Chemistry": 0
+            "Inorganic Chemistry": 0,
+            "Maths": 0,
+            "Botany": 0,
+            "Zoology": 0
         };
 
         questions.forEach(q => {
@@ -27,8 +31,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
 
-        // 3. Define the UI and descriptions for the three main Chemistry pillars
+        // 3. Define the UI and descriptions for all subjects
         const subjects = [
+            {
+                name: "Physics",
+                icon: "🧲",
+                desc: "Master mechanics, electrostatics, optics, and modern physics for JEE & NEET.",
+                color: "#ef4444", // Red
+                bg: "#fef2f2"
+            },
             {
                 name: "Physical Chemistry",
                 icon: "⚗️",
@@ -49,6 +60,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                 desc: "Conquer periodic trends, chemical bonding, coordination compounds, and s/p/d/f block elements.",
                 color: "#8b5cf6", // Purple
                 bg: "#f5f3ff"
+            },
+            {
+                name: "Maths",
+                icon: "📐",
+                desc: "Conquer calculus, algebra, coordinate geometry, and vectors for JEE Main & Advanced.",
+                color: "#f59e0b", // Amber
+                bg: "#fffbeb"
+            },
+            {
+                name: "Botany",
+                icon: "🌿",
+                desc: "Master plant physiology, genetics, ecology, and cell biology for NEET preparation.",
+                color: "#059669", // Emerald
+                bg: "#ecfdf5"
+            },
+            {
+                name: "Zoology",
+                icon: "🔬",
+                desc: "Excel in human physiology, human reproduction, animal kingdom, and evolution for NEET.",
+                color: "#06b6d4", // Cyan
+                bg: "#ecfeff"
             }
         ];
 
