@@ -1,48 +1,118 @@
 [
   {
+    "subject": "Physics",
+    "chapters": [
+      "Physical World and Measurement",
+      "Kinematics",
+      "Laws of Motion",
+      "Work, Energy and Power",
+      "Rotational Motion",
+      "Gravitation",
+      "Properties of Bulk Matter",
+      "Thermodynamics",
+      "Kinetic Theory of Gases",
+      "Oscillations and Waves",
+      "Electrostatics",
+      "Current Electricity",
+      "Magnetic Effects of Current",
+      "Electromagnetic Induction",
+      "Alternating Current",
+      "Electromagnetic Waves",
+      "Ray Optics and Optical Instruments",
+      "Wave Optics",
+      "Dual Nature of Radiation and Matter",
+      "Atoms and Nuclei",
+      "Electronic Devices"
+    ]
+  },
+  {
     "subject": "Physical Chemistry",
     "chapters": [
-      	"Mole Concept",
-     	 "Atomic Structure",
-	"Gaseous State",
-	"Redox & Equivalent Concept",
-     	 "Thermodynamics",
-     	 "Chemical Equilibrium",
-     	 "Ionic Equilibrium",
-     	 "Electrochemistry",
-     	 "Chemical Kinetics",
-     	 "Solutions",
-      	"Surface Chemistry",
-	"Solid State"
+      "Mole Concept",
+      "Atomic Structure",
+      "Gaseous State",
+      "Redox & Equivalent Concept",
+      "Thermodynamics",
+      "Chemical Equilibrium",
+      "Ionic Equilibrium",
+      "Electrochemistry",
+      "Chemical Kinetics",
+      "Solutions",
+      "Surface Chemistry",
+      "Solid State"
     ]
   },
   {
     "subject": "Organic Chemistry",
     "chapters": [
-       "Nomenclature",
-	"General Organic Chemistry",
+      "Nomenclature",
+      "General Organic Chemistry",
       "Hydrocarbons",
       "Haloalkanes and Haloarenes",
       "Alcohols Phenols and Ethers",
       "Aldehydes Ketones and Carboxylic Acids",
       "Amines",
       "Biomolecules",
-	 "Chemistry in Everyday Life",
+      "Chemistry in Everyday Life",
       "Polymers"
     ]
   },
   {
     "subject": "Inorganic Chemistry",
     "chapters": [
-	 "Periodic Table",
+      "Periodic Table",
       "Chemical Bonding",
       "Coordination Compounds",
       "p-Block",
       "d and f Block",
-	 "Salt Analysis",
+      "Salt Analysis",
       "Metallurgy",
       "Hydrogen",
       "s-Block"
+    ]
+  },
+  {
+    "subject": "Maths",
+    "chapters": [
+      "Sets, Relations and Functions",
+      "Complex Numbers",
+      "Matrices and Determinants",
+      "Quadratic Equations",
+      "Permutations and Combinations",
+      "Binomial Theorem",
+      "Sequence and Series",
+      "Calculus",
+      "Coordinate Geometry",
+      "Vector Algebra",
+      "3D Geometry",
+      "Probability",
+      "Trigonometry"
+    ]
+  },
+  {
+    "subject": "Botany",
+    "chapters": [
+      "Diversity in Living World",
+      "Structural Organisation in Plants",
+      "Cell Structure and Function",
+      "Plant Physiology",
+      "Reproduction in Plants",
+      "Genetics and Evolution",
+      "Biology and Human Welfare",
+      "Biotechnology",
+      "Ecology and Environment"
+    ]
+  },
+  {
+    "subject": "Zoology",
+    "chapters": [
+      "Animal Kingdom",
+      "Structural Organisation in Animals",
+      "Human Physiology",
+      "Human Reproduction",
+      "Evolution",
+      "Human Health and Disease",
+      "Biotechnology"
     ]
   }
 ]
