@@ -1,4 +1,4 @@
-﻿import {
+import {
     getQuestionById,
     getQuestions,
     getComments,
@@ -187,12 +187,14 @@ function showQuestion() {
     if (nextButton) nextButton.disabled = currentIndex === questions.length - 1;
 
     loadComments();
-// --- 1. DYNAMIC SEO UPDATE & Q&A SCHEMA ---
+
+    // --- 1. DYNAMIC SEO UPDATE & Q&A SCHEMA ---
     const cleanQText = (q.question || "").replace(/<[^>]*>?/gm, '').trim();
     const shortTitleSnippet = cleanQText.length > 40 ? cleanQText.substring(0, 40) + "..." : cleanQText;
+    const subjectLabel = q.subject || "General";
 
     // Automatically update the Browser Tab & Google Search Title
-    document.title = `${shortTitleSnippet} | ${q.chapter} for JEE/NEET Chemistry`;
+    document.title = `${shortTitleSnippet} | ${q.chapter || subjectLabel} for JEE/NEET`;
 
     // Automatically update the Meta Description for Google Search Results
     let metaDescription = document.querySelector('meta[name="description"]');
@@ -201,7 +203,7 @@ function showQuestion() {
         metaDescription.name = "description";
         document.head.appendChild(metaDescription);
     }
-    metaDescription.content = `Practice this ${q.difficulty || "Medium"} ${q.chapter} question for JEE/NEET Chemistry on Doubt Factory. ${cleanQText.substring(0, 120)}...`;
+    metaDescription.content = `Practice this ${q.difficulty || "Medium"} ${q.chapter || subjectLabel} question for JEE/NEET on Doubt Factory. ${cleanQText.substring(0, 120)}...`;
 
     // Remove old schema if the student clicked "Next Question"
     const existingSchema = document.getElementById("qa-schema");
@@ -240,7 +242,7 @@ function showQuestion() {
         const contentImages = document.querySelectorAll('.question-content img, .solution-content img, #questionContainer img');
         contentImages.forEach((img, index) => {
             if (!img.alt || img.alt.toLowerCase().includes('image') || img.alt.trim() === '') {
-                img.alt = `${q.chapter || "Chemistry"} technical diagram for JEE/NEET Chemistry - Figure ${index + 1}`;
+                img.alt = `${q.chapter || subjectLabel} technical diagram for JEE/NEET - Figure ${index + 1}`;
             }
             img.style.maxWidth = "100%";
             img.style.height = "auto";
@@ -258,8 +260,8 @@ function showQuestion() {
         tag.setAttribute('content', content);
     };
 
-    setOpenGraphTag('og:title', `${shortTitleSnippet} | ${q.chapter} for JEE/NEET Chemistry`);
-    setOpenGraphTag('og:description', `Practice this ${q.difficulty || "Medium"} ${q.chapter} question on Doubt Factory. Check out the step-by-step solution!`);
+    setOpenGraphTag('og:title', `${shortTitleSnippet} | ${q.chapter || subjectLabel} for JEE/NEET`);
+    setOpenGraphTag('og:description', `Practice this ${q.difficulty || "Medium"} ${q.chapter || subjectLabel} question on Doubt Factory. Check out the step-by-step solution!`);
     setOpenGraphTag('og:url', window.location.href);
     setOpenGraphTag('og:type', 'website');
 
