@@ -10,18 +10,17 @@
     
     <style>
         /* =========================================
-           MINIMAL DARK THEME OVERRIDES (Homepage Only)
+           MINIMAL BLUE/WHITE THEME OVERRIDES
            ========================================= */
         :root {
-            --bg-dark: #0f141e;
-            --bg-card: #192132;
-            --bg-card-inner: #242c3d;
-            --text-main: #ffffff;
-            --text-muted: #8b9bb4;
-            --accent-orange: #ff7a59;
-            --accent-purple: #a855f7;
-            --accent-pink: #ec4899;
-            --border-dark: #2a3441;
+            --bg-dark: #0B1120;
+            --bg-card: #151E32;
+            --bg-card-inner: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --accent-blue: #3B82F6;
+            --accent-light-blue: #60A5FA;
+            --border-dark: #2A3441;
         }
 
         body#home-body {
@@ -38,7 +37,7 @@
             background: var(--bg-dark);
             border-bottom: 1px solid var(--border-dark);
             padding: 15px 20px;
-            z-index: 1001; /* Forces the header & sidebar to sit ABOVE the blur overlay */
+            z-index: 1001; 
         }
         #home-body .site-header .logo h2, 
         #home-body .site-header .logo p {
@@ -50,8 +49,8 @@
         }
         #home-body .site-header nav a:hover, 
         #home-body .site-header .drop-trigger:hover {
-            color: var(--text-main);
-            background: rgba(255,255,255,0.05);
+            color: var(--accent-light-blue);
+            background: rgba(59, 130, 246, 0.1);
         }
 
         /* Mobile Sidebar Elements */
@@ -89,7 +88,7 @@
             letter-spacing: -0.5px;
         }
         .hero-title span {
-            color: var(--accent-orange);
+            color: var(--accent-blue);
         }
         .hero-subtitle {
             font-size: 16px;
@@ -105,7 +104,7 @@
         }
         .search-container input {
             width: 100%;
-            background: transparent;
+            background: var(--bg-card);
             border: 1px solid var(--border-dark);
             border-radius: 12px;
             padding: 16px 20px 16px 45px;
@@ -116,14 +115,15 @@
             box-sizing: border-box;
         }
         .search-container input:focus {
-            border-color: var(--accent-orange);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
         .search-container svg {
             position: absolute;
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
+            color: var(--accent-blue);
         }
 
         /* Horizontal Scroll Cards */
@@ -160,7 +160,10 @@
             scroll-snap-align: start;
             flex-shrink: 0;
             border: 1px solid var(--border-dark);
-            transition: transform 0.2s;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .exam-card:hover {
+            border-color: var(--accent-blue);
         }
         .exam-card:active {
             transform: scale(0.98);
@@ -172,6 +175,7 @@
             display: flex;
             align-items: flex-end;
             justify-content: flex-end;
+            background: linear-gradient(to bottom right, var(--bg-card-inner), var(--bg-dark));
         }
         .badge {
             position: absolute;
@@ -181,10 +185,9 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            background: rgba(59, 130, 246, 0.15); 
+            color: var(--accent-light-blue);
         }
-        .badge-orange { background: rgba(255, 122, 89, 0.15); color: var(--accent-orange); }
-        .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
-        .badge-pink { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
         
         .card-bottom {
             padding: 20px;
@@ -219,13 +222,13 @@
         .feature-icon {
             width: 48px;
             height: 48px;
-            background: var(--bg-card-inner);
+            background: rgba(59, 130, 246, 0.1);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: var(--accent-orange);
+            color: var(--accent-blue);
         }
         .feature-text h4 {
             margin: 0 0 4px 0;
@@ -247,15 +250,11 @@
             }
         }
 
-        /* =========================================
-           MOBILE SIDEBAR OVERRIDES
-           ========================================= */
+        /* Mobile Sidebar Overrides */
         @media (max-width: 768px) {
             .mobile-menu-btn {
                 display: block;
             }
-            
-            /* Sidebar Structure */
             nav[aria-label="Primary navigation"] {
                 display: flex !important; 
                 flex-direction: column;
@@ -273,28 +272,22 @@
                 overflow-y: auto;
                 box-shadow: -10px 0 30px rgba(0,0,0,0.5);
             }
-
             nav[aria-label="Primary navigation"].open {
                 right: 0;
             }
-
             .close-menu-btn {
                 display: block;
             }
-
-            /* Links inside Sidebar */
             nav[aria-label="Primary navigation"] a, 
             nav[aria-label="Primary navigation"] .drop-trigger {
                 font-size: 17px;
-                font-weight: 600; /* Crisper text rendering */
+                font-weight: 600;
                 padding: 16px 12px;
                 border-bottom: 1px solid var(--border-dark);
                 width: 100%;
                 display: block;
                 color: var(--text-main);
             }
-
-            /* Dropdown behavior inside Sidebar */
             .nav-item-dropdown {
                 width: 100%;
             }
@@ -310,8 +303,6 @@
             .drop-menu.mobile-open {
                 display: block !important;
             }
-            
-            /* Overlay */
             .menu-overlay {
                 display: none;
                 position: fixed;
@@ -334,14 +325,12 @@
 </head>
 <body id="home-body">
 
-    <!-- HEADER -->
     <header class="site-header">
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <!-- Hamburger Icon for Mobile -->
         <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -351,7 +340,6 @@
         </button>
 
         <nav aria-label="Primary navigation" id="primaryNav">
-            <!-- Close Button inside Sidebar -->
             <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
                 <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -374,12 +362,12 @@
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
                     <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: #8b9bb4; text-transform: uppercase;">Chemistry</span>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
                     <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
                     <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
                     <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
                     <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: #8b9bb4; text-transform: uppercase;">Biology</span>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
                     <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
                     <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
                 </div>
@@ -391,7 +379,6 @@
         </nav>
     </header>
 
-    <!-- HERO SECTION -->
     <section class="hero-section">
         <h1 class="hero-title">Master Your Exams<br><span>With Doubt Factory</span></h1>
         <p class="hero-subtitle">Topic-wise quizzes, past papers, and analytics to prepare with confidence.</p>
@@ -407,20 +394,18 @@
         </div>
     </section>
 
-    <!-- HORIZONTAL EXAM CARDS -->
     <section class="next-step-section">
         <h2 class="section-title">Pick your Next Step</h2>
         <div class="scroll-container">
             
-            <!-- JEE MAIN -->
             <a href="exam.html?type=JEE Main" class="exam-card">
-                <div class="card-top" style="background: linear-gradient(to bottom right, #2a1f1d, #1a1515);">
-                    <span class="badge badge-orange">Engineering</span>
-                    <svg viewBox="0 0 24 24" width="100" height="100" stroke="var(--accent-orange)" stroke-width="1.5" fill="none" style="opacity: 0.8; transform: translate(10px, 10px);">
+                <div class="card-top">
+                    <span class="badge">Engineering</span>
+                    <svg viewBox="0 0 24 24" width="100" height="100" stroke="var(--accent-blue)" stroke-width="1.5" fill="none" style="opacity: 0.5; transform: translate(10px, 10px);">
                         <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
                         <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
                         <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)"></ellipse>
-                        <circle cx="12" cy="12" r="2" fill="var(--accent-orange)"></circle>
+                        <circle cx="12" cy="12" r="2" fill="var(--accent-blue)"></circle>
                     </svg>
                 </div>
                 <div class="card-bottom">
@@ -429,19 +414,18 @@
                 </div>
             </a>
 
-            <!-- JEE ADVANCED -->
             <a href="exam.html?type=JEE Advanced" class="exam-card">
-                <div class="card-top" style="background: linear-gradient(to bottom right, #251c2d, #17121c);">
-                    <span class="badge badge-purple">Engineering</span>
-                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-purple)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8; transform: translate(10px, 10px) rotate(15deg);">
+                <div class="card-top">
+                    <span class="badge">Engineering</span>
+                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-blue)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; transform: translate(10px, 10px) rotate(15deg);">
                         <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
                         <rect x="8" y="6" width="8" height="4"></rect>
-                        <circle cx="8" cy="14" r="1" fill="var(--accent-purple)"></circle>
-                        <circle cx="12" cy="14" r="1" fill="var(--accent-purple)"></circle>
-                        <circle cx="16" cy="14" r="1" fill="var(--accent-purple)"></circle>
-                        <circle cx="8" cy="18" r="1" fill="var(--accent-purple)"></circle>
-                        <circle cx="12" cy="18" r="1" fill="var(--accent-purple)"></circle>
-                        <circle cx="16" cy="18" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="8" cy="14" r="1" fill="var(--accent-blue)"></circle>
+                        <circle cx="12" cy="14" r="1" fill="var(--accent-blue)"></circle>
+                        <circle cx="16" cy="14" r="1" fill="var(--accent-blue)"></circle>
+                        <circle cx="8" cy="18" r="1" fill="var(--accent-blue)"></circle>
+                        <circle cx="12" cy="18" r="1" fill="var(--accent-blue)"></circle>
+                        <circle cx="16" cy="18" r="1" fill="var(--accent-blue)"></circle>
                     </svg>
                 </div>
                 <div class="card-bottom">
@@ -450,11 +434,10 @@
                 </div>
             </a>
 
-            <!-- NEET -->
             <a href="exam.html?type=NEET" class="exam-card">
-                <div class="card-top" style="background: linear-gradient(to bottom right, #2d1c24, #1c1216);">
-                    <span class="badge badge-pink">Medical</span>
-                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-pink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8; transform: translate(10px, 10px) rotate(-15deg);">
+                <div class="card-top">
+                    <span class="badge">Medical</span>
+                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-blue)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; transform: translate(10px, 10px) rotate(-15deg);">
                         <path d="M15 2v20"></path>
                         <path d="M9 2v20"></path>
                         <path d="M9 6h6"></path>
@@ -477,9 +460,8 @@
         </div>
     </section>
 
-    <!-- FEATURES LIST -->
     <section class="features-section">
-        <h2 class="section-title">Why Students<br><span style="color: var(--accent-orange);">Love Doubt Factory?</span></h2>
+        <h2 class="section-title">Why Students<br><span style="color: var(--accent-blue);">Love Doubt Factory?</span></h2>
         
         <div class="features-list">
             
@@ -524,7 +506,7 @@
             </div>
 
             <div class="feature-item">
-                <div class="feature-icon" style="color: var(--accent-pink);">
+                <div class="feature-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 </div>
                 <div class="feature-text">
@@ -534,7 +516,7 @@
             </div>
 
             <div class="feature-item">
-                <div class="feature-icon" style="color: var(--accent-purple);">
+                <div class="feature-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="5" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="19"></line><line x1="5" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="19" y2="12"></line><line x1="7.05" y1="7.05" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="16.95" y2="16.95"></line><line x1="7.05" y1="16.95" x2="5.64" y2="18.36"></line><line x1="18.36" y1="7.05" x2="16.95" y2="5.64"></line></svg>
                 </div>
                 <div class="feature-text">
@@ -546,13 +528,11 @@
         </div>
     </section>
 
-    <!-- Mobile Sidebar Logic -->
     <script>
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const primaryNav = document.getElementById('primaryNav');
         
-        // Create and inject the darkened overlay
         const overlay = document.createElement('div');
         overlay.className = 'menu-overlay';
         document.body.appendChild(overlay);
@@ -566,16 +546,14 @@
             } else {
                 primaryNav.classList.add('open');
                 overlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                document.body.style.overflow = 'hidden'; 
             }
         }
 
-        // Event Listeners for opening and closing sidebar
         mobileMenuBtn.addEventListener('click', toggleMenu);
         closeMenuBtn.addEventListener('click', toggleMenu);
         overlay.addEventListener('click', toggleMenu);
 
-        // Mobile Dropdown Accordion behavior
         document.querySelectorAll('.drop-trigger').forEach(trigger => {
             trigger.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
