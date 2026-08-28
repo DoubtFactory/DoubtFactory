@@ -6,7 +6,6 @@
     <title>Doubt Factory | Master Your Exams</title>
     <meta name="description" content="Topic-wise quizzes, past papers, and analytics to prepare for JEE and NEET with confidence.">
     
-    <!-- Using the global CSS, but we will override for the dark homepage theme below -->
     <link rel="stylesheet" href="css/main.css">
     
     <style>
@@ -34,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* Transparent Header for Homepage */
+        /* Header */
         #home-body .site-header {
             background: var(--bg-dark);
             border-bottom: 1px solid var(--border-dark);
@@ -54,6 +53,26 @@
             background: rgba(255,255,255,0.05);
         }
 
+        /* Mobile Sidebar Elements */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 4px;
+        }
+        .close-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            align-self: flex-end;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+        
         /* Hero Section */
         .hero-section {
             text-align: center;
@@ -219,12 +238,94 @@
             line-height: 1.4;
         }
 
-        /* Mobile specific adjustments */
         @media (min-width: 768px) {
             .scroll-container {
                 justify-content: center;
                 flex-wrap: wrap;
                 overflow-x: visible;
+            }
+        }
+
+        /* =========================================
+           MOBILE SIDEBAR OVERRIDES
+           ========================================= */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            /* Sidebar Structure */
+            nav[aria-label="Primary navigation"] {
+                display: flex !important; 
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                max-width: 85vw;
+                height: 100vh;
+                background: var(--bg-card);
+                border-left: 1px solid var(--border-dark);
+                padding: 20px;
+                transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1000;
+                overflow-y: auto;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            }
+
+            nav[aria-label="Primary navigation"].open {
+                right: 0;
+            }
+
+            .close-menu-btn {
+                display: block;
+            }
+
+            /* Links inside Sidebar */
+            nav[aria-label="Primary navigation"] a, 
+            nav[aria-label="Primary navigation"] .drop-trigger {
+                font-size: 17px;
+                padding: 16px 12px;
+                border-bottom: 1px solid var(--border-dark);
+                width: 100%;
+                display: block;
+                color: var(--text-main);
+            }
+
+            /* Dropdown behavior inside Sidebar */
+            .nav-item-dropdown {
+                width: 100%;
+            }
+            .drop-menu {
+                position: static !important;
+                box-shadow: none !important;
+                border: none !important;
+                background: rgba(0,0,0,0.2) !important;
+                padding: 0 0 0 16px !important;
+                display: none !important; 
+                border-radius: 0 !important;
+            }
+            .drop-menu.mobile-open {
+                display: block !important;
+            }
+            
+            /* Overlay */
+            .menu-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+                z-index: 999;
+                backdrop-filter: blur(4px);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .menu-overlay.active {
+                display: block;
+                opacity: 1;
             }
         }
     </style>
@@ -238,7 +339,24 @@
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <nav aria-label="Primary navigation">
+        <!-- Hamburger Icon for Mobile -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <!-- Close Button inside Sidebar -->
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
             <a href="index.html">Home</a>
             
             <div class="nav-item-dropdown">
@@ -254,14 +372,14 @@
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
                     <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: #8b9bb4; text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
                     <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: #8b9bb4; text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
                 </div>
             </div>
 
@@ -426,32 +544,44 @@
         </div>
     </section>
 
-    <!-- Mobile Dropdown Logic -->
+    <!-- Mobile Sidebar Logic -->
     <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const primaryNav = document.getElementById('primaryNav');
+        
+        // Create and inject the darkened overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        document.body.appendChild(overlay);
+
+        function toggleMenu() {
+            const isOpen = primaryNav.classList.contains('open');
+            if (isOpen) {
+                primaryNav.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                primaryNav.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        }
+
+        // Event Listeners for opening and closing sidebar
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        // Mobile Dropdown Accordion behavior
         document.querySelectorAll('.drop-trigger').forEach(trigger => {
-            const dropMenu = trigger.nextElementSibling;
             trigger.addEventListener('click', function(e) {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    if (dropMenu.classList.contains('mobile-popup-active')) {
-                        dropMenu.classList.remove('mobile-popup-active');
-                    } else {
-                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                        if (dropMenu.parentElement !== document.body) {
-                            document.body.appendChild(dropMenu);
-                        }
-                        setTimeout(() => {
-                            dropMenu.classList.add('mobile-popup-active');
-                        }, 10);
-                    }
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
                 }
             });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
-                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-            }
         });
     </script>
 </body>
