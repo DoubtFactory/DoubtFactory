@@ -15,23 +15,30 @@ let activeSuggestionIndex = -1;
 let debounceTimer = null;
 const params = new URLSearchParams(window.location.search);
 const initialQuery = params.get("q") || "";
+const initialSubject = params.get("subject") || "";
 
 async function load() {
-
     if (!results) return;
 
-    results.innerHTML =
-        '<div class="empty-state loading">Loading questions…</div>';
+    results.innerHTML = '<div class="empty-state loading">Loading questions…</div>';
 
     questions = await getQuestions();
-    console.log("Questions loaded:", questions);
 
     if (searchBox && initialQuery) {
         searchBox.value = initialQuery;
     }
 
-    renderResults();
+    // Automatically apply the subject from the URL to the dropdown filter
+    if (subjectFilter && initialSubject) {
+        for (let i = 0; i < subjectFilter.options.length; i++) {
+            if (subjectFilter.options[i].value.toLowerCase() === initialSubject.toLowerCase()) {
+                subjectFilter.selectedIndex = i;
+                break;
+            }
+        }
+    }
 
+    renderResults();
 }
 
 function normalizeText(value) {
@@ -41,7 +48,6 @@ function normalizeText(value) {
 function getFilteredQuestions(keyword) {
     const term = normalizeText(keyword);
     
-    // Grab the current values from the dropdowns
     const activeSubject = subjectFilter ? subjectFilter.value.toLowerCase() : "";
     const activeDifficulty = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
 
@@ -52,22 +58,16 @@ function getFilteredQuestions(keyword) {
         const exam = normalizeText(q.exam);
         const difficulty = normalizeText(q.difficulty);
 
-        // 1. Exam Match (from filter chips)
         const matchesExam = activeFilter === "All" || exam === activeFilter.toLowerCase();
         
-        // 2. Subject Match
-        const matchesSubject = !activeSubject || subject === activeSubject;
-        
-        // 3. Difficulty Match
-        const matchesDifficulty = !activeDifficulty || difficulty === activeDifficulty;
+        // Support matching exact subjects or falling back to "All" options
+        const matchesSubject = !activeSubject || activeSubject.includes("all") || subject === activeSubject;
+        const matchesDifficulty = !activeDifficulty || activeDifficulty.includes("any") || activeDifficulty.includes("all") || difficulty === activeDifficulty;
 
-        // If a question fails ANY of the active filters, hide it
         if (!matchesExam || !matchesSubject || !matchesDifficulty) return false;
         
-        // If there is no typed keyword, show all questions that pass the filters above
         if (!term) return true;
 
-        // Otherwise, check if the keyword matches text
         return question.includes(term) || chapter.includes(term) || subject.includes(term) || exam.includes(term) || difficulty.includes(term);
     });
 }
@@ -128,7 +128,16 @@ function renderResults() {
     results.innerHTML = "";
     searchMeta.innerHTML = "";
 
-    if (!keyword.trim()) {
+    const activeSub = subjectFilter ? subjectFilter.value.toLowerCase() : "";
+    const activeDiff = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
+    
+    // Check if any filters (chips or dropdowns) are actively applied
+    const hasActiveFilters = activeFilter !== "All" || 
+                             (activeSub && !activeSub.includes("all")) || 
+                             (activeDiff && !activeDiff.includes("any") && !activeDiff.includes("all"));
+
+    // Only show the empty setup state if there is NO text typed AND NO filters are applied
+    if (!keyword.trim() && !hasActiveFilters) {
         searchMeta.innerHTML = '<p class="meta-text">Start typing to search questions by chapter, subject, exam, or keyword.</p>';
         results.innerHTML = '<div class="empty-state">Try searching for a topic like “Thermodynamics” or “JEE Main”.</div>';
         return;
@@ -139,7 +148,8 @@ function renderResults() {
         return;
     }
 
-    searchMeta.innerHTML = `<p class="meta-text">Showing ${filtered.length} result${filtered.length > 1 ? 's' : ''} for “${keyword}”</p>`;
+    const resultLabel = keyword.trim() ? `for “${keyword}”` : "matching your filters";
+    searchMeta.innerHTML = `<p class="meta-text">Showing ${filtered.length} result${filtered.length > 1 ? 's' : ''} ${resultLabel}</p>`;
 
     const fragment = document.createDocumentFragment();
 
@@ -158,7 +168,7 @@ function renderResults() {
                 <span>${q.subject || "Subject"}</span>
                 <span>${q.difficulty || "Medium"}</span>
             </div>
-            <a href="question.html?id=${q.docId}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}">Solve Question →</a>
+            <a href="question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}">Solve Question →</a>
         `;
         fragment.appendChild(card);
     });
