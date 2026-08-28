@@ -21,7 +21,7 @@
         background: var(--bg-card);
         border-bottom: 1px solid var(--border-color);
         position: sticky;
-        top: 63px; /* Sits directly below the universal header */
+        top: 63px;
         z-index: 990;
         padding: 0 20px;
     }
@@ -71,7 +71,7 @@
     
     .dash-stats { 
         display: grid; 
-        grid-template-columns: repeat(3, 1fr); /* Forces horizontal layout */
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px; 
         margin-bottom: 30px; 
     }
@@ -145,7 +145,7 @@
     }
 
     /* =========================================
-       CHEMISTRY TOOLBAR COMPACT FIX
+       CHEMISTRY TOOLBAR COMPACT & LINEAR FIX
        ========================================= */
     .chem-editor-wrapper {
         border: 1px solid var(--border-color) !important;
@@ -155,20 +155,29 @@
     }
     .chem-editor-wrapper > div:first-child {
         background: var(--bg-card-hover) !important;
-        padding: 8px !important;
+        padding: 10px !important;
         border-bottom: 1px solid var(--border-color) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
     }
+    /* Group rows inside the toolbar */
     .chem-editor-wrapper > div:first-child > div {
         display: flex !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
         gap: 4px !important;
-        margin-bottom: 6px !important;
         align-items: center !important;
         font-size: 12px !important;
         color: var(--text-secondary) !important;
+        padding-bottom: 4px;
+        scrollbar-width: none;
     }
+    .chem-editor-wrapper > div:first-child > div::-webkit-scrollbar { display: none; }
+
     .chem-editor-wrapper > div:first-child button {
-        min-width: 30px !important;
+        flex: 0 0 auto !important;
+        min-width: 28px !important;
         height: 28px !important;
         padding: 0 4px !important;
         margin: 0 !important;
@@ -182,7 +191,6 @@
         display: inline-flex !important;
         justify-content: center !important;
         align-items: center !important;
-        line-height: 1 !important;
     }
     .chem-editor-wrapper > div:first-child button:hover {
         background: rgba(59, 130, 246, 0.2) !important;
@@ -199,6 +207,7 @@
         resize: vertical;
     }
 </style>
+
 </head>
 
 <body class="admin-body" id="home-body">
