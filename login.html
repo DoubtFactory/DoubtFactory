@@ -2,117 +2,202 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Login | Doubt Factory</title>
-    <meta name="robots" content="noindex,nofollow"> <!-- Keeps admin login off search engines -->
-
+    <meta name="robots" content="noindex,nofollow"> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/main.css">
-
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial,Helvetica,sans-serif;
+        .login-wrapper {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        body{
-            background:linear-gradient(135deg,#0f62fe,#3b82f6);
-            min-height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-top: 6px solid var(--accent-blue);
         }
 
-        .login-card{
-            width:420px;
-            background:#fff;
-            padding:40px;
-            border-radius:18px;
-            box-shadow:0 20px 50px rgba(0,0,0,.25);
+        .login-card h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        h1{
-            text-align:center;
-            color:#0f62fe;
-            margin-bottom:10px;
+        .login-card p {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 15px;
         }
 
-        p{
-            text-align:center;
-            color:#666;
-            margin-bottom:30px;
+        .login-card input {
+            margin-bottom: 20px;
         }
 
-        input{
-            width:100%;
-            padding:14px;
-            margin-bottom:18px;
-            border:1px solid #ddd;
-            border-radius:10px;
-            font-size:16px;
+        .login-card button {
+            width: 100%;
+            margin-top: 10px;
         }
 
-        button{
-            width:100%;
-            padding:15px;
-            border:none;
-            border-radius:10px;
-            background:#0f62fe;
-            color:white;
-            font-size:17px;
-            cursor:pointer;
-        }
-
-        button:hover{
-            background:#0047c6;
-        }
-
-        #error{
-            color:red;
-            margin-top:15px;
-            text-align:center;
+        #error {
+            color: #EF4444; 
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
         }
     </style>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
 </head>
 
-<body>
+<body id="home-body">
 
-<div class="login-card">
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
 
-<h1>Doubt Factory</h1>
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
 
-<p>Administrator Login</p>
+        <!-- Sidebar Navigation -->
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
 
-<input
-id="email"
-type="email"
-placeholder="Email">
+            <a href="index.html">Home</a>
+            
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
 
-<input
-id="password"
-type="password"
-placeholder="Password">
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
+                </div>
+            </div>
 
-<button id="loginBtn">
-Login
-</button>
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
+    </header>
 
-<div id="error"></div>
+    <!-- Sidebar Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            if (!mobileMenuBtn || !primaryNav) return;
 
-</div>
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
 
-<script type="module" src="js/login.js"></script>
-<script type="module" src="js/theme.js"></script>
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                newTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
+                });
+            });
+        });
+    </script>
+    <!-- ========================================== -->
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <h1>Doubt Factory</h1>
+            <p>Administrator Login</p>
+
+            <input id="email" type="email" placeholder="Email Address" required>
+            <input id="password" type="password" placeholder="Password" required>
+            
+            <button id="loginBtn" class="btn-primary">Secure Login</button>
+            <div id="error"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/login.js"></script>
+    <script type="module" src="js/theme.js"></script>
 </body>
 </html>
