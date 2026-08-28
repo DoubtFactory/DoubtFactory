@@ -339,10 +339,108 @@ async function loadQuestionsTable() {
 async function updateDashboard() {
     try {
         const questions = await getQuestions();
+        
+        // 1. Basic Stats
         const total = document.getElementById("totalQuestions");
         const published = document.getElementById("publishedQuestions");
         if (total) total.textContent = questions.length;
         if (published) published.textContent = questions.length;
+
+        // 2. Recent Activity List
+        const recentActivityList = document.getElementById("recentActivityList");
+        if (recentActivityList) {
+            recentActivityList.innerHTML = "";
+            const recentQs = [...questions].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 5);
+            
+            if (recentQs.length === 0) {
+                recentActivityList.innerHTML = "<p style='color:#64748b; padding:15px;'>No recent activity.</p>";
+            } else {
+                recentQs.forEach(q => {
+                    const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 50) + "..." : "No text provided";
+                    recentActivityList.innerHTML += `
+                        <div style="padding: 15px; border-bottom: 1px solid #e2e8f0; display:flex; justify-content: space-between; align-items:flex-start;">
+                            <div>
+                                <div style="font-weight:700; color:#1e293b; font-size:14px; margin-bottom:4px;">${q.subject || 'Subject'} - ${q.chapter || 'Chapter'}</div>
+                                <div style="font-size:13px; color:#64748b;">${snippet}</div>
+                            </div>
+                            <span style="font-size:12px; font-weight:700; background:#eff6ff; color:#2563eb; border: 1px solid #bfdbfe; padding:4px 8px; border-radius:6px; flex-shrink:0;">${q.exam || 'Exam'}</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // 3. Questions by Exam Stats
+        const examStatsList = document.getElementById("examStatsList");
+        if (examStatsList) {
+            const examCounts = {};
+            questions.forEach(q => {
+                const ex = q.exam || "Unspecified";
+                examCounts[ex] = (examCounts[ex] || 0) + 1;
+            });
+            
+            examStatsList.innerHTML = "";
+            if (Object.keys(examCounts).length === 0) {
+                examStatsList.innerHTML = "<p style='color:#64748b;'>No exams data.</p>";
+            } else {
+                Object.keys(examCounts).sort().forEach(ex => {
+                    examStatsList.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom: 1px dashed #e2e8f0;">
+                            <span style="color:#475569; font-weight:600; font-size:14px;">${ex}</span>
+                            <span style="background:#f8fafc; padding:4px 10px; border-radius:6px; font-weight:700; color:#0f172a; border: 1px solid #e2e8f0;">${examCounts[ex]}</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // 4. Question Type Distribution (CSS Pie Chart)
+        const typePieChart = document.getElementById("typePieChart");
+        const typeLegend = document.getElementById("typeLegend");
+        if (typePieChart && typeLegend) {
+            const typeCounts = {};
+            questions.forEach(q => {
+                const t = q.type || "Unspecified";
+                typeCounts[t] = (typeCounts[t] || 0) + 1;
+            });
+
+            const colors = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ef4444", "#06b6d4"];
+            let conicGradientArgs = [];
+            let currentPercentage = 0;
+            const totalQs = questions.length || 1; 
+            let colorIndex = 0;
+
+            typeLegend.innerHTML = "";
+            
+            if (questions.length === 0) {
+                typePieChart.style.background = "#e2e8f0";
+                typeLegend.innerHTML = "<p style='color:#64748b; font-size:13px;'>No data available</p>";
+            } else {
+                Object.keys(typeCounts).forEach(type => {
+                    const percentage = (typeCounts[type] / totalQs) * 100;
+                    const color = colors[colorIndex % colors.length];
+                    
+                    conicGradientArgs.push(`${color} ${currentPercentage}% ${currentPercentage + percentage}%`);
+                    currentPercentage += percentage;
+
+                    typeLegend.innerHTML += `
+                        <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#334155; margin-bottom:8px; font-weight:500;">
+                            <span style="display:inline-block; width:14px; height:14px; background:${color}; border-radius:4px;"></span>
+                            ${type} <span style="color:#94a3b8; font-size:12px;">(${typeCounts[type]})</span>
+                        </div>
+                    `;
+                    colorIndex++;
+                });
+
+                typePieChart.style.background = `conic-gradient(${conicGradientArgs.join(", ")})`;
+                typePieChart.style.borderRadius = "50%";
+                typePieChart.style.width = "180px";
+                typePieChart.style.height = "180px";
+                typePieChart.style.margin = "20px auto";
+                typePieChart.style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
+            }
+        }
+
     } catch (e) {
         console.error(e);
     }
