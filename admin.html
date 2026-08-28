@@ -6,359 +6,389 @@
 
 <title>Admin Panel | Doubt Factory</title>
 <meta name="description" content="Manage questions, drafts, and previews for Physics, Chemistry, Maths, and Biology from the Doubt Factory admin dashboard.">
-<meta name="keywords" content="admin dashboard, JEE NEET admin, question management, Doubt Factory admin">
 <meta name="robots" content="noindex,follow">
-<meta name="theme-color" content="#1565C0">
 <link rel="canonical" href="admin.html">
+
+<!-- Global CSS -->
 <link rel="stylesheet" href="css/main.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
+<style>
+    /* =========================================
+       ADMIN SPECIFIC LAYOUT & TABS
+       ========================================= */
+    .admin-tabs-container {
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 63px; /* Sits directly below the universal header */
+        z-index: 990;
+        padding: 0 20px;
+    }
+    
+    .admin-tabs {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 15px 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+    }
+    .admin-tabs::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+    
+    .admin-tab-btn {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        padding: 8px 16px;
+        border-radius: 20px;
+        white-space: nowrap;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .admin-tab-btn.active {
+        background: rgba(59, 130, 246, 0.15);
+        color: var(--accent-blue);
+        border-color: var(--accent-blue);
+    }
+    
+    .admin-tab-btn:hover:not(.active) {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+    }
+
+    /* Admin Content Area Layout Fixes */
+    .dash-header { margin-bottom: 30px; }
+    .dash-header h1 { font-size: 28px; margin-bottom: 8px; color: var(--text-primary); }
+    .dash-header p { color: var(--text-secondary); }
+    
+    .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: var(--radius-lg); }
+    .stat-info h4 { color: var(--text-secondary); font-size: 14px; margin-bottom: 8px; }
+    .stat-info h2 { color: var(--text-primary); font-size: 32px; margin: 0; }
+
+    .dash-grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+    @media (max-width: 900px) { .dash-grid-layout { grid-template-columns: 1fr; } }
+    
+    .dash-panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; }
+    .panel-head h3 { margin: 0 0 15px 0; color: var(--text-primary); font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+</style>
 </head>
 
 <body class="admin-body">
-<a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<div class="app-layout">
-    
-    <!-- Top Navigation Bar -->
-    <header class="app-topbar">
-        <div class="topbar-left">
-            <a href="index.html" class="app-logo">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l-4 10h-2l-4-10z"></path><path d="M12 17v-4"></path><path d="M10 21h4"></path></svg>
-                <div class="logo-text">
-                    <h2>Doubt Factory Admin</h2>
-                    <p>Turning Doubts into Clarity</p>
-                </div>
-            </a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Sidebar Navigation -->
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
             </button>
-        </div>
 
-        <div class="topbar-right">
-            <a href="index.html" class="topbar-link">
-                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                Home
-            </a>
-            <a href="admin.html" class="topbar-link active">
-                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                Admin
-            </a>
+            <a href="index.html">Home</a>
             
-            <button id="logoutBtn" class="logout-btn">
-                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                Logout
-            </button>
-        </div>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
+                </div>
+            </div>
+
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
     </header>
 
-    <div class="app-body">
-        <!-- Left Sidebar -->
-        <aside class="app-sidebar" id="appSidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">ADMIN TOOLS</div>
-                <ul class="sidebar-menu">
-                    <li><a href="#" class="menu-item active" data-target="dashboardSection">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                        Dashboard
-                    </a></li>
-                    <li><a href="#" class="menu-item" data-target="formSection">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                        Create Question
-                    </a></li>
-                    <li><a href="#" class="menu-item" data-target="bulkSection">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        Bulk Import PYQs
-                    </a></li>
-                    <li><a href="#" class="menu-item" data-target="tableSection">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                        Manage Questions
-                    </a></li>
-                    <li>
-                        <a href="#" class="menu-item" data-target="feedbackSection">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                            Student Feedback
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="menu-item" data-target="commentsSection">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                            Student Comments
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
+    <!-- ADMIN HORIZONTAL TABS (Replaces Left Sidebar) -->
+    <div class="admin-tabs-container">
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-target="dashboardSection">Dashboard</button>
+            <button class="admin-tab-btn" data-target="formSection">Create Question</button>
+            <button class="admin-tab-btn" data-target="bulkSection">Bulk Import PYQs</button>
+            <button class="admin-tab-btn" data-target="tableSection">Manage Questions</button>
+            <button class="admin-tab-btn" data-target="feedbackSection">Student Feedback</button>
+            <button class="admin-tab-btn" data-target="commentsSection">Student Comments</button>
+            <button id="logoutBtn" class="admin-tab-btn" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">Logout</button>
+        </div>
+    </div>
 
-        <!-- Main Content Area -->
-        <main class="app-content" id="mainContent">
+    <!-- MAIN ADMIN CONTENT -->
+    <main class="container" id="mainContent">
 
-            <!-- DASHBOARD SECTION -->
-            <div id="dashboardSection" class="view-section active">
-                <div class="dash-header">
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboardSection" class="view-section active">
+            <div class="dash-header">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
                     <div>
-                        <h1>Dashboard</h1>
+                        <h1>Admin Dashboard</h1>
                         <p>Welcome back, Admin! Here's what's happening with Doubt Factory.</p>
                     </div>
-                    <div class="dash-clock" id="liveClock">
-                        <span id="dateText">Loading...</span>
-                        <span id="timeText">--:--:--</span>
-                    </div>
-                </div>
-
-                <div class="dash-stats">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4>Total Questions</h4>
-                            <h2 id="totalQuestions">0</h2>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4>Published</h4>
-                            <h2 id="publishedQuestions">0</h2>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4>Drafts</h4>
-                            <h2 id="draftQuestions">0</h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dash-grid-layout" style="margin-top: 24px;">
-                    <div class="dash-panel panel-large">
-                        <div class="panel-head"><h3>Recent Activity</h3></div>
-                        <div class="activity-wrapper" id="recentActivityList"></div>
-                    </div>
-                    <div class="panel-col">
-                        <div class="dash-panel">
-                            <div class="panel-head"><h3>Questions by Exam</h3></div>
-                            <div id="examStatsList"></div>
-                        </div>
-                        <div class="dash-panel">
-                            <div class="panel-head"><h3>Question Type Distribution</h3></div>
-                            <div class="pie-chart-container">
-                                <div class="pie-chart" id="typePieChart"></div>
-                                <div class="pie-legend" id="typeLegend"></div>
-                            </div>
-                        </div>
+                    <div class="dash-clock" id="liveClock" style="text-align: right; color: var(--accent-blue); font-weight: 600;">
+                        <div id="dateText">Loading...</div>
+                        <div id="timeText" style="font-size: 20px;">--:--:--</div>
                     </div>
                 </div>
             </div>
 
-            <!-- CREATE/EDIT QUESTION SECTION -->
-            <div id="formSection" class="view-section" style="display: none;">
-                <div class="dash-header">
-                    <div>
-                        <h1>Create Question</h1>
-                        <p>Add a new question to the database.</p>
+            <div class="dash-stats">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Total Questions</h4>
+                        <h2 id="totalQuestions">0</h2>
                     </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Published</h4>
+                        <h2 id="publishedQuestions">0</h2>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h4>Drafts</h4>
+                        <h2 id="draftQuestions">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-grid-layout">
+                <div class="dash-panel panel-large">
+                    <div class="panel-head"><h3>Recent Activity</h3></div>
+                    <div class="activity-wrapper" id="recentActivityList"></div>
+                </div>
+                <div class="panel-col">
+                    <div class="dash-panel">
+                        <div class="panel-head"><h3>Questions by Exam</h3></div>
+                        <div id="examStatsList"></div>
+                    </div>
+                    <div class="dash-panel">
+                        <div class="panel-head"><h3>Question Type Distribution</h3></div>
+                        <div class="pie-chart-container">
+                            <div class="pie-chart" id="typePieChart"></div>
+                            <div class="pie-legend" id="typeLegend"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CREATE/EDIT QUESTION SECTION -->
+        <div id="formSection" class="view-section" style="display: none;">
+            <div class="dash-header">
+                <h1>Create Question</h1>
+                <p>Add a new question to the database.</p>
+            </div>
+            
+            <form id="questionForm" class="admin-form-card">
+                <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Basic Information</h3>
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <select id="subject" required>
+                        <option value="">Select Subject</option>
+                        <option value="Physics">Physics</option>
+                        <optgroup label="Chemistry">
+                            <option value="Physical Chemistry">Physical Chemistry</option>
+                            <option value="Organic Chemistry">Organic Chemistry</option>
+                            <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                        </optgroup>
+                        <option value="Maths">Maths</option>
+                        <optgroup label="Biology">
+                            <option value="Botany">Botany</option>
+                            <option value="Zoology">Zoology</option>
+                        </optgroup>
+                    </select>
+
+                    <select id="chapter" required>
+                        <option value="">Select Chapter</option>
+                    </select>
+
+                    <select id="exam" required>
+                        <option value="">Select Exam</option>
+                        <option>JEE Main</option>
+                        <option>JEE Advanced</option>
+                        <option>NEET</option>
+                    </select>
+
+                    <input type="number" id="year" placeholder="Year" required>
+
+                    <select id="difficulty" required>
+                        <option value="">Difficulty</option>
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+
+                    <select id="type" required>
+                        <option value="">Question Type</option>
+                        <option>Single Correct</option>
+                        <option>Multiple Correct</option>
+                        <option>Integer Type</option>
+                        <option>Assertion Reason</option>
+                        <option>Match the Column</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Question Content</h3>
+                <label for="question" style="font-weight: 600; margin-bottom: 8px; display: block;">Question</label>
+                <div class="chem-editor-wrapper" style="margin-bottom: 15px;">
+                    <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
                 </div>
                 
-                <form id="questionForm" class="admin-form-card">
-                    <h3>Basic Information</h3>
-                    <div class="form-grid">
-                        <label class="sr-only" for="subject">Subject</label>
-                        <select id="subject" required>
-                            <option value="">Select Subject</option>
-                            <option value="Physics">Physics</option>
-                            <optgroup label="Chemistry">
-                                <option value="Physical Chemistry">Physical Chemistry</option>
-                                <option value="Organic Chemistry">Organic Chemistry</option>
-                                <option value="Inorganic Chemistry">Inorganic Chemistry</option>
-                            </optgroup>
-                            <option value="Maths">Maths</option>
-                            <optgroup label="Biology">
-                                <option value="Botany">Botany</option>
-                                <option value="Zoology">Zoology</option>
-                            </optgroup>
-                        </select>
+                <div style="display: flex; gap: 10px; margin-bottom: 30px; align-items: center;">
+                    <input type="text" id="questionImage" readonly placeholder="No image selected" style="flex: 1;">
+                    <button type="button" id="uploadQuestionImage" class="btn-secondary">Upload Image</button>
+                </div>
 
-                        <label class="sr-only" for="chapter">Chapter</label>
-                        <select id="chapter" required>
-                            <option value="">Select Chapter</option>
-                        </select>
-
-                        <label class="sr-only" for="exam">Exam</label>
-                        <select id="exam" required>
-                            <option value="">Select Exam</option>
-                            <option>JEE Main</option>
-                            <option>JEE Advanced</option>
-                            <option>NEET</option>
-                        </select>
-
-                        <label class="sr-only" for="year">Year</label>
-                        <input type="number" id="year" placeholder="Year" required>
-
-                        <label class="sr-only" for="difficulty">Difficulty</label>
-                        <select id="difficulty" required>
-                            <option value="">Difficulty</option>
-                            <option>Easy</option>
-                            <option>Medium</option>
-                            <option>Hard</option>
-                        </select>
-
-                        <label class="sr-only" for="type">Question type</label>
-                        <select id="type" required>
-                            <option value="">Question Type</option>
-                            <option>Single Correct</option>
-                            <option>Multiple Correct</option>
-                            <option>Integer Type</option>
-                            <option>Assertion Reason</option>
-                            <option>Match the Column</option>
-                        </select>
-                    </div>
-
-                    <h3>Question Content</h3>
-                    <label for="question">Question</label>
-                    <div class="chem-editor-wrapper">
-                        <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Question Image</label>
-                        <input type="text" id="questionImage" readonly placeholder="No image selected">
-                        <button type="button" id="uploadQuestionImage" class="upload-btn">Upload Image</button>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-                            <label for="optionA">Option A</label>
-                            <div class="chem-editor-wrapper">
-                                <textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Option A Image</label>
-                            <input type="text" id="optionAImage" readonly>
-                            <button type="button" id="uploadOptionAImage" class="upload-btn">Upload Image</button>
-                        </div>
-
-                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-                            <label for="optionB">Option B</label>
-                            <div class="chem-editor-wrapper">
-                                <textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Option B Image</label>
-                            <input type="text" id="optionBImage" readonly>
-                            <button type="button" id="uploadOptionBImage" class="upload-btn">Upload Image</button>
-                        </div>
-
-                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-                            <label for="optionC">Option C</label>
-                            <div class="chem-editor-wrapper">
-                                <textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Option C Image</label>
-                            <input type="text" id="optionCImage" readonly>
-                            <button type="button" id="uploadOptionCImage" class="upload-btn">Upload Image</button>
-                        </div>
-
-                        <div class="form-group editor-wrapper" style="grid-column: 1 / -1;">
-                            <label for="optionD">Option D</label>
-                            <div class="chem-editor-wrapper">
-                                <textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Option D Image</label>
-                            <input type="text" id="optionDImage" readonly>
-                            <button type="button" id="uploadOptionDImage" class="upload-btn">Upload Image</button>
-                        </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="answer">Correct Answer</label>
-                            <select id="answer">
-                                <option value="0">A</option>
-                                <option value="1">B</option>
-                                <option value="2">C</option>
-                                <option value="3">D</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="youtube">YouTube video URL</label>
-                            <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
-                        </div>
-                    </div>
-
-                    <label for="solution">Solution</label>
-                    <div class="chem-editor-wrapper">
-                        <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Solution Image</label>
-                        <input type="text" id="solutionImage" readonly placeholder="No image selected">
-                        <button type="button" id="uploadSolutionImage" class="upload-btn">Upload Image</button>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" id="saveButton" class="btn-primary">Save Question</button>
-                        <button type="button" id="clearButton" class="btn-secondary">Clear</button>
-                        <span id="saveStatus" style="align-self: center; margin-left: 10px; color: #64748b; font-weight: bold; font-size: 13px;"></span>
-                    </div>
-                    <div id="formError" class="form-error"></div>
-                </form>
-            </div>
-
-            <!-- BULK IMPORT SECTION -->
-            <div id="bulkSection" class="view-section" style="display: none;">
-                <div class="dash-header">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px;">
+                    <!-- Option A -->
                     <div>
-                        <h1>Bulk Import PYQs</h1>
-                        <p>Paste the JSON array generated by AI to upload multiple questions in seconds.</p>
+                        <label for="optionA" style="font-weight: 600; margin-bottom: 8px; display: block;">Option A</label>
+                        <div class="chem-editor-wrapper"><textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea></div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <input type="text" id="optionAImage" readonly placeholder="Option A Image">
+                            <button type="button" id="uploadOptionAImage" class="btn-secondary">Upload</button>
+                        </div>
+                    </div>
+                    <!-- Option B -->
+                    <div>
+                        <label for="optionB" style="font-weight: 600; margin-bottom: 8px; display: block;">Option B</label>
+                        <div class="chem-editor-wrapper"><textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea></div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <input type="text" id="optionBImage" readonly placeholder="Option B Image">
+                            <button type="button" id="uploadOptionBImage" class="btn-secondary">Upload</button>
+                        </div>
+                    </div>
+                    <!-- Option C -->
+                    <div>
+                        <label for="optionC" style="font-weight: 600; margin-bottom: 8px; display: block;">Option C</label>
+                        <div class="chem-editor-wrapper"><textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea></div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <input type="text" id="optionCImage" readonly placeholder="Option C Image">
+                            <button type="button" id="uploadOptionCImage" class="btn-secondary">Upload</button>
+                        </div>
+                    </div>
+                    <!-- Option D -->
+                    <div>
+                        <label for="optionD" style="font-weight: 600; margin-bottom: 8px; display: block;">Option D</label>
+                        <div class="chem-editor-wrapper"><textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea></div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <input type="text" id="optionDImage" readonly placeholder="Option D Image">
+                            <button type="button" id="uploadOptionDImage" class="btn-secondary">Upload</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="admin-form-card" style="background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <label for="bulkJsonInput" style="font-weight: 700; color: #0f172a; margin-bottom: 8px; display: block;">
-                        Paste AI-Generated JSON Array
-                    </label>
-                    <textarea id="bulkJsonInput" rows="12" placeholder='[&#10;  {&#10;    "subject": "Physics",&#10;    "chapter": "Work, Energy and Power",&#10;    "exam": "NEET",&#10;    "year": 2026,&#10;    "difficulty": "Medium",&#10;    "type": "Single Correct",&#10;    "question": "Sample text...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "solution": "Sample solution..."&#10;  }&#10;]' style="width: 100%; font-family: monospace; font-size: 13px; padding: 14px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; background: #f8fafc; line-height: 1.4; resize: vertical;"></textarea>
-
-                    <div style="display: flex; gap: 12px; align-items: center; margin-top: 16px; flex-wrap: wrap;">
-                        <button type="button" id="startBulkUploadBtn" class="btn-primary" style="background: #10b981; border-color: #059669; padding: 10px 24px; font-weight: bold; border-radius: 8px; color: white; cursor: pointer;">
-                            🚀 Upload All to Database
-                        </button>
-                        <button type="button" id="clearBulkBtn" class="btn-secondary" style="padding: 10px 18px; border-radius: 8px; cursor: pointer;">
-                            Clear
-                        </button>
-                        <span id="bulkStatusText" style="font-weight: 600; color: #64748b; font-size: 14px;"></span>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div>
+                        <label for="answer" style="font-weight: 600; margin-bottom: 8px; display: block;">Correct Answer</label>
+                        <select id="answer">
+                            <option value="0">A</option>
+                            <option value="1">B</option>
+                            <option value="2">C</option>
+                            <option value="3">D</option>
+                        </select>
                     </div>
+                    <div>
+                        <label for="youtube" style="font-weight: 600; margin-bottom: 8px; display: block;">YouTube video URL</label>
+                        <input type="url" id="youtube" placeholder="Paste YouTube Video URL">
+                    </div>
+                </div>
 
-                    <div id="bulkProgressBarContainer" style="display: none; margin-top: 20px;">
-                        <div style="width: 100%; height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
-                            <div id="bulkProgressBar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.2s ease;"></div>
-                        </div>
+                <label for="solution" style="font-weight: 600; margin-bottom: 8px; display: block;">Solution</label>
+                <div class="chem-editor-wrapper" style="margin-bottom: 15px;">
+                    <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 30px; align-items: center;">
+                    <input type="text" id="solutionImage" readonly placeholder="No image selected" style="flex: 1;">
+                    <button type="button" id="uploadSolutionImage" class="btn-secondary">Upload Image</button>
+                </div>
+
+                <div style="display: flex; gap: 15px; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                    <button type="submit" id="saveButton" class="btn-primary">Save Question</button>
+                    <button type="button" id="clearButton" class="btn-secondary">Clear Form</button>
+                    <span id="saveStatus" style="color: var(--accent-blue); font-weight: bold; font-size: 14px;"></span>
+                </div>
+            </form>
+        </div>
+
+        <!-- BULK IMPORT SECTION -->
+        <div id="bulkSection" class="view-section" style="display: none;">
+            <div class="dash-header">
+                <h1>Bulk Import PYQs</h1>
+                <p>Paste the JSON array generated by AI to upload multiple questions in seconds.</p>
+            </div>
+
+            <div class="admin-form-card">
+                <label for="bulkJsonInput" style="font-weight: 700; margin-bottom: 12px; display: block;">
+                    Paste AI-Generated JSON Array
+                </label>
+                <textarea id="bulkJsonInput" rows="12" placeholder='[&#10;  {&#10;    "subject": "Physics",&#10;    "chapter": "Work, Energy and Power",&#10;    "exam": "NEET",&#10;    "year": 2026,&#10;    "difficulty": "Medium",&#10;    "type": "Single Correct",&#10;    "question": "Sample text...",&#10;    "options": ["A", "B", "C", "D"],&#10;    "answer": 0,&#10;    "solution": "Sample solution..."&#10;  }&#10;]' style="font-family: monospace; font-size: 13px; line-height: 1.5; resize: vertical;"></textarea>
+
+                <div style="display: flex; gap: 12px; align-items: center; margin-top: 20px; flex-wrap: wrap;">
+                    <button type="button" id="startBulkUploadBtn" class="btn-primary">🚀 Upload All to Database</button>
+                    <button type="button" id="clearBulkBtn" class="btn-secondary">Clear</button>
+                    <span id="bulkStatusText" style="font-weight: 600; color: var(--accent-blue); font-size: 14px;"></span>
+                </div>
+
+                <div id="bulkProgressBarContainer" style="display: none; margin-top: 20px;">
+                    <div style="width: 100%; height: 10px; background: var(--bg-main); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color);">
+                        <div id="bulkProgressBar" style="width: 0%; height: 100%; background: var(--accent-blue); transition: width 0.2s ease;"></div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- MANAGE QUESTIONS SECTION -->
-            <div id="tableSection" class="view-section" style="display: none;">
-                <div class="dash-header">
-                    <div>
-                        <h1>Manage Questions</h1>
-                        <p>View, edit, and delete existing questions from the database.</p>
-                    </div>
-                </div>
-                
-                <section class="table-card">
-                    <table id="questionsTable" class="question-table">
+        <!-- MANAGE QUESTIONS SECTION -->
+        <div id="tableSection" class="view-section" style="display: none;">
+            <div class="dash-header">
+                <h1>Manage Questions</h1>
+                <p>View, edit, and delete existing questions from the database.</p>
+            </div>
+            
+            <section class="card" style="padding: 0; overflow: hidden;">
+                <div style="overflow-x: auto;">
+                    <table id="questionsTable" class="question-table" style="min-width: 600px;">
                         <thead>
                             <tr>
                                 <th>Exam</th>
@@ -369,47 +399,88 @@
                         </thead>
                         <tbody id="questionsTableBody"></tbody>
                     </table>
-                </section>
-            </div>
-
-            <!-- STUDENT FEEDBACK SECTION -->
-            <div id="feedbackSection" class="view-section" style="display: none;">
-                <div class="dash-header">
-                    <div>
-                        <h1>Student Feedback</h1>
-                        <p>Read suggestions, bug reports, and messages sent by website visitors.</p>
-                    </div>
                 </div>
-                <div style="background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid #8b5cf6;">
-                    <div id="messagesInbox" style="display: flex; flex-direction: column; gap: 15px;">
-                        <p style="color: #64748b;">Loading messages...</p>
-                    </div>
+            </section>
+        </div>
+
+        <!-- STUDENT FEEDBACK SECTION -->
+        <div id="feedbackSection" class="view-section" style="display: none;">
+            <div class="dash-header">
+                <h1>Student Feedback</h1>
+                <p>Read suggestions, bug reports, and messages sent by website visitors.</p>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--accent-blue);">
+                <div id="messagesInbox" style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="color: var(--text-secondary);">Loading messages...</p>
                 </div>
             </div>
+        </div>
 
-            <!-- STUDENT COMMENTS SECTION -->
-            <div id="commentsSection" class="view-section" style="display: none;">
-                <div class="dash-header">
-                    <div>
-                        <h1>Student Comments</h1>
-                        <p>Read and moderate student discussions across all question pages.</p>
-                    </div>
-                </div>
-                <div style="background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 6px solid #f59e0b;">
-                    <div id="commentsInbox" style="display: flex; flex-direction: column; gap: 15px;">
-                        <p style="color: #64748b;">Loading comments...</p>
-                    </div>
+        <!-- STUDENT COMMENTS SECTION -->
+        <div id="commentsSection" class="view-section" style="display: none;">
+            <div class="dash-header">
+                <h1>Student Comments</h1>
+                <p>Read and moderate student discussions across all question pages.</p>
+            </div>
+            <div class="card" style="border-top: 4px solid #F59E0B;">
+                <div id="commentsInbox" style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="color: var(--text-secondary);">Loading comments...</p>
                 </div>
             </div>
+        </div>
 
-        </main>
-    </div>
-</div>
+    </main>
 
+<!-- Scripts -->
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
 
-<!-- Tab Navigation Script -->
+<!-- Universal Sidebar Initialization -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const primaryNav = document.getElementById('primaryNav');
+        
+        if (!mobileMenuBtn || !primaryNav) return;
+
+        let overlay = document.querySelector('.menu-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'menu-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        function toggleMenu() {
+            const isOpen = primaryNav.classList.contains('open');
+            if (isOpen) {
+                primaryNav.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                primaryNav.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; 
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        document.querySelectorAll('.drop-trigger').forEach(trigger => {
+            const newTrigger = trigger.cloneNode(true);
+            trigger.parentNode.replaceChild(newTrigger, trigger);
+            newTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const dropMenu = this.nextElementSibling;
+                dropMenu.classList.toggle('mobile-open');
+            });
+        });
+    });
+</script>
+
+<!-- Admin Tabs Navigation Script -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     function switchTab(targetId) {
@@ -417,21 +488,21 @@ document.addEventListener("DOMContentLoaded", function() {
         const targetSection = document.getElementById(targetId);
         if (targetSection) targetSection.style.display = 'block';
 
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.classList.remove('active');
-            if (item.getAttribute('data-target') === targetId) item.classList.add('active');
+        document.querySelectorAll('.admin-tab-btn').forEach(item => {
+            if (item.id !== 'logoutBtn') {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target') === targetId) item.classList.add('active');
+            }
         });
     }
 
     document.addEventListener('click', function(e) {
-        const trigger = e.target.closest('[data-target]');
-        if (trigger) {
+        const trigger = e.target.closest('.admin-tab-btn');
+        if (trigger && trigger.id !== 'logoutBtn') {
             e.preventDefault(); 
             const targetId = trigger.getAttribute('data-target');
             switchTab(targetId);
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            const appSidebar = document.getElementById("appSidebar");
-            if(appSidebar && appSidebar.classList.contains("open")) appSidebar.classList.remove("open");
         }
     });
 
@@ -439,7 +510,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<!-- Feedback & Comments Loader Script -->
+<!-- Feedback & Comments Loader Script (Dark Theme Native) -->
 <script type="module">
     import { db } from "./js/firebase.js";
     import { collection, getDocs, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
@@ -450,21 +521,21 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
             const snapshot = await getDocs(q);
-            inbox.innerHTML = snapshot.empty ? '<p style="color: #64748b;">No messages yet.</p>' : '';
+            inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No messages yet.</p>' : '';
             snapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 const date = new Date(data.timestamp).toLocaleString('en-IN');
                 inbox.innerHTML += `
-                    <div style="background: #f8fafc; border-left: 4px solid #10b981; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="background: rgba(59, 130, 246, 0.05); border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong style="color: #1e3a8a;">${data.name}</strong>
-                            <span style="font-size: 12px; color: #64748b; font-weight: 600;">${date}</span>
+                            <strong style="color: var(--accent-blue);">${data.name}</strong>
+                            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${date}</span>
                         </div>
-                        <div style="color: #334155; font-size: 14px; white-space: pre-wrap; line-height: 1.5;">${data.message}</div>
+                        <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; line-height: 1.5;">${data.message}</div>
                     </div>`;
             });
         } catch (e) {
-            inbox.innerHTML = '<p style="color: red;">Failed to load messages.</p>';
+            inbox.innerHTML = '<p style="color: #ef4444;">Failed to load messages.</p>';
         }
     }
 
@@ -474,25 +545,25 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
             const snapshot = await getDocs(q);
-            inbox.innerHTML = snapshot.empty ? '<p style="color: #64748b;">No comments yet.</p>' : '';
+            inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No comments yet.</p>' : '';
             snapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 const timeVal = data.timestamp?.seconds ? data.timestamp.seconds * 1000 : (data.timestamp || Date.now());
                 const date = new Date(timeVal).toLocaleString('en-IN');
                 inbox.innerHTML += `
-                    <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 8px; border: 1px solid #fde68a;">
+                    <div style="background: rgba(245, 158, 11, 0.05); border-left: 4px solid #F59E0B; padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <strong style="color: #92400e; font-size: 15px;">${data.name || data.author || 'Student'}</strong>
-                                <span style="font-size: 12px; color: #b45309; font-weight: 600; margin-left: 8px;">${date}</span>
+                                <strong style="color: #FBBF24; font-size: 15px;">${data.name || data.author || 'Student'}</strong>
+                                <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">${date}</span>
                             </div>
-                            <button onclick="deleteStudentComment('${docSnap.id}')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">Delete</button>
+                            <button onclick="deleteStudentComment('${docSnap.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.2s;">Delete</button>
                         </div>
-                        <div style="color: #451a03; font-size: 14px; white-space: pre-wrap; margin-top: 8px;">${data.text || data.comment || ''}</div>
+                        <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; margin-top: 8px;">${data.text || data.comment || ''}</div>
                     </div>`;
             });
         } catch (e) {
-            inbox.innerHTML = '<p style="color: red;">Failed to load comments.</p>';
+            inbox.innerHTML = '<p style="color: #ef4444;">Failed to load comments.</p>';
         }
     }
 
@@ -511,7 +582,7 @@ document.addEventListener("DOMContentLoaded", function() {
     loadComments();
 </script>
 
-<!-- Chemistry Toolbar Letters Enhancer -->
+<!-- Chemistry Toolbar Letters Enhancer (Dark Theme Native) -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const toolbarInterval = setInterval(() => {
@@ -525,17 +596,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 toolbar.classList.add('enhanced-toolbar');
                 toolbar.querySelectorAll('button').forEach(btn => {
                     btn.style.fontWeight = "bold";
+                    btn.style.background = "transparent";
+                    btn.style.color = "var(--text-secondary)";
+                    btn.style.border = "1px solid var(--border-color)";
+                    btn.style.borderRadius = "4px";
+                    btn.style.margin = "2px";
                 });
 
                 const sep1 = document.createElement('span');
-                sep1.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
+                sep1.style.cssText = "display:inline-block; width:2px; height:20px; background:var(--border-color); margin:0 8px; vertical-align:middle;";
                 toolbar.appendChild(sep1);
 
                 supers.forEach(char => {
                     const btn = document.createElement('button');
                     btn.type = 'button';
                     btn.textContent = char; 
-                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid #bfdbfe; background: #eff6ff; cursor: pointer; color: #1e40af; font-weight: bold;";
+                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border-color); background: rgba(59, 130, 246, 0.1); cursor: pointer; color: var(--accent-blue); font-weight: bold;";
                     btn.onclick = (e) => {
                         e.preventDefault();
                         const textarea = toolbar.parentElement.querySelector('textarea');
@@ -548,14 +624,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 const sep2 = document.createElement('span');
-                sep2.style.cssText = "display:inline-block; width:2px; height:20px; background:#cbd5e1; margin:0 8px; vertical-align:middle;";
+                sep2.style.cssText = "display:inline-block; width:2px; height:20px; background:var(--border-color); margin:0 8px; vertical-align:middle;";
                 toolbar.appendChild(sep2);
 
                 subs.forEach(char => {
                     const btn = document.createElement('button');
                     btn.type = 'button';
                     btn.textContent = char; 
-                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid #bbf7d0; background: #f0fdf4; cursor: pointer; color: #166534; font-weight: bold;";
+                    btn.style.cssText = "margin: 2px; min-width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border-color); background: rgba(59, 130, 246, 0.1); cursor: pointer; color: var(--accent-blue); font-weight: bold;";
                     btn.onclick = (e) => {
                         e.preventDefault();
                         const textarea = toolbar.parentElement.querySelector('textarea');
