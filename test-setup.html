@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Setup | Doubt Factory</title>
     <meta name="description" content="Configure a custom practice test or PYQ paper across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
-    <meta name="keywords" content="test setup, mock test generator, JEE practice test, NEET mock test, Physics, Chemistry, Maths, Biology">
     <meta name="robots" content="index,follow">
     <link rel="canonical" href="test-setup.html">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
@@ -21,44 +25,123 @@
     </script>
 
     <style>
-        .setup-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 40px auto; border-top: 6px solid #1565C0; }
+        /* =========================================
+           TEST SETUP DARK THEME OVERRIDES
+           ========================================= */
+        .setup-card { 
+            background: var(--bg-card); 
+            border-radius: var(--radius-lg); 
+            padding: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            max-width: 600px; 
+            margin: 40px auto; 
+            border: 1px solid var(--border-color);
+            border-top: 6px solid var(--accent-blue); 
+        }
+        
         .setup-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
-        .tab-btn { flex: 1; padding: 12px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-weight: bold; color: #64748b; font-size: 15px; transition: 0.2s; }
-        .tab-btn:hover { border-color: #cbd5e1; }
-        .tab-btn.active { border-color: #1565C0; background: #eff6ff; color: #1565C0; }
+        
+        .tab-btn { 
+            flex: 1; 
+            padding: 14px; 
+            border: 1px solid var(--border-color); 
+            background: var(--bg-card-hover); 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            font-weight: 600; 
+            color: var(--text-secondary); 
+            font-size: 15px; 
+            transition: 0.2s; 
+        }
+        .tab-btn:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+        .tab-btn.active { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        
         .setup-section { display: none; animation: fadeIn 0.3s ease; }
         .setup-section.active { display: block; }
-        .input-group { margin-bottom: 18px; }
-        .input-group label { font-weight: 600; margin-bottom: 8px; display: block; color: #334155; font-size: 14px; }
         
-        /* Unified inputs and selects for a clean look */
-        .input-group select, .input-group input { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; color: #0f172a; background: #fff; outline: none; box-sizing: border-box; }
-        .input-group select:focus, .input-group input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-        .input-group select:disabled, .input-group input:disabled { background: #f1f5f9; cursor: not-allowed; color: #94a3b8; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { font-weight: 600; margin-bottom: 8px; display: block; color: var(--text-primary); font-size: 14px; }
         
-        .start-btn { width: 100%; background: #10b981; color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        .start-btn:hover { background: #059669; transform: translateY(-2px); }
-        .start-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .input-group select, .input-group input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border-radius: var(--radius-md); 
+            border: 1px solid var(--border-color); 
+            font-size: 15px; 
+            color: var(--text-primary); 
+            background: var(--bg-main); 
+            outline: none; 
+            box-sizing: border-box; 
+            transition: border-color 0.2s; 
+        }
+        .input-group select:focus, .input-group input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        .input-group select:disabled, .input-group input:disabled { background: var(--bg-card-hover); cursor: not-allowed; color: var(--text-secondary); opacity: 0.7; }
         
-        /* Live Counter Styling */
-        .live-counter { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 600; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
-        .live-counter.error { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+        .start-btn { 
+            width: 100%; 
+            background: var(--accent-blue); 
+            color: white; 
+            padding: 16px; 
+            border: none; 
+            border-radius: var(--radius-md); 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: 0.2s; 
+        }
+        .start-btn:hover:not(:disabled) { background: #2563EB; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transform: translateY(-2px); }
+        .start-btn:disabled { background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border-color); cursor: not-allowed; transform: none; }
+        
+        .live-counter { 
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid rgba(16, 185, 129, 0.3); 
+            color: #10b981; 
+            padding: 12px 16px; 
+            border-radius: var(--radius-md); 
+            font-size: 14px; 
+            font-weight: 600; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .live-counter.error { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body id="home-body">
+
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
     <header class="site-header">
-        <!-- Original Clean Logo -->
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <nav aria-label="Primary navigation">
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Sidebar Navigation -->
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
             <a href="index.html">Home</a>
             
-            <!-- EXAMS DROPDOWN -->
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Exams ▾</a>
                 <div class="drop-menu">
@@ -68,31 +151,76 @@
                 </div>
             </div>
 
-            <!-- SUBJECTS DROPDOWN -->
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
                     <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
                     <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
                 </div>
             </div>
 
-            <a href="test-setup.html">Mock Tests</a>
+            <a href="test-setup.html" style="color: var(--accent-blue);">Mock Tests</a>
             <a href="search.html">Search</a>
             <a href="bookmarks.html">Bookmarks</a>
         </nav>
     </header>
 
+    <!-- Sidebar Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            if (!mobileMenuBtn || !primaryNav) return;
+
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                newTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
+                });
+            });
+        });
+    </script>
+    <!-- ========================================== -->
+
     <main class="container">
         <div class="setup-card">
-            <h2 style="text-align: center; color: #0f172a; margin-bottom: 25px; font-size: 24px;">Configure Practice Test</h2>
+            <h2 style="text-align: center; color: var(--text-primary); margin-bottom: 25px; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">Configure Practice Test</h2>
             
             <div class="setup-tabs">
                 <button class="tab-btn active" onclick="switchMode('pyq')">PYQ Paper Mode</button>
@@ -132,7 +260,6 @@
                     <label>Select Subject</label>
                     <select id="customSubject">
                         <option value="All">All Subjects</option>
-                        <!-- Options dynamically injected via JS based on Target Exam -->
                     </select>
                 </div>
                 <div class="input-group">
@@ -163,7 +290,7 @@
             </div>
 
             <!-- GLOBAL TIME LIMIT (Applies to both modes) -->
-            <div class="input-group" style="border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 10px;">
+            <div class="input-group" style="border-top: 1px solid var(--border-color); padding-top: 24px; margin-top: 15px;">
                 <label>Test Duration</label>
                 <select id="testDuration">
                     <option value="15">15 Minutes (Quick Practice)</option>
@@ -178,7 +305,7 @@
             </div>
 
             <button class="start-btn" id="startTestBtn" disabled>Loading Database...</button>
-            <p id="setupError" style="color: #dc2626; text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; height: 20px;"></p>
+            <p id="setupError" style="color: #EF4444; text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; height: 20px;"></p>
         </div>
     </main>
 
@@ -211,7 +338,6 @@
         const testDurationSelect = document.getElementById('testDuration');
         const customMinutesInput = document.getElementById('customMinutes');
 
-        // Toggle Custom Minutes Input
         testDurationSelect.addEventListener('change', (e) => {
             if (e.target.value === 'custom') {
                 customMinutesInput.style.display = 'block';
@@ -221,7 +347,6 @@
             }
         });
 
-        // Dynamic Subject Menu filtering based on JEE vs NEET
         function updateSubjects() {
             const selectedExam = customExamSelect.value;
             const currentSubject = subjectSelect.value; 
@@ -251,7 +376,6 @@
 
             subjectSelect.innerHTML = html;
 
-            // Preserve the user's previous selection if it's still available in the new dropdown
             const optionExists = Array.from(subjectSelect.options).some(opt => opt.value === currentSubject);
             if (optionExists) {
                 subjectSelect.value = currentSubject;
@@ -345,7 +469,6 @@
             let availableChapters = [];
             
             if (selectedSubject === "All") {
-                // If "All Subjects", show chapters based strictly on what's available for the selected Exam
                 const targetExam = customExamSelect.value;
                 availableChapters = [...new Set(allQuestions
                     .filter(q => (targetExam === "All" || q.exam === targetExam) && q.chapter)
@@ -390,7 +513,6 @@
             if (val < 1) e.target.value = 1;
         });
 
-        // Launch Test Logic
         startBtn.addEventListener('click', () => {
             errorText.textContent = "";
             const isPyq = document.getElementById('pyqMode').classList.contains('active');
@@ -423,7 +545,6 @@
                 return;
             }
 
-            // Determine Time Limit
             let timeSelected = testDurationSelect.value;
             if (timeSelected === 'custom') {
                 timeSelected = parseInt(customMinutesInput.value);
@@ -439,35 +560,6 @@
             sessionStorage.setItem('df_cbt_duration', timeSelected);
             
             window.location.href = "cbt.html";
-        });
-    </script>
-    
-    <script>
-        // Ultimate Mobile Dropdown Teleporter
-        document.querySelectorAll('.drop-trigger').forEach(trigger => {
-            const dropMenu = trigger.nextElementSibling;
-            trigger.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    if (dropMenu.classList.contains('mobile-popup-active')) {
-                        dropMenu.classList.remove('mobile-popup-active');
-                    } else {
-                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                        if (dropMenu.parentElement !== document.body) {
-                            document.body.appendChild(dropMenu);
-                        }
-                        setTimeout(() => {
-                            dropMenu.classList.add('mobile-popup-active');
-                        }, 10);
-                    }
-                }
-            });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
-                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-            }
         });
     </script>
 </body>
