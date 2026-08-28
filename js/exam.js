@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (filteredQuestions.length === 0) {
-            container.innerHTML = `<p style="text-align:center; padding:40px; background:#f8fafc; border-radius:12px; color:#64748b;">No questions uploaded for this exam yet. Check back soon!</p>`;
-            if (yearFiltersContainer) yearFiltersContainer.innerHTML = "<p style='color:#64748b;'>No years available</p>";
+            container.innerHTML = `<p style="text-align:center; padding:40px; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius:12px; color: var(--text-secondary);">No questions uploaded for this exam yet. Check back soon!</p>`;
+            if (yearFiltersContainer) yearFiltersContainer.innerHTML = "<p style='color: var(--text-secondary);'>No years available</p>";
             return;
         }
 
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const allBtn = document.createElement("button");
         allBtn.textContent = "All Years";
         // Default "All Years" to blue (active)
-        allBtn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: none; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 5px; transition: all 0.2s;";
+        allBtn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: 1px solid var(--accent-blue); background: var(--accent-blue); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 8px; transition: all 0.2s;";
         allBtn.onclick = () => filterByYear("All", allBtn);
         if (yearFiltersContainer) yearFiltersContainer.appendChild(allBtn);
 
@@ -66,8 +66,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const btn = document.createElement("button");
                 btn.textContent = year;
                 btn.className = "year-filter-btn";
-                // Default specific years to white (inactive)
-                btn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: 1px solid #cbd5e1; background: white; color: #334155; border-radius: 8px; cursor: pointer; font-weight: 500; margin-bottom: 5px; transition: all 0.2s;";
+                // Default specific years to transparent/dark (inactive)
+                btn.style.cssText = "display: block; width: 100%; text-align: left; padding: 10px 15px; border: 1px solid var(--border-color); background: transparent; color: var(--text-primary); border-radius: 8px; cursor: pointer; font-weight: 500; margin-bottom: 8px; transition: all 0.2s;";
                 btn.onclick = () => filterByYear(year, btn);
                 yearFiltersContainer.appendChild(btn);
             }
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             yearBlock.style.marginBottom = "40px";
             
             const yearHeading = document.createElement("h2");
-            yearHeading.style.cssText = "color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px;";
+            yearHeading.style.cssText = "color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;";
             yearHeading.textContent = year === "General Practice" ? year : `${selectedExam || 'Exam'} - ${year}`;
             yearBlock.appendChild(yearHeading);
 
@@ -90,20 +90,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             yearQuestions.forEach(q => {
                 const qCard = document.createElement("a");
                 qCard.href = `question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}`;
-                qCard.style.cssText = "display: block; padding: 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: box-shadow 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
+                qCard.style.cssText = "display: block; padding: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;";
                 
-                qCard.onmouseover = () => qCard.style.boxShadow = "0 10px 15px rgba(0,0,0,0.05)";
-                qCard.onmouseout = () => qCard.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02)";
+                qCard.onmouseover = () => {
+                    qCard.style.background = "var(--bg-card-hover)";
+                    qCard.style.borderColor = "var(--accent-blue)";
+                    qCard.style.transform = "translateY(-2px)";
+                };
+                qCard.onmouseout = () => {
+                    qCard.style.background = "var(--bg-card)";
+                    qCard.style.borderColor = "var(--border-color)";
+                    qCard.style.transform = "translateY(0)";
+                };
 
                 const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..." : "Practice Question...";
 
                 qCard.innerHTML = `
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.chapter || q.subject || 'Topic'}</span>
-                        <span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
+                        <span style="background: rgba(59, 130, 246, 0.15); color: var(--accent-light-blue); border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.chapter || q.subject || 'Topic'}</span>
+                        <span style="background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">${q.difficulty || 'Medium'}</span>
                     </div>
-                    <h3 style="font-size: 16px; color: #334155; margin: 0; line-height: 1.5; font-weight: 500;">${snippet}</h3>
-                    <div style="margin-top: 15px; font-size: 14px; color: #3b82f6; font-weight: 600;">Solve Question →</div>
+                    <h3 style="font-size: 16px; color: var(--text-primary); margin: 0; line-height: 1.5; font-weight: 500;">${snippet}</h3>
+                    <div style="margin-top: 15px; font-size: 14px; color: var(--accent-blue); font-weight: 600;">Solve Question →</div>
                 `;
                 questionGrid.appendChild(qCard);
             });
@@ -114,19 +122,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // The Filtering Magic
         function filterByYear(targetYear, activeBtn) {
-            // Reset all buttons to white
+            // Reset all buttons to transparent dark theme
             const allButtons = yearFiltersContainer.querySelectorAll("button");
             allButtons.forEach(b => {
-                b.style.background = "white";
-                b.style.color = "#334155";
-                b.style.border = "1px solid #cbd5e1";
+                b.style.background = "transparent";
+                b.style.color = "var(--text-primary)";
+                b.style.border = "1px solid var(--border-color)";
                 b.style.fontWeight = "500";
             });
             
-            // Turn the clicked button Blue
-            activeBtn.style.background = "#2563eb";
+            // Turn the clicked button Solid Blue
+            activeBtn.style.background = "var(--accent-blue)";
             activeBtn.style.color = "white";
-            activeBtn.style.border = "none";
+            activeBtn.style.border = "1px solid var(--accent-blue)";
             activeBtn.style.fontWeight = "600";
 
             // Hide/Show the corresponding year blocks
@@ -141,6 +149,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     } catch (error) {
         console.error("Error loading exam questions:", error);
-        container.innerHTML = `<p style="text-align:center; color:red;">Failed to load questions. Please check your connection.</p>`;
+        container.innerHTML = `<p style="text-align:center; color: #ef4444;">Failed to load questions. Please check your connection.</p>`;
     }
 });
