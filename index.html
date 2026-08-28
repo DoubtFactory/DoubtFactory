@@ -1,245 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="google-site-verification" content="yqKOY45zRSKrG-RrktWw_G5l9k3EJ49mI4K4NlUWcpw" />
-<title>Doubt Factory | Complete Practice for JEE & NEET</title>
-<meta name="description" content="Doubt Factory is a modern practice platform for JEE and NEET students with topic-wise questions across Physics, Chemistry, Maths, and Biology, complete with video support.">
-<meta name="keywords" content="JEE practice, NEET practice, Physics questions, Chemistry questions, Maths questions, Biology questions, video solutions, exam preparation">
-<meta name="robots" content="index,follow">
-<meta name="theme-color" content="#1565C0">
-<link rel="canonical" href="index.html">
-<meta property="og:title" content="Doubt Factory | Complete Practice for JEE & NEET">
-<meta property="og:description" content="Practice Physics, Chemistry, Maths, and Biology questions with explanations and video support for JEE and NEET.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://doubtfactory.example.com/index.html">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Doubt Factory | Complete Practice for JEE & NEET">
-<meta name="twitter:description" content="Practice Physics, Chemistry, Maths, and Biology questions with explanations and video support for JEE and NEET.">
-<link rel="stylesheet" href="css/main.css">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
-
-</head>
-
-<body class="home-page">
-<a class="skip-link" href="#mainContent">Skip to main content</a>
-
-<header class="site-header">
-
-    <!-- Original Clean Logo -->
-    <a href="index.html" class="logo">
-        <h2>Doubt Factory</h2>
-        <p>Turning Doubts into Clarity</p>
-    </a>
-
-  <nav aria-label="Primary navigation">
-    <a href="index.html">Home</a>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Doubt Factory | Master Your Exams</title>
+    <meta name="description" content="Topic-wise quizzes, past papers, and analytics to prepare for JEE and NEET with confidence.">
     
-    <!-- EXAMS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Exams ▾</a>
-        <div class="drop-menu">
-            <a href="exam.html?type=JEE Main">JEE Main</a>
-            <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-            <a href="exam.html?type=NEET">NEET</a>
-        </div>
-    </div>
+    <!-- Using the global CSS, but we will override for the dark homepage theme below -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <style>
+        /* =========================================
+           MINIMAL DARK THEME OVERRIDES (Homepage Only)
+           ========================================= */
+        :root {
+            --bg-dark: #0f141e;
+            --bg-card: #192132;
+            --bg-card-inner: #242c3d;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --accent-orange: #ff7a59;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --border-dark: #2a3441;
+        }
 
-    <!-- SUBJECTS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-        <div class="drop-menu">
-            <a href="chapter.html?subject=Physics">Physics</a>
-            
-            <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-            <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-            <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-            <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
-            
-            <a href="chapter.html?subject=Maths">Maths</a>
-            
-            <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-            <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-            <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
-        </div>
-    </div>
+        body#home-body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-    <a href="test-setup.html">Mock Tests</a>
-    <a href="search.html">Search</a>
-    <a href="bookmarks.html">Bookmarks</a>
-</nav>
+        /* Transparent Header for Homepage */
+        #home-body .site-header {
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 15px 20px;
+        }
+        #home-body .site-header .logo h2, 
+        #home-body .site-header .logo p {
+            color: var(--text-main);
+        }
+        #home-body .site-header nav a, 
+        #home-body .site-header .drop-trigger {
+            color: var(--text-muted);
+        }
+        #home-body .site-header nav a:hover, 
+        #home-body .site-header .drop-trigger:hover {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+        }
 
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+        .hero-title span {
+            color: var(--accent-orange);
+        }
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
 
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            max-width: 100%;
+        }
+        .search-container input {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 16px 20px 16px 45px;
+            font-size: 16px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .search-container input:focus {
+            border-color: var(--accent-orange);
+        }
+        .search-container svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
 
-</header>
-
-<main id="mainContent">
-<section class="hero">
-
-<div class="hero-content">
-
-<div class="hero-copy">
-
-<span class="hero-pill">JEE & NEET Practice Platform</span>
-
-<h1>Master JEE & NEET</h1>
-
-<p>
-Practice thousands of carefully selected questions across Physics, Chemistry, Maths, and Biology with clear explanations, video support, and exam-focused practice.
-</p>
-
-<form class="search-box" role="search">
-<label class="sr-only" for="homeSearch">Search questions</label>
-<input
-    id="homeSearch"
-    type="text"
-    placeholder="Search Physics, Chemistry, Maths, Biology..."
-    aria-label="Search questions"
->
-<button type="submit" aria-label="Search questions">
-Search
-</button>
-</form>
-
-<div class="hero-highlights">
-<div>
-<strong>4+</strong>
-<span>Subjects</span>
-</div>
-<div>
-<strong>90+</strong>
-<span>Chapters</span>
-</div>
-<div>
-<strong>100%</strong>
-<span>Free Access</span>
-</div>
-</div>
-
-</div>
-
-<div class="hero-card" aria-label="Why students love Doubt Factory">
-<h3>Why students love Doubt Factory</h3>
-<ul>
-<li>Exam-specific practice for JEE Main, JEE Advanced, and NEET</li>
-<li>Topic-wise questions with solutions and video explanations</li>
-<li>Quick search and smooth navigation for daily revision</li>
-</ul>
-</div>
-
-</div>
-
-</section>
-<section class="latest">
-
-    <div class="container">
-
-        <div class="section-heading">
-            <h2>Latest Questions</h2>
-            <p class="section-subtitle">
-                Recently added practice questions with detailed solutions.
-            </p>
-        </div>
-
-        <div id="latestQuestions" class="loading-stack" aria-live="polite" aria-busy="true">
-            <div class="skeleton-card">
-                <div class="skeleton-line short"></div>
-                <div class="skeleton-line long"></div>
-                <div class="skeleton-line medium"></div>
-            </div>
-            <div class="skeleton-card">
-                <div class="skeleton-line short"></div>
-                <div class="skeleton-line long"></div>
-                <div class="skeleton-line medium"></div>
-            </div>
-        </div>
-
-    </div>
-
-</section>
-
-
-<footer class="site-footer">
-
-<div class="container footer-content">
-<div>
-<h3>Doubt Factory</h3>
-<p>High-quality practice for JEE and NEET exam preparation.</p>
-</div>
-<div>
-<h4>Explore</h4>
-<a href="index.html">Home</a>
-<a href="exam.html">Exams</a>
-<a href="search.html">Subjects</a>
-</div>
-        <div class="footer-col">
-            <h4>Support</h4>
-            <!-- Replaced Search with Contact -->
-            <a href="contact.html">Contact Us</a>
-        </div>
-
-</div>
-
-<div class="footer-bottom">© 2026 Doubt Factory</div>
-
-</footer>
-
-<script type="module" src="js/home.js"></script>
-<script>
-    // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
-    document.querySelectorAll('.drop-trigger').forEach(trigger => {
-        // Find the menu IMMEDIATELY when the page loads, before it teleports anywhere
-        const dropMenu = trigger.nextElementSibling;
+        /* Horizontal Scroll Cards */
+        .next-step-section {
+            padding: 20px 0 60px 20px;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        .scroll-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            padding-right: 20px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .exam-card {
+            min-width: 280px;
+            width: 280px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-main);
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            border: 1px solid var(--border-dark);
+            transition: transform 0.2s;
+        }
+        .exam-card:active {
+            transform: scale(0.98);
+        }
+        .card-top {
+            height: 160px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+        .badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-orange { background: rgba(255, 122, 89, 0.15); color: var(--accent-orange); }
+        .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+        .badge-pink { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
         
-        trigger.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                
-                // If the menu is already open, close it
-                if (dropMenu.classList.contains('mobile-popup-active')) {
-                    dropMenu.classList.remove('mobile-popup-active');
-                } else {
-                    // Close any other menus that might be open
-                    document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                    
-                    // TELEPORTATION: Move the menu to the main body if it isn't there already
-                    if (dropMenu.parentElement !== document.body) {
-                        document.body.appendChild(dropMenu);
+        .card-bottom {
+            padding: 20px;
+        }
+        .card-bottom h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+        .card-bottom p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Features List */
+        .features-section {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+        .feature-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-card-inner);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--accent-orange);
+        }
+        .feature-text h4 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .feature-text p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Mobile specific adjustments */
+        @media (min-width: 768px) {
+            .scroll-container {
+                justify-content: center;
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+        }
+    </style>
+</head>
+<body id="home-body">
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+
+        <nav aria-label="Primary navigation">
+            <a href="index.html">Home</a>
+            
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                </div>
+            </div>
+
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <h1 class="hero-title">Master Your Exams<br><span>With Doubt Factory</span></h1>
+        <p class="hero-subtitle">Topic-wise quizzes, past papers, and analytics to prepare with confidence.</p>
+        
+        <div class="search-container">
+            <form action="search.html" method="GET">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="q" placeholder="Search" required aria-label="Search questions">
+            </form>
+        </div>
+    </section>
+
+    <!-- HORIZONTAL EXAM CARDS -->
+    <section class="next-step-section">
+        <h2 class="section-title">Pick your Next Step</h2>
+        <div class="scroll-container">
+            
+            <!-- JEE MAIN -->
+            <a href="exam.html?type=JEE Main" class="exam-card">
+                <div class="card-top" style="background: linear-gradient(to bottom right, #2a1f1d, #1a1515);">
+                    <span class="badge badge-orange">Engineering</span>
+                    <svg viewBox="0 0 24 24" width="100" height="100" stroke="var(--accent-orange)" stroke-width="1.5" fill="none" style="opacity: 0.8; transform: translate(10px, 10px);">
+                        <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+                        <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
+                        <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)"></ellipse>
+                        <circle cx="12" cy="12" r="2" fill="var(--accent-orange)"></circle>
+                    </svg>
+                </div>
+                <div class="card-bottom">
+                    <h3>JEE Main</h3>
+                    <p>Comprehensive preparation for India's premier engineering entrance exam.</p>
+                </div>
+            </a>
+
+            <!-- JEE ADVANCED -->
+            <a href="exam.html?type=JEE Advanced" class="exam-card">
+                <div class="card-top" style="background: linear-gradient(to bottom right, #251c2d, #17121c);">
+                    <span class="badge badge-purple">Engineering</span>
+                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-purple)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8; transform: translate(10px, 10px) rotate(15deg);">
+                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                        <rect x="8" y="6" width="8" height="4"></rect>
+                        <circle cx="8" cy="14" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="12" cy="14" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="16" cy="14" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="8" cy="18" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="12" cy="18" r="1" fill="var(--accent-purple)"></circle>
+                        <circle cx="16" cy="18" r="1" fill="var(--accent-purple)"></circle>
+                    </svg>
+                </div>
+                <div class="card-bottom">
+                    <h3>JEE Advanced</h3>
+                    <p>Master the toughest engineering exam with in-depth topic coverage.</p>
+                </div>
+            </a>
+
+            <!-- NEET -->
+            <a href="exam.html?type=NEET" class="exam-card">
+                <div class="card-top" style="background: linear-gradient(to bottom right, #2d1c24, #1c1216);">
+                    <span class="badge badge-pink">Medical</span>
+                    <svg viewBox="0 0 24 24" width="90" height="90" stroke="var(--accent-pink)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8; transform: translate(10px, 10px) rotate(-15deg);">
+                        <path d="M15 2v20"></path>
+                        <path d="M9 2v20"></path>
+                        <path d="M9 6h6"></path>
+                        <path d="M9 12h6"></path>
+                        <path d="M9 18h6"></path>
+                        <path d="M15 6c3 0 3-4 6-4"></path>
+                        <path d="M9 6c-3 0-3-4-6-4"></path>
+                        <path d="M15 12c3 0 3-4 6-4"></path>
+                        <path d="M9 12c-3 0-3-4-6-4"></path>
+                        <path d="M15 18c3 0 3-4 6-4"></path>
+                        <path d="M9 18c-3 0-3-4-6-4"></path>
+                    </svg>
+                </div>
+                <div class="card-bottom">
+                    <h3>NEET</h3>
+                    <p>Your gateway to medical colleges with extensive biology, physics, and chemistry.</p>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- FEATURES LIST -->
+    <section class="features-section">
+        <h2 class="section-title">Why Students<br><span style="color: var(--accent-orange);">Love Doubt Factory?</span></h2>
+        
+        <div class="features-list">
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Topic-wise Quizzes</h4>
+                    <p>Focused practice on specific topics to strengthen your weak areas.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Past Year Papers</h4>
+                    <p>Practice with real exam questions from previous years.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Performance Analytics</h4>
+                    <p>Track your progress with detailed stats and insights.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Bookmarks</h4>
+                    <p>Save important questions for quick revision later.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon" style="color: var(--accent-pink);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Review Mistakes</h4>
+                    <p>Learn from your errors with a dedicated wrong answers section.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon" style="color: var(--accent-purple);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="5" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="19"></line><line x1="5" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="19" y2="12"></line><line x1="7.05" y1="7.05" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="16.95" y2="16.95"></line><line x1="7.05" y1="16.95" x2="5.64" y2="18.36"></line><line x1="18.36" y1="7.05" x2="16.95" y2="5.64"></line></svg>
+                </div>
+                <div class="feature-text">
+                    <h4>Detailed Explanations</h4>
+                    <p>Understand concepts better with step-by-step solutions.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Mobile Dropdown Logic -->
+    <script>
+        document.querySelectorAll('.drop-trigger').forEach(trigger => {
+            const dropMenu = trigger.nextElementSibling;
+            trigger.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    if (dropMenu.classList.contains('mobile-popup-active')) {
+                        dropMenu.classList.remove('mobile-popup-active');
+                    } else {
+                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
+                        if (dropMenu.parentElement !== document.body) {
+                            document.body.appendChild(dropMenu);
+                        }
+                        setTimeout(() => {
+                            dropMenu.classList.add('mobile-popup-active');
+                        }, 10);
                     }
-                    
-                    // A tiny 10-millisecond delay forces the browser to register the tap instantly
-                    setTimeout(() => {
-                        dropMenu.classList.add('mobile-popup-active');
-                    }, 10);
                 }
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
+                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
             }
         });
-    });
-
-    // Close the menu if the student taps anywhere in the dark background
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
-            document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
