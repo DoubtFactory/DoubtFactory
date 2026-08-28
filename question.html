@@ -1,254 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Doubt Factory - Question Practice</title>
+    <meta name="description" content="Practice questions for JEE and NEET across Physics, Chemistry, Maths, and Biology with explanations, video support, and discussion tools.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="question.html">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/question.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* =========================================
+           QUESTION PAGE DARK THEME OVERRIDES
+           ========================================= */
+        .question-card, .video-card, .discussion-card {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
 
-<title>Doubt Factory - Question</title>
-<meta name="description" content="Practice questions for JEE and NEET across Physics, Chemistry, Maths, and Biology with explanations, video support, and discussion tools.">
-<meta name="keywords" content="JEE practice, NEET practice, Physics, Chemistry, Maths, Biology, video explanation">
-<meta name="robots" content="index,follow">
-<meta name="theme-color" content="#1565C0">
-<link rel="canonical" href="question.html">
-<meta property="og:title" content="Doubt Factory Question Practice">
-<meta property="og:description" content="Practice questions with explanations and video support on Doubt Factory.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://doubtfactory.example.com/question.html">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Doubt Factory Question Practice">
-<meta name="twitter:description" content="Practice questions with explanations and video support on Doubt Factory.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/question.css">
+        #breadcrumb {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        /* Dark Theme Bookmark Button */
+        #bookmarkBtn {
+            background: rgba(59, 130, 246, 0.1) !important;
+            border: 1px solid rgba(59, 130, 246, 0.3) !important;
+            color: var(--accent-blue) !important;
+            padding: 8px 14px !important;
+            border-radius: var(--radius-sm) !important;
+            cursor: pointer;
+            font-weight: 600 !important;
+            font-size: 13px !important;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        #bookmarkBtn:hover {
+            background: rgba(59, 130, 246, 0.2) !important;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        /* Force All Tags to Blue Theme */
+        .question-tags .tag {
+            background: rgba(59, 130, 246, 0.15) !important;
+            color: var(--accent-light-blue) !important;
+            border: 1px solid rgba(59, 130, 246, 0.3) !important;
+            border-radius: 6px;
+            font-weight: 600;
+        }
 
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
+        #questionText { color: var(--text-primary) !important; }
+        
+        .card-heading h3 { color: var(--text-primary) !important; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; }
 
+        /* Discussion Inputs */
+        #commentName, #commentText {
+            background: var(--bg-main) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--radius-sm);
+        }
+        #commentName:focus, #commentText:focus {
+            border-color: var(--accent-blue) !important;
+        }
+
+        #postComment {
+            background: var(--accent-blue) !important;
+            color: white !important;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        #postComment:hover { background: #2563EB !important; }
+
+        .comments-list { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px; }
+        
+        /* Navigation Buttons */
+        .question-navigation { display: flex; justify-content: space-between; gap: 15px; margin-top: 10px; }
+        .nav-btn {
+            flex: 1;
+            background: var(--bg-card-hover) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-color) !important;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: var(--border-color) !important;
+            color: var(--accent-blue) !important;
+        }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* Options & Solution Box */
+        .option-label { border-color: var(--border-color) !important; }
+        .option-label:hover { background: var(--bg-card-hover) !important; }
+        .submit-btn { background: var(--accent-blue) !important; border-radius: var(--radius-md); }
+    </style>
 </head>
 
-<body class="question-page">
-<a class="skip-link" href="#mainContent">Skip to main content</a>
+<body class="question-page" id="home-body">
+    <a class="skip-link" href="#mainContent" style="position: absolute; left: -9999px;">Skip to main content</a>
 
-<header class="site-header">
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
 
-    <!-- Original Clean Logo -->
-    <a href="index.html" class="logo">
-        <h2>Doubt Factory</h2>
-        <p>Turning Doubts into Clarity</p>
-    </a>
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
 
-     <nav aria-label="Primary navigation">
-    <a href="index.html">Home</a>
-    
-    <!-- EXAMS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Exams ▾</a>
-        <div class="drop-menu">
-            <a href="exam.html?type=JEE Main">JEE Main</a>
-            <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-            <a href="exam.html?type=NEET">NEET</a>
-        </div>
-    </div>
+        <!-- Sidebar Navigation -->
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
 
-    <!-- SUBJECTS DROPDOWN -->
-    <div class="nav-item-dropdown">
-        <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-        <div class="drop-menu">
-            <a href="chapter.html?subject=Physics">Physics</a>
+            <a href="index.html">Home</a>
             
-            <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-            <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-            <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-            <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
+                    <a href="exam.html?type=NEET">NEET</a>
+                </div>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
+                </div>
+            </div>
+
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+        </nav>
+    </header>
+
+    <!-- Sidebar Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
             
-            <a href="chapter.html?subject=Maths">Maths</a>
-            
-            <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-            <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-            <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
-        </div>
-    </div>
+            if (!mobileMenuBtn || !primaryNav) return;
 
-    <a href="test-setup.html">Mock Tests</a>
-    <a href="search.html">Search</a>
-    <a href="bookmarks.html">Bookmarks</a>
-</nav>
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
 
-
-
-</header>
-
-<main id="mainContent" class="container question-layout">
-
-<div class="question-main">
-
-<div class="question-card">
-
-<div class="breadcrumb" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-    
-    <span id="breadcrumb">
-    Home
-    </span>
-    
-    <button id="bookmarkBtn" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; color: #334155; font-size: 13px; display: flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-        ☆ Bookmark
-    </button>
-
-</div>
-
-<div class="question-tags">
-
-<span class="tag blue" id="examTag"></span>
-
-<span class="tag purple" id="chapterTag"></span>
-
-<span class="tag orange" id="difficultyTag"></span>
-
-<span class="tag green" id="typeTag"></span>
-
-</div>
-
-<h2 id="questionText" style="line-height: 1.6; font-weight: 500;">
-Loading question...
-</h2>
-<div id="questionImageContainer"></div>
-
-<form class="question-form" novalidate aria-label="Question answer form">
-
-<div id="optionsContainer" class="options-list" aria-label="Answer options"></div>
-
-<button type="button" class="submit-btn" id="submitAnswer">
-
-Submit Answer
-
-</button>
-<div id="resultMessage" class="result-message" aria-live="polite"></div>
-
-<div id="solutionBox" style="display:none;" class="solution-card">
-
-    <h3>Explanation</h3>
-
-    <div id="solutionText" style="line-height: 1.6; margin-bottom: 15px;"></div>
-
-    <div id="solutionImageContainer"></div>
-
-</div>
-
-</form>
-
-</div>
-
-<div class="video-card">
-
-    <div class="card-heading">
-        <h3>🎥 Video Solution</h3>
-    </div>
-
-    <div id="videoContainer" aria-label="Video solution container">
-        <p class="empty-state">No video available.</p>
-    </div>
-
-</div>
-
-<div class="discussion-card">
-
-    <div class="card-heading">
-        <h3>Student Discussion</h3>
-    </div>
-
-    <label class="sr-only" for="commentName">Your name</label>
-    <input
-        type="text"
-        id="commentName"
-        placeholder="Your name (optional)"
-        aria-label="Your name"
-    >
-
-    <label class="sr-only" for="commentText">Your doubt</label>
-    <textarea
-        id="commentText"
-        placeholder="Write your doubt..."
-        aria-label="Write your doubt"
-    ></textarea>
-
-    <button id="postComment" type="button" aria-label="Post comment">
-        Post Comment
-    </button>
-
-    <div id="commentFeedback" class="inline-feedback" role="alert" aria-live="polite"></div>
-    <div id="commentsList" class="comments-list" aria-live="polite"></div>
-
-</div>
-
-<div class="question-navigation">
-
-    <button id="prevQuestion" class="nav-btn" disabled>
-        ← Previous
-    </button>
-
-    <button id="nextQuestion" class="nav-btn">
-        Next →
-    </button>
-
-</div>
-
-</div>
-
-</main>
-
-<script type="module" src="js/question.js"></script>
-<script>
-    // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
-    document.querySelectorAll('.drop-trigger').forEach(trigger => {
-        // Find the menu IMMEDIATELY when the page loads, before it teleports anywhere
-        const dropMenu = trigger.nextElementSibling;
-        
-        trigger.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                
-                // If the menu is already open, close it
-                if (dropMenu.classList.contains('mobile-popup-active')) {
-                    dropMenu.classList.remove('mobile-popup-active');
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 } else {
-                    // Close any other menus that might be open
-                    document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                    
-                    // TELEPORTATION: Move the menu to the main body if it isn't there already
-                    if (dropMenu.parentElement !== document.body) {
-                        document.body.appendChild(dropMenu);
-                    }
-                    
-                    // A tiny 10-millisecond delay forces the browser to register the tap instantly
-                    setTimeout(() => {
-                        dropMenu.classList.add('mobile-popup-active');
-                    }, 10);
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
                 }
             }
-        });
-    });
 
-    // Close the menu if the student taps anywhere in the dark background
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
-            document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-        }
-    });
-</script>
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                newTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
+                });
+            });
+        });
+    </script>
+    <!-- ========================================== -->
+
+    <main id="mainContent" class="container question-layout">
+
+        <div class="question-main">
+
+            <div class="question-card">
+
+                <div class="breadcrumb" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                    <span id="breadcrumb">Home</span>
+                    <button id="bookmarkBtn">☆ Bookmark</button>
+                </div>
+
+                <div class="question-tags" style="margin-bottom: 20px;">
+                    <span class="tag" id="examTag"></span>
+                    <span class="tag" id="chapterTag"></span>
+                    <span class="tag" id="difficultyTag"></span>
+                    <span class="tag" id="typeTag"></span>
+                </div>
+
+                <h2 id="questionText" style="line-height: 1.6; font-weight: 600; font-size: 18px; margin-bottom: 15px;">Loading question...</h2>
+                <div id="questionImageContainer"></div>
+
+                <form class="question-form" novalidate aria-label="Question answer form">
+                    <div id="optionsContainer" class="options-list" aria-label="Answer options"></div>
+
+                    <button type="button" class="submit-btn" id="submitAnswer" style="margin-top: 20px; width: 100%;">Submit Answer</button>
+                    
+                    <div id="resultMessage" class="result-message" aria-live="polite"></div>
+
+                    <div id="solutionBox" style="display:none;" class="solution-card">
+                        <h3 style="color: var(--text-primary); margin-bottom: 15px;">Explanation</h3>
+                        <div id="solutionText" style="line-height: 1.6; margin-bottom: 15px; color: var(--text-secondary);"></div>
+                        <div id="solutionImageContainer"></div>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="video-card">
+                <div class="card-heading">
+                    <h3>🎥 Video Solution</h3>
+                </div>
+                <div id="videoContainer" aria-label="Video solution container">
+                    <p class="empty-state" style="color: var(--text-secondary);">No video available.</p>
+                </div>
+            </div>
+
+            <div class="discussion-card">
+                <div class="card-heading">
+                    <h3>Student Discussion</h3>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <label class="sr-only" for="commentName">Your name</label>
+                    <input type="text" id="commentName" placeholder="Your name (optional)" aria-label="Your name" style="padding: 12px; width: 100%;">
+
+                    <label class="sr-only" for="commentText">Your doubt</label>
+                    <textarea id="commentText" placeholder="Write your doubt..." aria-label="Write your doubt" style="padding: 12px; width: 100%; min-height: 100px; resize: vertical;"></textarea>
+
+                    <button id="postComment" type="button" aria-label="Post comment" style="padding: 12px; border: none; cursor: pointer; width: 100%;">
+                        Post Comment
+                    </button>
+                </div>
+
+                <div id="commentFeedback" class="inline-feedback" role="alert" aria-live="polite" style="margin-top: 10px;"></div>
+                <div id="commentsList" class="comments-list" aria-live="polite"></div>
+            </div>
+
+            <div class="question-navigation">
+                <button id="prevQuestion" class="nav-btn" disabled>← Previous</button>
+                <button id="nextQuestion" class="nav-btn">Next →</button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script type="module" src="js/question.js"></script>
+
 </body>
 </html>
