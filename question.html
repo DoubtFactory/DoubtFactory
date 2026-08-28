@@ -28,7 +28,19 @@
     <style>
         /* =========================================
            QUESTION PAGE DARK THEME OVERRIDES
+           (Fixes the white background from question.css)
            ========================================= */
+        html, body.question-page {
+            background-color: var(--bg-main) !important;
+            background: var(--bg-main) !important;
+        }
+
+        .question-layout, .question-main, .container {
+            background-color: transparent !important;
+            background: transparent !important;
+        }
+
+        /* Card Styling */
         .question-card, .video-card, .discussion-card {
             background: var(--bg-card) !important;
             border: 1px solid var(--border-color) !important;
@@ -85,6 +97,8 @@
         }
         #commentName:focus, #commentText:focus {
             border-color: var(--accent-blue) !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
         }
 
         #postComment {
@@ -93,6 +107,7 @@
             border-radius: var(--radius-sm);
             font-weight: 600;
             transition: background 0.2s;
+            border: none;
         }
         #postComment:hover { background: #2563EB !important; }
 
@@ -243,7 +258,7 @@
                     <button id="bookmarkBtn">☆ Bookmark</button>
                 </div>
 
-                <div class="question-tags" style="margin-bottom: 20px;">
+                <div class="question-tags" style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px;">
                     <span class="tag" id="examTag"></span>
                     <span class="tag" id="chapterTag"></span>
                     <span class="tag" id="difficultyTag"></span>
@@ -256,12 +271,12 @@
                 <form class="question-form" novalidate aria-label="Question answer form">
                     <div id="optionsContainer" class="options-list" aria-label="Answer options"></div>
 
-                    <button type="button" class="submit-btn" id="submitAnswer" style="margin-top: 20px; width: 100%;">Submit Answer</button>
+                    <button type="button" class="submit-btn" id="submitAnswer" style="margin-top: 20px; width: 100%; border: none; padding: 14px; font-weight: 600; cursor: pointer; color: white;">Submit Answer</button>
                     
-                    <div id="resultMessage" class="result-message" aria-live="polite"></div>
+                    <div id="resultMessage" class="result-message" aria-live="polite" style="margin-top: 15px;"></div>
 
                     <div id="solutionBox" style="display:none;" class="solution-card">
-                        <h3 style="color: var(--text-primary); margin-bottom: 15px;">Explanation</h3>
+                        <h3 style="color: var(--text-primary); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Explanation</h3>
                         <div id="solutionText" style="line-height: 1.6; margin-bottom: 15px; color: var(--text-secondary);"></div>
                         <div id="solutionImageContainer"></div>
                     </div>
