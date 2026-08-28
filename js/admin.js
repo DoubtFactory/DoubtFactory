@@ -176,6 +176,45 @@ if(subjectSelect) {
 }
 
 /* ===========================================
+   EXAM & QUESTION TYPE MAPPING
+=========================================== */
+const examSelectForm = document.getElementById("exam");
+const typeSelectForm = document.getElementById("type");
+
+if (examSelectForm && typeSelectForm) {
+    const typeOptions = {
+        "NEET": ["Single Correct"],
+        "JEE Main": ["Single Correct", "Integer Based"],
+        "JEE Advanced": ["Single Correct", "Multiple Correct", "Integer Based", "Comprehension", "Matrix Match"]
+    };
+
+    examSelectForm.addEventListener("change", () => {
+        const selectedExam = examSelectForm.value;
+        const allowedTypes = typeOptions[selectedExam] || typeOptions["JEE Advanced"]; 
+        
+        const currentType = typeSelectForm.value;
+        typeSelectForm.innerHTML = "";
+        
+        allowedTypes.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t;
+            opt.textContent = t;
+            typeSelectForm.appendChild(opt);
+        });
+        
+        // Retain selection if valid, otherwise fallback to the first available option (e.g. Single Correct)
+        if (allowedTypes.includes(currentType)) {
+            typeSelectForm.value = currentType;
+        } else {
+            typeSelectForm.value = allowedTypes[0];
+        }
+    });
+
+    // Trigger on page load to set defaults correctly
+    setTimeout(() => examSelectForm.dispatchEvent(new Event("change")), 100);
+}
+
+/* ===========================================
    FIREBASE LOGIC & DASHBOARD
 =========================================== */
 const STORAGE_KEY = "doubtFactoryAdminDraft";
@@ -307,10 +346,18 @@ window.editQuestion = async function(id) {
             setTimeout(() => { if (chapterSelect) chapterSelect.value = q.chapter || ""; }, 200);
         }
 
-        document.getElementById("exam").value = q.exam || "";
+        const examField = document.getElementById("exam");
+        examField.value = q.exam || "";
+        examField.dispatchEvent(new Event("change")); // Force dropdown to regenerate types based on the saved exam
+
         document.getElementById("year").value = q.year || "";
         document.getElementById("difficulty").value = q.difficulty || "";
-        document.getElementById("type").value = q.type || "";
+        
+        // Wait briefly for the type dropdown to rebuild itself before setting its value
+        setTimeout(() => {
+            document.getElementById("type").value = q.type || "Single Correct";
+        }, 50);
+
         document.getElementById("question").value = q.question || "";
         document.getElementById("optionA").value = q.options?.[0] || "";
         document.getElementById("optionB").value = q.options?.[1] || "";
@@ -337,6 +384,9 @@ if(questionForm) {
                 await addDoc(collection(db, "questions"), question);
             }
             questionForm.reset();
+            // Reset types back to default
+            if (examSelectForm) examSelectForm.dispatchEvent(new Event("change"));
+            
             editingDocId = null;
             isEditing = false;
             if (saveButton) saveButton.textContent = "Save Question";
