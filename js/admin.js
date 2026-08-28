@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================
-   CHAPTERS & SUBJECT MAPPING
+   CHAPTERS, SUBJECTS & EXAM MAPPING
 =========================================== */
 const chapters = {
     "Physics": [
@@ -158,28 +158,58 @@ const chapters = {
 
 const subjectSelect = document.getElementById("subject");
 const chapterSelect = document.getElementById("chapter");
+const examSelectForm = document.getElementById("exam");
+const typeSelectForm = document.getElementById("type");
 
 if(subjectSelect) {
     subjectSelect.addEventListener("change", () => {
+        // 1. Update Chapter Options
         if(chapterSelect) {
             chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
             const list = chapters[subjectSelect.value];
-            if (!list) return;
-            list.forEach(chapter => {
-                const option = document.createElement("option");
-                option.value = chapter;
-                option.textContent = chapter;
-                chapterSelect.appendChild(option);
+            if (list) {
+                list.forEach(chapter => {
+                    const option = document.createElement("option");
+                    option.value = chapter;
+                    option.textContent = chapter;
+                    chapterSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // 2. Update Exam Options Based on Subject
+        if(examSelectForm) {
+            const selectedSubject = subjectSelect.value;
+            let allowedExams = ["JEE Main", "JEE Advanced", "NEET"]; // Default for Physics and Chemistry
+            
+            if (selectedSubject === "Maths") {
+                allowedExams = ["JEE Main", "JEE Advanced"];
+            } else if (selectedSubject === "Botany" || selectedSubject === "Zoology") {
+                allowedExams = ["NEET"];
+            }
+            
+            const currentExam = examSelectForm.value;
+            examSelectForm.innerHTML = "";
+            
+            allowedExams.forEach(ex => {
+                const opt = document.createElement("option");
+                opt.value = ex;
+                opt.textContent = ex;
+                examSelectForm.appendChild(opt);
             });
+            
+            // Retain selection if valid, otherwise fallback
+            if (allowedExams.includes(currentExam)) {
+                examSelectForm.value = currentExam;
+            } else {
+                examSelectForm.value = allowedExams[0];
+            }
+            
+            // Trigger Exam change to correctly update question types (Single Correct, Integer, etc.)
+            examSelectForm.dispatchEvent(new Event("change"));
         }
     });
 }
-
-/* ===========================================
-   EXAM & QUESTION TYPE MAPPING
-=========================================== */
-const examSelectForm = document.getElementById("exam");
-const typeSelectForm = document.getElementById("type");
 
 if (examSelectForm && typeSelectForm) {
     const typeOptions = {
@@ -202,7 +232,6 @@ if (examSelectForm && typeSelectForm) {
             typeSelectForm.appendChild(opt);
         });
         
-        // Retain selection if valid, otherwise fallback to the first available option (e.g. Single Correct)
         if (allowedTypes.includes(currentType)) {
             typeSelectForm.value = currentType;
         } else {
@@ -210,8 +239,10 @@ if (examSelectForm && typeSelectForm) {
         }
     });
 
-    // Trigger on page load to set defaults correctly
-    setTimeout(() => examSelectForm.dispatchEvent(new Event("change")), 100);
+    // Initialize defaults on page load
+    setTimeout(() => {
+        if(subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
+    }, 100);
 }
 
 /* ===========================================
@@ -343,20 +374,25 @@ window.editQuestion = async function(id) {
         if (subjectSelect) {
             subjectSelect.value = q.subject || "";
             subjectSelect.dispatchEvent(new Event("change"));
-            setTimeout(() => { if (chapterSelect) chapterSelect.value = q.chapter || ""; }, 200);
         }
 
-        const examField = document.getElementById("exam");
-        examField.value = q.exam || "";
-        examField.dispatchEvent(new Event("change")); // Force dropdown to regenerate types based on the saved exam
+        // Delay to allow dynamically generated dropdown options to populate first
+        setTimeout(() => { 
+            if (chapterSelect) chapterSelect.value = q.chapter || ""; 
+            
+            if (examSelectForm) {
+                examSelectForm.value = q.exam || "";
+                examSelectForm.dispatchEvent(new Event("change"));
+            }
+            
+            document.getElementById("year").value = q.year || "";
+            document.getElementById("difficulty").value = q.difficulty || "";
 
-        document.getElementById("year").value = q.year || "";
-        document.getElementById("difficulty").value = q.difficulty || "";
-        
-        // Wait briefly for the type dropdown to rebuild itself before setting its value
-        setTimeout(() => {
-            document.getElementById("type").value = q.type || "Single Correct";
-        }, 50);
+            setTimeout(() => {
+                if (typeSelectForm) typeSelectForm.value = q.type || "Single Correct";
+            }, 50);
+
+        }, 100);
 
         document.getElementById("question").value = q.question || "";
         document.getElementById("optionA").value = q.options?.[0] || "";
@@ -385,7 +421,7 @@ if(questionForm) {
             }
             questionForm.reset();
             // Reset types back to default
-            if (examSelectForm) examSelectForm.dispatchEvent(new Event("change"));
+            if (subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
             
             editingDocId = null;
             isEditing = false;
