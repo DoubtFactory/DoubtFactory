@@ -58,7 +58,7 @@ a:hover {
 }
 
 /* =========================================
-   HEADER & NAVIGATION (Global)
+   UNIVERSAL HEADER & SIDEBAR NAVIGATION
    ========================================= */
 .site-header {
     background: rgba(11, 17, 32, 0.8);
@@ -71,7 +71,7 @@ a:hover {
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .site-header .logo {
@@ -93,45 +93,120 @@ a:hover {
     margin: 0;
 }
 
-nav[aria-label="Primary navigation"] {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-}
-
-nav a, .drop-trigger {
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 15px;
+/* The Hamburger Button */
+.mobile-menu-btn {
+    display: block !important;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
     cursor: pointer;
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
+    padding: 4px;
 }
 
-nav a:hover, .drop-trigger:hover {
-    color: var(--accent-blue);
-    background: rgba(59, 130, 246, 0.1);
+.close-menu-btn {
+    display: block !important;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    align-self: flex-end;
+    padding: 4px;
+    margin-bottom: 24px;
 }
 
-.nav-item-dropdown { position: relative; }
+/* The Universal Sidebar */
+nav[aria-label="Primary navigation"] {
+    display: flex !important; 
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background: var(--bg-card) !important;
+    border-left: 1px solid var(--border-color);
+    padding: 20px;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1002;
+    overflow-y: auto;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    align-items: flex-start;
+}
+
+nav[aria-label="Primary navigation"].open {
+    right: 0 !important;
+}
+
+/* Sidebar Links */
+nav[aria-label="Primary navigation"] a, 
+nav[aria-label="Primary navigation"] .drop-trigger {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    padding: 16px 12px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    width: 100% !important;
+    display: block !important;
+    color: var(--text-primary) !important;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 0;
+}
+
+nav[aria-label="Primary navigation"] a:hover, 
+nav[aria-label="Primary navigation"] .drop-trigger:hover {
+    color: var(--accent-blue) !important;
+    background: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Sidebar Accordion Dropdowns */
+.nav-item-dropdown { width: 100% !important; }
 
 .drop-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 8px 0;
-    min-width: 200px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    z-index: 1002;
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: rgba(0,0,0,0.2) !important;
+    padding: 0 0 0 16px !important;
+    display: none !important; 
+    border-radius: 0 !important;
 }
 
-.nav-item-dropdown:hover .drop-menu { display: block; }
-.drop-menu a { display: block; padding: 10px 20px; color: var(--text-secondary); font-weight: 500; }
-.drop-menu a:hover { background: var(--bg-card-hover); color: var(--accent-blue); }
+.drop-menu.mobile-open {
+    display: block !important;
+}
+
+.drop-menu a {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    border-bottom: none !important;
+    color: var(--text-secondary) !important;
+}
+
+.drop-menu a:hover {
+    color: var(--accent-blue) !important;
+    background: transparent !important;
+}
+
+/* Dark Blur Overlay */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
 
 /* =========================================
    FORM ELEMENTS & BUTTONS
