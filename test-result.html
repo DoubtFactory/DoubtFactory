@@ -2,19 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Scorecard | Doubt Factory</title>
     <meta name="description" content="View your performance report and test scorecard for your JEE or NEET practice session on Doubt Factory.">
-    <meta name="keywords" content="test result, scorecard, JEE practice, NEET practice, mock test results, performance report">
-    <meta name="robots" content="noindex,follow"> <!-- Keeps student scorecards off Google search results -->
+    <meta name="robots" content="noindex,follow"> 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
     
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -24,37 +22,131 @@
     </script>
 
     <style>
+        /* =========================================
+           TEST RESULT DARK THEME OVERRIDES
+           ========================================= */
         .result-container { max-width: 800px; margin: 40px auto; padding: 20px; }
-        .score-card { background: white; border-radius: 16px; padding: 40px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 6px solid #1565C0; }
-        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #eff6ff; border: 8px solid #3b82f6; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px; }
-        .score-circle h1 { font-size: 42px; margin: 0; color: #1e3a8a; line-height: 1; }
-        .score-circle span { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 30px; }
-        .stat-box { padding: 20px; border-radius: 12px; font-weight: bold; }
-        .stat-correct { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-        .stat-incorrect { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-        .stat-unattempted { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
-        .stat-box h2 { font-size: 28px; margin: 5px 0 0; }
+        .score-card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); 
+            padding: 40px 20px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            margin-bottom: 30px; 
+            border-top: 6px solid var(--accent-blue); 
+        }
+
+        .score-circle { 
+            width: 150px; 
+            height: 150px; 
+            border-radius: 50%; 
+            background: rgba(59, 130, 246, 0.1); 
+            border: 8px solid var(--accent-blue); 
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto 20px; 
+        }
         
-        .action-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
-        .btn-home { padding: 12px 24px; background: #f1f5f9; color: #334155; border-radius: 8px; text-decoration: none; font-weight: 600; }
-        .btn-retry { padding: 12px 24px; background: #1565C0; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; }
+        .score-circle h1 { 
+            font-size: 48px; 
+            margin: 0; 
+            color: var(--text-primary); 
+            line-height: 1; 
+            font-weight: 800;
+        }
+        
+        .score-circle span { 
+            font-size: 14px; 
+            color: var(--text-secondary); 
+            font-weight: 600; 
+            margin-top: 5px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
+            margin-top: 40px; 
+        }
+        
+        .stat-box { 
+            padding: 20px; 
+            border-radius: var(--radius-md); 
+            font-weight: bold; 
+        }
+        
+        /* Dark Theme Stat Colors */
+        .stat-correct { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .stat-incorrect { background: rgba(244, 63, 94, 0.1); color: #F43F5E; border: 1px solid rgba(244, 63, 94, 0.3); }
+        .stat-unattempted { background: rgba(148, 163, 184, 0.1); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.3); }
+        
+        .stat-box h2 { font-size: 32px; margin: 5px 0 0; color: var(--text-primary); }
+        
+        .action-buttons { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin-top: 40px; 
+            flex-wrap: wrap; 
+        }
+        
+        .btn-home { 
+            padding: 14px 24px; 
+            background: var(--bg-card-hover); 
+            color: var(--text-primary); 
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.2s;
+        }
+        .btn-home:hover { background: var(--border-color); }
+        
+        .btn-retry { 
+            padding: 14px 24px; 
+            background: var(--accent-blue); 
+            color: white; 
+            border-radius: var(--radius-md); 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.2s;
+        }
+        .btn-retry:hover { background: #2563EB; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
-<body>
+<body id="home-body">
 
     <header class="site-header">
-        <!-- Original Clean Logo -->
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <nav aria-label="Primary navigation">
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
             <a href="index.html">Home</a>
             
-            <!-- EXAMS DROPDOWN -->
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Exams ▾</a>
                 <div class="drop-menu">
@@ -64,19 +156,18 @@
                 </div>
             </div>
 
-            <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
-                    <a href="search.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-                    <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-                    <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-                    <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
-                    <a href="search.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-                    <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-                    <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                    <a href="chapter.html?subject=Physics">Physics</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
                 </div>
             </div>
 
@@ -86,28 +177,71 @@
         </nav>
     </header>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            if (!mobileMenuBtn || !primaryNav) return;
+
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                newTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
+                });
+            });
+        });
+    </script>
     <main class="result-container">
         <div class="score-card">
-            <h2 style="color: #0f172a; margin-bottom: 20px;">Performance Report</h2>
+            <h2 style="color: var(--text-primary); margin-bottom: 30px; font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">Performance Report</h2>
             
             <div class="score-circle">
                 <h1 id="finalScore">0</h1>
                 <span>Final Score</span>
             </div>
             
-            <p style="color: #64748b; font-size: 16px;">Based on the standard marking scheme (+4/-1)</p>
+            <p style="color: var(--text-secondary); font-size: 15px;">Based on the standard marking scheme (+4/-1)</p>
 
             <div class="stats-grid">
                 <div class="stat-box stat-correct">
-                    <div>Correct (+4)</div>
+                    <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Correct (+4)</div>
                     <h2 id="correctCount">0</h2>
                 </div>
                 <div class="stat-box stat-incorrect">
-                    <div>Incorrect (-1)</div>
+                    <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Incorrect (-1)</div>
                     <h2 id="incorrectCount">0</h2>
                 </div>
                 <div class="stat-box stat-unattempted">
-                    <div>Unattempted (0)</div>
+                    <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Unattempted</div>
                     <h2 id="skippedCount">0</h2>
                 </div>
             </div>
@@ -121,7 +255,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 1. Retrieve the saved test data
             const rawData = sessionStorage.getItem('df_cbt_results');
             if (!rawData) {
                 window.location.href = "test-setup.html";
@@ -134,11 +267,8 @@
             let incorrect = 0;
             let skipped = 0;
 
-            // 2. Evaluate the responses based on NTA rules
             responses.forEach((res, index) => {
                 const q = questions[index];
-                
-                // NTA Rule: Only 'answered' or 'review-ans' (Answered & Marked for Review) are evaluated
                 const isEvaluated = (res.state === 'answered' || res.state === 'review-ans');
 
                 if (isEvaluated && res.selectedOption !== null) {
@@ -152,18 +282,15 @@
                 }
             });
 
-            // 3. Calculate Final Score
             const totalScore = (correct * 4) - (incorrect * 1);
 
-            // 4. Update the UI
             document.getElementById('correctCount').textContent = correct;
             document.getElementById('incorrectCount').textContent = incorrect;
             document.getElementById('skippedCount').textContent = skipped;
             
-            // Animate the score counter for a premium feel
             let currentScore = 0;
             const scoreEl = document.getElementById('finalScore');
-            const duration = 1000; // 1 second animation
+            const duration = 1000; 
             const steps = 30;
             const increment = totalScore / steps;
             
@@ -181,41 +308,7 @@
                 }, duration / steps);
             }
             
-            // Clean up the memory so they can't refresh and cheat the system
             sessionStorage.removeItem('df_cbt_test');
-        });
-    </script>
-    
-    <script>
-        // Ultimate Mobile Dropdown Teleporter (Single-Tap Fix)
-        document.querySelectorAll('.drop-trigger').forEach(trigger => {
-            const dropMenu = trigger.nextElementSibling;
-            
-            trigger.addEventListener('click', function(e) {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    
-                    if (dropMenu.classList.contains('mobile-popup-active')) {
-                        dropMenu.classList.remove('mobile-popup-active');
-                    } else {
-                        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-                        
-                        if (dropMenu.parentElement !== document.body) {
-                            document.body.appendChild(dropMenu);
-                        }
-                        
-                        setTimeout(() => {
-                            dropMenu.classList.add('mobile-popup-active');
-                        }, 10);
-                    }
-                }
-            });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && !e.target.matches('.drop-trigger') && !e.target.closest('.drop-menu')) {
-                document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('mobile-popup-active'));
-            }
         });
     </script>
 </body>
