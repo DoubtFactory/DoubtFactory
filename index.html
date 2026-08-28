@@ -38,6 +38,7 @@
             background: var(--bg-dark);
             border-bottom: 1px solid var(--border-dark);
             padding: 15px 20px;
+            z-index: 1001; /* Forces the header & sidebar to sit ABOVE the blur overlay */
         }
         #home-body .site-header .logo h2, 
         #home-body .site-header .logo p {
@@ -285,6 +286,7 @@
             nav[aria-label="Primary navigation"] a, 
             nav[aria-label="Primary navigation"] .drop-trigger {
                 font-size: 17px;
+                font-weight: 600; /* Crisper text rendering */
                 padding: 16px 12px;
                 border-bottom: 1px solid var(--border-dark);
                 width: 100%;
