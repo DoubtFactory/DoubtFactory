@@ -180,7 +180,7 @@ if(subjectSelect) {
         // 2. Update Exam Options Based on Subject
         if(examSelectForm) {
             const selectedSubject = subjectSelect.value;
-            let allowedExams = ["JEE Main", "JEE Advanced", "NEET"]; // Default for Physics and Chemistry
+            let allowedExams = ["JEE Main", "JEE Advanced", "NEET"]; 
             
             if (selectedSubject === "Maths") {
                 allowedExams = ["JEE Main", "JEE Advanced"];
@@ -205,7 +205,7 @@ if(subjectSelect) {
                 examSelectForm.value = allowedExams[0];
             }
             
-            // Trigger Exam change to correctly update question types (Single Correct, Integer, etc.)
+            // Trigger Exam change to correctly update question types
             examSelectForm.dispatchEvent(new Event("change"));
         }
     });
@@ -239,7 +239,6 @@ if (examSelectForm && typeSelectForm) {
         }
     });
 
-    // Initialize defaults on page load
     setTimeout(() => {
         if(subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
     }, 100);
@@ -320,6 +319,7 @@ async function loadQuestionsTable() {
                 <tr>
                     <td style="vertical-align: top; padding-top: 15px;">${q.exam || ""}</td>
                     <td style="vertical-align: top; padding-top: 15px; min-width: 150px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">${q.subject || "Subject"}</div>
                         <div style="font-weight: 600; color: #0f172a; margin-bottom: 6px;">${q.chapter || ""}</div>
                         <div style="font-size: 13px; color: #64748b; line-height: 1.4;">${snippet}</div>
                     </td>
@@ -394,7 +394,7 @@ async function updateDashboard() {
             }
         }
 
-        // 4. Question Type Distribution (CSS Pie Chart)
+        // 4. Question Type Distribution
         const typePieChart = document.getElementById("typePieChart");
         const typeLegend = document.getElementById("typeLegend");
         if (typePieChart && typeLegend) {
@@ -474,7 +474,6 @@ window.editQuestion = async function(id) {
             subjectSelect.dispatchEvent(new Event("change"));
         }
 
-        // Delay to allow dynamically generated dropdown options to populate first
         setTimeout(() => { 
             if (chapterSelect) chapterSelect.value = q.chapter || ""; 
             
@@ -518,7 +517,6 @@ if(questionForm) {
                 await addDoc(collection(db, "questions"), question);
             }
             questionForm.reset();
-            // Reset types back to default
             if (subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
             
             editingDocId = null;
