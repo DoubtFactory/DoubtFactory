@@ -78,7 +78,7 @@
     .stat-card { 
         background: var(--bg-card); 
         border: 1px solid var(--border-color); 
-        padding: 12px 8px; 
+        padding: 14px 10px; 
         border-radius: var(--radius-md); 
         text-align: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -95,7 +95,7 @@
     }
     .stat-info h2 { 
         color: var(--text-primary); 
-        font-size: 20px; 
+        font-size: 22px; 
         margin: 0; 
         font-weight: 800;
     }
@@ -113,7 +113,7 @@
     .panel-head h3 { margin: 0 0 15px 0; color: var(--text-primary); font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
 
     /* =========================================
-       JS INLINE TEXT COLOR OVERRIDES
+       TEXT COLOR OVERRIDES FOR DYNAMIC BLOCKS
        ========================================= */
     #recentActivityList div[style*="background"] {
         background: var(--bg-main) !important;
@@ -132,7 +132,7 @@
     #typeLegend div { color: var(--text-secondary) !important; }
 
     /* =========================================
-       FORCED LINEAR CHEMISTRY TOOLBAR STYLES
+       CHEMISTRY TOOLBAR CLEAN LINEAR STYLING
        ========================================= */
     .chem-editor-wrapper {
         border: 1px solid var(--border-color) !important;
@@ -141,19 +141,22 @@
         margin-bottom: 15px;
         background: var(--bg-main);
     }
-    /* Force the generated toolbar container to hold horizontal scrolling rows */
+    
+    /* Toolbar container */
     .chem-editor-wrapper > div:first-child {
         background: var(--bg-card-hover) !important;
-        padding: 8px !important;
+        padding: 10px !important;
         border-bottom: 1px solid var(--border-color) !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 6px !important;
-        max-height: 160px;
+        max-height: 200px;
         overflow-y: auto;
     }
-    /* Force every inner row of buttons to stay in a single horizontal line */
-    .chem-editor-wrapper > div:first-child div {
+    
+    /* Force rows inside the toolbar to be strictly horizontal */
+    .chem-editor-wrapper > div:first-child > div,
+    .chem-editor-wrapper > div:first-child span {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
@@ -162,17 +165,17 @@
         align-items: center !important;
         scrollbar-width: none;
     }
-    .chem-editor-wrapper > div:first-child div::-webkit-scrollbar { display: none; }
+    .chem-editor-wrapper > div:first-child > div::-webkit-scrollbar { display: none; }
 
-    /* Force each button to stay small and compact */
+    /* Toolbar buttons */
     .chem-editor-wrapper > div:first-child button {
         flex: 0 0 auto !important;
-        width: 32px !important;
-        min-width: 32px !important;
-        height: 30px !important;
+        width: 30px !important;
+        min-width: 30px !important;
+        height: 28px !important;
         padding: 0 !important;
         margin: 0 !important;
-        font-size: 13px !important;
+        font-size: 12px !important;
         font-weight: 600 !important;
         background: var(--bg-main) !important;
         color: var(--text-primary) !important;
@@ -188,6 +191,7 @@
         border-color: var(--accent-blue) !important;
         color: var(--accent-blue) !important;
     }
+    
     .chem-editor {
         background: var(--bg-main) !important;
         color: var(--text-primary) !important;
@@ -622,6 +626,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.switchTab = switchTab;
 });
+</script>
+
+<!-- Toolbar Fixer Script (Ensures chemical symbol rows stay linear & horizontal) -->
+<script>
+    const observer = new MutationObserver(() => {
+        document.querySelectorAll('.chem-editor-wrapper > div:first-child').forEach(toolbar => {
+            toolbar.querySelectorAll('div, span').forEach(el => {
+                el.style.display = 'flex';
+                el.style.flexDirection = 'row';
+                el.style.flexWrap = 'nowrap';
+                el.style.overflowX = 'auto';
+                el.style.gap = '4px';
+                el.style.alignItems = 'center';
+            });
+            toolbar.querySelectorAll('button').forEach(btn => {
+                btn.style.flex = '0 0 auto';
+                btn.style.width = '28px';
+                btn.style.minWidth = '28px';
+                btn.style.height = '26px';
+                btn.style.padding = '0';
+                btn.style.margin = '0';
+                btn.style.fontSize = '12px';
+            });
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
 </script>
 
 <!-- Feedback & Comments Loader Script -->
