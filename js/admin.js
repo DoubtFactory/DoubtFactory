@@ -111,7 +111,48 @@ function buildToolbar(textarea) {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".chem-editor").forEach(textarea => buildToolbar(textarea));
+    setupCloudinaryUploaders();
 });
+
+/* ===========================================
+   CLOUDINARY IMAGE UPLOAD BINDINGS
+=========================================== */
+function setupCloudinaryUploaders() {
+    const uploadMappings = [
+        { btnId: "uploadQuestionImage", inputId: "questionImage" },
+        { btnId: "uploadOptionAImage", inputId: "optionAImage" },
+        { btnId: "uploadOptionBImage", inputId: "optionBImage" },
+        { btnId: "uploadOptionCImage", inputId: "optionCImage" },
+        { btnId: "uploadOptionDImage", inputId: "optionDImage" },
+        { btnId: "uploadSolutionImage", inputId: "solutionImage" }
+    ];
+
+    uploadMappings.forEach(mapping => {
+        const btn = document.getElementById(mapping.btnId);
+        const input = document.getElementById(mapping.inputId);
+        if (btn && input) {
+            btn.addEventListener("click", async () => {
+                btn.textContent = "Uploading...";
+                btn.disabled = true;
+                try {
+                    const url = await uploadImage();
+                    if (url) {
+                        input.value = url;
+                        btn.textContent = "Uploaded ✓";
+                    } else {
+                        btn.textContent = "Upload Image";
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Image upload failed.");
+                    btn.textContent = "Upload Image";
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+        }
+    });
+}
 
 /* ===========================================
    CHAPTERS, SUBJECTS & EXAM MAPPING
@@ -163,7 +204,6 @@ const typeSelectForm = document.getElementById("type");
 
 if(subjectSelect) {
     subjectSelect.addEventListener("change", () => {
-        // 1. Update Chapter Options
         if(chapterSelect) {
             chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
             const list = chapters[subjectSelect.value];
@@ -177,7 +217,6 @@ if(subjectSelect) {
             }
         }
         
-        // 2. Update Exam Options Based on Subject
         if(examSelectForm) {
             const selectedSubject = subjectSelect.value;
             let allowedExams = ["JEE Main", "JEE Advanced", "NEET"]; 
@@ -198,14 +237,12 @@ if(subjectSelect) {
                 examSelectForm.appendChild(opt);
             });
             
-            // Retain selection if valid, otherwise fallback
             if (allowedExams.includes(currentExam)) {
                 examSelectForm.value = currentExam;
             } else {
                 examSelectForm.value = allowedExams[0];
             }
             
-            // Trigger Exam change to correctly update question types
             examSelectForm.dispatchEvent(new Event("change"));
         }
     });
@@ -247,9 +284,7 @@ if (examSelectForm && typeSelectForm) {
 /* ===========================================
    FIREBASE LOGIC & DASHBOARD
 =========================================== */
-const STORAGE_KEY = "doubtFactoryAdminDraft";
 const saveButton = document.getElementById("saveButton");
-const clearButton = document.getElementById("clearButton");
 const questionForm = document.getElementById("questionForm");
 
 let editingDocId = null;
@@ -340,13 +375,11 @@ async function updateDashboard() {
     try {
         const questions = await getQuestions();
         
-        // 1. Basic Stats
         const total = document.getElementById("totalQuestions");
         const published = document.getElementById("publishedQuestions");
         if (total) total.textContent = questions.length;
         if (published) published.textContent = questions.length;
 
-        // 2. Recent Activity List
         const recentActivityList = document.getElementById("recentActivityList");
         if (recentActivityList) {
             recentActivityList.innerHTML = "";
@@ -370,7 +403,6 @@ async function updateDashboard() {
             }
         }
 
-        // 3. Questions by Exam Stats
         const examStatsList = document.getElementById("examStatsList");
         if (examStatsList) {
             const examCounts = {};
@@ -394,7 +426,6 @@ async function updateDashboard() {
             }
         }
 
-        // 4. Question Type Distribution
         const typePieChart = document.getElementById("typePieChart");
         const typeLegend = document.getElementById("typeLegend");
         if (typePieChart && typeLegend) {
