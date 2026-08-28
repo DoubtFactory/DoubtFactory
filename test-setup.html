@@ -68,25 +68,23 @@
                 </div>
             </div>
 
-            <!-- SUBJECTS DROPDOWN WITH ALL SUBJECTS -->
+            <!-- SUBJECTS DROPDOWN -->
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
-                    <a href="search.html?subject=Physics">Physics</a>
+                    <a href="chapter.html?subject=Physics">Physics</a>
                     <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Chemistry</span>
-                    <a href="search.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-                    <a href="search.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-                    <a href="search.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
-                    <a href="search.html?subject=Maths">Maths</a>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Maths">Maths</a>
                     <span style="display:block; padding: 8px 16px; font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Biology</span>
-                    <a href="search.html?subject=Botany" style="padding-left: 24px;">Botany</a>
-                    <a href="search.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">Zoology</a>
                 </div>
             </div>
 
-            <!-- MOCK TESTS LINK -->
             <a href="test-setup.html">Mock Tests</a>
-
             <a href="search.html">Search</a>
             <a href="bookmarks.html">Bookmarks</a>
         </nav>
@@ -134,17 +132,7 @@
                     <label>Select Subject</label>
                     <select id="customSubject">
                         <option value="All">All Subjects</option>
-                        <option value="Physics">Physics</option>
-                        <optgroup label="Chemistry">
-                            <option value="Physical Chemistry">Physical Chemistry</option>
-                            <option value="Organic Chemistry">Organic Chemistry</option>
-                            <option value="Inorganic Chemistry">Inorganic Chemistry</option>
-                        </optgroup>
-                        <option value="Maths">Maths</option>
-                        <optgroup label="Biology">
-                            <option value="Botany">Botany</option>
-                            <option value="Zoology">Zoology</option>
-                        </optgroup>
+                        <!-- Options dynamically injected via JS based on Target Exam -->
                     </select>
                 </div>
                 <div class="input-group">
@@ -229,11 +217,53 @@
                 customMinutesInput.style.display = 'block';
             } else {
                 customMinutesInput.style.display = 'none';
-                errorText.textContent = ""; // Clear errors if they switch back
+                errorText.textContent = ""; 
             }
         });
 
+        // Dynamic Subject Menu filtering based on JEE vs NEET
+        function updateSubjects() {
+            const selectedExam = customExamSelect.value;
+            const currentSubject = subjectSelect.value; 
+
+            let html = '<option value="All">All Subjects</option>';
+            html += '<option value="Physics">Physics</option>';
+            html += `<optgroup label="Chemistry">
+                        <option value="Physical Chemistry">Physical Chemistry</option>
+                        <option value="Organic Chemistry">Organic Chemistry</option>
+                        <option value="Inorganic Chemistry">Inorganic Chemistry</option>
+                    </optgroup>`;
+
+            if (selectedExam === "All") {
+                html += '<option value="Maths">Maths</option>';
+                html += `<optgroup label="Biology">
+                            <option value="Botany">Botany</option>
+                            <option value="Zoology">Zoology</option>
+                        </optgroup>`;
+            } else if (selectedExam === "JEE Main" || selectedExam === "JEE Advanced") {
+                html += '<option value="Maths">Maths</option>';
+            } else if (selectedExam === "NEET") {
+                html += `<optgroup label="Biology">
+                            <option value="Botany">Botany</option>
+                            <option value="Zoology">Zoology</option>
+                        </optgroup>`;
+            }
+
+            subjectSelect.innerHTML = html;
+
+            // Preserve the user's previous selection if it's still available in the new dropdown
+            const optionExists = Array.from(subjectSelect.options).some(opt => opt.value === currentSubject);
+            if (optionExists) {
+                subjectSelect.value = currentSubject;
+            } else {
+                subjectSelect.value = "All";
+            }
+            
+            updateCustomChapters();
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
+            updateSubjects();
             try {
                 allQuestions = await getQuestions();
                 
@@ -315,7 +345,12 @@
             let availableChapters = [];
             
             if (selectedSubject === "All") {
-                availableChapters = [...new Set(allQuestions.filter(q => q.chapter).map(q => q.chapter))].sort();
+                // If "All Subjects", show chapters based strictly on what's available for the selected Exam
+                const targetExam = customExamSelect.value;
+                availableChapters = [...new Set(allQuestions
+                    .filter(q => (targetExam === "All" || q.exam === targetExam) && q.chapter)
+                    .map(q => q.chapter)
+                )].sort();
             } else {
                 availableChapters = [...new Set(allQuestions
                     .filter(q => q.subject === selectedSubject && q.chapter)
@@ -340,7 +375,10 @@
             updateLiveCounter(); 
         }
 
-        customExamSelect.addEventListener('change', updateLiveCounter);
+        customExamSelect.addEventListener('change', () => {
+            updateSubjects();
+            updateLiveCounter();
+        });
         subjectSelect.addEventListener('change', updateCustomChapters);
         chapterSelect.addEventListener('change', updateLiveCounter);
         diffSelect.addEventListener('change', updateLiveCounter);
