@@ -1,166 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Manage Questions | Doubt Factory</title>
+    <meta name="description" content="Manage and review questions across Physics, Chemistry, Maths, and Biology from the Doubt Factory admin workspace.">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="manage.html">
 
-<title>Manage Questions | Doubt Factory</title>
-<meta name="description" content="Manage and review questions across Physics, Chemistry, Maths, and Biology from the Doubt Factory admin workspace.">
-<meta name="keywords" content="manage questions, admin workspace, question management, Physics, Chemistry, Maths, Biology">
-<meta name="robots" content="noindex,follow">
-<link rel="canonical" href="manage.html">
-<meta property="og:title" content="Manage Questions | Doubt Factory">
-<meta property="og:description" content="Manage and review questions across Physics, Chemistry, Maths, and Biology from the Doubt Factory admin workspace.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://doubtfactory.example.com/manage.html">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Manage Questions | Doubt Factory">
-<meta name="twitter:description" content="Manage and review questions across Physics, Chemistry, Maths, and Biology from the Doubt Factory admin workspace.">
-<link rel="stylesheet" href="css/main.css">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565C0'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Fonts & Global CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
 
-  gtag('config', 'G-T43GPM3CQJ');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-T43GPM3CQJ');
+    </script>
+
+    <style>
+        /* =========================================
+           MANAGE QUESTIONS SPECIFIC DARK THEME UI
+           ========================================= */
+        .manage-shell { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .manage-dashboard-card { 
+            background: var(--bg-card); 
+            border-radius: var(--radius-lg); 
+            padding: 30px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+        }
+
+        /* Toolbar */
+        .manage-toolbar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
+        .manage-eyebrow { color: var(--text-secondary); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .manage-toolbar h1 { color: var(--text-primary); font-size: 28px; margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        .manage-toolbar-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        
+        /* Pills & Buttons */
+        .manage-count-pill { 
+            background: rgba(59, 130, 246, 0.1); 
+            color: var(--accent-blue); 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            border: 1px solid rgba(59, 130, 246, 0.2); 
+        }
+        
+        .manage-refresh-btn, .sort-btn { 
+            background: var(--bg-card-hover); 
+            color: var(--text-primary); 
+            border: 1px solid var(--border-color); 
+            padding: 10px 16px; 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: all 0.2s ease; 
+        }
+        .manage-refresh-btn:hover, .sort-btn:hover { background: var(--border-color); }
+        
+        #generateSitemapBtn { 
+            background: var(--accent-blue) !important; 
+            color: white !important; 
+            border-color: var(--accent-blue) !important; 
+        }
+        #generateSitemapBtn:hover { background: #2563EB !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important; }
+
+        /* Search & Filters */
+        .manage-search-row { margin-bottom: 20px; }
+        .manage-search-row input { 
+            width: 100%; padding: 14px 20px; background: var(--bg-main); border: 1px solid var(--border-color); 
+            color: var(--text-primary); border-radius: var(--radius-md); font-size: 15px; outline: none; transition: border-color 0.2s; 
+        }
+        .manage-search-row input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        .manage-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .manage-filter-field span { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+        .manage-filter-field select { width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); font-size: 14px; outline: none; }
+
+        /* Table Area */
+        .manage-table-meta { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text-secondary); font-size: 14px; }
+        .manage-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+        .question-table { width: 100%; min-width: 800px; border-collapse: collapse; }
+        .question-table th { background: var(--bg-main); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .question-table td { padding: 16px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 14px; }
+        .question-table tr:hover td { background: var(--bg-card-hover); }
+
+        /* Empty States & Modals */
+        .manage-empty { text-align: center; padding: 50px 20px; color: var(--text-secondary); }
+        .manage-empty-icon { font-size: 40px; margin-bottom: 15px; }
+        .manage-empty h3 { color: var(--text-primary); margin-bottom: 5px; font-size: 18px; }
+        
+        .manage-modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
+        .manage-modal { background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); width: 90%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .manage-modal h3 { color: var(--text-primary); margin: 0 0 10px 0; font-size: 20px; }
+        .manage-modal p { color: var(--text-secondary); margin: 0 0 24px 0; font-size: 15px; }
+        .manage-modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        
+        .manage-cancel-btn { padding: 10px 16px; background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .manage-cancel-btn:hover { background: var(--bg-card-hover); }
+        .manage-delete-btn { padding: 10px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: background 0.2s; }
+        .manage-delete-btn:hover { background: rgba(239, 68, 68, 0.2); }
+
+        .manage-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent-blue); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 600; box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 3000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .manage-toast.show { opacity: 1; }
+
+        .manage-pagination { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .manage-pagination button { background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 14px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .manage-pagination button:hover { background: var(--bg-card-hover); border-color: var(--accent-blue); color: var(--accent-blue); }
+    </style>
 </head>
 
-<body>
-<a class="skip-link" href="#mainContent">Skip to main content</a>
+<body id="home-body">
+    <a class="skip-link" href="#mainContent" style="position: absolute; left: -9999px;">Skip to main content</a>
 
-<header class="navbar">
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
 
-<div class="container">
-
-<h2>Doubt Factory Admin</h2>
-
-<nav aria-label="Admin navigation">
-
-<a href="admin.html">Dashboard</a>
-
-<a href="manage.html">Manage Questions</a>
-
-</nav>
-
-</div>
-
-</header>
-
-<main id="mainContent" class="container manage-shell">
-
-<section class="manage-dashboard-card">
-
-<div class="manage-toolbar">
-    <div>
-        <p class="manage-eyebrow">Content Studio</p>
-        <h1>Manage Questions</h1>
-    </div>
-
-    <div class="manage-toolbar-actions">
-        <div class="manage-count-pill" aria-live="polite">Total <strong id="questionCount">0</strong></div>
-        
-        <!-- NEW SITEMAP BUTTON -->
-        <button type="button" class="manage-refresh-btn" id="generateSitemapBtn" style="background: #10b981; color: white; border-color: #059669;">
-            Download Sitemap
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
         </button>
 
-        <button type="button" class="manage-refresh-btn" id="refreshButton" aria-label="Refresh question list">Refresh</button>
-    </div>
-</div>
+        <!-- Sidebar Navigation -->
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
 
-<div class="manage-search-row">
-    <label class="sr-only" for="searchBox">Search questions</label>
-    <input
-        type="text"
-        id="searchBox"
-        placeholder="Search by question, subject, chapter, or exam...">
-</div>
+            <a href="admin.html">Admin Dashboard</a>
+            <a href="manage.html" style="color: var(--accent-blue);">Manage Questions</a>
+            <a href="index.html">Live Website →</a>
+        </nav>
+    </header>
 
-<div class="manage-filters">
-    <label class="manage-filter-field">
-        <span>Subject</span>
-        <select id="filterSubject">
-            <option value="All">All Subjects</option>
-        </select>
-    </label>
+    <!-- Sidebar Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            if (!mobileMenuBtn || !primaryNav) return;
 
-    <label class="manage-filter-field">
-        <span>Chapter</span>
-        <select id="filterChapter">
-            <option value="All">All Chapters</option>
-        </select>
-    </label>
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
 
-    <label class="manage-filter-field">
-        <span>Exam</span>
-        <select id="filterExam">
-            <option value="All">All Exams</option>
-        </select>
-    </label>
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            }
 
-    <label class="manage-filter-field">
-        <span>Type</span>
-        <select id="filterType">
-            <option value="All">All Types</option>
-        </select>
-    </label>
-</div>
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+        });
+    </script>
+    <!-- ========================================== -->
 
-<div class="manage-table-card">
-    <div class="manage-table-meta">
-        <p class="manage-table-caption">Review, filter, and manage your complete question bank.</p>
-        <div class="manage-table-status" id="tableStatus">Loading questions...</div>
-    </div>
+    <main id="mainContent" class="manage-shell">
 
-    <div class="manage-table-wrap">
-        <div id="tableLoading" class="manage-empty manage-loading" role="status">Loading questions...</div>
+        <section class="manage-dashboard-card">
 
-        <table class="question-table" aria-label="Questions management table">
-            <thead>
-                <tr>
-                    <th><button type="button" class="sort-btn" data-sort="question">Question</button></th>
-                    <th><button type="button" class="sort-btn" data-sort="subject">Subject</button></th>
-                    <th><button type="button" class="sort-btn" data-sort="chapter">Chapter</button></th>
-                    <th><button type="button" class="sort-btn" data-sort="exam">Exam</button></th>
-                    <th><button type="button" class="sort-btn" data-sort="type">Type</button></th>
-                    <th><button type="button" class="sort-btn" data-sort="year">Date</button></th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="questionTableBody"></tbody>
-        </table>
-    </div>
+            <div class="manage-toolbar">
+                <div>
+                    <p class="manage-eyebrow">Content Studio</p>
+                    <h1>Manage Questions</h1>
+                </div>
 
-    <div id="tableEmptyState" class="manage-empty" hidden>
-        <div class="manage-empty-icon">📭</div>
-        <h3>No questions found</h3>
-        <p>Try adjusting your search or filters to view more results.</p>
-    </div>
+                <div class="manage-toolbar-actions">
+                    <div class="manage-count-pill" aria-live="polite">Total <strong id="questionCount">0</strong></div>
+                    
+                    <button type="button" class="manage-refresh-btn" id="generateSitemapBtn">
+                        Download Sitemap
+                    </button>
 
-    <div class="manage-pagination" id="paginationControls"></div>
-</div>
+                    <button type="button" class="manage-refresh-btn" id="refreshButton" aria-label="Refresh question list">Refresh</button>
+                </div>
+            </div>
 
-</section>
+            <div class="manage-search-row">
+                <label class="sr-only" for="searchBox">Search questions</label>
+                <input
+                    type="text"
+                    id="searchBox"
+                    placeholder="Search by question, subject, chapter, or exam...">
+            </div>
 
-</main>
+            <div class="manage-filters">
+                <label class="manage-filter-field">
+                    <span>Subject</span>
+                    <select id="filterSubject">
+                        <option value="All">All Subjects</option>
+                    </select>
+                </label>
 
-<div class="manage-modal-backdrop" id="deleteModal" hidden>
-    <div class="manage-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="deleteModalText">
-        <h3 id="modalTitle">Delete question?</h3>
-        <p id="deleteModalText">This action will remove the question from the current list.</p>
-        <div class="manage-modal-actions">
-            <button type="button" class="manage-cancel-btn" id="cancelDeleteButton">Cancel</button>
-            <button type="button" class="manage-delete-btn" id="confirmDeleteButton">Delete</button>
+                <label class="manage-filter-field">
+                    <span>Chapter</span>
+                    <select id="filterChapter">
+                        <option value="All">All Chapters</option>
+                    </select>
+                </label>
+
+                <label class="manage-filter-field">
+                    <span>Exam</span>
+                    <select id="filterExam">
+                        <option value="All">All Exams</option>
+                    </select>
+                </label>
+
+                <label class="manage-filter-field">
+                    <span>Type</span>
+                    <select id="filterType">
+                        <option value="All">All Types</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="manage-table-card">
+                <div class="manage-table-meta">
+                    <p class="manage-table-caption">Review, filter, and manage your complete question bank.</p>
+                    <div class="manage-table-status" id="tableStatus">Loading questions...</div>
+                </div>
+
+                <div class="manage-table-wrap">
+                    <div id="tableLoading" class="manage-empty manage-loading" role="status">Loading questions...</div>
+
+                    <table class="question-table" aria-label="Questions management table">
+                        <thead>
+                            <tr>
+                                <th><button type="button" class="sort-btn" data-sort="question">Question</button></th>
+                                <th><button type="button" class="sort-btn" data-sort="subject">Subject</button></th>
+                                <th><button type="button" class="sort-btn" data-sort="chapter">Chapter</button></th>
+                                <th><button type="button" class="sort-btn" data-sort="exam">Exam</button></th>
+                                <th><button type="button" class="sort-btn" data-sort="type">Type</button></th>
+                                <th><button type="button" class="sort-btn" data-sort="year">Date</button></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questionTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="tableEmptyState" class="manage-empty" hidden>
+                    <div class="manage-empty-icon">📭</div>
+                    <h3>No questions found</h3>
+                    <p>Try adjusting your search or filters to view more results.</p>
+                </div>
+
+                <div class="manage-pagination" id="paginationControls"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal Background -->
+    <div class="manage-modal-backdrop" id="deleteModal" hidden>
+        <div class="manage-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="deleteModalText">
+            <h3 id="modalTitle">Delete question?</h3>
+            <p id="deleteModalText">This action will remove the question from the current list. It cannot be undone.</p>
+            <div class="manage-modal-actions">
+                <button type="button" class="manage-cancel-btn" id="cancelDeleteButton">Cancel</button>
+                <button type="button" class="manage-delete-btn" id="confirmDeleteButton">Delete Permanently</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="manage-toast" id="manageToast" aria-live="polite"></div>
+    <div class="manage-toast" id="manageToast" aria-live="polite"></div>
 
-<script type="module" src="js/manage.js"></script>
+    <script type="module" src="js/manage.js"></script>
 </body>
 </html>
