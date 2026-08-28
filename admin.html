@@ -113,75 +113,66 @@
     .panel-head h3 { margin: 0 0 15px 0; color: var(--text-primary); font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
 
     /* =========================================
-       JS INLINE TEXT COLOR OVERRIDES (Visibility Fix)
+       JS INLINE TEXT COLOR OVERRIDES
        ========================================= */
     #recentActivityList div[style*="background"] {
         background: var(--bg-main) !important;
         border-color: var(--border-color) !important;
     }
-    #recentActivityList strong, #recentActivityList h4 {
-        color: var(--text-primary) !important;
-    }
-    #recentActivityList p, #recentActivityList div {
-        color: var(--text-secondary) !important;
-    }
+    #recentActivityList strong, #recentActivityList h4 { color: var(--text-primary) !important; }
+    #recentActivityList p, #recentActivityList div { color: var(--text-secondary) !important; }
     #recentActivityList span[style*="background"] {
         background: rgba(59, 130, 246, 0.15) !important;
         color: var(--accent-light-blue) !important;
         border: 1px solid rgba(59, 130, 246, 0.3) !important;
     }
 
-    #examStatsList > div {
-        border-color: var(--border-color) !important;
-        color: var(--text-secondary) !important;
-    }
-    #examStatsList span {
-        color: var(--text-primary) !important;
-        font-weight: 700 !important;
-    }
-    
-    #typeLegend div {
-        color: var(--text-secondary) !important;
-    }
+    #examStatsList > div { border-color: var(--border-color) !important; color: var(--text-secondary) !important; }
+    #examStatsList span { color: var(--text-primary) !important; font-weight: 700 !important; }
+    #typeLegend div { color: var(--text-secondary) !important; }
 
     /* =========================================
-       CHEMISTRY TOOLBAR COMPACT & LINEAR FIX
+       FORCED LINEAR CHEMISTRY TOOLBAR STYLES
        ========================================= */
     .chem-editor-wrapper {
         border: 1px solid var(--border-color) !important;
         border-radius: var(--radius-md) !important;
         overflow: hidden !important;
         margin-bottom: 15px;
+        background: var(--bg-main);
     }
+    /* Force the generated toolbar container to hold horizontal scrolling rows */
     .chem-editor-wrapper > div:first-child {
         background: var(--bg-card-hover) !important;
-        padding: 10px !important;
+        padding: 8px !important;
         border-bottom: 1px solid var(--border-color) !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 8px !important;
+        gap: 6px !important;
+        max-height: 160px;
+        overflow-y: auto;
     }
-    /* Group rows inside the toolbar */
-    .chem-editor-wrapper > div:first-child > div {
+    /* Force every inner row of buttons to stay in a single horizontal line */
+    .chem-editor-wrapper > div:first-child div {
         display: flex !important;
+        flex-direction: row !important;
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
         gap: 4px !important;
         align-items: center !important;
-        font-size: 12px !important;
-        color: var(--text-secondary) !important;
-        padding-bottom: 4px;
         scrollbar-width: none;
     }
-    .chem-editor-wrapper > div:first-child > div::-webkit-scrollbar { display: none; }
+    .chem-editor-wrapper > div:first-child div::-webkit-scrollbar { display: none; }
 
+    /* Force each button to stay small and compact */
     .chem-editor-wrapper > div:first-child button {
         flex: 0 0 auto !important;
-        min-width: 28px !important;
-        height: 28px !important;
-        padding: 0 4px !important;
+        width: 32px !important;
+        min-width: 32px !important;
+        height: 30px !important;
+        padding: 0 !important;
         margin: 0 !important;
-        font-size: 12px !important;
+        font-size: 13px !important;
         font-weight: 600 !important;
         background: var(--bg-main) !important;
         color: var(--text-primary) !important;
@@ -207,7 +198,6 @@
         resize: vertical;
     }
 </style>
-
 </head>
 
 <body class="admin-body" id="home-body">
@@ -269,7 +259,7 @@
         </nav>
     </header>
 
-    <!-- ADMIN HORIZONTAL TABS (Replaces Left Sidebar) -->
+    <!-- ADMIN HORIZONTAL TABS -->
     <div class="admin-tabs-container">
         <div class="admin-tabs">
             <button class="admin-tab-btn active" data-target="dashboardSection">Dashboard</button>
@@ -634,7 +624,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<!-- Feedback & Comments Loader Script (Dark Theme Native) -->
+<!-- Feedback & Comments Loader Script -->
 <script type="module">
     import { db } from "./js/firebase.js";
     import { collection, getDocs, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
