@@ -2,393 +2,347 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CBT Simulator | Doubt Factory</title>
+    <meta name="description" content="Practice in a real exam environment with the Doubt Factory CBT Simulator.">
+    <meta name="robots" content="noindex,follow">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
+    
     <style>
-        /* Strict NTA-Style CSS Reset */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { display: flex; flex-direction: column; height: 100vh; background: #fff; overflow: hidden; }
-        
-        /* Header */
-        .nta-header { background: #2563eb; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .timer-box { font-size: 18px; font-weight: bold; background: #1e40af; padding: 5px 15px; border-radius: 4px; }
-        
-        /* Layout */
-        .cbt-layout { display: flex; flex: 1; overflow: hidden; }
-        
-        /* Left Panel: Question Area */
-        .question-panel { flex: 1; display: flex; flex-direction: column; border-right: 2px solid #cbd5e1; }
-        .question-content { flex: 1; padding: 30px; overflow-y: auto; font-size: 16px; line-height: 1.6; }
-        .option-label { display: block; padding: 10px; margin: 5px 0; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer; }
-        .option-label:hover { background: #f8fafc; }
-        
-        /* Left Panel: Action Buttons */
-        .action-bar { padding: 15px 20px; background: #f1f5f9; border-top: 1px solid #cbd5e1; display: flex; justify-content: space-between; }
-        .btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-save { background: #10b981; }
-        .btn-review { background: #8b5cf6; }
-        .btn-clear { background: #fff; color: #475569; border: 1px solid #cbd5e1; }
-        
-        /* Right Panel: Palette */
-        .palette-panel { width: 300px; background: #f8fafc; display: flex; flex-direction: column; }
-        .palette-header { padding: 15px; background: #e2e8f0; text-align: center; font-weight: bold; }
-        .palette-grid { padding: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; overflow-y: auto; flex: 1; }
-        
-        /* NTA Bubble States */
-        .q-bubble { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border-radius: 5px; color: white; }
-        .state-unvisited { background: #cbd5e1; color: #333; }
-        .state-unanswered { background: #ef4444; border-radius: 50%; padding-bottom: 5px; } /* Red Circle/Dome */
-        .state-answered { background: #10b981; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); } /* Green Hexagon */
-        .state-review { background: #8b5cf6; border-radius: 50%; } /* Purple Circle */
-        .state-review-ans { background: #8b5cf6; border-radius: 50%; position: relative; }
-        .state-review-ans::after { content: ''; position: absolute; bottom: 4px; right: 4px; width: 10px; height: 10px; background: #10b981; border-radius: 50%; }
-        
-        /* Submit Button */
-        .submit-bar { padding: 15px; background: #e2e8f0; text-align: center; }
-        .btn-submit-test { background: #3b82f6; width: 100%; }
-            
-                     
         /* =========================================
-           MOBILE RESPONSIVENESS (NATURAL SCROLL)
+           CBT SIMULATOR DARK THEME OVERRIDES
            ========================================= */
-        @media (max-width: 768px) {
-            /* 1. Unlock the page so it can scroll naturally */
-            body { height: auto !important; overflow: auto !important; display: block !important; }
-            
-            /* 2. Stack the header and make the timer stretch across the screen */
-            .nta-header { flex-direction: column !important; padding: 15px !important; gap: 10px !important; text-align: center !important; }
-            .timer-box { width: 100% !important; padding: 10px !important; font-size: 20px !important; }
-            
-            /* 3. Stack the main layout vertically */
-            .cbt-layout { flex-direction: column !important; display: flex !important; height: auto !important; overflow: visible !important; }
-            
-            /* 4. Let the question content expand as much as it needs */
-            .question-panel { width: 100% !important; flex: none !important; border-right: none !important; }
-            .question-content { overflow-y: visible !important; height: auto !important; padding: 20px 15px !important; }
-            
-            /* 5. Wrap buttons into a chunky, touch-friendly grid */
-            .action-bar { flex-wrap: wrap !important; gap: 10px !important; padding: 15px !important; border-top: 1px solid #cbd5e1 !important; border-bottom: 8px solid #e2e8f0 !important; }
-            .action-bar .btn { flex: 1 1 45% !important; padding: 15px 5px !important; font-size: 14px !important; line-height: 1.3 !important; }
-            .btn-clear { flex: 1 1 100% !important; order: 3 !important; } /* Pushes 'Clear' to the bottom row */
-            
-            /* 6. Fix the sideways numbering by using an auto-filling grid */
-            .palette-panel { width: 100% !important; flex: none !important; height: auto !important; }
-            .palette-grid { overflow-y: visible !important; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)) !important; padding: 20px !important; gap: 12px !important; justify-content: center !important; }
-            .q-bubble { margin: 0 auto !important; width: 45px !important; height: 45px !important; font-size: 16px !important; }
+        body {
+            background: var(--bg-main) !important;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
+        /* Top Bar */
+        .cbt-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .cbt-brand h2 { margin: 0; font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
+        .cbt-timer {
+            background: rgba(244, 63, 94, 0.1);
+            color: #FB7185;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-               </style>
+        /* Main Layout */
+        .cbt-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        @media (max-width: 900px) {
+            .cbt-layout { flex-direction: column; overflow: auto; }
+        }
+
+        /* Question Area (Left side) */
+        .cbt-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 30px;
+            background: var(--bg-main);
+        }
+        .cbt-q-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .cbt-q-header h3 { margin: 0; color: var(--accent-blue); font-size: 22px; font-weight: 800; }
+        
+        .cbt-q-text {
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .cbt-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .cbt-option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .cbt-option-label:hover { background: var(--bg-card-hover); border-color: rgba(59, 130, 246, 0.4); }
+        .cbt-option-label input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            margin: 0;
+            display: grid;
+            place-content: center;
+        }
+        .cbt-option-label input[type="radio"]::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 0.1s transform ease-in-out;
+            box-shadow: inset 10px 10px var(--accent-blue);
+        }
+        .cbt-option-label input[type="radio"]:checked { border-color: var(--accent-blue); }
+        .cbt-option-label input[type="radio"]:checked::before { transform: scale(1); }
+
+        /* Action Buttons Bottom Bar */
+        .cbt-actions {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        .cbt-btn {
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .btn-save { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .btn-save:hover { background: rgba(16, 185, 129, 0.25); }
+        
+        .btn-review { background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .btn-review:hover { background: rgba(139, 92, 246, 0.25); }
+        
+        .btn-clear { background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-clear:hover { background: var(--border-color); color: var(--text-primary); }
+
+        /* Palette Sidebar (Right side) */
+        .cbt-sidebar {
+            width: 320px;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 900px) {
+            .cbt-sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border-color); }
+            .cbt-layout { overflow-y: auto; }
+        }
+
+        .palette-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .palette-header h4 { margin: 0; color: var(--text-primary); font-size: 16px; }
+
+        .palette-legend {
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-box { width: 20px; height: 20px; border-radius: 4px; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* State Colors */
+        .state-unvisited { background: var(--bg-card-hover); border-color: var(--border-color); }
+        .state-unanswered { background: #ef4444; color: white; }
+        .state-answered { background: #10b981; color: white; }
+        .state-review { background: #8b5cf6; color: white; }
+        .state-review-ans { background: #8b5cf6; color: white; position: relative; }
+        .state-review-ans::after { content: ''; position: absolute; bottom: 3px; right: 3px; width: 6px; height: 6px; background: #10b981; border-radius: 50%; }
+
+        .palette-grid-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .palette-btn {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .palette-btn:hover { transform: scale(1.05); }
+        .palette-btn.active { box-shadow: 0 0 0 2px var(--bg-main), 0 0 0 4px var(--accent-blue); }
+
+        .submit-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+        .btn-submit {
+            width: 100%;
+            background: var(--accent-blue);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { background: #2563EB; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+
+        /* Custom Modal */
+        .cbt-modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .cbt-modal {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            padding: 30px; border-radius: var(--radius-lg); width: 90%; max-width: 400px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .cbt-modal h3 { color: var(--text-primary); margin-top: 0; font-size: 22px; }
+        .cbt-modal p { color: var(--text-secondary); margin-bottom: 25px; line-height: 1.5; }
+        .modal-actions { display: flex; gap: 15px; justify-content: center; }
+        .modal-actions button { flex: 1; padding: 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: none; }
+        .btn-cancel { background: var(--bg-card-hover); color: var(--text-primary); border: 1px solid var(--border-color) !important; }
+        .btn-confirm { background: var(--accent-blue); color: white; }
+    </style>
 </head>
 <body>
 
-    <!-- ==========================================
-         UNIVERSAL HEADER & SIDEBAR 
-         ========================================== -->
-    <header class="site-header">
-        <a href="index.html" class="logo">
-            <h2>Doubt Factory</h2>
-            <p>Turning Doubts into Clarity</p>
-        </a>
-
-        <!-- Hamburger Icon -->
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
-
-        <!-- Sidebar Navigation -->
-        <nav aria-label="Primary navigation" id="primaryNav">
-            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <a href="index.html">Home</a>
-            
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Exams ▾</a>
-                <div class="drop-menu">
-                    <a href="exam.html?type=JEE Main">JEE Main</a>
-                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-                    <a href="exam.html?type=NEET">NEET</a>
-                </div>
-            </div>
-
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-                <div class="drop-menu">
-                    <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
-                    <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
-                </div>
-            </div>
-
-            <a href="test-setup.html">Mock Tests</a>
-            <a href="search.html">Search</a>
-            <a href="bookmarks.html">Bookmarks</a>
-        </nav>
+    <!-- Minimal Header specifically for CBT to avoid distraction -->
+    <header class="cbt-header">
+        <div class="cbt-brand">
+            <h2>Doubt Factory Simulator</h2>
+        </div>
+        <div class="cbt-timer" id="timerDisplay">
+            ⏱ 00:00:00
+        </div>
     </header>
 
-    <!-- Sidebar Logic -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const closeMenuBtn = document.getElementById('closeMenuBtn');
-            const primaryNav = document.getElementById('primaryNav');
-            
-            if (!mobileMenuBtn || !primaryNav) return;
-
-            let overlay = document.querySelector('.menu-overlay');
-            if (!overlay) {
-                overlay = document.createElement('div');
-                overlay.className = 'menu-overlay';
-                document.body.appendChild(overlay);
-            }
-
-            function toggleMenu() {
-                const isOpen = primaryNav.classList.contains('open');
-                if (isOpen) {
-                    primaryNav.classList.remove('open');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                } else {
-                    primaryNav.classList.add('open');
-                    overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden'; 
-                }
-            }
-
-            mobileMenuBtn.addEventListener('click', toggleMenu);
-            closeMenuBtn.addEventListener('click', toggleMenu);
-            overlay.addEventListener('click', toggleMenu);
-
-            document.querySelectorAll('.drop-trigger').forEach(trigger => {
-                const newTrigger = trigger.cloneNode(true);
-                trigger.parentNode.replaceChild(newTrigger, trigger);
-                newTrigger.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const dropMenu = this.nextElementSibling;
-                    dropMenu.classList.toggle('mobile-open');
-                });
-            });
-        });
-    </script>
-    <!-- ========================================== -->
-
-    <header class="nta-header">
-        <h2>Doubt Factory CBT Simulator</h2>
-        <div class="timer-box">Time Left: <span id="timeDisplay">00:00:00</span></div>
-    </header>
-
-    <div class="cbt-layout">
-        <!-- Left Side -->
-        <div class="question-panel">
-            <div class="question-content" id="qContent">
-                <h3 style="color: #64748b; margin-bottom: 20px;">Loading Test Environment...</h3>
+    <main class="cbt-layout">
+        
+        <!-- Left Panel: Question Display -->
+        <div class="cbt-main">
+            <div class="cbt-q-header">
+                <h3 id="qNumDisplay">Question 1</h3>
             </div>
             
-            <div class="action-bar">
-                <button class="btn btn-review" onclick="handleAction('review')">Mark for Review & Next</button>
-                <button class="btn btn-clear" onclick="handleAction('clear')">Clear Response</button>
-                <button class="btn btn-save" onclick="handleAction('save')">Save & Next</button>
+            <div class="cbt-q-text" id="qText">Loading question...</div>
+            <div id="qImageContainer" style="margin-bottom: 20px;"></div>
+
+            <div class="cbt-options" id="optionsContainer">
+                <!-- Radio buttons injected by JS -->
+            </div>
+
+            <div class="cbt-actions">
+                <button type="button" class="cbt-btn btn-clear" id="btnClear">Clear Response</button>
+                <button type="button" class="cbt-btn btn-review" id="btnReview">Mark for Review & Next</button>
+                <button type="button" class="cbt-btn btn-save" id="btnSaveNext">Save & Next</button>
             </div>
         </div>
 
-        <!-- Right Side -->
-        <div class="palette-panel">
-            <div class="palette-header">Question Palette</div>
-            <div class="palette-grid" id="paletteGrid"></div>
-            <div class="submit-bar">
-                <button class="btn btn-submit-test" onclick="submitTest()">Submit Test</button>
+        <!-- Right Panel: Palette & Submit -->
+        <div class="cbt-sidebar">
+            <div class="palette-header">
+                <h4>Question Palette</h4>
+            </div>
+            
+            <div class="palette-legend">
+                <div class="legend-item"><span class="legend-box state-unvisited"></span> Not Visited</div>
+                <div class="legend-item"><span class="legend-box state-unanswered"></span> Not Answered</div>
+                <div class="legend-item"><span class="legend-box state-answered"></span> Answered</div>
+                <div class="legend-item"><span class="legend-box state-review"></span> Marked Review</div>
+            </div>
+            <div class="palette-legend" style="border-top: none; padding-top: 0;">
+                <div class="legend-item" style="grid-column: span 2;"><span class="legend-box state-review-ans"></span> Answered & Marked for Review</div>
+            </div>
+
+            <div class="palette-grid-wrapper">
+                <div class="palette-grid" id="paletteGrid">
+                    <!-- Palette buttons injected by JS -->
+                </div>
+            </div>
+
+            <div class="submit-area">
+                <button type="button" class="btn-submit" id="btnSubmitTest">Submit Test</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Submission Confirmation Modal -->
+    <div class="cbt-modal-overlay" id="submitModal" style="display: none;">
+        <div class="cbt-modal">
+            <h3>Submit Test?</h3>
+            <p>Are you sure you want to submit the test? You will not be able to change your answers after submission.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" id="cancelSubmit">Resume Test</button>
+                <button type="button" class="btn-confirm" id="confirmSubmit">Yes, Submit</button>
             </div>
         </div>
     </div>
 
-      <script type="module">
-        import { getQuestions } from "./js/firebase.js";
-
-        let allQuestions = [];
-        let testQuestions = [];
-        let currentIndex = 0;
-        let userResponses = []; 
-        
-        // 1. Load the test and the custom timer
-        async function initTest() {
-            const savedIds = JSON.parse(sessionStorage.getItem('df_cbt_test') || '[]');
-            const savedDuration = parseInt(sessionStorage.getItem('df_cbt_duration') || '60', 10);
-
-            if (savedIds.length === 0) {
-                alert("No questions found. Redirecting to setup.");
-                window.location.href = "test-setup.html";
-                return;
-            }
-
-            try {
-                allQuestions = await getQuestions();
-                testQuestions = savedIds.map(id => allQuestions.find(q => (q.docId || q.id) === id)).filter(Boolean);
-                
-                userResponses = testQuestions.map(() => ({ selectedOption: null, state: 'unvisited' }));
-                
-                // Immediately update the display so there is no 1-second delay showing 00:00:00
-                updateTimerDisplay(savedDuration * 60);
-                
-                startTimer(savedDuration * 60); 
-                buildPalette();
-                loadQuestion(0);
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        // 2. Build the right-side grid
-        function buildPalette() {
-            const grid = document.getElementById('paletteGrid');
-            grid.innerHTML = '';
-            userResponses.forEach((res, index) => {
-                const bubble = document.createElement('div');
-                bubble.textContent = index + 1;
-                bubble.className = `q-bubble state-${res.state}`;
-                bubble.onclick = () => loadQuestion(index);
-                grid.appendChild(bubble);
-            });
-        }
-
-                // 3. Render a specific question (NOW WITH IMAGES)
-        window.loadQuestion = function(index) {
-            if (userResponses[currentIndex].state === 'unvisited') {
-                userResponses[currentIndex].state = 'unanswered';
-            }
-            
-            currentIndex = index;
-            const q = testQuestions[currentIndex];
-            const content = document.getElementById('qContent');
-            
-            // 3A. Handle the Main Question Image
-            let questionImageHTML = '';
-            if (q.questionImage && q.questionImage.trim() !== '') {
-                questionImageHTML = `<img src="${q.questionImage}" alt="Question Image" style="max-width: 100%; height: auto; margin: 15px 0; border-radius: 8px; border: 1px solid #e2e8f0;">`;
-            }
-
-            // 3B. Handle the Options (Text + Images)
-            let optionsHTML = '';
-            const optionLetters = ['A', 'B', 'C', 'D']; // Maps index 0-3 to database image keys
-
-            q.options.forEach((optText, i) => {
-                const isChecked = userResponses[currentIndex].selectedOption === i ? 'checked' : '';
-                const letter = optionLetters[i];
-                
-                // Check if this specific option has an image attached
-                let optImageHTML = '';
-                if (q.optionImages && q.optionImages[letter] && q.optionImages[letter].trim() !== '') {
-                    optImageHTML = `<img src="${q.optionImages[letter]}" alt="Option ${letter}" style="max-width: 250px; height: auto; display: block; margin-top: 8px; border-radius: 6px;">`;
-                }
-
-                // Only render text if it exists (prevents blank spaces)
-                let optTextHTML = optText ? `<span style="font-size: 16px;">${optText}</span>` : '';
-
-                optionsHTML += `
-                    <label class="option-label" style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
-                        <input type="radio" name="cbtOption" value="${i}" ${isChecked} style="margin-top: 4px; width: 16px; height: 16px; cursor: pointer;">
-                        <div style="flex: 1;">
-                            ${optTextHTML}
-                            ${optImageHTML}
-                        </div>
-                    </label>
-                `;
-            });
-
-            content.innerHTML = `
-                <div style="font-weight:bold; margin-bottom: 20px; font-size: 18px; color: #1e3a8a;">Question ${currentIndex + 1}</div>
-                <div style="margin-bottom: 10px; font-size: 16px;">${q.question}</div>
-                ${questionImageHTML}
-                <div style="margin-top: 25px;">${optionsHTML}</div>
-            `;
-            
-            buildPalette(); 
-        }
-
-
-        // 4. Handle Buttons
-        window.handleAction = function(action) {
-            const selected = document.querySelector('input[name="cbtOption"]:checked');
-            const stateObj = userResponses[currentIndex];
-
-            if (action === 'clear') {
-                stateObj.selectedOption = null;
-                stateObj.state = 'unanswered';
-                loadQuestion(currentIndex); 
-                return;
-            }
-
-            if (action === 'save') {
-                if (selected) {
-                    stateObj.selectedOption = Number(selected.value);
-                    stateObj.state = 'answered';
-                } else {
-                    stateObj.state = 'unanswered';
-                }
-            }
-
-            if (action === 'review') {
-                if (selected) {
-                    stateObj.selectedOption = Number(selected.value);
-                    stateObj.state = 'review-ans';
-                } else {
-                    stateObj.state = 'review';
-                }
-            }
-
-            if (currentIndex < testQuestions.length - 1) {
-                loadQuestion(currentIndex + 1);
-            } else {
-                buildPalette(); 
-            }
-        }
-
-        // 5. Timer Logic
-        function updateTimerDisplay(secondsTotal) {
-            const hours = String(Math.floor(secondsTotal / 3600)).padStart(2, '0');
-            const minutes = String(Math.floor((secondsTotal % 3600) / 60)).padStart(2, '0');
-            const seconds = String(secondsTotal % 60).padStart(2, '0');
-            document.getElementById('timeDisplay').textContent = `${hours}:${minutes}:${seconds}`;
-        }
-
-        function startTimer(duration) {
-            let timer = duration;
-            setInterval(() => {
-                if (--timer < 0) {
-                    submitTest();
-                } else {
-                    updateTimerDisplay(timer);
-                }
-            }, 1000);
-        }
-
-        // 6. Submit to Scorecard
-        window.submitTest = function() {
-            const testData = {
-                questions: testQuestions,
-                responses: userResponses
-            };
-            
-            sessionStorage.setItem('df_cbt_results', JSON.stringify(testData));
-            window.location.href = "test-result.html"; 
-        }
-
-        document.addEventListener("DOMContentLoaded", initTest);
-    </script>
+    <!-- CBT Logic script (ensure you have js/cbt.js properly coded for these IDs) -->
+    <script type="module" src="js/cbt.js"></script>
 
 </body>
 </html>
