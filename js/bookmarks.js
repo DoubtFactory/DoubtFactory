@@ -1,106 +1,91 @@
 import { getQuestions } from "./firebase.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const listContainer = document.getElementById("bookmarksList");
-    if (!listContainer) return;
+    const container = document.getElementById("bookmarksContainer");
 
-    // 1. Read the student's saved bookmarks from their browser's memory
-    let savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
+    // Retrieve saved bookmarks from localStorage
+    let savedBookmarks = JSON.parse(localStorage.getItem("df_bookmarks")) || [];
 
     if (savedBookmarks.length === 0) {
-        renderEmptyState(listContainer);
+        renderEmptyState();
         return;
     }
 
     try {
-        // 2. Fetch all questions from the database
-        const questions = await getQuestions();
+        const allQuestions = await getQuestions();
         
-        // 3. Filter down to ONLY the questions the student has starred
-        const bookmarkedQuestions = questions.filter(q => savedBookmarks.includes(q.docId || q.id));
+        // Filter the database to only show questions whose IDs match the saved bookmarks
+        const bookmarkedQuestions = allQuestions.filter(q => {
+            const currentId = q.docId || q.id;
+            return savedBookmarks.includes(String(currentId));
+        });
 
         if (bookmarkedQuestions.length === 0) {
-            renderEmptyState(listContainer);
-            // Cleanup their browser memory if the questions were deleted from the database
-            localStorage.removeItem('df_bookmarks');
+            // Edge case: IDs are in localStorage, but deleted from the DB
+            renderEmptyState();
             return;
         }
 
-        renderBookmarks(bookmarkedQuestions, listContainer);
+        renderBookmarks(bookmarkedQuestions);
 
     } catch (error) {
         console.error("Error loading bookmarks:", error);
-        listContainer.innerHTML = "<p style='color:red;'>Failed to load bookmarked questions. Check your connection.</p>";
+        container.innerHTML = `<p style="color: #EF4444; text-align: center; padding: 40px 0;">Failed to load bookmarks. Please check your connection.</p>`;
     }
-});
 
-// UI for when they have 0 bookmarks
-function renderEmptyState(container) {
-    container.innerHTML = `
-        <div style="text-align:center; padding: 60px 20px; background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1;">
-            <div style="font-size: 40px; margin-bottom: 15px;">⭐</div>
-            <h2 style="color: #1e293b; margin-bottom: 10px;">No bookmarks yet</h2>
-            <p style="color: #64748b; margin-bottom: 25px; line-height: 1.6;">When you find a tricky JEE/NEET question you want to revise later, click the <b>Bookmark</b> button on the question page.</p>
-            <a href="exam.html" style="background: #1565C0; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: background 0.2s;">Start Practicing</a>
-        </div>
-    `;
-}
-
-// UI for rendering the saved questions list
-function renderBookmarks(questions, container) {
-    container.innerHTML = "";
-    
-    const flexList = document.createElement("div");
-    flexList.style.cssText = "display: flex; flex-direction: column; gap: 15px;";
-
-    questions.forEach(q => {
-        const qId = q.docId || q.id;
-        const card = document.createElement("div");
-        card.className = "bookmark-card";
-        
-        // Inline styling for the horizontal list item
-        card.style.cssText = "display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: box-shadow 0.2s;";
-        card.onmouseover = () => card.style.boxShadow = "0 8px 16px rgba(0,0,0,0.06)";
-        card.onmouseout = () => card.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02)";
-
-        const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 110) + "..." : "Practice Question...";
-
-        card.innerHTML = `
-            <div style="flex: 1 1 300px;">
-                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span style="font-size: 12px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">${q.chapter || q.subject || 'Topic'}</span>
-                    <span style="font-size: 12px; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 4px 8px; border-radius: 4px; border: 1px solid #bfdbfe;">${q.exam || 'JEE/NEET'}</span>
-                </div>
-                <h3 style="margin: 0; font-size: 16px; color: #1e293b; line-height: 1.5; font-weight: 600;">${snippet}</h3>
-            </div>
-            <div style="display: flex; gap: 10px; flex-shrink: 0; align-items: center;">
-                <a href="question.html?id=${qId}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}" 
-                   style="background: #1565C0; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; text-align: center;">Revise Now</a>
-                <button class="remove-bookmark-btn" data-id="${qId}" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s;">Remove</button>
+    // Renders the new dark theme empty state
+    function renderEmptyState() {
+        container.innerHTML = `
+            <div class="empty-state-card">
+                <span class="star-icon">⭐</span>
+                <p>When you find a tricky JEE/NEET question you want to revise later, click the <strong>Bookmark</strong> button on the question page.</p>
+                <a href="index.html" class="btn-start">Start Practicing</a>
             </div>
         `;
-        flexList.appendChild(card);
-    });
+    }
 
-    container.appendChild(flexList);
+    // Renders the actual dark theme cards
+    function renderBookmarks(questions) {
+        container.innerHTML = questions.map(q => {
+            const qId = q.docId || q.id;
+            const diff = (q.difficulty || "Medium");
+            const diffClass = diff.toLowerCase() === "easy" ? "badge-easy" : (diff.toLowerCase() === "hard" ? "badge-hard" : "badge-medium");
+            
+            const snippet = q.question 
+                ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 160) + (q.question.length > 160 ? "..." : "") 
+                : "Question text";
 
-    // 4. Make the "Remove" buttons functional
-    document.querySelectorAll('.remove-bookmark-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const idToRemove = e.target.getAttribute('data-id');
-            
-            // Delete it from the browser's memory
-            let savedBookmarks = JSON.parse(localStorage.getItem('df_bookmarks')) || [];
-            savedBookmarks = savedBookmarks.filter(id => id !== idToRemove);
-            localStorage.setItem('df_bookmarks', JSON.stringify(savedBookmarks));
-            
-            // Re-render the UI instantly without refreshing the page
-            const updatedQuestions = questions.filter(q => savedBookmarks.includes(q.docId || q.id));
-            if (updatedQuestions.length === 0) {
-                renderEmptyState(container);
-            } else {
-                renderBookmarks(updatedQuestions, container);
-            }
-        });
-    });
-}
+            return `
+                <div class="exam-q-card" id="card-${qId}">
+                    <button class="remove-bookmark-btn" onclick="removeBookmark('${qId}')">Remove</button>
+                    <div class="exam-badges">
+                        <span class="badge badge-exam">${q.exam || "Exam"}</span>
+                        <span class="badge badge-year">${q.year || "Year"}</span>
+                        <span class="badge badge-subject">${q.subject || "Subject"}</span>
+                        <span class="badge badge-chapter" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${q.chapter || "Chapter"}</span>
+                        <span class="badge ${diffClass}">${diff}</span>
+                    </div>
+                    <div class="exam-q-text">${snippet}</div>
+                    <a href="question.html?id=${qId}" class="solve-btn-link">Solve Question →</a>
+                </div>
+            `;
+        }).join("");
+    }
+
+    // Global function to remove bookmarks without refreshing the page
+    window.removeBookmark = function(idToRemove) {
+        savedBookmarks = savedBookmarks.filter(id => String(id) !== String(idToRemove));
+        localStorage.setItem("df_bookmarks", JSON.stringify(savedBookmarks));
+
+        // Visually remove the card
+        const card = document.getElementById(`card-${idToRemove}`);
+        if (card) {
+            card.remove();
+        }
+
+        // If no bookmarks are left, show the empty state
+        if (savedBookmarks.length === 0) {
+            renderEmptyState();
+        }
+    };
+});
