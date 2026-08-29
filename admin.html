@@ -20,9 +20,8 @@
     .admin-tabs-container {
         background: var(--bg-card);
         border-bottom: 1px solid var(--border-color);
-        position: sticky;
-        top: 63px;
-        z-index: 990;
+        /* Removed position: sticky to stop tabs from floating over content */
+        position: static; 
         padding: 0 20px;
     }
     
@@ -63,9 +62,9 @@
     }
 
     /* =========================================
-       DASHBOARD LAYOUT FIXES (Horizontal Stats)
+       DASHBOARD LAYOUT FIXES
        ========================================= */
-    .dash-header { margin-bottom: 30px; }
+    .dash-header { margin-bottom: 30px; margin-top: 20px; }
     .dash-header h1 { font-size: 28px; margin-bottom: 8px; color: var(--text-primary); }
     .dash-header p { color: var(--text-secondary); }
     
@@ -115,24 +114,17 @@
     /* =========================================
        TEXT COLOR OVERRIDES FOR DYNAMIC BLOCKS
        ========================================= */
-    #recentActivityList div[style*="background"] {
-        background: var(--bg-main) !important;
-        border-color: var(--border-color) !important;
-    }
+    #recentActivityList div[style*="background"] { background: var(--bg-main) !important; border-color: var(--border-color) !important; }
     #recentActivityList strong, #recentActivityList h4 { color: var(--text-primary) !important; }
     #recentActivityList p, #recentActivityList div { color: var(--text-secondary) !important; }
-    #recentActivityList span[style*="background"] {
-        background: rgba(59, 130, 246, 0.15) !important;
-        color: var(--accent-light-blue) !important;
-        border: 1px solid rgba(59, 130, 246, 0.3) !important;
-    }
+    #recentActivityList span[style*="background"] { background: rgba(59, 130, 246, 0.15) !important; color: var(--accent-light-blue) !important; border: 1px solid rgba(59, 130, 246, 0.3) !important; }
 
     #examStatsList > div { border-color: var(--border-color) !important; color: var(--text-secondary) !important; }
     #examStatsList span { color: var(--text-primary) !important; font-weight: 700 !important; }
     #typeLegend div { color: var(--text-secondary) !important; }
 
     /* =========================================
-       CLEAN CHEMISTRY EDITOR TOOLBAR STYLES
+       CHEMISTRY EDITOR TOOLBAR STYLES (Single Line Scroll)
        ========================================= */
     .chem-editor-wrapper {
         border: 1px solid var(--border-color) !important;
@@ -144,39 +136,45 @@
     
     .custom-editor-toolbar {
         background: var(--bg-card-hover) !important;
-        padding: 8px !important;
+        padding: 10px 12px !important;
         border-bottom: 1px solid var(--border-color) !important;
         display: flex !important;
-        flex-direction: column !important;
-        gap: 6px !important;
-        max-height: 180px;
-        overflow-y: auto;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 20px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scrollbar-width: none;
     }
+    .custom-editor-toolbar::-webkit-scrollbar { display: none; }
     
     .toolbar-group {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        overflow-x: auto !important;
-        gap: 4px !important;
         align-items: center !important;
-        scrollbar-width: none;
+        gap: 4px !important;
+        flex-shrink: 0 !important;
+        border-right: 1px solid var(--border-color);
+        padding-right: 15px;
     }
-    .toolbar-group::-webkit-scrollbar { display: none; }
+    .toolbar-group:last-child {
+        border-right: none;
+        padding-right: 0;
+    }
 
     .group-label {
         font-size: 11px;
         font-weight: 700;
         color: var(--accent-blue);
-        min-width: 85px;
-        flex-shrink: 0;
         text-transform: uppercase;
+        margin-right: 6px;
+        flex-shrink: 0;
     }
 
     .toolbar-btn {
         flex: 0 0 auto !important;
-        width: 30px !important;
-        min-width: 30px !important;
+        width: 28px !important;
         height: 28px !important;
         padding: 0 !important;
         margin: 0 !important;
