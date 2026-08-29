@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Contact Us | Doubt Factory</title>
-    <meta name="description" content="Contact Doubt Factory for suggestions, bug reports, or to request specific Physics, Chemistry, Maths, or Biology chapters.">
+    <meta name="description" content="Send your feedback, suggestions, or bug reports to Doubt Factory.">
+    <meta name="robots" content="noindex,follow">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,37 +15,57 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
     
     <style>
-        .contact-wrapper {
-            max-width: 500px;
-            margin: 40px auto;
-        }
+        .contact-container { max-width: 600px; margin: 60px auto; padding: 0 20px; }
+        .contact-header { text-align: center; margin-bottom: 30px; }
+        .contact-header h1 { font-size: 32px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; margin-bottom: 10px; }
+        .contact-header p { color: var(--text-secondary); font-size: 16px; }
+
         .contact-card {
-            border-top: 6px solid var(--accent-blue) !important;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .input-group { 
-            margin-bottom: 20px; 
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
-        .input-group label { 
-            display: block; 
-            font-weight: 600; 
-            margin-bottom: 8px; 
-            color: var(--text-primary); 
-            font-size: 14px; 
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
-        .input-group textarea { 
-            resize: vertical; 
-            min-height: 130px; 
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-blue);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .submit-btn { 
-            width: 100%; 
-        }
-        .status-msg { 
-            text-align: center; 
-            margin-top: 15px; 
-            font-weight: 600; 
-            font-size: 14px; 
-            min-height: 20px; 
-        }
+        .submit-btn:hover { background: #2563EB; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transform: translateY(-2px); }
+        .submit-btn:disabled { background: var(--bg-card-hover); color: var(--text-secondary); cursor: not-allowed; transform: none; box-shadow: none; border: 1px solid var(--border-color); }
+
+        .status-msg { margin-top: 15px; font-weight: 600; font-size: 14px; text-align: center; }
+        .status-success { color: #10B981; }
+        .status-error { color: #EF4444; }
     </style>
 </head>
 <body id="home-body">
@@ -58,22 +79,13 @@
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <!-- Hamburger Icon -->
         <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
 
-        <!-- Sidebar Navigation -->
         <nav aria-label="Primary navigation" id="primaryNav">
             <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
 
             <a href="index.html">Home</a>
@@ -105,6 +117,7 @@
             <a href="test-setup.html">Mock Tests</a>
             <a href="search.html">Search</a>
             <a href="bookmarks.html">Bookmarks</a>
+            <a href="contact.html" style="color: var(--accent-blue);">Contact Us</a>
         </nav>
     </header>
 
@@ -152,45 +165,50 @@
             });
         });
     </script>
-    <!-- ========================================== -->
 
-    <main class="container">
-        <div class="contact-wrapper">
-            <div class="card contact-card">
-                <h2 style="text-align: center; margin-bottom: 10px; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">Get in Touch</h2>
-                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 25px; font-size: 14px;">Have a suggestion, found a bug, or want a specific chapter added? Let us know!</p>
+    <!-- Main Content -->
+    <main class="contact-container">
+        <div class="contact-header">
+            <h1>Contact Us</h1>
+            <p>Have a suggestion, found a bug, or want to request a feature? Let us know below!</p>
+        </div>
+
+        <div class="contact-card">
+            <form id="contactForm">
+                <div class="input-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" id="userName" placeholder="Enter your name" required>
+                </div>
                 
-                <form id="contactForm">
-                    <div class="input-group">
-                        <label for="senderName">Your Name (Optional)</label>
-                        <input type="text" id="senderName" placeholder="How should we address you?">
-                    </div>
-                    <div class="input-group">
-                        <label for="senderMessage">Message / Suggestion *</label>
-                        <textarea id="senderMessage" placeholder="Write your thoughts here..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary submit-btn" id="submitBtn">Send Message</button>
-                    <div id="statusMsg" class="status-msg"></div>
-                </form>
-            </div>
+                <div class="input-group">
+                    <label for="userMessage">Your Feedback</label>
+                    <textarea id="userMessage" rows="6" placeholder="Tell us how we can improve..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+                <div id="statusMessage" class="status-msg"></div>
+            </form>
         </div>
     </main>
-    
+
+    <!-- Firebase Logic -->
     <script type="module">
         import { db } from "./js/firebase.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+        document.getElementById("contactForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const status = document.getElementById('statusMsg');
             
-            const name = document.getElementById('senderName').value.trim() || "Anonymous Student";
-            const message = document.getElementById('senderMessage').value.trim();
+            const btn = document.getElementById("submitBtn");
+            const statusMsg = document.getElementById("statusMessage");
+            const name = document.getElementById("userName").value.trim();
+            const message = document.getElementById("userMessage").value.trim();
 
-            btn.textContent = "Sending...";
+            if (!name || !message) return;
+
             btn.disabled = true;
-            status.textContent = "";
+            btn.textContent = "Sending...";
+            statusMsg.textContent = "";
 
             try {
                 await addDoc(collection(db, "messages"), {
@@ -199,16 +217,16 @@
                     timestamp: Date.now()
                 });
                 
-                status.style.color = "#10B981"; // Emerald Green for success
-                status.textContent = "Message sent successfully! Thank you.";
-                document.getElementById('contactForm').reset();
+                statusMsg.textContent = "Thank you! Your feedback has been sent.";
+                statusMsg.className = "status-msg status-success";
+                document.getElementById("contactForm").reset();
             } catch (error) {
-                console.error("Error sending message: ", error);
-                status.style.color = "#F43F5E"; // Rose Red for error
-                status.textContent = "Error: " + error.message; 
+                console.error("Error sending message:", error);
+                statusMsg.textContent = "Failed to send message. Please try again.";
+                statusMsg.className = "status-msg status-error";
             } finally {
-                btn.textContent = "Send Message";
                 btn.disabled = false;
+                btn.textContent = "Send Message";
             }
         });
     </script>
