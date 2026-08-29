@@ -1,6 +1,7 @@
 import { uploadImage } from "./cloudinary.js";
 import { getQuestions, auth, onAuthStateChanged, signOut, db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc, writeBatch } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+// Added missing query and orderBy to ensure the Feedback and Comments functions do not crash the script
+import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc, writeBatch, query, orderBy } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // --- AUTHENTICATION CHECK ---
 onAuthStateChanged(auth, (user) => {
@@ -126,6 +127,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     if (manageChapterFilter) manageChapterFilter.addEventListener("change", window.renderManageQuestions);
+    
+    // Core Execution Loader
+    loadQuestionsTable();
+    updateDashboard();
+    loadFeedback();
+    loadComments();
 });
 
 /* ===========================================
@@ -439,9 +446,9 @@ async function updateDashboard() {
         const questions = await getQuestions();
         
         const total = document.getElementById("totalQuestions");
-        const published = document.getElementById("publishedQuestions");
+        const drafts = document.getElementById("draftQuestions");
         if (total) total.textContent = questions.length;
-        if (published) published.textContent = questions.length;
+        if (drafts) drafts.textContent = "0";
 
         const recentActivityList = document.getElementById("recentActivityList");
         if (recentActivityList) {
@@ -449,17 +456,17 @@ async function updateDashboard() {
             const recentQs = [...questions].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0, 5);
             
             if (recentQs.length === 0) {
-                recentActivityList.innerHTML = "<p style='color:#64748b; padding:15px;'>No recent activity.</p>";
+                recentActivityList.innerHTML = "<p style='color: var(--text-secondary); padding:15px;'>No recent activity.</p>";
             } else {
                 recentQs.forEach(q => {
                     const snippet = q.question ? q.question.replace(/<[^>]*>?/gm, '').substring(0, 50) + "..." : "No text provided";
                     recentActivityList.innerHTML += `
-                        <div style="padding: 15px; border-bottom: 1px solid #e2e8f0; display:flex; justify-content: space-between; align-items:flex-start;">
+                        <div style="padding: 15px; border-bottom: 1px solid var(--border-color); display:flex; justify-content: space-between; align-items:flex-start;">
                             <div>
-                                <div style="font-weight:700; color:#1e293b; font-size:14px; margin-bottom:4px;">${q.subject || 'Subject'} - ${q.chapter || 'Chapter'}</div>
-                                <div style="font-size:13px; color:#64748b;">${snippet}</div>
+                                <div style="font-weight:700; color: var(--text-primary); font-size:14px; margin-bottom:4px;">${q.subject || 'Subject'} - ${q.chapter || 'Chapter'}</div>
+                                <div style="font-size:13px; color: var(--text-secondary);">${snippet}</div>
                             </div>
-                            <span style="font-size:12px; font-weight:700; background:#eff6ff; color:#2563eb; border: 1px solid #bfdbfe; padding:4px 8px; border-radius:6px; flex-shrink:0;">${q.exam || 'Exam'}</span>
+                            <span style="font-size:12px; font-weight:700; background: rgba(59, 130, 246, 0.15); color: var(--accent-light-blue); border: 1px solid rgba(59, 130, 246, 0.3); padding:4px 8px; border-radius:6px; flex-shrink:0;">${q.exam || 'Exam'}</span>
                         </div>
                     `;
                 });
@@ -476,13 +483,13 @@ async function updateDashboard() {
             
             examStatsList.innerHTML = "";
             if (Object.keys(examCounts).length === 0) {
-                examStatsList.innerHTML = "<p style='color:#64748b;'>No exams data.</p>";
+                examStatsList.innerHTML = "<p style='color: var(--text-secondary);'>No exams data.</p>";
             } else {
                 Object.keys(examCounts).sort().forEach(ex => {
                     examStatsList.innerHTML += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom: 1px dashed #e2e8f0;">
-                            <span style="color:#475569; font-weight:600; font-size:14px;">${ex}</span>
-                            <span style="background:#f8fafc; padding:4px 10px; border-radius:6px; font-weight:700; color:#0f172a; border: 1px solid #e2e8f0;">${examCounts[ex]}</span>
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom: 1px dashed var(--border-color);">
+                            <span style="color: var(--text-secondary); font-weight:600; font-size:14px;">${ex}</span>
+                            <span style="background: var(--bg-main); padding:4px 10px; border-radius:6px; font-weight:700; color: var(--text-primary); border: 1px solid var(--border-color);">${examCounts[ex]}</span>
                         </div>
                     `;
                 });
@@ -507,8 +514,8 @@ async function updateDashboard() {
             typeLegend.innerHTML = "";
             
             if (questions.length === 0) {
-                typePieChart.style.background = "#e2e8f0";
-                typeLegend.innerHTML = "<p style='color:#64748b; font-size:13px;'>No data available</p>";
+                typePieChart.style.background = "var(--bg-main)";
+                typeLegend.innerHTML = "<p style='color: var(--text-secondary); font-size:13px;'>No data available</p>";
             } else {
                 Object.keys(typeCounts).forEach(type => {
                     const percentage = (typeCounts[type] / totalQs) * 100;
@@ -518,9 +525,9 @@ async function updateDashboard() {
                     currentPercentage += percentage;
 
                     typeLegend.innerHTML += `
-                        <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#334155; margin-bottom:8px; font-weight:500;">
+                        <div style="display:flex; align-items:center; gap:10px; font-size:14px; color: var(--text-secondary); margin-bottom:8px; font-weight:500;">
                             <span style="display:inline-block; width:14px; height:14px; background:${color}; border-radius:4px;"></span>
-                            ${type} <span style="color:#94a3b8; font-size:12px;">(${typeCounts[type]})</span>
+                            ${type} <span style="font-size:12px;">(${typeCounts[type]})</span>
                         </div>
                     `;
                     colorIndex++;
@@ -536,7 +543,7 @@ async function updateDashboard() {
         }
 
     } catch (e) {
-        console.error(e);
+        console.error("Dashboard fetch error:", e);
     }
 }
 
@@ -717,10 +724,6 @@ if (bulkUploadBtn && bulkJsonInput) {
     });
 }
 
-// Initial Calls
-loadQuestionsTable();
-updateDashboard();
-
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
@@ -728,3 +731,71 @@ if (logoutBtn) {
         window.location.href = "login.html";
     });
 }
+
+/* ===========================================
+   FEEDBACK AND COMMENTS
+=========================================== */
+async function loadFeedback() {
+    const inbox = document.getElementById('messagesInbox');
+    if (!inbox) return;
+    try {
+        const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
+        const snapshot = await getDocs(q);
+        inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No messages yet.</p>' : '';
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const date = new Date(data.timestamp).toLocaleString('en-IN');
+            inbox.innerHTML += `
+                <div style="background: rgba(59, 130, 246, 0.05); border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <strong style="color: var(--accent-blue);">${data.name}</strong>
+                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${date}</span>
+                    </div>
+                    <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; line-height: 1.5;">${data.message}</div>
+                </div>`;
+        });
+    } catch (e) {
+        console.error("Feedback fetch error:", e);
+        inbox.innerHTML = '<p style="color: #ef4444;">Failed to load messages.</p>';
+    }
+}
+
+async function loadComments() {
+    const inbox = document.getElementById('commentsInbox');
+    if (!inbox) return;
+    try {
+        const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
+        const snapshot = await getDocs(q);
+        inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No comments yet.</p>' : '';
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const timeVal = data.timestamp?.seconds ? data.timestamp.seconds * 1000 : (data.timestamp || Date.now());
+            const date = new Date(timeVal).toLocaleString('en-IN');
+            inbox.innerHTML += `
+                <div style="background: rgba(245, 158, 11, 0.05); border-left: 4px solid #F59E0B; padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <strong style="color: #FBBF24; font-size: 15px;">${data.name || data.author || 'Student'}</strong>
+                            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">${date}</span>
+                        </div>
+                        <button onclick="deleteStudentComment('${docSnap.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.2s;">Delete</button>
+                    </div>
+                    <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; margin-top: 8px;">${data.text || data.comment || ''}</div>
+                </div>`;
+        });
+    } catch (e) {
+        console.error("Comments fetch error:", e);
+        inbox.innerHTML = '<p style="color: #ef4444;">Failed to load comments.</p>';
+    }
+}
+
+window.deleteStudentComment = async function(id) {
+    if(confirm("Permanently delete this comment?")) {
+        try {
+            await deleteDoc(doc(db, "comments", id));
+            loadComments();
+        } catch(e) {
+            alert("Failed to delete comment.");
+        }
+    }
+};
