@@ -18,15 +18,6 @@ setInterval(() => {
     if (timeText) timeText.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
 }, 1000);
 
-// Mobile Sidebar Toggle
-const menuToggle = document.getElementById("menuToggle");
-const appSidebar = document.getElementById("appSidebar");
-if(menuToggle && appSidebar) {
-    menuToggle.addEventListener("click", () => {
-        appSidebar.classList.toggle("open");
-    });
-}
-
 /* ===========================================
    CUSTOM TEXT EDITOR ENGINE
 =========================================== */
@@ -112,6 +103,29 @@ function buildToolbar(textarea) {
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".chem-editor").forEach(textarea => buildToolbar(textarea));
     setupCloudinaryUploaders();
+
+    // Bind filters for Manage Questions
+    const manageExamFilter = document.getElementById("manageExamFilter");
+    const manageYearFilter = document.getElementById("manageYearFilter");
+    const manageSubjectFilter = document.getElementById("manageSubjectFilter");
+    const manageChapterFilter = document.getElementById("manageChapterFilter");
+
+    if (manageExamFilter) manageExamFilter.addEventListener("change", window.renderManageQuestions);
+    if (manageYearFilter) manageYearFilter.addEventListener("change", window.renderManageQuestions);
+    if (manageSubjectFilter) {
+        manageSubjectFilter.addEventListener("change", () => {
+            const sub = manageSubjectFilter.value;
+            let chapters = [];
+            if (sub === "All") {
+                chapters = [...new Set(window.manageQuestionsList.map(q => q.chapter).filter(Boolean))].sort();
+            } else {
+                chapters = [...new Set(window.manageQuestionsList.filter(q => q.subject === sub).map(q => q.chapter).filter(Boolean))].sort();
+            }
+            manageChapterFilter.innerHTML = '<option value="All">All Chapters</option>' + chapters.map(c => `<option value="${c}">${c}</option>`).join('');
+            window.renderManageQuestions();
+        });
+    }
+    if (manageChapterFilter) manageChapterFilter.addEventListener("change", window.renderManageQuestions);
 });
 
 /* ===========================================
@@ -289,6 +303,7 @@ const questionForm = document.getElementById("questionForm");
 
 let editingDocId = null;
 let isEditing = false;
+window.manageQuestionsList = []; // Global for filtering
 
 function extractVideoId(url) {
     if (!url || url.trim() === "") return "";
@@ -332,44 +347,92 @@ function collectFormData() {
 async function loadQuestionsTable() {
     try {
         const snapshot = await getDocs(collection(db, "questions"));
-        const tbody = document.getElementById("questionsTableBody");
-        if(!tbody) return;
-        tbody.innerHTML = "";
+        window.manageQuestionsList = snapshot.docs.map(doc => ({ docId: doc.id, ...doc.data() }));
+        window.manageQuestionsList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-        const sortedDocs = snapshot.docs.sort((a, b) => {
-            const aTime = a.data().timestamp || 0;
-            const bTime = b.data().timestamp || 0;
-            return bTime - aTime;
-        });
-
-        sortedDocs.forEach(documentItem => {
-            const q = documentItem.data();
-            let snippet = "No text provided";
-            if (q.question) {
-                snippet = String(q.question).replace(/<[^>]*>?/gm, '').substring(0, 55).trim();
-                if (String(q.question).replace(/<[^>]*>?/gm, '').length > 55) snippet += "...";
-            }
-
-            tbody.innerHTML += `
-                <tr>
-                    <td style="vertical-align: top; padding-top: 15px;">${q.exam || ""}</td>
-                    <td style="vertical-align: top; padding-top: 15px; min-width: 150px;">
-                        <div style="font-size: 11px; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">${q.subject || "Subject"}</div>
-                        <div style="font-weight: 600; color: #0f172a; margin-bottom: 6px;">${q.chapter || ""}</div>
-                        <div style="font-size: 13px; color: #64748b; line-height: 1.4;">${snippet}</div>
-                    </td>
-                    <td style="vertical-align: top; padding-top: 15px;">${q.year || ""}</td>
-                    <td style="vertical-align: top; padding-top: 15px;">
-                        <button class="edit-btn" onclick="editQuestion('${documentItem.id}')">Edit</button>
-                        <button class="delete-btn" onclick="deleteQuestion('${documentItem.id}')">Delete</button>
-                    </td>
-                </tr>
-            `;
-        });
+        window.populateManageFilters();
+        window.renderManageQuestions();
     } catch(err) {
         console.error("Failed to load table", err);
     }
 }
+
+window.populateManageFilters = function() {
+    const manageExamFilter = document.getElementById("manageExamFilter");
+    const manageYearFilter = document.getElementById("manageYearFilter");
+    const manageSubjectFilter = document.getElementById("manageSubjectFilter");
+    const manageChapterFilter = document.getElementById("manageChapterFilter");
+
+    if(!manageExamFilter) return;
+
+    const exams = [...new Set(window.manageQuestionsList.map(q => q.exam).filter(Boolean))].sort();
+    const years = [...new Set(window.manageQuestionsList.map(q => q.year).filter(Boolean))].sort((a,b)=>b-a);
+    const subjects = [...new Set(window.manageQuestionsList.map(q => q.subject).filter(Boolean))].sort();
+    const chapters = [...new Set(window.manageQuestionsList.map(q => q.chapter).filter(Boolean))].sort();
+
+    const currEx = manageExamFilter.value;
+    const currYr = manageYearFilter.value;
+    const currSub = manageSubjectFilter.value;
+    const currCh = manageChapterFilter.value;
+
+    manageExamFilter.innerHTML = '<option value="All">All Exams</option>' + exams.map(e => `<option value="${e}">${e}</option>`).join('');
+    manageYearFilter.innerHTML = '<option value="All">All Years</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+    manageSubjectFilter.innerHTML = '<option value="All">All Subjects</option>' + subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+    manageChapterFilter.innerHTML = '<option value="All">All Chapters</option>' + chapters.map(c => `<option value="${c}">${c}</option>`).join('');
+
+    manageExamFilter.value = exams.includes(currEx) ? currEx : "All";
+    manageYearFilter.value = years.includes(Number(currYr)) || years.includes(String(currYr)) ? currYr : "All";
+    manageSubjectFilter.value = subjects.includes(currSub) ? currSub : "All";
+    manageChapterFilter.value = chapters.includes(currCh) ? currCh : "All";
+};
+
+window.renderManageQuestions = function() {
+    const tbody = document.getElementById("questionsTableBody");
+    const manageExamFilter = document.getElementById("manageExamFilter");
+    const manageYearFilter = document.getElementById("manageYearFilter");
+    const manageSubjectFilter = document.getElementById("manageSubjectFilter");
+    const manageChapterFilter = document.getElementById("manageChapterFilter");
+
+    if(!tbody || !manageExamFilter) return;
+
+    const ex = manageExamFilter.value;
+    const yr = manageYearFilter.value;
+    const sub = manageSubjectFilter.value;
+    const ch = manageChapterFilter.value;
+
+    const filtered = window.manageQuestionsList.filter(q => {
+        if (ex !== "All" && q.exam !== ex) return false;
+        if (yr !== "All" && String(q.year) !== String(yr)) return false;
+        if (sub !== "All" && q.subject !== sub) return false;
+        if (ch !== "All" && q.chapter !== ch) return false;
+        return true;
+    });
+
+    tbody.innerHTML = filtered.map(q => {
+        let snippet = "No text provided";
+        if (q.question) {
+            snippet = String(q.question).replace(/<[^>]*>?/gm, '').substring(0, 55).trim();
+            if (String(q.question).replace(/<[^>]*>?/gm, '').length > 55) snippet += "...";
+        }
+        return `
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="vertical-align: top; padding: 15px; color: var(--text-primary); font-weight: 600;">${q.exam || ""}</td>
+                <td style="vertical-align: top; padding: 15px; min-width: 200px;">
+                    <div style="font-size: 11px; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">${q.subject || "Subject"}</div>
+                    <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">${q.chapter || ""}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.4;">${snippet}</div>
+                </td>
+                <td style="vertical-align: top; padding: 15px; color: var(--text-primary); font-weight: 500;">${q.year || ""}</td>
+                <td style="vertical-align: top; padding: 15px;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button onclick="editQuestion('${q.docId}')" style="width: 100%; border: 1px solid var(--border-color); background: var(--bg-card-hover); color: var(--text-primary); padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s;">Edit</button>
+                        <button onclick="deleteQuestion('${q.docId}')" style="width: 100%; border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s;">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+};
 
 async function updateDashboard() {
     try {
