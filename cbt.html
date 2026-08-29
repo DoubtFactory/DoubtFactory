@@ -25,7 +25,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            height: 100dvh; /* Mobile browser viewport fix */
+            height: 100dvh;
         }
 
         /* Top Bar */
@@ -59,10 +59,10 @@
         .cbt-layout {
             display: flex;
             flex: 1;
-            overflow: hidden; /* Prevent body scroll on desktop */
+            overflow: hidden;
         }
 
-        /* Question Area (Left side) */
+        /* Question Area */
         .cbt-main {
             flex: 1;
             display: flex;
@@ -133,7 +133,7 @@
         .cbt-option-label input[type="radio"]:checked { border-color: var(--accent-blue); }
         .cbt-option-label input[type="radio"]:checked::before { transform: scale(1); }
 
-        /* Action Buttons Bottom Bar */
+        /* Action Buttons */
         .cbt-actions {
             margin-top: auto;
             display: flex;
@@ -156,14 +156,12 @@
         }
         .btn-save { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
         .btn-save:hover { background: rgba(16, 185, 129, 0.25); }
-        
         .btn-review { background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); }
         .btn-review:hover { background: rgba(139, 92, 246, 0.25); }
-        
         .btn-clear { background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .btn-clear:hover { background: var(--border-color); color: var(--text-primary); }
 
-        /* Palette Sidebar (Right side) */
+        /* Palette Sidebar */
         .cbt-sidebar {
             width: 320px;
             flex-shrink: 0;
@@ -172,7 +170,6 @@
             display: flex;
             flex-direction: column;
         }
-        
         .palette-header {
             padding: 20px;
             border-bottom: 1px solid var(--border-color);
@@ -190,15 +187,15 @@
             color: var(--text-secondary);
         }
         .legend-item { display: flex; align-items: center; gap: 8px; }
-        .legend-box { width: 20px; height: 20px; border-radius: 4px; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
         
-        /* State Colors */
-        .state-unvisited { background: var(--bg-card-hover); border-color: var(--border-color); }
-        .state-unanswered { background: #ef4444; color: white; }
-        .state-answered { background: #10b981; color: white; }
-        .state-review { background: #8b5cf6; color: white; }
-        .state-review-ans { background: #8b5cf6; color: white; position: relative; }
-        .state-review-ans::after { content: ''; position: absolute; bottom: 3px; right: 3px; width: 6px; height: 6px; background: #10b981; border-radius: 50%; }
+        /* STRICT Legend Box Colors */
+        .legend-box { width: 20px; height: 20px; border-radius: 4px; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
+        .legend-box.state-unvisited { background: var(--bg-card-hover); border-color: var(--border-color); }
+        .legend-box.state-unanswered { background: #ef4444; border-color: #ef4444; }
+        .legend-box.state-answered { background: #10b981; border-color: #10b981; }
+        .legend-box.state-review { background: #8b5cf6; border-color: #8b5cf6; }
+        .legend-box.state-review-ans { background: #8b5cf6; border-color: #8b5cf6; position: relative; }
+        .legend-box.state-review-ans::after { content: ''; position: absolute; bottom: 2px; right: 2px; width: 4px; height: 4px; background: #10b981; border-radius: 50%; }
 
         .palette-grid-wrapper {
             flex: 1;
@@ -210,12 +207,11 @@
             grid-template-columns: repeat(5, 1fr);
             gap: 10px;
         }
+        
+        /* Base Palette Button */
         .palette-btn {
             aspect-ratio: 1;
             border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
@@ -223,9 +219,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         .palette-btn:hover { transform: scale(1.05); }
         .palette-btn.active { box-shadow: 0 0 0 2px var(--bg-main), 0 0 0 4px var(--accent-blue); }
+
+        /* STRICT Palette Button Overrides (Fixes the grey background issue) */
+        .palette-btn.state-unvisited { background: var(--bg-card-hover); border: 1px solid var(--border-color); color: var(--text-primary); }
+        .palette-btn.state-unanswered { background: #ef4444; border: 1px solid #dc2626; color: white; }
+        .palette-btn.state-answered { background: #10b981; border: 1px solid #059669; color: white; }
+        .palette-btn.state-review { background: #8b5cf6; border: 1px solid #7c3aed; color: white; }
+        .palette-btn.state-review-ans { background: #8b5cf6; border: 1px solid #7c3aed; color: white; position: relative; }
+        .palette-btn.state-review-ans::after { content: ''; position: absolute; bottom: 4px; right: 4px; width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 1px #8b5cf6; }
 
         .submit-area {
             padding: 20px;
@@ -264,38 +269,18 @@
         .btn-cancel { background: var(--bg-card-hover); color: var(--text-primary); border: 1px solid var(--border-color) !important; }
         .btn-confirm { background: var(--accent-blue); color: white; }
 
-        /* =========================================
-           MOBILE RESPONSIVENESS FIX
-           ========================================= */
+        /* Mobile Adjustments */
         @media (max-width: 900px) {
-            .cbt-layout {
-                flex-direction: column;
-                overflow-y: auto; /* Allow the entire page to scroll */
-            }
-            .cbt-main {
-                flex: 0 0 auto; /* Stop it from shrinking */
-                min-height: min-content;
-                overflow-y: visible; /* Prevent double scrollbars */
-                padding: 20px;
-            }
-            .cbt-actions {
-                margin-top: 30px; /* Provides space above action buttons */
-            }
-            .cbt-sidebar {
-                width: 100%;
-                flex: 0 0 auto;
-                border-left: none;
-                border-top: 4px solid var(--bg-card-hover);
-            }
-            .palette-grid-wrapper {
-                overflow-y: visible; /* Let grid expand naturally */
-            }
+            .cbt-layout { flex-direction: column; overflow-y: auto; }
+            .cbt-main { flex: 0 0 auto; min-height: min-content; overflow-y: visible; padding: 20px; }
+            .cbt-actions { margin-top: 30px; }
+            .cbt-sidebar { width: 100%; flex: 0 0 auto; border-left: none; border-top: 4px solid var(--bg-card-hover); }
+            .palette-grid-wrapper { overflow-y: visible; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Minimal Header specifically for CBT to avoid distraction -->
     <header class="cbt-header">
         <div class="cbt-brand">
             <h2>Doubt Factory Simulator</h2>
@@ -306,8 +291,7 @@
     </header>
 
     <main class="cbt-layout" id="cbtScrollContainer">
-        
-        <!-- Left Panel: Question Display -->
+        <!-- Left Panel -->
         <div class="cbt-main">
             <div class="cbt-q-header">
                 <h3 id="qNumDisplay">Question 1</h3>
@@ -316,9 +300,7 @@
             <div class="cbt-q-text" id="qText">Loading question...</div>
             <div id="qImageContainer" style="margin-bottom: 20px;"></div>
 
-            <div class="cbt-options" id="optionsContainer">
-                <!-- Radio buttons injected by JS -->
-            </div>
+            <div class="cbt-options" id="optionsContainer"></div>
 
             <div class="cbt-actions">
                 <button type="button" class="cbt-btn btn-clear" id="btnClear">Clear Response</button>
@@ -327,7 +309,7 @@
             </div>
         </div>
 
-        <!-- Right Panel: Palette & Submit -->
+        <!-- Right Panel -->
         <div class="cbt-sidebar">
             <div class="palette-header">
                 <h4>Question Palette</h4>
@@ -344,9 +326,7 @@
             </div>
 
             <div class="palette-grid-wrapper">
-                <div class="palette-grid" id="paletteGrid">
-                    <!-- Palette buttons injected by JS -->
-                </div>
+                <div class="palette-grid" id="paletteGrid"></div>
             </div>
 
             <div class="submit-area">
@@ -355,7 +335,7 @@
         </div>
     </main>
 
-    <!-- Submission Confirmation Modal -->
+    <!-- Submission Modal -->
     <div class="cbt-modal-overlay" id="submitModal" style="display: none;">
         <div class="cbt-modal">
             <h3>Submit Test?</h3>
@@ -367,10 +347,10 @@
         </div>
     </div>
 
-    <!-- CBT Logic Script -->
+    <!-- CBT Script -->
     <script type="module" src="js/cbt.js"></script>
 
-    <!-- Auto-Scroll to Top on Question Change for Mobile -->
+    <!-- Auto-Scroll Script for Mobile -->
     <script>
         document.addEventListener('click', (e) => {
             if (e.target.closest('.cbt-btn') || e.target.closest('.palette-btn')) {
