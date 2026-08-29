@@ -25,6 +25,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh; /* Mobile browser viewport fix */
         }
 
         /* Top Bar */
@@ -58,10 +59,7 @@
         .cbt-layout {
             display: flex;
             flex: 1;
-            overflow: hidden;
-        }
-        @media (max-width: 900px) {
-            .cbt-layout { flex-direction: column; overflow: auto; }
+            overflow: hidden; /* Prevent body scroll on desktop */
         }
 
         /* Question Area (Left side) */
@@ -98,7 +96,7 @@
         }
         .cbt-option-label {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             padding: 16px;
             border: 1px solid var(--border-color);
@@ -109,15 +107,17 @@
             font-size: 15px;
             color: var(--text-primary);
             font-weight: 500;
+            line-height: 1.4;
         }
         .cbt-option-label:hover { background: var(--bg-card-hover); border-color: rgba(59, 130, 246, 0.4); }
         .cbt-option-label input[type="radio"] {
             appearance: none;
+            flex-shrink: 0;
             width: 20px;
             height: 20px;
             border: 2px solid var(--border-color);
             border-radius: 50%;
-            margin: 0;
+            margin: 2px 0 0 0;
             display: grid;
             place-content: center;
         }
@@ -143,7 +143,7 @@
             padding-top: 20px;
         }
         .cbt-btn {
-            padding: 12px 20px;
+            padding: 12px 16px;
             border-radius: var(--radius-sm);
             font-weight: 700;
             font-size: 14px;
@@ -152,6 +152,7 @@
             transition: all 0.2s;
             flex: 1;
             text-align: center;
+            min-width: 120px;
         }
         .btn-save { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
         .btn-save:hover { background: rgba(16, 185, 129, 0.25); }
@@ -165,16 +166,13 @@
         /* Palette Sidebar (Right side) */
         .cbt-sidebar {
             width: 320px;
+            flex-shrink: 0;
             background: var(--bg-card);
             border-left: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
         }
-        @media (max-width: 900px) {
-            .cbt-sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border-color); }
-            .cbt-layout { overflow-y: auto; }
-        }
-
+        
         .palette-header {
             padding: 20px;
             border-bottom: 1px solid var(--border-color);
@@ -265,6 +263,34 @@
         .modal-actions button { flex: 1; padding: 12px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; border: none; }
         .btn-cancel { background: var(--bg-card-hover); color: var(--text-primary); border: 1px solid var(--border-color) !important; }
         .btn-confirm { background: var(--accent-blue); color: white; }
+
+        /* =========================================
+           MOBILE RESPONSIVENESS FIX
+           ========================================= */
+        @media (max-width: 900px) {
+            .cbt-layout {
+                flex-direction: column;
+                overflow-y: auto; /* Allow the entire page to scroll */
+            }
+            .cbt-main {
+                flex: 0 0 auto; /* Stop it from shrinking */
+                min-height: min-content;
+                overflow-y: visible; /* Prevent double scrollbars */
+                padding: 20px;
+            }
+            .cbt-actions {
+                margin-top: 30px; /* Provides space above action buttons */
+            }
+            .cbt-sidebar {
+                width: 100%;
+                flex: 0 0 auto;
+                border-left: none;
+                border-top: 4px solid var(--bg-card-hover);
+            }
+            .palette-grid-wrapper {
+                overflow-y: visible; /* Let grid expand naturally */
+            }
+        }
     </style>
 </head>
 <body>
@@ -279,7 +305,7 @@
         </div>
     </header>
 
-    <main class="cbt-layout">
+    <main class="cbt-layout" id="cbtScrollContainer">
         
         <!-- Left Panel: Question Display -->
         <div class="cbt-main">
@@ -341,8 +367,19 @@
         </div>
     </div>
 
-    <!-- CBT Logic script (ensure you have js/cbt.js properly coded for these IDs) -->
+    <!-- CBT Logic Script -->
     <script type="module" src="js/cbt.js"></script>
 
+    <!-- Auto-Scroll to Top on Question Change for Mobile -->
+    <script>
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.cbt-btn') || e.target.closest('.palette-btn')) {
+                const scrollContainer = document.getElementById('cbtScrollContainer');
+                if (scrollContainer && window.innerWidth <= 900) {
+                    setTimeout(() => { scrollContainer.scrollTo({ top: 0, behavior: 'smooth' }); }, 50);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
