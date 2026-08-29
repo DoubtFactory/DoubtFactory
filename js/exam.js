@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function populateFilters() {
-        // 1. Populate Years
+        // 1. Populate Years (Descending)
         const years = [...new Set(examQuestions.map(q => q.year).filter(Boolean))].sort((a, b) => b - a);
         yearSelect.innerHTML = '<option value="All">All Years</option>';
         years.forEach(y => {
@@ -46,15 +46,50 @@ document.addEventListener("DOMContentLoaded", async () => {
             yearSelect.appendChild(opt);
         });
 
-        // 2. Populate Subjects based on Exam
-        const subjects = [...new Set(examQuestions.map(q => q.subject).filter(Boolean))].sort();
-        subjectSelect.innerHTML = '<option value="All">All Subjects</option>';
-        subjects.forEach(s => {
-            const opt = document.createElement("option");
-            opt.value = s;
-            opt.textContent = s;
-            subjectSelect.appendChild(opt);
+        // 2. Populate Subjects in Structured Hierarchy
+        const availableSubjects = [...new Set(examQuestions.map(q => q.subject).filter(Boolean))];
+        let subjectHTML = '<option value="All">All Subjects</option>';
+
+        // Physics First
+        if (availableSubjects.includes('Physics')) {
+            subjectHTML += '<option value="Physics">Physics</option>';
+        }
+
+        // Chemistry Group (Strict Order: Physical, Inorganic, Organic)
+        const chemOrder = ['Physical Chemistry', 'Inorganic Chemistry', 'Organic Chemistry'];
+        const chemSubjects = chemOrder.filter(s => availableSubjects.includes(s));
+        if (chemSubjects.length > 0) {
+            subjectHTML += '<optgroup label="Chemistry">';
+            chemSubjects.forEach(s => {
+                subjectHTML += `<option value="${s}">${s}</option>`;
+            });
+            subjectHTML += '</optgroup>';
+        }
+
+        // Maths (If JEE)
+        if (availableSubjects.includes('Maths')) {
+            subjectHTML += '<option value="Maths">Maths</option>';
+        }
+
+        // Biology Group (Strict Order: Botany, Zoology)
+        const bioOrder = ['Botany', 'Zoology'];
+        const bioSubjects = bioOrder.filter(s => availableSubjects.includes(s));
+        if (bioSubjects.length > 0) {
+            subjectHTML += '<optgroup label="Biology">';
+            bioSubjects.forEach(s => {
+                subjectHTML += `<option value="${s}">${s}</option>`;
+            });
+            subjectHTML += '</optgroup>';
+        }
+
+        // Catch any remaining subjects just in case
+        const handledSubjects = ['Physics', 'Physical Chemistry', 'Inorganic Chemistry', 'Organic Chemistry', 'Maths', 'Botany', 'Zoology'];
+        const otherSubjects = availableSubjects.filter(s => !handledSubjects.includes(s)).sort();
+        otherSubjects.forEach(s => {
+            subjectHTML += `<option value="${s}">${s}</option>`;
         });
+
+        subjectSelect.innerHTML = subjectHTML;
 
         // 3. Populate Chapters
         updateChapters();
