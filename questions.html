@@ -25,17 +25,9 @@
     </script>
     
     <style>
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .search-question {
-            margin-bottom: 30px;
-        }
-        
+        /* =========================================
+           QUESTIONS PAGE DARK THEME OVERRIDES
+           ========================================= */
         #chapterTitle {
             color: var(--text-primary);
             font-size: 32px;
@@ -44,6 +36,102 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Filter Grid Styling */
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-field { display: flex; flex-direction: column; gap: 8px; }
+        .filter-field label { 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: var(--text-secondary); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        
+        .filter-field select, .search-question {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        .filter-field select:focus, .search-question:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Question Card Styling */
+        .exam-q-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .exam-q-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .exam-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .badge-exam { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-year { background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .badge-subject { background: rgba(148, 163, 184, 0.12); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .badge-chapter { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .badge-easy { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-medium { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-hard { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+        
+        .exam-q-text {
+            color: var(--text-primary);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+        
+        .solve-btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: gap 0.2s ease;
+        }
+        .solve-btn-link:hover {
+            color: #60A5FA;
+            gap: 10px;
         }
     </style>
 </head>
@@ -156,42 +244,52 @@
     </script>
     <!-- ========================================== -->
 
-    <main id="mainContent" class="container" style="max-width: 1000px; margin-top: 20px; min-height: 60vh;">
+    <main id="mainContent" class="container" style="max-width: 1000px; margin-top: 40px; min-height: 60vh;">
 
         <h1 id="chapterTitle">Loading...</h1>
 
-        <div class="filters" aria-label="Question filters">
-            <label class="sr-only" for="examFilter">Filter by exam</label>
-            <select id="examFilter" aria-label="Filter by exam">
-                <option value="All">All Exams</option>
-                <option>JEE Main</option>
-                <option>JEE Advanced</option>
-                <option>NEET</option>
-            </select>
+        <div class="filter-grid" aria-label="Question filters">
+            <!-- Exam Filter -->
+            <div class="filter-field" id="examFilterContainer">
+                <label for="examFilter">Filter by Exam</label>
+                <select id="examFilter" aria-label="Filter by exam">
+                    <option value="All">All Exams</option>
+                </select>
+            </div>
 
-            <label class="sr-only" for="yearFilter">Filter by year</label>
-            <select id="yearFilter" aria-label="Filter by year">
-                <option value="All">All Years</option>
-            </select>
+            <!-- Year Filter -->
+            <div class="filter-field">
+                <label for="yearFilter">Filter by Year</label>
+                <select id="yearFilter" aria-label="Filter by year">
+                    <option value="All">All Years</option>
+                </select>
+            </div>
 
-            <label class="sr-only" for="difficultyFilter">Filter by difficulty</label>
-            <select id="difficultyFilter" aria-label="Filter by difficulty">
-                <option value="All">All Difficulty</option>
-                <option>Easy</option>
-                <option>Medium</option>
-                <option>Hard</option>
-            </select>
+            <!-- Difficulty Filter -->
+            <div class="filter-field">
+                <label for="difficultyFilter">Filter by Difficulty</label>
+                <select id="difficultyFilter" aria-label="Filter by difficulty">
+                    <option value="All">All Difficulty</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+            </div>
         </div>
 
-        <label class="sr-only" for="searchQuestion">Search questions in this chapter</label>
-        <input
-            type="text"
-            id="searchQuestion"
-            class="search-question"
-            placeholder="🔍 Search questions in this chapter..."
-            aria-label="Search questions in this chapter">
+        <div class="filter-field" style="margin-bottom: 30px;">
+            <label for="searchQuestion">Search</label>
+            <input
+                type="text"
+                id="searchQuestion"
+                class="search-question"
+                placeholder="🔍 Search questions in this chapter..."
+                aria-label="Search questions in this chapter">
+        </div>
 
-        <div id="questionList" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        <div id="questionList" style="display: flex; flex-direction: column;">
+            <p style="text-align: center; color: var(--text-secondary);">Loading questions...</p>
+        </div>
 
     </main>
 
