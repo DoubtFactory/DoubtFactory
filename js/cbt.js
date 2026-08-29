@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const confirmSubmit = document.getElementById("confirmSubmit");
 
     try {
-        // Fetch and filter questions based on the IDs saved during Test Setup
         const allQs = await getQuestions();
         questions = storedIds.map(id => allQs.find(q => (q.docId || q.id) === id)).filter(Boolean);
 
@@ -42,13 +41,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // Initialize state for each question
         responses = questions.map(() => ({
             state: 'unvisited',
             selectedOption: null
         }));
 
-        // Start Test Environment
         initPalette();
         startTimer();
         goToQuestion(0);
@@ -58,21 +55,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         qText.textContent = "Error loading test data. Please check your connection.";
     }
 
-    // --- Core Navigation & Rendering ---
-
     function goToQuestion(index) {
         if (index < 0 || index >= questions.length) return;
 
-        // If leaving a question without interacting, and it was unvisited, mark it unanswered
+        // Mark as unanswered if skipped without interacting
         if (responses[currentIndex].state === 'unvisited') {
             responses[currentIndex].state = 'unanswered';
-            updatePalette();
         }
 
         currentIndex = index;
         renderCurrentQuestion();
         
-        // When landing on a new question, if it's unvisited, update palette to show it's currently being viewed (unanswered)
+        // Update state to viewed
         if (responses[currentIndex].state === 'unvisited') {
             responses[currentIndex].state = 'unanswered';
         }
@@ -84,14 +78,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         qNumDisplay.textContent = `Question ${currentIndex + 1}`;
         qText.innerHTML = q.question || "No question text provided.";
 
-        // Handle Question Image
         if (q.questionImage) {
             qImageContainer.innerHTML = `<img src="${q.questionImage}" alt="Question Image" style="max-width:100%; max-height:250px; border-radius:8px; margin-top:10px;">`;
         } else {
             qImageContainer.innerHTML = '';
         }
 
-        // Handle Options
         optionsContainer.innerHTML = '';
         q.options.forEach((optText, i) => {
             const isChecked = responses[currentIndex].selectedOption === i ? 'checked' : '';
@@ -110,7 +102,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             label.innerHTML = optionHTML;
             
-            // Listen for selection changes directly
             label.querySelector('input').addEventListener('change', (e) => {
                 responses[currentIndex].selectedOption = parseInt(e.target.value);
             });
@@ -118,8 +109,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             optionsContainer.appendChild(label);
         });
     }
-
-    // --- Action Buttons Logic ---
 
     btnSaveNext.addEventListener("click", () => {
         const selected = getSelectedOption();
@@ -147,10 +136,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         goToQuestion(currentIndex + 1 < questions.length ? currentIndex + 1 : 0);
     });
 
+    // Clear Response now correctly updates the state to RED (Not Answered)
     btnClear.addEventListener("click", () => {
         const radios = document.getElementsByName("cbtOption");
         radios.forEach(r => r.checked = false);
         responses[currentIndex].selectedOption = null;
+        responses[currentIndex].state = 'unanswered';
+        updatePalette();
     });
 
     function getSelectedOption() {
@@ -161,8 +153,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return null;
     }
 
-    // --- Palette Logic ---
-
     function initPalette() {
         paletteGrid.innerHTML = '';
         questions.forEach((_, i) => {
@@ -170,11 +160,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.className = "palette-btn state-unvisited";
             btn.textContent = i + 1;
             btn.addEventListener("click", () => {
-                // Ensure current selection is captured before jumping
                 const selected = getSelectedOption();
                 if (selected !== null) {
                     responses[currentIndex].selectedOption = selected;
-                    // Auto-save behavior if they select something and just click another number
                     if (responses[currentIndex].state === 'unanswered' || responses[currentIndex].state === 'unvisited') {
                         responses[currentIndex].state = 'answered';
                     }
@@ -191,14 +179,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             const state = responses[i].state;
             buttons[i].className = `palette-btn state-${state}`;
             
-            // Highlight current active question
             if (i === currentIndex) {
                 buttons[i].classList.add("active");
             }
         }
     }
-
-    // --- Timer Logic ---
 
     function startTimer() {
         updateTimerDisplay();
@@ -220,22 +205,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         const format = num => num.toString().padStart(2, '0');
         timerDisplay.innerHTML = `⏱ ${format(h)}:${format(m)}:${format(s)}`;
         
-        if (timeRemaining < 300) { // Under 5 minutes turns red
+        if (timeRemaining < 300) { 
             timerDisplay.style.color = "white";
             timerDisplay.style.background = "#ef4444";
             timerDisplay.style.borderColor = "#dc2626";
         }
     }
 
-    // --- Submission Logic ---
-
-    btnSubmitTest.addEventListener("click", () => {
-        submitModal.style.display = "flex";
-    });
-
-    cancelSubmit.addEventListener("click", () => {
-        submitModal.style.display = "none";
-    });
+    btnSubmitTest.addEventListener("click", () => { submitModal.style.display = "flex"; });
+    cancelSubmit.addEventListener("click", () => { submitModal.style.display = "none"; });
 
     confirmSubmit.addEventListener("click", () => {
         submitModal.style.display = "none";
@@ -244,7 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     function executeSubmission() {
-        // Save final responses exactly as they are currently selected
         const finalSelected = getSelectedOption();
         if (finalSelected !== null) {
              responses[currentIndex].selectedOption = finalSelected;
@@ -252,12 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                  responses[currentIndex].state = 'answered';
              }
         }
-
-        // Package and send to result screen
-        const resultData = {
-            questions: questions,
-            responses: responses
-        };
+        const resultData = { questions: questions, responses: responses };
         sessionStorage.setItem('df_cbt_results', JSON.stringify(resultData));
         window.location.href = "test-result.html";
     }
