@@ -212,60 +212,13 @@
 <body class="admin-body" id="home-body">
 
     <!-- ==========================================
-         UNIVERSAL HEADER & SIDEBAR 
+         CLEAN ADMIN HEADER 
          ========================================== -->
-    <header class="site-header">
-        <a href="index.html" class="logo">
+    <header class="site-header" style="justify-content: center; position: relative;">
+        <a href="index.html" class="logo" style="margin: 0 auto; text-align: center;">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
-
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
-
-        <nav aria-label="Primary navigation" id="primaryNav">
-            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <a href="index.html">Home</a>
-            
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Exams ▾</a>
-                <div class="drop-menu">
-                    <a href="exam.html?type=JEE Main">JEE Main</a>
-                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-                    <a href="exam.html?type=NEET">NEET</a>
-                </div>
-            </div>
-
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-                <div class="drop-menu">
-                    <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
-                    <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
-                </div>
-            </div>
-
-            <a href="test-setup.html">Mock Tests</a>
-            <a href="search.html">Search</a>
-            <a href="bookmarks.html">Bookmarks</a>
-        </nav>
     </header>
 
     <!-- ADMIN HORIZONTAL TABS -->
@@ -509,15 +462,35 @@
                 <p>View, edit, and delete existing questions from the database.</p>
             </div>
             
+            <!-- Filters -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Exam</label>
+                    <select id="manageExamFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Exams</option></select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Year</label>
+                    <select id="manageYearFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Years</option></select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Subject</label>
+                    <select id="manageSubjectFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Subjects</option></select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Chapter</label>
+                    <select id="manageChapterFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Chapters</option></select>
+                </div>
+            </div>
+
             <section class="card" style="padding: 0; overflow: hidden;">
                 <div style="overflow-x: auto;">
-                    <table id="questionsTable" class="question-table" style="min-width: 600px;">
+                    <table id="questionsTable" class="question-table" style="min-width: 600px; width: 100%; text-align: left; border-collapse: collapse;">
                         <thead>
-                            <tr>
-                                <th>Exam</th>
-                                <th>Chapter / Snippet</th>
-                                <th>Year</th>
-                                <th>Action</th>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">
+                                <th style="padding: 15px;">Exam</th>
+                                <th style="padding: 15px;">Chapter / Snippet</th>
+                                <th style="padding: 15px;">Year</th>
+                                <th style="padding: 15px;">Action</th>
                             </tr>
                         </thead>
                         <tbody id="questionsTableBody"></tbody>
@@ -557,51 +530,6 @@
 <!-- Scripts -->
 <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
 <script type="module" src="js/admin.js"></script>
-
-<!-- Universal Sidebar Initialization -->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeMenuBtn = document.getElementById('closeMenuBtn');
-        const primaryNav = document.getElementById('primaryNav');
-        
-        if (!mobileMenuBtn || !primaryNav) return;
-
-        let overlay = document.querySelector('.menu-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'menu-overlay';
-            document.body.appendChild(overlay);
-        }
-
-        function toggleMenu() {
-            const isOpen = primaryNav.classList.contains('open');
-            if (isOpen) {
-                primaryNav.classList.remove('open');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            } else {
-                primaryNav.classList.add('open');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; 
-            }
-        }
-
-        mobileMenuBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        document.querySelectorAll('.drop-trigger').forEach(trigger => {
-            const newTrigger = trigger.cloneNode(true);
-            trigger.parentNode.replaceChild(newTrigger, trigger);
-            newTrigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                const dropMenu = this.nextElementSibling;
-                dropMenu.classList.toggle('mobile-open');
-            });
-        });
-    });
-</script>
 
 <!-- Admin Tabs Navigation Script -->
 <script>
