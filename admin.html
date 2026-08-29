@@ -20,7 +20,6 @@
     .admin-tabs-container {
         background: var(--bg-card);
         border-bottom: 1px solid var(--border-color);
-        /* Removed position: sticky to stop tabs from floating over content */
         position: static; 
         padding: 0 20px;
     }
@@ -70,39 +69,30 @@
     
     .dash-stats { 
         display: grid; 
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px; 
+        grid-template-columns: repeat(2, 1fr); /* Changed to 2 items */
+        gap: 15px; 
         margin-bottom: 30px; 
     }
     .stat-card { 
         background: var(--bg-card); 
         border: 1px solid var(--border-color); 
-        padding: 14px 10px; 
+        padding: 20px; 
         border-radius: var(--radius-md); 
         text-align: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     .stat-info h4 { 
         color: var(--text-secondary); 
-        font-size: 11px; 
-        margin-bottom: 4px; 
+        font-size: 12px; 
+        margin-bottom: 6px; 
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .stat-info h2 { 
         color: var(--text-primary); 
-        font-size: 22px; 
+        font-size: 28px; 
         margin: 0; 
         font-weight: 800;
-    }
-    @media (min-width: 768px) {
-        .stat-card { padding: 20px; }
-        .stat-info h4 { font-size: 13px; }
-        .stat-info h2 { font-size: 32px; }
-        .dash-stats { gap: 20px; }
     }
 
     .dash-grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
@@ -124,14 +114,29 @@
     #typeLegend div { color: var(--text-secondary) !important; }
 
     /* =========================================
-       CHEMISTRY EDITOR TOOLBAR STYLES (Single Line Scroll)
+       CHEMISTRY EDITOR TOOLBAR FIXES (Prevents Stretching)
        ========================================= */
+    .options-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+        width: 100%;
+    }
+    .option-item {
+        min-width: 0; /* CRITICAL: Prevents flex child from exceeding container width */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
     .chem-editor-wrapper {
         border: 1px solid var(--border-color) !important;
         border-radius: var(--radius-md) !important;
         overflow: hidden !important;
         margin-bottom: 15px;
         background: var(--bg-main);
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .custom-editor-toolbar {
@@ -141,12 +146,14 @@
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 20px !important;
+        gap: 15px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
-        scrollbar-width: none;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-color) transparent;
     }
-    .custom-editor-toolbar::-webkit-scrollbar { display: none; }
     
     .toolbar-group {
         display: flex !important;
@@ -158,10 +165,7 @@
         border-right: 1px solid var(--border-color);
         padding-right: 15px;
     }
-    .toolbar-group:last-child {
-        border-right: none;
-        padding-right: 0;
-    }
+    .toolbar-group:last-child { border-right: none; padding-right: 0; }
 
     .group-label {
         font-size: 11px;
@@ -201,6 +205,7 @@
         border: none !important;
         padding: 12px !important;
         width: 100%;
+        box-sizing: border-box;
         outline: none;
         resize: vertical;
     }
@@ -255,12 +260,6 @@
                     <div class="stat-info">
                         <h4>Total Questions</h4>
                         <h2 id="totalQuestions">0</h2>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-info">
-                        <h4>Published</h4>
-                        <h2 id="publishedQuestions">0</h2>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -348,18 +347,21 @@
                 </div>
 
                 <h3 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Question Content</h3>
-                <label for="question" style="font-weight: 600; margin-bottom: 8px; display: block;">Question</label>
-                <div class="chem-editor-wrapper">
-                    <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
-                </div>
                 
-                <div style="display: flex; gap: 10px; margin-bottom: 30px; align-items: center;">
-                    <input type="text" id="questionImage" readonly placeholder="No image selected" style="flex: 1;">
-                    <button type="button" id="uploadQuestionImage" class="btn-secondary">Upload Image</button>
+                <div class="option-item" style="margin-bottom: 30px;">
+                    <label for="question" style="font-weight: 600; margin-bottom: 8px; display: block;">Question</label>
+                    <div class="chem-editor-wrapper">
+                        <textarea id="question" class="chem-editor" rows="6" placeholder="Enter Question"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="questionImage" readonly placeholder="No image selected" style="flex: 1;">
+                        <button type="button" id="uploadQuestionImage" class="btn-secondary">Upload Image</button>
+                    </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px;">
-                    <div>
+                <!-- Bound Options in Strict Grid -->
+                <div class="options-grid">
+                    <div class="option-item">
                         <label for="optionA" style="font-weight: 600; margin-bottom: 8px; display: block;">Option A</label>
                         <div class="chem-editor-wrapper"><textarea id="optionA" class="chem-editor" rows="3" placeholder="Enter Option A"></textarea></div>
                         <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -367,7 +369,7 @@
                             <button type="button" id="uploadOptionAImage" class="btn-secondary">Upload</button>
                         </div>
                     </div>
-                    <div>
+                    <div class="option-item">
                         <label for="optionB" style="font-weight: 600; margin-bottom: 8px; display: block;">Option B</label>
                         <div class="chem-editor-wrapper"><textarea id="optionB" class="chem-editor" rows="3" placeholder="Enter Option B"></textarea></div>
                         <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -375,7 +377,7 @@
                             <button type="button" id="uploadOptionBImage" class="btn-secondary">Upload</button>
                         </div>
                     </div>
-                    <div>
+                    <div class="option-item">
                         <label for="optionC" style="font-weight: 600; margin-bottom: 8px; display: block;">Option C</label>
                         <div class="chem-editor-wrapper"><textarea id="optionC" class="chem-editor" rows="3" placeholder="Enter Option C"></textarea></div>
                         <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -383,7 +385,7 @@
                             <button type="button" id="uploadOptionCImage" class="btn-secondary">Upload</button>
                         </div>
                     </div>
-                    <div>
+                    <div class="option-item">
                         <label for="optionD" style="font-weight: 600; margin-bottom: 8px; display: block;">Option D</label>
                         <div class="chem-editor-wrapper"><textarea id="optionD" class="chem-editor" rows="3" placeholder="Enter Option D"></textarea></div>
                         <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -409,13 +411,15 @@
                     </div>
                 </div>
 
-                <label for="solution" style="font-weight: 600; margin-bottom: 8px; display: block;">Solution</label>
-                <div class="chem-editor-wrapper">
-                    <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
-                </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 30px; margin-top: 10px; align-items: center;">
-                    <input type="text" id="solutionImage" readonly placeholder="No image selected" style="flex: 1;">
-                    <button type="button" id="uploadSolutionImage" class="btn-secondary">Upload Image</button>
+                <div class="option-item">
+                    <label for="solution" style="font-weight: 600; margin-bottom: 8px; display: block;">Solution</label>
+                    <div class="chem-editor-wrapper">
+                        <textarea id="solution" class="chem-editor" rows="6" placeholder="Enter Solution"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 30px; margin-top: 10px; align-items: center;">
+                        <input type="text" id="solutionImage" readonly placeholder="No image selected" style="flex: 1;">
+                        <button type="button" id="uploadSolutionImage" class="btn-secondary">Upload Image</button>
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 15px; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
@@ -460,7 +464,6 @@
                 <p>View, edit, and delete existing questions from the database.</p>
             </div>
             
-            <!-- Filters -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Exam</label>
@@ -558,78 +561,5 @@ document.addEventListener("DOMContentLoaded", function() {
     window.switchTab = switchTab;
 });
 </script>
-
-<!-- Feedback & Comments Loader Script -->
-<script type="module">
-    import { db } from "./js/firebase.js";
-    import { collection, getDocs, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-    async function loadFeedback() {
-        const inbox = document.getElementById('messagesInbox');
-        if (!inbox) return;
-        try {
-            const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
-            const snapshot = await getDocs(q);
-            inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No messages yet.</p>' : '';
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const date = new Date(data.timestamp).toLocaleString('en-IN');
-                inbox.innerHTML += `
-                    <div style="background: rgba(59, 130, 246, 0.05); border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong style="color: var(--accent-blue);">${data.name}</strong>
-                            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${date}</span>
-                        </div>
-                        <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; line-height: 1.5;">${data.message}</div>
-                    </div>`;
-            });
-        } catch (e) {
-            inbox.innerHTML = '<p style="color: #ef4444;">Failed to load messages.</p>';
-        }
-    }
-
-    async function loadComments() {
-        const inbox = document.getElementById('commentsInbox');
-        if (!inbox) return;
-        try {
-            const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
-            const snapshot = await getDocs(q);
-            inbox.innerHTML = snapshot.empty ? '<p style="color: var(--text-secondary);">No comments yet.</p>' : '';
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const timeVal = data.timestamp?.seconds ? data.timestamp.seconds * 1000 : (data.timestamp || Date.now());
-                const date = new Date(timeVal).toLocaleString('en-IN');
-                inbox.innerHTML += `
-                    <div style="background: rgba(245, 158, 11, 0.05); border-left: 4px solid #F59E0B; padding: 15px; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div>
-                                <strong style="color: #FBBF24; font-size: 15px;">${data.name || data.author || 'Student'}</strong>
-                                <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-left: 8px;">${date}</span>
-                            </div>
-                            <button onclick="deleteStudentComment('${docSnap.id}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.2s;">Delete</button>
-                        </div>
-                        <div style="color: var(--text-primary); font-size: 14px; white-space: pre-wrap; margin-top: 8px;">${data.text || data.comment || ''}</div>
-                    </div>`;
-            });
-        } catch (e) {
-            inbox.innerHTML = '<p style="color: #ef4444;">Failed to load comments.</p>';
-        }
-    }
-
-    window.deleteStudentComment = async function(id) {
-        if(confirm("Permanently delete this comment?")) {
-            try {
-                await deleteDoc(doc(db, "comments", id));
-                loadComments();
-            } catch(e) {
-                alert("Failed to delete comment.");
-            }
-        }
-    };
-
-    loadFeedback();
-    loadComments();
-</script>
-
 </body>
 </html>
