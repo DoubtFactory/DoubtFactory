@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (manageExamFilter) manageExamFilter.addEventListener("change", window.renderManageQuestions);
     if (manageYearFilter) manageYearFilter.addEventListener("change", window.renderManageQuestions);
-    if (manageSearchFilter) manageSearchFilter.addEventListener("input", window.renderManageQuestions); // Bind search
+    if (manageSearchFilter) manageSearchFilter.addEventListener("input", window.renderManageQuestions);
     
     if (manageSubjectFilter) {
         manageSubjectFilter.addEventListener("change", () => {
@@ -162,7 +162,6 @@ function setupCloudinaryUploaders() {
                 
                 try {
                     const url = await uploadImage();
-                    
                     if (url && typeof url === 'string') {
                         input.value = url;
                         btn.textContent = "Uploaded ✓";
@@ -248,7 +247,6 @@ if(subjectSelect) {
         if(examSelectForm) {
             const selectedSubject = subjectSelect.value;
             let allowedExams = ["JEE Main", "JEE Advanced", "NEET"]; 
-            
             if (selectedSubject === "Maths") {
                 allowedExams = ["JEE Main", "JEE Advanced"];
             } else if (selectedSubject === "Botany" || selectedSubject === "Zoology") {
@@ -257,20 +255,17 @@ if(subjectSelect) {
             
             const currentExam = examSelectForm.value;
             examSelectForm.innerHTML = "";
-            
             allowedExams.forEach(ex => {
                 const opt = document.createElement("option");
                 opt.value = ex;
                 opt.textContent = ex;
                 examSelectForm.appendChild(opt);
             });
-            
             if (allowedExams.includes(currentExam)) {
                 examSelectForm.value = currentExam;
             } else {
                 examSelectForm.value = allowedExams[0];
             }
-            
             examSelectForm.dispatchEvent(new Event("change"));
         }
     });
@@ -282,11 +277,9 @@ if (examSelectForm && typeSelectForm) {
         "JEE Main": ["Single Correct", "Integer Based"],
         "JEE Advanced": ["Single Correct", "Multiple Correct", "Integer Based", "Comprehension", "Matrix Match"]
     };
-
     examSelectForm.addEventListener("change", () => {
         const selectedExam = examSelectForm.value;
         const allowedTypes = typeOptions[selectedExam] || typeOptions["JEE Advanced"]; 
-        
         const currentType = typeSelectForm.value;
         typeSelectForm.innerHTML = "";
         
@@ -296,24 +289,22 @@ if (examSelectForm && typeSelectForm) {
             opt.textContent = t;
             typeSelectForm.appendChild(opt);
         });
-        
         if (allowedTypes.includes(currentType)) {
             typeSelectForm.value = currentType;
         } else {
             typeSelectForm.value = allowedTypes[0];
         }
     });
-
-    setTimeout(() => {
-        if(subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
-    }, 100);
+    setTimeout(() => { if(subjectSelect) subjectSelect.dispatchEvent(new Event("change")); }, 100);
 }
 
 /* ===========================================
-   FIREBASE LOGIC & DASHBOARD
+   ROBUST FIREBASE SAVING & EDITING LOGIC
 =========================================== */
-const saveButton = document.getElementById("saveButton");
 const questionForm = document.getElementById("questionForm");
+const saveButton = document.getElementById("saveButton");
+const saveStatus = document.getElementById("saveStatus");
+const clearButton = document.getElementById("clearButton");
 
 let editingDocId = null;
 let isEditing = false;
@@ -327,37 +318,174 @@ function extractVideoId(url) {
 
 function collectFormData() {
     return {
-        id: Date.now(),
+        id: isEditing ? editingDocId : Date.now().toString(),
         timestamp: Date.now(),
-        subject: document.getElementById("subject").value,
-        chapter: document.getElementById("chapter").value,
-        exam: document.getElementById("exam").value,
-        year: Number(document.getElementById("year").value),
-        difficulty: document.getElementById("difficulty").value,
-        type: document.getElementById("type").value,
-        question: document.getElementById("question").value,
-        questionImage: document.getElementById("questionImage").value,
+        subject: document.getElementById("subject").value || "General",
+        chapter: document.getElementById("chapter").value || "General",
+        exam: document.getElementById("exam").value || "NEET",
+        year: Number(document.getElementById("year").value) || new Date().getFullYear(),
+        difficulty: document.getElementById("difficulty").value || "Medium",
+        type: document.getElementById("type").value || "Single Correct",
+        question: document.getElementById("question").value || "",
+        questionImage: document.getElementById("questionImage").value || "",
         options: [
-            document.getElementById("optionA").value,
-            document.getElementById("optionB").value,
-            document.getElementById("optionC").value,
-            document.getElementById("optionD").value
+            document.getElementById("optionA").value || "",
+            document.getElementById("optionB").value || "",
+            document.getElementById("optionC").value || "",
+            document.getElementById("optionD").value || ""
         ],
         optionImages: {
-            A: document.getElementById("optionAImage").value,
-            B: document.getElementById("optionBImage").value,
-            C: document.getElementById("optionCImage").value,
-            D: document.getElementById("optionDImage").value
+            A: document.getElementById("optionAImage").value || "",
+            B: document.getElementById("optionBImage").value || "",
+            C: document.getElementById("optionCImage").value || "",
+            D: document.getElementById("optionDImage").value || ""
         },
-        answer: Number(document.getElementById("answer").value),
-        solution: document.getElementById("solution").value,
-        solutionImage: document.getElementById("solutionImage").value,
+        answer: Number(document.getElementById("answer").value) || 0,
+        solution: document.getElementById("solution").value || "",
+        solutionImage: document.getElementById("solutionImage").value || "",
         youtube: extractVideoId(document.getElementById("youtube").value),
         views: 0,
         likes: 0
     };
 }
 
+// BULLETPROOF SAVE FUNCTION
+if(questionForm) {
+    questionForm.addEventListener("submit", async function(e) {
+        e.preventDefault(); // Stop native HTML submission
+        
+        try {
+            // UI Feedback
+            if(saveButton) {
+                saveButton.disabled = true;
+                saveButton.textContent = "Saving...";
+            }
+            if(saveStatus) saveStatus.textContent = "Connecting to database...";
+
+            const questionData = collectFormData();
+            
+            if (isEditing && editingDocId) {
+                await updateDoc(doc(db, "questions", editingDocId), questionData);
+                if(saveStatus) saveStatus.textContent = "✅ Updated Successfully!";
+            } else {
+                await addDoc(collection(db, "questions"), questionData);
+                if(saveStatus) saveStatus.textContent = "✅ Created Successfully!";
+            }
+            
+            // Reset Form and State
+            questionForm.reset();
+            editingDocId = null;
+            isEditing = false;
+            
+            if (subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
+            
+            // Refresh Data Tables
+            loadQuestionsTable();
+            updateDashboard();
+            
+            // Clear Success message after 3 seconds
+            setTimeout(() => { if(saveStatus) saveStatus.textContent = ""; }, 3000);
+            
+        } catch(error) {
+            console.error("Save Error:", error);
+            if(saveStatus) saveStatus.textContent = "❌ Failed to save (Check Console)";
+            alert("An error occurred while saving the question to Firebase.");
+        } finally {
+            if(saveButton) {
+                saveButton.disabled = false;
+                saveButton.textContent = "Save Question";
+            }
+        }
+    });
+}
+
+// BIND CLEAR BUTTON
+if(clearButton) {
+    clearButton.addEventListener("click", () => {
+        if(questionForm) questionForm.reset();
+        editingDocId = null;
+        isEditing = false;
+        if(saveButton) saveButton.textContent = "Save Question";
+        if(saveStatus) saveStatus.textContent = "";
+        if(subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
+    });
+}
+
+window.editQuestion = async function(id) {
+    try {
+        if (window.switchTab) window.switchTab("formSection");
+        const docSnap = await getDoc(doc(db, "questions", id));
+        if (!docSnap.exists()) {
+            alert("This question could not be found in the database.");
+            return;
+        }
+
+        const q = docSnap.data();
+        editingDocId = id;
+        isEditing = true;
+        
+        if (saveButton) saveButton.textContent = "Update Question";
+        if (saveStatus) saveStatus.textContent = "Editing Mode Active";
+
+        if (subjectSelect) {
+            subjectSelect.value = q.subject || "";
+            subjectSelect.dispatchEvent(new Event("change"));
+        }
+
+        setTimeout(() => { 
+            if (chapterSelect) chapterSelect.value = q.chapter || ""; 
+            
+            if (examSelectForm) {
+                examSelectForm.value = q.exam || "";
+                examSelectForm.dispatchEvent(new Event("change"));
+            }
+            
+            document.getElementById("year").value = q.year || "";
+            document.getElementById("difficulty").value = q.difficulty || "";
+
+            setTimeout(() => {
+                if (typeSelectForm) typeSelectForm.value = q.type || "Single Correct";
+            }, 50);
+        }, 100);
+
+        document.getElementById("question").value = q.question || "";
+        document.getElementById("questionImage").value = q.questionImage || "";
+        document.getElementById("optionA").value = q.options?.[0] || "";
+        document.getElementById("optionB").value = q.options?.[1] || "";
+        document.getElementById("optionC").value = q.options?.[2] || "";
+        document.getElementById("optionD").value = q.options?.[3] || "";
+        document.getElementById("optionAImage").value = q.optionImages?.A || "";
+        document.getElementById("optionBImage").value = q.optionImages?.B || "";
+        document.getElementById("optionCImage").value = q.optionImages?.C || "";
+        document.getElementById("optionDImage").value = q.optionImages?.D || "";
+        document.getElementById("solution").value = q.solution || "";
+        document.getElementById("solutionImage").value = q.solutionImage || "";
+        document.getElementById("answer").value = q.answer || 0;
+        document.getElementById("youtube").value = q.youtube ? `https://youtube.com/watch?v=${q.youtube}` : "";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch(err) {
+        console.error("Edit Error:", err);
+        alert("Failed to load question data for editing.");
+    }
+};
+
+window.deleteQuestion = async function(id) {
+    if (confirm("Are you sure you want to permanently delete this question?")) {
+        try {
+            await deleteDoc(doc(db, "questions", id));
+            loadQuestionsTable();
+            updateDashboard();
+        } catch (error) {
+            console.error("Delete Error:", error);
+            alert("Unable to delete question.");
+        }
+    }
+};
+
+/* ===========================================
+   TABLE & DASHBOARD LOADERS
+=========================================== */
 async function loadQuestionsTable() {
     try {
         const snapshot = await getDocs(collection(db, "questions"));
@@ -417,13 +545,11 @@ window.renderManageQuestions = function() {
     const term = manageSearchFilter ? manageSearchFilter.value.toLowerCase().trim() : "";
 
     const filtered = window.manageQuestionsList.filter(q => {
-        // Dropdown Filters
         if (ex !== "All" && q.exam !== ex) return false;
         if (yr !== "All" && String(q.year) !== String(yr)) return false;
         if (sub !== "All" && q.subject !== sub) return false;
         if (ch !== "All" && q.chapter !== ch) return false;
         
-        // Search Keyword Filter
         if (term) {
             const qText = String(q.question || "").toLowerCase();
             const qChap = String(q.chapter || "").toLowerCase();
@@ -431,7 +557,6 @@ window.renderManageQuestions = function() {
                 return false;
             }
         }
-        
         return true;
     });
 
@@ -464,9 +589,9 @@ window.renderManageQuestions = function() {
 async function updateDashboard() {
     try {
         const questions = await getQuestions();
-        
         const total = document.getElementById("totalQuestions");
         const drafts = document.getElementById("draftQuestions");
+        
         if (total) total.textContent = questions.length;
         if (drafts) drafts.textContent = "0";
 
@@ -532,7 +657,6 @@ async function updateDashboard() {
             let colorIndex = 0;
 
             typeLegend.innerHTML = "";
-            
             if (questions.length === 0) {
                 typePieChart.style.background = "var(--bg-main)";
                 typeLegend.innerHTML = "<p style='color: var(--text-secondary); font-size:13px;'>No data available</p>";
@@ -540,10 +664,8 @@ async function updateDashboard() {
                 Object.keys(typeCounts).forEach(type => {
                     const percentage = (typeCounts[type] / totalQs) * 100;
                     const color = colors[colorIndex % colors.length];
-                    
                     conicGradientArgs.push(`${color} ${currentPercentage}% ${currentPercentage + percentage}%`);
                     currentPercentage += percentage;
-
                     typeLegend.innerHTML += `
                         <div style="display:flex; align-items:center; gap:10px; font-size:14px; color: var(--text-secondary); margin-bottom:8px; font-weight:500;">
                             <span style="display:inline-block; width:14px; height:14px; background:${color}; border-radius:4px;"></span>
@@ -552,7 +674,6 @@ async function updateDashboard() {
                     `;
                     colorIndex++;
                 });
-
                 typePieChart.style.background = `conic-gradient(${conicGradientArgs.join(", ")})`;
                 typePieChart.style.borderRadius = "50%";
                 typePieChart.style.width = "180px";
@@ -565,91 +686,6 @@ async function updateDashboard() {
     } catch (e) {
         console.error("Dashboard fetch error:", e);
     }
-}
-
-window.deleteQuestion = async function(id) {
-    if (confirm("Delete this question?")) {
-        try {
-            await deleteDoc(doc(db, "questions", id));
-            loadQuestionsTable();
-            updateDashboard();
-        } catch (error) {
-            alert("Unable to delete question.");
-        }
-    }
-};
-
-window.editQuestion = async function(id) {
-    try {
-        if (window.switchTab) window.switchTab("formSection");
-        const docSnap = await getDoc(doc(db, "questions", id));
-        if (!docSnap.exists()) return;
-
-        const q = docSnap.data();
-        editingDocId = id;
-        isEditing = true;
-        if (saveButton) saveButton.textContent = "Update Question";
-
-        if (subjectSelect) {
-            subjectSelect.value = q.subject || "";
-            subjectSelect.dispatchEvent(new Event("change"));
-        }
-
-        setTimeout(() => { 
-            if (chapterSelect) chapterSelect.value = q.chapter || ""; 
-            
-            if (examSelectForm) {
-                examSelectForm.value = q.exam || "";
-                examSelectForm.dispatchEvent(new Event("change"));
-            }
-            
-            document.getElementById("year").value = q.year || "";
-            document.getElementById("difficulty").value = q.difficulty || "";
-
-            setTimeout(() => {
-                if (typeSelectForm) typeSelectForm.value = q.type || "Single Correct";
-            }, 50);
-
-        }, 100);
-
-        document.getElementById("question").value = q.question || "";
-        document.getElementById("optionA").value = q.options?.[0] || "";
-        document.getElementById("optionB").value = q.options?.[1] || "";
-        document.getElementById("optionC").value = q.options?.[2] || "";
-        document.getElementById("optionD").value = q.options?.[3] || "";
-        document.getElementById("solution").value = q.solution || "";
-        document.getElementById("answer").value = q.answer || 0;
-        document.getElementById("youtube").value = q.youtube ? `https://youtube.com/watch?v=${q.youtube}` : "";
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch(err) {
-        console.error(err);
-    }
-};
-
-if(questionForm) {
-    questionForm.addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const question = collectFormData();
-        try {
-            if (isEditing && editingDocId) {
-                await updateDoc(doc(db, "questions", editingDocId), question);
-            } else {
-                await addDoc(collection(db, "questions"), question);
-            }
-            questionForm.reset();
-            if (subjectSelect) subjectSelect.dispatchEvent(new Event("change"));
-            
-            editingDocId = null;
-            isEditing = false;
-            if (saveButton) saveButton.textContent = "Save Question";
-            loadQuestionsTable();
-            updateDashboard();
-            alert("Question saved successfully!");
-        } catch(error) {
-            alert("Error saving question.");
-        }
-    });
 }
 
 /* ===========================================
