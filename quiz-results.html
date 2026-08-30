@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Results | Doubt Factory</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Header CSS */
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-profile-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); text-decoration: none; transition: all 0.2s ease; border: 1px solid transparent; overflow: hidden; }
+        .header-profile-btn:hover { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.3); }
+        .header-profile-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Dashboard CSS */
         .dashboard-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .dash-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
+        .dash-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); justify-content: space-between; }
+        .dash-header-left { display: flex; align-items: center; gap: 15px; }
         .dash-header h1 { font-size: 24px; color: var(--text-primary); margin: 0; }
         .dash-header span { color: var(--text-secondary); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         
@@ -44,91 +51,233 @@
         .hist-date { color: var(--text-primary); font-weight: 600; font-size: 15px; }
         .hist-time { color: var(--text-secondary); font-size: 12px; }
         .hist-acc { font-size: 20px; font-weight: 700; color: #34D399; }
+
+        /* Empty State */
+        .empty-state { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); margin-top: 40px; }
+        .empty-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.8; }
+        .empty-state h2 { color: var(--text-primary); font-size: 24px; margin-bottom: 10px; }
+        .empty-state p { color: var(--text-secondary); font-size: 15px; max-width: 400px; line-height: 1.5; margin-bottom: 30px; }
+        .btn-primary { background: #F97316; color: white; padding: 12px 24px; border-radius: var(--radius-md); text-decoration: none; font-weight: 700; transition: 0.2s; }
+        .btn-primary:hover { background: #EA580C; }
     </style>
 </head>
 <body id="home-body">
 
-    <!-- Include the Universal Header here -->
+    <!-- UNIVERSAL HEADER -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+
+        <div class="header-actions">
+            <a href="profile-dashboard.html" id="headerProfileBtn" class="header-profile-btn" aria-label="User Profile">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <a href="index.html">Home</a>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">⚙️ JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">⚙️ JEE Advanced</a>
+                    <a href="exam.html?type=NEET">⚕️ NEET</a>
+                </div>
+            </div>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">⚛️ Physics</a>
+                    <a href="chapter.html?subject=Maths">📐 Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧪 Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧬 Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">🌿 Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">🦁 Zoology</a>
+                </div>
+            </div>
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="explore-quizzes.html">Quizzes</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+            <a href="profile-dashboard.html" style="color: var(--accent-blue);">My Progress</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
 
     <main class="dashboard-container">
-        <div class="dash-header">
-            <div class="stat-icon" style="color: #F97316;">🏆</div>
-            <div>
-                <span>Quiz Completed</span>
-                <h1>Angular Momentum</h1>
-            </div>
+        
+        <!-- EMPTY STATE (Shows if no quizzes attempted) -->
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <h2>No Quizzes Attempted Yet</h2>
+            <p>You haven't completed any topic quizzes. Start practicing to generate your personalized analytics and track your progress!</p>
+            <a href="explore-quizzes.html" class="btn-primary">Explore Quizzes</a>
         </div>
 
-        <div class="stats-row">
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #F97316;">📋</div>
-                <div class="stat-content"><h4>5</h4><p>Attempted</p></div>
+        <!-- DASHBOARD (Hidden until data is confirmed) -->
+        <div id="dashboardContent" style="display: none;">
+            <div class="dash-header">
+                <div class="dash-header-left">
+                    <div class="stat-icon" style="color: #F97316;">🏆</div>
+                    <div>
+                        <span>Latest Quiz Completed</span>
+                        <h1 id="latestQuizTitle">Loading...</h1>
+                    </div>
+                </div>
+                <a href="profile-dashboard.html" style="color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 14px;">← Back to Profile</a>
             </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #EC4899;">🎯</div>
-                <div class="stat-content"><h4>80.0%</h4><p>Accuracy</p></div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #8B5CF6;">⚗️</div>
-                <div class="stat-content"><h4>8</h4><p>Total Questions</p></div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #14B8A6;">📊</div>
-                <div class="stat-content"><h4>62.5%</h4><p>Completion</p></div>
-            </div>
-        </div>
 
-        <div class="charts-row">
-            <div class="chart-card">
-                <h3>Answer Breakdown</h3>
-                <p>Correct vs partial vs incorrect vs skipped</p>
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-icon" style="color: #F97316;">📋</div>
+                    <div class="stat-content"><h4 id="statAttempted">-</h4><p>Attempted</p></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon" style="color: #EC4899;">🎯</div>
+                    <div class="stat-content"><h4 id="statAccuracy">-%</h4><p>Accuracy</p></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon" style="color: #8B5CF6;">⚗️</div>
+                    <div class="stat-content"><h4 id="statTotal">-</h4><p>Total Questions</p></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon" style="color: #14B8A6;">📊</div>
+                    <div class="stat-content"><h4 id="statCompletion">-%</h4><p>Completion</p></div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>Answer Breakdown</h3>
+                    <p>Correct vs partial vs incorrect vs skipped</p>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Progress Metrics</h3>
+                    <p>Where you stand in this attempt</p>
+                    <div class="progress-bars">
+                        <div class="bar-group">
+                            <div class="bar-header"><span>Accuracy</span> <span id="barAccText" style="color: #34D399;">-%</span></div>
+                            <div class="bar-track"><div id="barAccFill" class="bar-fill" style="width: 0%; background: #34D399;"></div></div>
+                            <span id="barAccSub" style="font-size: 11px; color: var(--text-secondary);"></span>
+                        </div>
+                        <div class="bar-group" style="margin-top: 25px;">
+                            <div class="bar-header"><span>Completion</span> <span id="barCompText" style="color: #38BDF8;">-%</span></div>
+                            <div class="bar-track"><div id="barCompFill" class="bar-fill" style="width: 0%; background: #38BDF8;"></div></div>
+                            <span id="barCompSub" style="font-size: 11px; color: var(--text-secondary);"></span>
+                        </div>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-item"><h4 id="mCorrect" style="color: #34D399;">0</h4><span>Correct</span></div>
+                        <div class="metric-item"><h4 id="mPartial" style="color: #FBBF24;">0</h4><span>Partial</span></div>
+                        <div class="metric-item"><h4 id="mIncorrect" style="color: #FB7185;">0</h4><span>Incorrect</span></div>
+                        <div class="metric-item"><h4 id="mSkipped" style="color: #94A3B8;">0</h4><span>Skipped</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card" style="margin-bottom: 20px;">
+                <h3>Attempt Trend</h3>
+                <p>How your recent attempts compare</p>
                 <div style="position: relative; height: 250px; width: 100%;">
-                    <canvas id="pieChart"></canvas>
+                    <canvas id="lineChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-card">
-                <h3>Progress Metrics</h3>
-                <p>Where you stand in this attempt</p>
-                
-                <div class="progress-bars">
-                    <div class="bar-group">
-                        <div class="bar-header"><span>Accuracy</span> <span style="color: #34D399;">80.0%</span></div>
-                        <div class="bar-track"><div class="bar-fill" style="width: 80%; background: #34D399;"></div></div>
-                        <span style="font-size: 11px; color: var(--text-secondary);">4 correct out of 5 attempted</span>
-                    </div>
-                    <div class="bar-group" style="margin-top: 25px;">
-                        <div class="bar-header"><span>Completion</span> <span style="color: #38BDF8;">62.5%</span></div>
-                        <div class="bar-track"><div class="bar-fill" style="width: 62.5%; background: #38BDF8;"></div></div>
-                        <span style="font-size: 11px; color: var(--text-secondary);">5 answered out of 8 total</span>
-                    </div>
+                <h3>History</h3>
+                <div class="history-list" id="historyList">
+                    <!-- Injected via JS -->
                 </div>
-
-                <div class="metrics-grid">
-                    <div class="metric-item"><h4 style="color: #34D399;">4</h4><span>Correct</span></div>
-                    <div class="metric-item"><h4 style="color: #FBBF24;">0</h4><span>Partial</span></div>
-                    <div class="metric-item"><h4 style="color: #FB7185;">1</h4><span>Incorrect</span></div>
-                    <div class="metric-item"><h4 style="color: #94A3B8;">3</h4><span>Skipped</span></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="chart-card" style="margin-bottom: 20px;">
-            <h3>Attempt Trend</h3>
-            <p>How your recent attempts compare</p>
-            <div style="position: relative; height: 250px; width: 100%;">
-                <canvas id="lineChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3>History</h3>
-            <div class="history-list" id="historyList">
-                <!-- Injected via JS -->
             </div>
         </div>
     </main>
 
+    <!-- Header & Sidebar Auth Script -->
+    <script type="module">
+        import { auth, onAuthStateChanged } from "./js/firebase.js";
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const profileBtn = document.getElementById('headerProfileBtn');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            // Header Profile Logic
+            if(profileBtn) {
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        profileBtn.href = "profile-dashboard.html"; 
+                        if(user.photoURL) {
+                            profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                        }
+                    } else {
+                        profileBtn.href = "login.html";
+                    }
+                });
+            }
+
+            // Sidebar Logic
+            if (mobileMenuBtn && primaryNav) {
+                let overlay = document.querySelector('.menu-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'menu-overlay';
+                    document.body.appendChild(overlay);
+                }
+                function toggleMenu() {
+                    const isOpen = primaryNav.classList.contains('open');
+                    if (isOpen) {
+                        primaryNav.classList.remove('open');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    } else {
+                        primaryNav.classList.add('open');
+                        overlay.classList.add('active');
+                        document.body.style.overflow = 'hidden'; 
+                    }
+                }
+                mobileMenuBtn.addEventListener('click', toggleMenu);
+                closeMenuBtn.addEventListener('click', toggleMenu);
+                overlay.addEventListener('click', toggleMenu);
+
+                document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                    const newTrigger = trigger.cloneNode(true);
+                    trigger.parentNode.replaceChild(newTrigger, trigger);
+                    newTrigger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const dropMenu = this.nextElementSibling;
+                        dropMenu.classList.toggle('mobile-open');
+                    });
+                });
+            }
+        });
+    </script>
     <script type="module" src="js/quiz-analytics.js"></script>
 </body>
 </html>
