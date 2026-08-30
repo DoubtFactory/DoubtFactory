@@ -316,53 +316,46 @@ function extractVideoId(url) {
     return match ? match[1] : url;
 }
 
-function collectFormData() {
-    return {
-        id: isEditing ? editingDocId : Date.now().toString(),
-        timestamp: Date.now(),
-        subject: document.getElementById("subject").value || "General",
-        chapter: document.getElementById("chapter").value || "General",
-        exam: document.getElementById("exam").value || "NEET",
-        year: Number(document.getElementById("year").value) || new Date().getFullYear(),
-        difficulty: document.getElementById("difficulty").value || "Medium",
-        type: document.getElementById("type").value || "Single Correct",
-        question: document.getElementById("question").value || "",
-        questionImage: document.getElementById("questionImage").value || "",
-        options: [
-            document.getElementById("optionA").value || "",
-            document.getElementById("optionB").value || "",
-            document.getElementById("optionC").value || "",
-            document.getElementById("optionD").value || ""
-        ],
-        optionImages: {
-            A: document.getElementById("optionAImage").value || "",
-            B: document.getElementById("optionBImage").value || "",
-            C: document.getElementById("optionCImage").value || "",
-            D: document.getElementById("optionDImage").value || ""
-        },
-        answer: Number(document.getElementById("answer").value) || 0,
-        solution: document.getElementById("solution").value || "",
-        solutionImage: document.getElementById("solutionImage").value || "",
-        youtube: extractVideoId(document.getElementById("youtube").value),
-        views: 0,
-        likes: 0
-    };
-}
-
-// BULLETPROOF SAVE FUNCTION
-if(questionForm) {
-    questionForm.addEventListener("submit", async function(e) {
-        e.preventDefault(); // Stop native HTML submission
+// Bypasses HTML Form Validation entirely
+if(saveButton) {
+    saveButton.addEventListener("click", async function(e) {
+        e.preventDefault(); 
         
         try {
-            // UI Feedback
-            if(saveButton) {
-                saveButton.disabled = true;
-                saveButton.textContent = "Saving...";
-            }
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
             if(saveStatus) saveStatus.textContent = "Connecting to database...";
 
-            const questionData = collectFormData();
+            const questionData = {
+                id: isEditing && editingDocId ? editingDocId : Date.now().toString(),
+                timestamp: Date.now(),
+                subject: document.getElementById("subject")?.value || "General",
+                chapter: document.getElementById("chapter")?.value || "General",
+                exam: document.getElementById("exam")?.value || "NEET",
+                year: Number(document.getElementById("year")?.value) || new Date().getFullYear(),
+                difficulty: document.getElementById("difficulty")?.value || "Medium",
+                type: document.getElementById("type")?.value || "Single Correct",
+                question: document.getElementById("question")?.value || "",
+                questionImage: document.getElementById("questionImage")?.value || "",
+                options: [
+                    document.getElementById("optionA")?.value || "",
+                    document.getElementById("optionB")?.value || "",
+                    document.getElementById("optionC")?.value || "",
+                    document.getElementById("optionD")?.value || ""
+                ],
+                optionImages: {
+                    A: document.getElementById("optionAImage")?.value || "",
+                    B: document.getElementById("optionBImage")?.value || "",
+                    C: document.getElementById("optionCImage")?.value || "",
+                    D: document.getElementById("optionDImage")?.value || ""
+                },
+                answer: Number(document.getElementById("answer")?.value) || 0,
+                solution: document.getElementById("solution")?.value || "",
+                solutionImage: document.getElementById("solutionImage")?.value || "",
+                youtube: extractVideoId(document.getElementById("youtube")?.value),
+                views: 0,
+                likes: 0
+            };
             
             if (isEditing && editingDocId) {
                 await updateDoc(doc(db, "questions", editingDocId), questionData);
@@ -373,7 +366,7 @@ if(questionForm) {
             }
             
             // Reset Form and State
-            questionForm.reset();
+            if(questionForm) questionForm.reset();
             editingDocId = null;
             isEditing = false;
             
@@ -383,25 +376,23 @@ if(questionForm) {
             loadQuestionsTable();
             updateDashboard();
             
-            // Clear Success message after 3 seconds
             setTimeout(() => { if(saveStatus) saveStatus.textContent = ""; }, 3000);
             
         } catch(error) {
             console.error("Save Error:", error);
             if(saveStatus) saveStatus.textContent = "❌ Failed to save (Check Console)";
-            alert("An error occurred while saving the question to Firebase.");
+            alert("An error occurred while saving the question. Check your internet connection.");
         } finally {
-            if(saveButton) {
-                saveButton.disabled = false;
-                saveButton.textContent = "Save Question";
-            }
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Question";
         }
     });
 }
 
 // BIND CLEAR BUTTON
 if(clearButton) {
-    clearButton.addEventListener("click", () => {
+    clearButton.addEventListener("click", (e) => {
+        e.preventDefault();
         if(questionForm) questionForm.reset();
         editingDocId = null;
         isEditing = false;
@@ -440,28 +431,28 @@ window.editQuestion = async function(id) {
                 examSelectForm.dispatchEvent(new Event("change"));
             }
             
-            document.getElementById("year").value = q.year || "";
-            document.getElementById("difficulty").value = q.difficulty || "";
+            if(document.getElementById("year")) document.getElementById("year").value = q.year || "";
+            if(document.getElementById("difficulty")) document.getElementById("difficulty").value = q.difficulty || "";
 
             setTimeout(() => {
                 if (typeSelectForm) typeSelectForm.value = q.type || "Single Correct";
             }, 50);
         }, 100);
 
-        document.getElementById("question").value = q.question || "";
-        document.getElementById("questionImage").value = q.questionImage || "";
-        document.getElementById("optionA").value = q.options?.[0] || "";
-        document.getElementById("optionB").value = q.options?.[1] || "";
-        document.getElementById("optionC").value = q.options?.[2] || "";
-        document.getElementById("optionD").value = q.options?.[3] || "";
-        document.getElementById("optionAImage").value = q.optionImages?.A || "";
-        document.getElementById("optionBImage").value = q.optionImages?.B || "";
-        document.getElementById("optionCImage").value = q.optionImages?.C || "";
-        document.getElementById("optionDImage").value = q.optionImages?.D || "";
-        document.getElementById("solution").value = q.solution || "";
-        document.getElementById("solutionImage").value = q.solutionImage || "";
-        document.getElementById("answer").value = q.answer || 0;
-        document.getElementById("youtube").value = q.youtube ? `https://youtube.com/watch?v=${q.youtube}` : "";
+        if(document.getElementById("question")) document.getElementById("question").value = q.question || "";
+        if(document.getElementById("questionImage")) document.getElementById("questionImage").value = q.questionImage || "";
+        if(document.getElementById("optionA")) document.getElementById("optionA").value = q.options?.[0] || "";
+        if(document.getElementById("optionB")) document.getElementById("optionB").value = q.options?.[1] || "";
+        if(document.getElementById("optionC")) document.getElementById("optionC").value = q.options?.[2] || "";
+        if(document.getElementById("optionD")) document.getElementById("optionD").value = q.options?.[3] || "";
+        if(document.getElementById("optionAImage")) document.getElementById("optionAImage").value = q.optionImages?.A || "";
+        if(document.getElementById("optionBImage")) document.getElementById("optionBImage").value = q.optionImages?.B || "";
+        if(document.getElementById("optionCImage")) document.getElementById("optionCImage").value = q.optionImages?.C || "";
+        if(document.getElementById("optionDImage")) document.getElementById("optionDImage").value = q.optionImages?.D || "";
+        if(document.getElementById("solution")) document.getElementById("solution").value = q.solution || "";
+        if(document.getElementById("solutionImage")) document.getElementById("solutionImage").value = q.solutionImage || "";
+        if(document.getElementById("answer")) document.getElementById("answer").value = q.answer || 0;
+        if(document.getElementById("youtube")) document.getElementById("youtube").value = q.youtube ? `https://youtube.com/watch?v=${q.youtube}` : "";
 
         window.scrollTo({ top: 0, behavior: "smooth" });
     } catch(err) {
