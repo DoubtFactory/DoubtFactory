@@ -7,95 +7,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <style>
+        /* Header CSS */
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-profile-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); text-decoration: none; transition: all 0.2s ease; border: 1px solid transparent; overflow: hidden; }
+        .header-profile-btn:hover { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.3); }
+        .header-profile-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Quiz Page CSS */
         .quiz-hero { text-align: center; padding: 50px 20px; }
         .quiz-hero h1 { font-size: 36px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
-        .quiz-hero h1 span { color: #F97316; }
-        .quiz-hero p { color: var(--text-secondary); font-size: 16px; }
+        .quiz-hero h1 span { color: var(--accent-blue); }
+        .quiz-hero p { color: var(--text-secondary); font-size: 16px; max-width: 600px; margin: 0 auto; }
 
         .quiz-section { max-width: 1000px; margin: 0 auto 40px; padding: 0 20px; }
         .quiz-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .quiz-section-header h2 { font-size: 20px; color: var(--text-primary); font-weight: 700; }
-        .quiz-section-header a { color: #F97316; font-size: 14px; font-weight: 600; text-decoration: none; }
+        .quiz-section-header a { color: var(--accent-blue); font-size: 14px; font-weight: 600; text-decoration: none; }
 
         .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .quiz-card {
             background: var(--bg-card); border: 1px solid var(--border-color);
             border-radius: var(--radius-lg); padding: 24px;
             transition: transform 0.2s, border-color 0.2s; cursor: pointer;
-            display: flex; flex-direction: column; justify-content: space-between;
+            display: flex; flex-direction: column; justify-content: space-between; text-decoration: none;
         }
-        .quiz-card:hover { transform: translateY(-4px); border-color: #F97316; }
+        .quiz-card:hover { transform: translateY(-4px); border-color: var(--accent-blue); }
         .card-badge { font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 700; margin-bottom: 12px; align-self: flex-start; }
         
-        .badge-jee { background: rgba(249, 115, 22, 0.1); color: #F97316; }
-        .badge-neet { background: rgba(139, 92, 246, 0.1); color: #A78BFA; }
+        .badge-main { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .badge-adv { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+        .badge-neet { background: rgba(167, 139, 250, 0.1); color: #A78BFA; }
+        .badge-sub { background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); }
         
         .quiz-card h3 { color: var(--text-primary); font-size: 18px; margin-bottom: 8px; }
-        .quiz-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+        .quiz-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin: 0;}
         
-        /* Icon placeholders */
         .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--bg-main); margin-bottom: 15px; }
     </style>
 </head>
 <body id="home-body">
 
-        <!-- ==========================================
-         UNIVERSAL HEADER & SIDEBAR 
-         ========================================== -->
-    <style>
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-profile-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-            overflow: hidden;
-        }
-
-        .header-profile-btn:hover {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent-blue);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .header-profile-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
-
+    <!-- UNIVERSAL HEADER -->
     <header class="site-header">
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <!-- Right Side Actions (Profile + Hamburger) -->
         <div class="header-actions">
-            
-            <!-- Dynamic Login / Profile Icon -->
-            <a href="login.html" id="headerProfileBtn" class="header-profile-btn" aria-label="User Profile">
-                <!-- Default SVG (Shows when logged out) -->
+            <a href="profile-dashboard.html" id="headerProfileBtn" class="header-profile-btn" aria-label="User Profile">
                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg>
             </a>
 
-            <!-- Hamburger Icon -->
             <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
                 <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -105,7 +71,6 @@
             </button>
         </div>
 
-        <!-- Sidebar Navigation -->
         <nav aria-label="Primary navigation" id="primaryNav">
             <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
                 <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -113,9 +78,7 @@
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
-
             <a href="index.html">Home</a>
-            
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Exams ▾</a>
                 <div class="drop-menu">
@@ -124,134 +87,217 @@
                     <a href="exam.html?type=NEET">⚕️ NEET</a>
                 </div>
             </div>
-
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
                     <a href="chapter.html?subject=Physics">⚛️ Physics</a>
                     <a href="chapter.html?subject=Maths">📐 Maths</a>
-                    
                     <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧪 Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
-                    
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
                     <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧬 Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">🌿 Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">🦁 Zoology</a>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">🌿 Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">🦁 Zoology</a>
                 </div>
             </div>
-
             <a href="test-setup.html">Mock Tests</a>
-            <a href="explore-quizzes.html">Quizzes</a>
+            <a href="explore-quizzes.html" style="color: var(--accent-blue);">Quizzes</a>
             <a href="search.html">Search</a>
             <a href="bookmarks.html">Bookmarks</a>
-            <a href="quiz-results.html">My Progress</a>
+            <a href="profile-dashboard.html">My Progress</a>
             <a href="contact.html">Contact Us</a>
         </nav>
     </header>
 
-       <!-- Header Dynamic Auth Script -->
-    <script type="module">
-        import { auth, onAuthStateChanged } from "./js/firebase.js";
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            const profileBtn = document.getElementById('headerProfileBtn');
-            if(profileBtn) {
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        // User is logged in: Link to central Profile Dashboard
-                        profileBtn.href = "profile-dashboard.html"; 
-                        
-                        // Show Google Profile Picture if available
-                        if(user.photoURL) {
-                            profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
-                        } else {
-                            profileBtn.style.color = "var(--accent-blue)";
-                            profileBtn.style.borderColor = "var(--accent-blue)";
-                            profileBtn.style.background = "rgba(59, 130, 246, 0.15)";
-                        }
-                    } else {
-                        // Not logged in: Link to Login Page
-                        profileBtn.href = "login.html";
-                    }
-                });
-            }
-        });
-    </script>
-
-    <!-- ========================================== -->
-
-
     <main>
         <div class="quiz-hero">
             <h1>Explore <span>Quizzes</span></h1>
-            <p>Discover your perfect quiz from our vast collection of exams, subjects, and topics.</p>
+            <p>Discover your perfect quiz from our vast collection of actual questions updated by Doubt Factory.</p>
         </div>
 
+        <!-- EXAM CATEGORIES -->
         <section class="quiz-section">
             <div class="quiz-section-header">
                 <h2>Browse by Exam</h2>
                 <a href="#">See all</a>
             </div>
             <div class="quiz-grid">
-                <div class="quiz-card" onclick="window.location.href='exam.html?type=JEE Main'">
+                <a href="exam.html?type=JEE Main" class="quiz-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <span class="card-badge badge-jee">724 Quizzes</span>
-                        <div class="card-icon" style="color: #F97316;">⚙️</div>
+                        <span class="card-badge badge-main" id="count-jee-main">Loading...</span>
+                        <div class="card-icon" style="color: var(--accent-blue);">⚙️</div>
                     </div>
-                    <h3>JEE Mains</h3>
-                    <p>Eligibility test for admission to engineering institutes</p>
-                </div>
-                <div class="quiz-card" onclick="window.location.href='exam.html?type=JEE Advanced'">
+                    <div>
+                        <h3>JEE Mains</h3>
+                        <p>Eligibility test for admission to engineering institutes</p>
+                    </div>
+                </a>
+                
+                <a href="exam.html?type=JEE Advanced" class="quiz-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <span class="card-badge badge-jee">578 Quizzes</span>
+                        <span class="card-badge badge-adv" id="count-jee-adv">Loading...</span>
                         <div class="card-icon" style="color: #EF4444;">🎯</div>
                     </div>
-                    <h3>JEE Advanced</h3>
-                    <p>Challenging test for entry into IITs</p>
-                </div>
-                <div class="quiz-card" onclick="window.location.href='exam.html?type=NEET'">
+                    <div>
+                        <h3>JEE Advanced</h3>
+                        <p>Challenging test for entry into IITs</p>
+                    </div>
+                </a>
+                
+                <a href="exam.html?type=NEET" class="quiz-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <span class="card-badge badge-neet">635 Quizzes</span>
+                        <span class="card-badge badge-neet" id="count-neet">Loading...</span>
                         <div class="card-icon" style="color: #A78BFA;">⚕️</div>
                     </div>
-                    <h3>NEET</h3>
-                    <p>National-level test for entry into medical schools</p>
-                </div>
+                    <div>
+                        <h3>NEET</h3>
+                        <p>National-level test for entry into medical schools</p>
+                    </div>
+                </a>
             </div>
         </section>
 
+        <!-- SUBJECT CATEGORIES -->
         <section class="quiz-section">
             <div class="quiz-section-header">
                 <h2>Browse by Subject</h2>
             </div>
             <div class="quiz-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="quiz-card" style="align-items: center; text-align: center;">
+                
+                <a href="chapter.html?subject=Physics" class="quiz-card" style="align-items: center; text-align: center;">
                     <div class="card-icon" style="color: #3B82F6;">⚛️</div>
                     <h3>Physics</h3>
-                </div>
-                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <span class="card-badge badge-sub" id="count-physics" style="align-self: center; margin: 5px 0 0 0;">Loading...</span>
+                </a>
+                
+                <a href="chapter.html?subject=Physical%20Chemistry" class="quiz-card" style="align-items: center; text-align: center;">
                     <div class="card-icon" style="color: #10B981;">🧪</div>
                     <h3>Chemistry</h3>
-                </div>
-                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <span class="card-badge badge-sub" id="count-chemistry" style="align-self: center; margin: 5px 0 0 0;">Loading...</span>
+                </a>
+                
+                <a href="chapter.html?subject=Maths" class="quiz-card" style="align-items: center; text-align: center;">
                     <div class="card-icon" style="color: #8B5CF6;">📐</div>
                     <h3>Mathematics</h3>
-                </div>
-                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <span class="card-badge badge-sub" id="count-maths" style="align-self: center; margin: 5px 0 0 0;">Loading...</span>
+                </a>
+                
+                <a href="chapter.html?subject=Botany" class="quiz-card" style="align-items: center; text-align: center;">
                     <div class="card-icon" style="color: #14B8A6;">🧬</div>
                     <h3>Biology</h3>
-                </div>
+                    <span class="card-badge badge-sub" id="count-biology" style="align-self: center; margin: 5px 0 0 0;">Loading...</span>
+                </a>
             </div>
         </section>
     </main>
     
+    <!-- Scripts -->
     <script type="module">
-        import { auth, onAuthStateChanged } from "./js/firebase.js";
-        // Force Login
-        onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.href = "login.html?redirect=explore-quizzes.html";
+        import { auth, onAuthStateChanged, db } from "./js/firebase.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- HEADER AUTH LOGIC ---
+            const profileBtn = document.getElementById('headerProfileBtn');
+            if(profileBtn) {
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        profileBtn.href = "profile-dashboard.html"; 
+                        if(user.photoURL) {
+                            profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                        }
+                    } else {
+                        profileBtn.href = "login.html";
+                    }
+                });
+            }
+
+            // --- MOBILE MENU LOGIC ---
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            
+            if (mobileMenuBtn && primaryNav) {
+                let overlay = document.querySelector('.menu-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'menu-overlay';
+                    document.body.appendChild(overlay);
+                }
+                function toggleMenu() {
+                    if (primaryNav.classList.contains('open')) {
+                        primaryNav.classList.remove('open');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    } else {
+                        primaryNav.classList.add('open');
+                        overlay.classList.add('active');
+                        document.body.style.overflow = 'hidden'; 
+                    }
+                }
+                mobileMenuBtn.addEventListener('click', toggleMenu);
+                closeMenuBtn.addEventListener('click', toggleMenu);
+                overlay.addEventListener('click', toggleMenu);
+
+                document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                    const newTrigger = trigger.cloneNode(true);
+                    trigger.parentNode.replaceChild(newTrigger, trigger);
+                    newTrigger.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        this.nextElementSibling.classList.toggle('mobile-open');
+                    });
+                });
+            }
+
+            // --- DYNAMIC FIREBASE DATA COUNTER ---
+            async function fetchQuestionCounts() {
+                try {
+                    const snapshot = await getDocs(collection(db, "questions"));
+                    
+                    let counts = { jeeMain: 0, jeeAdv: 0, neet: 0, physics: 0, chemistry: 0, maths: 0, biology: 0 };
+
+                    snapshot.forEach(doc => {
+                        const q = doc.data();
+                        
+                        // Tally Exams
+                        if (q.exam === "JEE Main") counts.jeeMain++;
+                        if (q.exam === "JEE Advanced") counts.jeeAdv++;
+                        if (q.exam === "NEET") counts.neet++;
+
+                        // Tally Subjects
+                        if (q.subject === "Physics") counts.physics++;
+                        if (q.subject === "Maths") counts.maths++;
+                        if (q.subject && q.subject.includes("Chemistry")) counts.chemistry++;
+                        if (q.subject === "Botany" || q.subject === "Zoology" || q.subject === "Biology") counts.biology++;
+                    });
+
+                    // Update UI safely
+                    const elJeeMain = document.getElementById('count-jee-main');
+                    const elJeeAdv = document.getElementById('count-jee-adv');
+                    const elNeet = document.getElementById('count-neet');
+                    const elPhy = document.getElementById('count-physics');
+                    const elChem = document.getElementById('count-chemistry');
+                    const elMath = document.getElementById('count-maths');
+                    const elBio = document.getElementById('count-biology');
+
+                    if(elJeeMain) elJeeMain.textContent = `${counts.jeeMain} Questions`;
+                    if(elJeeAdv) elJeeAdv.textContent = `${counts.jeeAdv} Questions`;
+                    if(elNeet) elNeet.textContent = `${counts.neet} Questions`;
+                    
+                    if(elPhy) elPhy.textContent = `${counts.physics} Qs`;
+                    if(elChem) elChem.textContent = `${counts.chemistry} Qs`;
+                    if(elMath) elMath.textContent = `${counts.maths} Qs`;
+                    if(elBio) elBio.textContent = `${counts.biology} Qs`;
+
+                } catch (error) {
+                    console.error("Failed to load question counts:", error);
+                    document.querySelectorAll('.card-badge').forEach(badge => badge.textContent = "Available");
+                }
+            }
+
+            fetchQuestionCounts();
         });
     </script>
 </body>
