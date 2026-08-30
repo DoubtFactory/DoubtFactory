@@ -42,20 +42,68 @@
         <!-- ==========================================
          UNIVERSAL HEADER & SIDEBAR 
          ========================================== -->
+    <style>
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-profile-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+
+        .header-profile-btn:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .header-profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+
     <header class="site-header">
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
+        <!-- Right Side Actions (Profile + Hamburger) -->
+        <div class="header-actions">
+            
+            <!-- Dynamic Login / Profile Icon -->
+            <a href="login.html" id="headerProfileBtn" class="header-profile-btn" aria-label="User Profile">
+                <!-- Default SVG (Shows when logged out) -->
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
+            <!-- Hamburger Icon -->
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
 
         <!-- Sidebar Navigation -->
         <nav aria-label="Primary navigation" id="primaryNav">
@@ -102,6 +150,37 @@
             <a href="contact.html">Contact Us</a>
         </nav>
     </header>
+
+       <!-- Header Dynamic Auth Script -->
+    <script type="module">
+        import { auth, onAuthStateChanged } from "./js/firebase.js";
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const profileBtn = document.getElementById('headerProfileBtn');
+            if(profileBtn) {
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        // User is logged in: Link to central Profile Dashboard
+                        profileBtn.href = "profile-dashboard.html"; 
+                        
+                        // Show Google Profile Picture if available
+                        if(user.photoURL) {
+                            profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                        } else {
+                            profileBtn.style.color = "var(--accent-blue)";
+                            profileBtn.style.borderColor = "var(--accent-blue)";
+                            profileBtn.style.background = "rgba(59, 130, 246, 0.15)";
+                        }
+                    } else {
+                        // Not logged in: Link to Login Page
+                        profileBtn.href = "login.html";
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- ========================================== -->
 
 
     <main>
