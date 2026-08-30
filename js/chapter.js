@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             titleElement.textContent = `${selectedSubject} Chapters`;
         }
 
-        grid.innerHTML = "<p style='text-align:center; color:#64748b; grid-column: 1 / -1;'>Loading chapters from database...</p>";
+        // Updated to dark theme text color
+        grid.innerHTML = "<p style='text-align:center; color: var(--text-secondary); grid-column: 1 / -1;'>Loading chapters from database...</p>";
 
         // 3. Fetch Data
         const questions = await getQuestions();
@@ -33,9 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         if (relevantQuestions.length === 0) {
-            grid.innerHTML = `<div style="text-align:center; grid-column: 1 / -1; background: #f8fafc; padding: 40px; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                <h3 style="color:#334155; margin-bottom:10px;">No Questions Found</h3>
-                <p style="color:#64748b; margin:0;">You haven't uploaded any ${selectedSubject || 'questions'} yet. Once you add them, the chapters will appear here automatically!</p>
+            // Updated Empty State to dark theme
+            grid.innerHTML = `<div style="text-align:center; grid-column: 1 / -1; background: var(--bg-card); padding: 40px; border-radius: var(--radius-lg); border: 1px dashed var(--border-color);">
+                <h3 style="color: var(--text-primary); margin-bottom:10px;">No Questions Found</h3>
+                <p style="color: var(--text-secondary); margin:0;">You haven't uploaded any ${selectedSubject || 'questions'} yet. Once you add them, the chapters will appear here automatically!</p>
             </div>`;
             return;
         }
@@ -60,30 +62,35 @@ document.addEventListener("DOMContentLoaded", async () => {
         grid.innerHTML = "";
         grid.style.cssText = "display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 60px;";
 
-        uniqueChapters.forEach(chapter => {
+        uniqueChapters.forEach((chapter, index) => {
             const count = chapterCounts[chapter];
             const cardSubject = chapterSubjects[chapter];
             const card = document.createElement("a");
             
-            card.href = `questions.html?subject=${encodeURIComponent(cardSubject)}&chapter=${encodeURIComponent(chapter)}`;
-            card.style.cssText = `display: block; padding: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);`;
+            // IMPORTANT: Changed link to point to our new launchpad and renamed parameter to 'topic'
+            card.href = `topic-details.html?subject=${encodeURIComponent(cardSubject)}&topic=${encodeURIComponent(chapter)}`;
+            
+            // Updated styles to match Doubt Factory Dark Theme
+            card.style.cssText = `background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; transition: transform 0.2s, border-color 0.2s;`;
             
             card.onmouseover = () => {
                 card.style.transform = "translateY(-4px)";
-                card.style.boxShadow = "0 10px 15px rgba(0,0,0,0.05)";
-                card.style.borderColor = "#3b82f6";
+                card.style.borderColor = "var(--accent-blue)";
             };
             card.onmouseout = () => {
                 card.style.transform = "translateY(0)";
-                card.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02)";
-                card.style.borderColor = "#e2e8f0";
+                card.style.borderColor = "var(--border-color)";
             };
 
             card.innerHTML = `
-                <h3 style="font-size: 18px; color: #1e293b; margin: 0 0 10px 0; line-height: 1.4; font-weight: 600;">${chapter}</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                    <span style="font-size: 13px; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">${count} Questions</span>
-                    <span style="font-size: 14px; font-weight: 600; color: #3b82f6;">Practice →</span>
+                <div>
+                    <p style="color: var(--text-secondary); font-size: 13px; margin: 0 0 6px 0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Chapter ${index + 1}</p>
+                    <h3 style="color: var(--text-primary); font-size: 18px; margin: 0; font-weight: 700;">${chapter}</h3>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                    <span style="font-size: 12px; font-weight: 700; color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); padding: 4px 10px; border-radius: 4px;">${count} Qs</span>
+                    <span style="color: var(--accent-blue); font-weight: bold; font-size: 20px;">→</span>
                 </div>
             `;
             
