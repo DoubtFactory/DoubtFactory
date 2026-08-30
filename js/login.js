@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const provider = new GoogleAuthProvider();
 
-    // 1. Instantly redirect if the browser detects an active session
+    // 1. Catch users who are ALREADY logged in when they visit the page
     onAuthStateChanged(auth, (user) => {
-        if (user) {
+        if (user && googleBtn && !googleBtn.disabled) { 
             const urlParams = new URLSearchParams(window.location.search);
             const redirectUrl = urlParams.get("redirect") || "profile-dashboard.html";
             window.location.href = redirectUrl;
@@ -20,36 +20,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if (googleBtn) {
         googleBtn.addEventListener("click", async () => {
             try {
-                // UI update
+                // UI update to show progress
                 googleBtn.disabled = true;
-                googleBtn.style.opacity = "0.7";
+                googleBtn.textContent = "Connecting to Google...";
                 if (errorDisplay) errorDisplay.style.display = "none";
 
-                // Step A: Force the browser to remember this login permanently
+                // Force local persistence
                 await setPersistence(auth, browserLocalPersistence);
                 
-                // Step B: Use Popup triggered by a DIRECT click (bypasses Safari tracking blocks)
-                await signInWithPopup(auth, provider);
+                // Trigger popup and WAIT for the result
+                const result = await signInWithPopup(auth, provider);
                 
-                // Note: We don't need a redirect code here because the onAuthStateChanged 
-                // listener at the top will automatically fire and move the user!
+                // If we get here, login was successful! Force the redirect immediately.
+                if (result && result.user) {
+                    googleBtn.textContent = "Success! Redirecting...";
+                    
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get("redirect") || "profile-dashboard.html";
+                    window.location.href = redirectUrl;
+                }
 
             } catch (error) {
                 console.error("Google Sign-In Error:", error);
                 
                 if (errorDisplay) {
-                    // Catch popup blockers or closed windows
                     if (error.code === 'auth/popup-closed-by-user') {
                         errorDisplay.textContent = "Sign-in cancelled. Please try again.";
                     } else {
-                        errorDisplay.textContent = "Login blocked by browser. Please try again.";
+                        // Print the exact error if it fails
+                        errorDisplay.textContent = "Error: " + error.message; 
                     }
                     errorDisplay.style.display = "block";
                 }
                 
-                // Reset button
+                // Reset button so they can try again
                 googleBtn.disabled = false;
-                googleBtn.style.opacity = "1";
+                googleBtn.innerHTML = `
+                    <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    Sign in with Google
+                `;
             }
         });
     }
