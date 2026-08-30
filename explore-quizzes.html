@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Explore Quizzes | Doubt Factory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .quiz-hero { text-align: center; padding: 50px 20px; }
+        .quiz-hero h1 { font-size: 36px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
+        .quiz-hero h1 span { color: #F97316; }
+        .quiz-hero p { color: var(--text-secondary); font-size: 16px; }
+
+        .quiz-section { max-width: 1000px; margin: 0 auto 40px; padding: 0 20px; }
+        .quiz-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .quiz-section-header h2 { font-size: 20px; color: var(--text-primary); font-weight: 700; }
+        .quiz-section-header a { color: #F97316; font-size: 14px; font-weight: 600; text-decoration: none; }
+
+        .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .quiz-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 24px;
+            transition: transform 0.2s, border-color 0.2s; cursor: pointer;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .quiz-card:hover { transform: translateY(-4px); border-color: #F97316; }
+        .card-badge { font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 700; margin-bottom: 12px; align-self: flex-start; }
+        
+        .badge-jee { background: rgba(249, 115, 22, 0.1); color: #F97316; }
+        .badge-neet { background: rgba(139, 92, 246, 0.1); color: #A78BFA; }
+        
+        .quiz-card h3 { color: var(--text-primary); font-size: 18px; margin-bottom: 8px; }
+        .quiz-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+        
+        /* Icon placeholders */
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--bg-main); margin-bottom: 15px; }
+    </style>
+</head>
+<body id="home-body">
+
+    <!-- UNIVERSAL HEADER (With updated icons & Mock Tests/Quizzes text) -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <a href="index.html">Home</a>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">⚙️ JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">⚙️ JEE Advanced</a>
+                    <a href="exam.html?type=NEET">⚕️ NEET</a>
+                </div>
+            </div>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">⚛️ Physics</a>
+                    <a href="chapter.html?subject=Maths">📐 Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧪 Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧬 Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">🌿 Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">🦁 Zoology</a>
+                </div>
+            </div>
+            <a href="explore-quizzes.html" style="color: #F97316;">Mock Tests/Quizzes</a>
+            <a href="search.html">Search</a>
+            <a href="quiz-results.html">My Progress</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="quiz-hero">
+            <h1>Explore <span>Quizzes</span></h1>
+            <p>Discover your perfect quiz from our vast collection of exams, subjects, and topics.</p>
+        </div>
+
+        <section class="quiz-section">
+            <div class="quiz-section-header">
+                <h2>Browse by Exam</h2>
+                <a href="#">See all</a>
+            </div>
+            <div class="quiz-grid">
+                <div class="quiz-card" onclick="window.location.href='exam.html?type=JEE Main'">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="card-badge badge-jee">724 Quizzes</span>
+                        <div class="card-icon" style="color: #F97316;">⚙️</div>
+                    </div>
+                    <h3>JEE Mains</h3>
+                    <p>Eligibility test for admission to engineering institutes</p>
+                </div>
+                <div class="quiz-card" onclick="window.location.href='exam.html?type=JEE Advanced'">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="card-badge badge-jee">578 Quizzes</span>
+                        <div class="card-icon" style="color: #EF4444;">🎯</div>
+                    </div>
+                    <h3>JEE Advanced</h3>
+                    <p>Challenging test for entry into IITs</p>
+                </div>
+                <div class="quiz-card" onclick="window.location.href='exam.html?type=NEET'">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <span class="card-badge badge-neet">635 Quizzes</span>
+                        <div class="card-icon" style="color: #A78BFA;">⚕️</div>
+                    </div>
+                    <h3>NEET</h3>
+                    <p>National-level test for entry into medical schools</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="quiz-section">
+            <div class="quiz-section-header">
+                <h2>Browse by Subject</h2>
+            </div>
+            <div class="quiz-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <div class="card-icon" style="color: #3B82F6;">⚛️</div>
+                    <h3>Physics</h3>
+                </div>
+                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <div class="card-icon" style="color: #10B981;">🧪</div>
+                    <h3>Chemistry</h3>
+                </div>
+                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <div class="card-icon" style="color: #8B5CF6;">📐</div>
+                    <h3>Mathematics</h3>
+                </div>
+                <div class="quiz-card" style="align-items: center; text-align: center;">
+                    <div class="card-icon" style="color: #14B8A6;">🧬</div>
+                    <h3>Biology</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script type="module">
+        import { auth, onAuthStateChanged } from "./js/firebase.js";
+        // Force Login
+        onAuthStateChanged(auth, (user) => {
+            if (!user) window.location.href = "login.html?redirect=explore-quizzes.html";
+        });
+    </script>
+</body>
+</html>
