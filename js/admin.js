@@ -1,6 +1,5 @@
 import { uploadImage } from "./cloudinary.js";
 import { getQuestions, auth, onAuthStateChanged, signOut, db } from "./firebase.js";
-// Added missing query and orderBy to ensure the Feedback and Comments functions do not crash the script
 import { collection, addDoc, getDocs, deleteDoc, doc, getDoc, updateDoc, writeBatch, query, orderBy } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // --- AUTHENTICATION CHECK ---
@@ -136,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================
-   CLOUDINARY IMAGE UPLOAD BINDINGS
+   HYBRID CLOUDINARY IMAGE UPLOAD BINDINGS
 =========================================== */
 function setupCloudinaryUploaders() {
     const uploadMappings = [
@@ -151,23 +150,45 @@ function setupCloudinaryUploaders() {
     uploadMappings.forEach(mapping => {
         const btn = document.getElementById(mapping.btnId);
         const input = document.getElementById(mapping.inputId);
+        
         if (btn && input) {
-            btn.addEventListener("click", async () => {
+            btn.addEventListener("click", () => {
                 btn.textContent = "Uploading...";
                 btn.disabled = true;
+                
                 try {
-                    const url = await uploadImage();
-                    if (url) {
-                        input.value = url;
-                        btn.textContent = "Uploaded ✓";
-                    } else {
-                        btn.textContent = "Upload Image";
+                    // Try to execute uploadImage. Pass a callback function just in case cloudinary.js expects it.
+                    const result = uploadImage((url) => {
+                        if (url) {
+                            input.value = url;
+                            btn.textContent = "Uploaded ✓";
+                        } else {
+                            btn.textContent = "Upload Image";
+                        }
+                        btn.disabled = false;
+                    });
+
+                    // If cloudinary.js uses Modern Promises instead of Callbacks, intercept it here.
+                    if (result instanceof Promise) {
+                        result.then(url => {
+                            if (url) {
+                                input.value = url;
+                                btn.textContent = "Uploaded ✓";
+                            } else {
+                                btn.textContent = "Upload Image";
+                            }
+                            btn.disabled = false;
+                        }).catch(err => {
+                            console.error(err);
+                            alert("Image upload failed.");
+                            btn.textContent = "Upload Image";
+                            btn.disabled = false;
+                        });
                     }
                 } catch (err) {
-                    console.error(err);
+                    console.error("Upload error:", err);
                     alert("Image upload failed.");
                     btn.textContent = "Upload Image";
-                } finally {
                     btn.disabled = false;
                 }
             });
@@ -310,7 +331,7 @@ const questionForm = document.getElementById("questionForm");
 
 let editingDocId = null;
 let isEditing = false;
-window.manageQuestionsList = []; // Global for filtering
+window.manageQuestionsList = []; 
 
 function extractVideoId(url) {
     if (!url || url.trim() === "") return "";
