@@ -109,9 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const manageYearFilter = document.getElementById("manageYearFilter");
     const manageSubjectFilter = document.getElementById("manageSubjectFilter");
     const manageChapterFilter = document.getElementById("manageChapterFilter");
+    const manageSearchFilter = document.getElementById("manageSearchFilter");
 
     if (manageExamFilter) manageExamFilter.addEventListener("change", window.renderManageQuestions);
     if (manageYearFilter) manageYearFilter.addEventListener("change", window.renderManageQuestions);
+    if (manageSearchFilter) manageSearchFilter.addEventListener("input", window.renderManageQuestions); // Bind search
+    
     if (manageSubjectFilter) {
         manageSubjectFilter.addEventListener("change", () => {
             const sub = manageSubjectFilter.value;
@@ -158,7 +161,6 @@ function setupCloudinaryUploaders() {
                 btn.textContent = "Processing...";
                 
                 try {
-                    // Await the response from your cloudinary.js file
                     const url = await uploadImage();
                     
                     if (url && typeof url === 'string') {
@@ -168,7 +170,6 @@ function setupCloudinaryUploaders() {
                         btn.style.borderColor = "rgba(16, 185, 129, 0.4)";
                         btn.style.background = "rgba(16, 185, 129, 0.1)";
                     } else {
-                        // Resets if user closes the widget without uploading
                         btn.textContent = originalText;
                     }
                 } catch (err) {
@@ -405,6 +406,7 @@ window.renderManageQuestions = function() {
     const manageYearFilter = document.getElementById("manageYearFilter");
     const manageSubjectFilter = document.getElementById("manageSubjectFilter");
     const manageChapterFilter = document.getElementById("manageChapterFilter");
+    const manageSearchFilter = document.getElementById("manageSearchFilter");
 
     if(!tbody || !manageExamFilter) return;
 
@@ -412,12 +414,24 @@ window.renderManageQuestions = function() {
     const yr = manageYearFilter.value;
     const sub = manageSubjectFilter.value;
     const ch = manageChapterFilter.value;
+    const term = manageSearchFilter ? manageSearchFilter.value.toLowerCase().trim() : "";
 
     const filtered = window.manageQuestionsList.filter(q => {
+        // Dropdown Filters
         if (ex !== "All" && q.exam !== ex) return false;
         if (yr !== "All" && String(q.year) !== String(yr)) return false;
         if (sub !== "All" && q.subject !== sub) return false;
         if (ch !== "All" && q.chapter !== ch) return false;
+        
+        // Search Keyword Filter
+        if (term) {
+            const qText = String(q.question || "").toLowerCase();
+            const qChap = String(q.chapter || "").toLowerCase();
+            if (!qText.includes(term) && !qChap.includes(term)) {
+                return false;
+            }
+        }
+        
         return true;
     });
 
