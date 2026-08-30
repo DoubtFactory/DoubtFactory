@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================
-   HYBRID CLOUDINARY IMAGE UPLOAD BINDINGS
+   CLEAN CLOUDINARY UPLOADER BINDINGS
 =========================================== */
 function setupCloudinaryUploaders() {
     const uploadMappings = [
@@ -152,44 +152,29 @@ function setupCloudinaryUploaders() {
         const input = document.getElementById(mapping.inputId);
         
         if (btn && input) {
-            btn.addEventListener("click", () => {
-                btn.textContent = "Uploading...";
-                btn.disabled = true;
+            btn.addEventListener("click", async (e) => {
+                e.preventDefault();
+                const originalText = btn.textContent;
+                btn.textContent = "Processing...";
                 
                 try {
-                    // Try to execute uploadImage. Pass a callback function just in case cloudinary.js expects it.
-                    const result = uploadImage((url) => {
-                        if (url) {
-                            input.value = url;
-                            btn.textContent = "Uploaded ✓";
-                        } else {
-                            btn.textContent = "Upload Image";
-                        }
-                        btn.disabled = false;
-                    });
-
-                    // If cloudinary.js uses Modern Promises instead of Callbacks, intercept it here.
-                    if (result instanceof Promise) {
-                        result.then(url => {
-                            if (url) {
-                                input.value = url;
-                                btn.textContent = "Uploaded ✓";
-                            } else {
-                                btn.textContent = "Upload Image";
-                            }
-                            btn.disabled = false;
-                        }).catch(err => {
-                            console.error(err);
-                            alert("Image upload failed.");
-                            btn.textContent = "Upload Image";
-                            btn.disabled = false;
-                        });
+                    // Await the response from your cloudinary.js file
+                    const url = await uploadImage();
+                    
+                    if (url && typeof url === 'string') {
+                        input.value = url;
+                        btn.textContent = "Uploaded ✓";
+                        btn.style.color = "#10B981"; 
+                        btn.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                        btn.style.background = "rgba(16, 185, 129, 0.1)";
+                    } else {
+                        // Resets if user closes the widget without uploading
+                        btn.textContent = originalText;
                     }
                 } catch (err) {
-                    console.error("Upload error:", err);
-                    alert("Image upload failed.");
-                    btn.textContent = "Upload Image";
-                    btn.disabled = false;
+                    console.error("Cloudinary Error:", err);
+                    btn.textContent = "Error";
+                    setTimeout(() => { btn.textContent = originalText; }, 2000);
                 }
             });
         }
