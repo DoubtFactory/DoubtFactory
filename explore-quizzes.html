@@ -39,14 +39,35 @@
 </head>
 <body id="home-body">
 
-    <!-- UNIVERSAL HEADER (With updated icons & Mock Tests/Quizzes text) -->
+        <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
     <header class="site-header">
         <a href="index.html" class="logo">
             <h2>Doubt Factory</h2>
             <p>Turning Doubts into Clarity</p>
         </a>
+
+        <!-- Hamburger Icon -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Sidebar Navigation -->
         <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
             <a href="index.html">Home</a>
+            
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Exams ▾</a>
                 <div class="drop-menu">
@@ -55,25 +76,33 @@
                     <a href="exam.html?type=NEET">⚕️ NEET</a>
                 </div>
             </div>
+
             <div class="nav-item-dropdown">
                 <a tabindex="0" class="drop-trigger">Subjects ▾</a>
                 <div class="drop-menu">
                     <a href="chapter.html?subject=Physics">⚛️ Physics</a>
                     <a href="chapter.html?subject=Maths">📐 Maths</a>
+                    
                     <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧪 Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
+                    
                     <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧬 Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">🌿 Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">🦁 Zoology</a>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">🌿 Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">🦁 Zoology</a>
                 </div>
             </div>
-            <a href="explore-quizzes.html" style="color: #F97316;">Mock Tests/Quizzes</a>
+
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="explore-quizzes.html">Quizzes</a>
             <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
             <a href="quiz-results.html">My Progress</a>
+            <a href="contact.html">Contact Us</a>
         </nav>
     </header>
+
 
     <main>
         <div class="quiz-hero">
