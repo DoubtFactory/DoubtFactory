@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Test | Doubt Factory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body { background: var(--bg-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        .mock-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--bg-card); border-bottom: 1px solid var(--border-color); }
+        .timer-box { font-size: 20px; font-weight: 700; font-family: monospace; color: #EF4444; background: rgba(239, 68, 68, 0.1); padding: 5px 15px; border-radius: 6px; }
+
+        .subject-tabs { display: flex; background: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 0 20px; }
+        .tab-btn { padding: 15px 25px; border: none; background: transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+        .mock-layout { display: grid; grid-template-columns: 1fr 300px; flex-grow: 1; overflow: hidden; }
+        
+        .question-area { padding: 30px; overflow-y: auto; }
+        .q-text { font-size: 18px; color: var(--text-primary); margin-bottom: 25px; line-height: 1.6; }
+        
+        .options-list { display: flex; flex-direction: column; gap: 10px; }
+        .opt-row { display: flex; align-items: center; gap: 15px; background: var(--bg-card); padding: 15px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; }
+        .opt-row.selected { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); }
+        
+        .palette-area { background: var(--bg-card); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 20px; overflow-y: auto; flex-grow: 1; }
+        .p-btn { aspect-ratio: 1; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); cursor: pointer; font-weight: bold; }
+        .p-btn.answered { background: #10B981; color: white; border-color: #10B981; }
+        .p-btn.current { border: 2px solid white; box-shadow: 0 0 0 2px var(--accent-blue); }
+
+        .action-bar { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; flex-direction: column; }
+        .btn-main { padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-submit { background: #F97316; }
+    </style>
+</head>
+<body>
+
+    <header class="mock-header">
+        <h2 style="margin: 0; font-size: 18px; color: var(--text-primary);" id="examNameTitle">Loading Test...</h2>
+        <div class="timer-box" id="timer">03:00:00</div>
+    </header>
+
+    <div class="subject-tabs" id="tabsContainer">
+        <!-- Tabs injected by JS -->
+    </div>
+
+    <div class="mock-layout">
+        <div class="question-area">
+            <h3 style="color: var(--text-secondary); font-size: 14px; margin-top: 0;" id="qNumHeader">Question 1</h3>
+            <div class="q-text" id="qText">Loading...</div>
+            <div class="options-list" id="optionsContainer"></div>
+        </div>
+
+        <div class="palette-area">
+            <div class="palette-grid" id="paletteGrid"></div>
+            <div class="action-bar">
+                <button class="btn-main" style="background: var(--bg-main); color: var(--text-primary); border: 1px solid var(--border-color);" id="btnClear">Clear Selection</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-main" style="flex:1;" id="btnPrev">Previous</button>
+                    <button class="btn-main" style="flex:1;" id="btnNext">Save & Next</button>
+                </div>
+                <button class="btn-main btn-submit" id="btnSubmit">Submit Final Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, onAuthStateChanged, db } from "./js/firebase.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentUser = null;
+            let timerSeconds = 3 * 60 * 60; // 3 Hours
+            let activeSubject = 'Physics';
+            let currentIndices = { Physics: 0, Chemistry: 0, Maths: 0 };
+            let userAnswers = { Physics: {}, Chemistry: {}, Maths: {} };
+            
+            // Dummy Mock Data (Replace with Firebase fetch in production)
+            const mockData = {
+                Physics: Array.from({length: 25}, (_, i) => ({ text: `Physics Question ${i+1}: What is the formula for Force?`, correct: 'A', opts: {A: 'F=ma', B: 'F=mc^2', C: 'F=mv', D: 'F=mgh'} })),
+                Chemistry: Array.from({length: 25}, (_, i) => ({ text: `Chemistry Question ${i+1}: What is the atomic number of Carbon?`, correct: 'B', opts: {A: '12', B: '6', C: '14', D: '8'} })),
+                Maths: Array.from({length: 25}, (_, i) => ({ text: `Maths Question ${i+1}: Derivative of sin(x) is?`, correct: 'A', opts: {A: 'cos(x)', B: '-cos(x)', C: 'tan(x)', D: 'sec(x)'} }))
+            };
+
+            const subjects = Object.keys(mockData);
+
+            onAuthStateChanged(auth, (user) => {
+                if (!user) { window.location.href = "login.html"; return; }
+                currentUser = user;
+                document.getElementById('examNameTitle').textContent = "JEE Main Full Syllabus Mock";
+                initTabs();
+                renderUI();
+                startTimer();
+            });
+
+            function initTabs() {
+                const tabsContainer = document.getElementById('tabsContainer');
+                tabsContainer.innerHTML = subjects.map(sub => 
+                    `<button class="tab-btn ${sub === activeSubject ? 'active' : ''}" data-sub="${sub}">${sub}</button>`
+                ).join('');
+                
+                tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.onclick = (e) => {
+                        activeSubject = e.target.dataset.sub;
+                        initTabs();
+                        renderUI();
+                    };
+                });
+            }
+
+            function renderUI() {
+                const idx = currentIndices[activeSubject];
+                const q = mockData[activeSubject][idx];
+                
+                document.getElementById('qNumHeader').textContent = `${activeSubject} - Question ${idx + 1}`;
+                document.getElementById('qText').textContent = q.text;
+
+                const optsContainer = document.getElementById('optionsContainer');
+                optsContainer.innerHTML = Object.entries(q.opts).map(([key, val]) => `
+                    <div class="opt-row ${userAnswers[activeSubject][idx] === key ? 'selected' : ''}" data-key="${key}">
+                        <div style="font-weight:bold; width:24px;">${key}.</div> <div>${val}</div>
+                    </div>
+                `).join('');
+
+                optsContainer.querySelectorAll('.opt-row').forEach(row => {
+                    row.onclick = () => {
+                        userAnswers[activeSubject][idx] = row.dataset.key;
+                        renderUI();
+                    };
+                });
+
+                renderPalette();
+            }
+
+            function renderPalette() {
+                const grid = document.getElementById('paletteGrid');
+                grid.innerHTML = mockData[activeSubject].map((_, i) => `
+                    <button class="p-btn ${userAnswers[activeSubject][i] ? 'answered' : ''} ${currentIndices[activeSubject] === i ? 'current' : ''}">
+                        ${i + 1}
+                    </button>
+                `).join('');
+
+                grid.querySelectorAll('.p-btn').forEach((btn, i) => {
+                    btn.onclick = () => { currentIndices[activeSubject] = i; renderUI(); };
+                });
+            }
+
+            // Navigation Buttons
+            document.getElementById('btnNext').onclick = () => {
+                if (currentIndices[activeSubject] < mockData[activeSubject].length - 1) {
+                    currentIndices[activeSubject]++;
+                    renderUI();
+                }
+            };
+            document.getElementById('btnPrev').onclick = () => {
+                if (currentIndices[activeSubject] > 0) {
+                    currentIndices[activeSubject]--;
+                    renderUI();
+                }
+            };
+            document.getElementById('btnClear').onclick = () => {
+                delete userAnswers[activeSubject][currentIndices[activeSubject]];
+                renderUI();
+            };
+
+            document.getElementById('btnSubmit').onclick = async () => {
+                if(confirm("Submit final mock test? You cannot change answers after this.")) {
+                    await calculateAndSubmit();
+                }
+            };
+
+            function startTimer() {
+                setInterval(() => {
+                    if (timerSeconds <= 0) return calculateAndSubmit();
+                    timerSeconds--;
+                    const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+                    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+                    const s = String(timerSeconds % 60).padStart(2, '0');
+                    document.getElementById('timer').textContent = `${h}:${m}:${s}`;
+                }, 1000);
+            }
+
+            async function calculateAndSubmit() {
+                document.getElementById('btnSubmit').textContent = "Submitting...";
+                document.getElementById('btnSubmit').disabled = true;
+
+                let scores = { Physics: 0, Chemistry: 0, Maths: 0 };
+                
+                subjects.forEach(sub => {
+                    mockData[sub].forEach((q, i) => {
+                        if (userAnswers[sub][i] === q.correct) scores[sub] += 4;
+                        else if (userAnswers[sub][i]) scores[sub] -= 1;
+                    });
+                });
+
+                const totalScore = scores.Physics + scores.Chemistry + scores.Maths;
+
+                const attemptData = {
+                    userId: currentUser.uid,
+                    testName: "JEE Main Full Syllabus",
+                    score: totalScore,
+                    totalScore: 300,
+                    physicsMarks: scores.Physics,
+                    chemistryMarks: scores.Chemistry,
+                    mathsMarks: scores.Maths,
+                    timeTaken: 180 - Math.floor(timerSeconds / 60), // minutes
+                    timestamp: Date.now()
+                };
+
+                try {
+                    await addDoc(collection(db, "mock_attempts"), attemptData);
+                    window.location.href = "mock-results.html";
+                } catch (error) {
+                    console.error(error);
+                    alert("Error submitting. Please check connection.");
+                    document.getElementById('btnSubmit').textContent = "Submit Final Test";
+                    document.getElementById('btnSubmit').disabled = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
