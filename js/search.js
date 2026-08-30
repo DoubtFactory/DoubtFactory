@@ -1,213 +1,149 @@
 import { getQuestions } from "./firebase.js";
 
-const searchBox = document.getElementById("searchBox");
-const results = document.getElementById("searchResults");
-const suggestions = document.getElementById("suggestions");
-const searchMeta = document.getElementById("searchMeta");
-const searchButton = document.getElementById("searchButton");
-const filterChips = document.querySelectorAll(".chip");
-const subjectFilter = document.getElementById("subjectFilter");
-const difficultyFilter = document.getElementById("difficultyFilter");
+document.addEventListener("DOMContentLoaded", async () => {
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const examFilter = document.getElementById("examFilter");
+    const subjectFilter = document.getElementById("subjectFilter");
+    const diffFilter = document.getElementById("diffFilter");
+    const resultsContainer = document.getElementById("searchResultsContainer");
+    const resultsInfo = document.getElementById("resultsInfo");
 
-let questions = [];
-let activeFilter = "All";
-let activeSuggestionIndex = -1;
-let debounceTimer = null;
-const params = new URLSearchParams(window.location.search);
-const initialQuery = params.get("q") || "";
-const initialSubject = params.get("subject") || "";
+    let allQuestions = [];
 
-async function load() {
-    if (!results) return;
-
-    results.innerHTML = '<div class="empty-state loading">Loading questions…</div>';
-
-    questions = await getQuestions();
-
-    if (searchBox && initialQuery) {
-        searchBox.value = initialQuery;
+    // Fetch questions on load
+    try {
+        allQuestions = await getQuestions();
+        populateSubjects();
+    } catch (err) {
+        console.error("Failed to load questions for search:", err);
+        resultsContainer.innerHTML = `<p style="color: #ef4444; text-align: center;">Failed to connect to the database. Please try again.</p>`;
     }
 
-    // Automatically apply the subject from the URL to the dropdown filter
-    if (subjectFilter && initialSubject) {
-        for (let i = 0; i < subjectFilter.options.length; i++) {
-            if (subjectFilter.options[i].value.toLowerCase() === initialSubject.toLowerCase()) {
-                subjectFilter.selectedIndex = i;
-                break;
-            }
-        }
-    }
-
-    renderResults();
-}
-
-function normalizeText(value) {
-    return (value || "").toLowerCase().trim();
-}
-
-function getFilteredQuestions(keyword) {
-    const term = normalizeText(keyword);
-    
-    const activeSubject = subjectFilter ? subjectFilter.value.toLowerCase() : "";
-    const activeDifficulty = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
-
-    return questions.filter(q => {
-        const question = normalizeText(q.question);
-        const chapter = normalizeText(q.chapter);
-        const subject = normalizeText(q.subject);
-        const exam = normalizeText(q.exam);
-        const difficulty = normalizeText(q.difficulty);
-
-        const matchesExam = activeFilter === "All" || exam === activeFilter.toLowerCase();
-        
-        // Support matching exact subjects or falling back to "All" options
-        const matchesSubject = !activeSubject || activeSubject.includes("all") || subject === activeSubject;
-        const matchesDifficulty = !activeDifficulty || activeDifficulty.includes("any") || activeDifficulty.includes("all") || difficulty === activeDifficulty;
-
-        if (!matchesExam || !matchesSubject || !matchesDifficulty) return false;
-        
-        if (!term) return true;
-
-        return question.includes(term) || chapter.includes(term) || subject.includes(term) || exam.includes(term) || difficulty.includes(term);
-    });
-}
-
-function renderSuggestions(keyword) {
-    const term = normalizeText(keyword);
-    suggestions.innerHTML = "";
-
-    if (!term) {
-        suggestions.style.display = "none";
-        return;
-    }
-
-    const suggestionItems = questions
-        .filter(q => `${q.question} ${q.chapter} ${q.subject} ${q.exam}`.toLowerCase().includes(term))
-        .slice(0, 5)
-        .map(q => ({
-            label: q.chapter || q.subject || q.exam,
-            value: q.question
-        }));
-
-    if (!suggestionItems.length) {
-        suggestions.style.display = "none";
-        return;
-    }
-
-    suggestions.style.display = "block";
-    const fragment = document.createDocumentFragment();
-
-    suggestionItems.forEach((item, index) => {
-        const button = document.createElement("button");
-        button.className = "suggestion-item";
-        button.dataset.index = index;
-        button.innerHTML = `<strong>${highlightMatch(item.label, term)}</strong><span>${highlightMatch(item.value, term)}</span>`;
-        button.addEventListener("click", () => {
-            if (searchBox) {
-                searchBox.value = button.querySelector("span").textContent;
-            }
-            suggestions.style.display = "none";
-            renderResults();
+    // Populate Dynamic Subjects from DB
+    function populateSubjects() {
+        const subjects = [...new Set(allQuestions.map(q => q.subject).filter(Boolean))].sort();
+        subjectFilter.innerHTML = '<option value="All">All Subjects</option>';
+        subjects.forEach(sub => {
+            const opt = document.createElement("option");
+            opt.value = sub;
+            opt.textContent = sub;
+            subjectFilter.appendChild(opt);
         });
-        fragment.appendChild(button);
-    });
-
-    suggestions.appendChild(fragment);
-}
-
-function highlightMatch(text, term) {
-    if (!term) return text;
-    const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escapedTerm})`, "gi");
-    return text.replace(regex, "<mark>$1</mark>");
-}
-
-function renderResults() {
-    const keyword = searchBox ? searchBox.value : "";
-    const filtered = getFilteredQuestions(keyword);
-    results.innerHTML = "";
-    searchMeta.innerHTML = "";
-
-    const activeSub = subjectFilter ? subjectFilter.value.toLowerCase() : "";
-    const activeDiff = difficultyFilter ? difficultyFilter.value.toLowerCase() : "";
-    
-    // Check if any filters (chips or dropdowns) are actively applied
-    const hasActiveFilters = activeFilter !== "All" || 
-                             (activeSub && !activeSub.includes("all")) || 
-                             (activeDiff && !activeDiff.includes("any") && !activeDiff.includes("all"));
-
-    // Only show the empty setup state if there is NO text typed AND NO filters are applied
-    if (!keyword.trim() && !hasActiveFilters) {
-        searchMeta.innerHTML = '<p class="meta-text">Start typing to search questions by chapter, subject, exam, or keyword.</p>';
-        results.innerHTML = '<div class="empty-state">Try searching for a topic like “Thermodynamics” or “JEE Main”.</div>';
-        return;
     }
 
-    if (!filtered.length) {
-        results.innerHTML = '<div class="empty-state">No questions matched your search. Try a different keyword or filter.</div>';
-        return;
+    // Highlighting Helper Function for Dark Theme
+    function highlightText(text, term) {
+        if (!term) return text;
+        const safeText = String(text || "").replace(/<[^>]*>?/gm, ''); // Strip existing HTML
+        
+        // Escape regex characters in the search term
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedTerm})`, "gi");
+        
+        // Replace with the dark-theme highlight class
+        return safeText.replace(regex, `<span class="search-highlight">$1</span>`);
     }
 
-    const resultLabel = keyword.trim() ? `for “${keyword}”` : "matching your filters";
-    searchMeta.innerHTML = `<p class="meta-text">Showing ${filtered.length} result${filtered.length > 1 ? 's' : ''} ${resultLabel}</p>`;
+    // Core Render Function
+    function renderResults() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedExam = examFilter.value;
+        const selectedSubject = subjectFilter.value;
+        const selectedDiff = diffFilter.value;
 
-    const fragment = document.createDocumentFragment();
+        // If completely empty search and no filters, don't show all 1000s of questions. Just clear.
+        if (!searchTerm && selectedExam === "All" && selectedSubject === "All" && selectedDiff === "All") {
+            resultsInfo.textContent = "";
+            resultsContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg);">
+                    <p style="color: var(--text-secondary); margin: 0; font-size: 16px;">Type a keyword or select filters above to start searching.</p>
+                </div>
+            `;
+            return;
+        }
 
-    filtered.forEach(q => {
-        const excerpt = (q.question || "").length > 180 ? `${q.question.slice(0, 180)}...` : q.question;
-        const card = document.createElement("div");
-        card.className = "search-result-card";
-        card.innerHTML = `
-            <div class="result-top">
-                <span class="result-tag">${q.exam || "Exam"}</span>
-                <span class="result-tag alt">${q.chapter || "Chapter"}</span>
-            </div>
-            <h3>${highlightMatch(q.chapter || q.subject || "Question", normalizeText(keyword))}</h3>
-            <p>${highlightMatch(excerpt, normalizeText(keyword))}</p>
-            <div class="result-meta">
-                <span>${q.subject || "Subject"}</span>
-                <span>${q.difficulty || "Medium"}</span>
-            </div>
-            <a href="question.html?id=${q.docId || q.id}&subject=${encodeURIComponent(q.subject || 'General')}&chapter=${encodeURIComponent(q.chapter || '')}">Solve Question →</a>
-        `;
-        fragment.appendChild(card);
+        const filtered = allQuestions.filter(q => {
+            let match = true;
+            
+            // Filter by Exam
+            if (selectedExam !== "All" && q.exam !== selectedExam) match = false;
+            
+            // Filter by Subject
+            if (selectedSubject !== "All" && q.subject !== selectedSubject) match = false;
+            
+            // Filter by Difficulty
+            if (selectedDiff !== "All" && q.difficulty !== selectedDiff) match = false;
+            
+            // Filter by Keyword (checks Question, Chapter, and Options)
+            if (searchTerm) {
+                const qText = String(q.question || "").toLowerCase();
+                const qChap = String(q.chapter || "").toLowerCase();
+                const qOpts = q.options ? q.options.join(" ").toLowerCase() : "";
+                
+                if (!qText.includes(searchTerm) && !qChap.includes(searchTerm) && !qOpts.includes(searchTerm)) {
+                    match = false;
+                }
+            }
+
+            return match;
+        });
+
+        // Update count text
+        if (searchTerm) {
+            resultsInfo.textContent = `Showing ${filtered.length} result${filtered.length === 1 ? '' : 's'} for "${searchTerm}"`;
+        } else {
+            resultsInfo.textContent = `Showing ${filtered.length} filtered result${filtered.length === 1 ? '' : 's'}`;
+        }
+
+        if (filtered.length === 0) {
+            resultsContainer.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                    <h3 style="color: var(--text-primary); margin-bottom: 8px;">No matches found</h3>
+                    <p style="color: var(--text-secondary); margin: 0;">Try using different keywords or loosening your filters.</p>
+                </div>`;
+            return;
+        }
+
+        // Render as standard Dark Theme Cards
+        resultsContainer.innerHTML = filtered.map(q => {
+            const diff = String(q.difficulty || "Medium");
+            const diffClass = diff.toLowerCase() === "easy" ? "badge-easy" : (diff.toLowerCase() === "hard" ? "badge-hard" : "badge-medium");
+            
+            // Generate a snippet with highlights
+            const rawSnippet = String(q.question || "").replace(/<[^>]*>?/gm, '').substring(0, 180);
+            const finalSnippet = highlightText(rawSnippet + (String(q.question).length > 180 ? "..." : ""), searchTerm);
+
+            // Highlight chapter name if it matches
+            const highlightedChapter = highlightText(q.chapter || "Chapter", searchTerm);
+
+            return `
+                <div class="exam-q-card">
+                    <div class="exam-badges">
+                        <span class="badge badge-exam">${q.exam || "Exam"}</span>
+                        <span class="badge badge-year">${q.year || "Year"}</span>
+                        <span class="badge badge-subject">${q.subject || "Subject"}</span>
+                        <span class="badge badge-chapter" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${highlightedChapter}</span>
+                        <span class="badge ${diffClass}">${diff}</span>
+                    </div>
+                    <div class="exam-q-text">${finalSnippet}</div>
+                    <a href="question.html?id=${q.docId || q.id}" class="solve-btn-link">Solve Question →</a>
+                </div>
+            `;
+        }).join("");
+    }
+
+    // Event Listeners (Triggers render when typing, clicking, or changing filters)
+    searchInput.addEventListener("keyup", (e) => {
+        // Trigger live search on every keystroke
+        renderResults();
     });
 
-    results.appendChild(fragment);
-}
-
-function debounceSearch() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        renderResults();
-        renderSuggestions(searchBox.value);
-    }, 250);
-}
-
-if (searchBox) {
-    searchBox.addEventListener("input", debounceSearch);
-}
-
-if (searchButton) {
-    searchButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        renderResults();
-        renderSuggestions(searchBox.value);
-    });
-}
-
-filterChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-        filterChips.forEach(btn => btn.classList.remove("active"));
-        chip.classList.add("active");
-        activeFilter = chip.dataset.filter;
-        renderResults();
-    });
-});
-if (subjectFilter) {
+    searchBtn.addEventListener("click", renderResults);
+    examFilter.addEventListener("change", renderResults);
     subjectFilter.addEventListener("change", renderResults);
-}
-if (difficultyFilter) {
-    difficultyFilter.addEventListener("change", renderResults);
-}
-load();
+    diffFilter.addEventListener("change", renderResults);
+
+    // Initial Empty State Call
+    renderResults();
+});
