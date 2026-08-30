@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Search Questions | Doubt Factory</title>
-    <meta name="description" content="Search questions quickly by topic, chapter, exam, or keyword across Physics, Chemistry, Maths, and Biology on Doubt Factory.">
-    <meta name="robots" content="index,follow">
-    <link rel="canonical" href="search.html">
+    <meta name="description" content="Search the Doubt Factory database for JEE and NEET previous year questions by keyword, topic, or chapter.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,130 +26,111 @@
         /* =========================================
            SEARCH PAGE DARK THEME OVERRIDES
            ========================================= */
-        .search-shell {
-            max-width: 1000px;
-            margin-top: 40px;
-            min-height: 60vh;
-        }
+        .search-header-banner { text-align: center; padding: 40px 20px 25px; }
+        .search-header-banner h1 { font-size: 32px; font-weight: 800; margin-bottom: 10px; color: var(--text-primary); letter-spacing: -0.5px; }
+        .search-header-banner p { color: var(--text-secondary); font-size: 15px; max-width: 600px; margin: 0 auto; }
 
-        .search-hero {
-            text-align: center;
+        .search-controls {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
             margin-bottom: 30px;
-        }
-        .search-hero h2 {
-            color: var(--text-primary);
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 10px;
-        }
-        .search-hero p {
-            color: var(--text-secondary);
-            font-size: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .search-input-wrap {
+        .search-input-group {
             display: flex;
             gap: 10px;
-            max-width: 800px;
-            margin: 0 auto 20px;
+            margin-bottom: 20px;
         }
-        .search-input-wrap input {
+        .search-input-group input {
             flex: 1;
-            background: var(--bg-card) !important;
-            border: 1px solid var(--border-color) !important;
-            color: var(--text-primary) !important;
-            padding: 16px 20px;
+            padding: 14px 16px;
             border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-primary);
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
         }
-        .search-input-wrap input:focus {
-            border-color: var(--accent-blue) !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
-        }
-        .search-input-wrap button {
-            background: var(--accent-blue) !important;
-            color: white !important;
+        .search-input-group input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        .search-input-group button {
+            background: var(--accent-blue);
+            color: white;
             border: none;
             padding: 0 24px;
             border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .search-input-wrap button:hover {
-            background: #2563EB !important;
-        }
-        @media (max-width: 600px) {
-            .search-input-wrap { flex-direction: column; }
-            .search-input-wrap button { padding: 16px 24px; }
-        }
-
-        .search-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .search-filters .chip {
-            background: var(--bg-card-hover);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .search-filters .chip:hover {
-            background: var(--border-color);
-            color: var(--text-primary);
-        }
-        .search-filters .chip.active {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent-blue);
-            border-color: var(--accent-blue);
-        }
+        .search-input-group button:hover { background: #2563EB; }
 
-        .search-dropdowns {
-            display: flex;
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
         }
-        .search-dropdowns select {
-            padding: 12px 16px;
+        .filter-field { display: flex; flex-direction: column; gap: 8px; }
+        .filter-field label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .filter-field select {
+            padding: 12px 14px;
             border-radius: var(--radius-md);
-            border: 1px solid var(--border-color) !important;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-primary);
             font-size: 14px;
-            background: var(--bg-card) !important;
-            color: var(--text-primary) !important;
-            min-width: 180px;
             outline: none;
-            font-weight: 500;
             cursor: pointer;
         }
-        .search-dropdowns select:focus {
-            border-color: var(--accent-blue) !important;
+        .filter-field select:focus { border-color: var(--accent-blue); }
+
+        /* Question Card & Badges */
+        .exam-q-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .exam-q-card:hover { transform: translateY(-2px); border-color: rgba(59, 130, 246, 0.4); }
+        
+        .exam-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        
+        .badge { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; }
+        .badge-exam { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-year { background: rgba(139, 92, 246, 0.15); color: #A78BFA; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .badge-subject { background: rgba(148, 163, 184, 0.12); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .badge-chapter { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .badge-easy { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-medium { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-hard { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+        
+        .exam-q-text { color: var(--text-primary); font-size: 16px; line-height: 1.6; margin-bottom: 18px; font-weight: 500; }
+        
+        /* Dark Theme Highlight for Search Terms */
+        .search-highlight {
+            background: rgba(250, 204, 21, 0.2);
+            color: #FDE047;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 700;
         }
 
-        .search-meta {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 500;
+        .solve-btn-link {
+            display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); font-weight: 700; font-size: 14px; text-decoration: none; transition: gap 0.2s ease;
         }
+        .solve-btn-link:hover { color: #60A5FA; gap: 10px; }
     </style>
 </head>
 <body id="home-body">
-    <a class="skip-link" href="#mainContent" style="position: absolute; left: -9999px;">Skip to main content</a>
 
     <!-- ==========================================
          UNIVERSAL HEADER & SIDEBAR 
@@ -209,7 +188,7 @@
             <a href="test-setup.html">Mock Tests</a>
             <a href="search.html" style="color: var(--accent-blue);">Search</a>
             <a href="bookmarks.html">Bookmarks</a>
-                <a href="contact.html">Contact Us</a> 
+            <a href="contact.html">Contact Us</a>
         </nav>
     </header>
 
@@ -259,66 +238,55 @@
     </script>
     <!-- ========================================== -->
 
-    <main id="mainContent" class="container search-shell">
+    <div class="search-header-banner">
+        <h1>Search Questions</h1>
+        <p>Find the right question quickly by topic, chapter, exam, or keyword.</p>
+    </div>
 
-        <div class="search-hero">
-            <h2>Search Questions</h2>
-            <p>Find the right question quickly by topic, chapter, exam, or keyword.</p>
+    <main class="container" style="max-width: 1000px; min-height: 60vh; padding-bottom: 60px;">
+        
+        <div class="search-controls">
+            <div class="search-input-group">
+                <input type="text" id="searchInput" placeholder="Search for a concept, chemical, or formula...">
+                <button id="searchBtn">Search</button>
+            </div>
+
+            <div class="filter-grid">
+                <div class="filter-field">
+                    <label for="examFilter">Exam</label>
+                    <select id="examFilter">
+                        <option value="All">All Exams</option>
+                        <option value="JEE Main">JEE Main</option>
+                        <option value="JEE Advanced">JEE Advanced</option>
+                        <option value="NEET">NEET</option>
+                    </select>
+                </div>
+                <div class="filter-field">
+                    <label for="subjectFilter">Subject</label>
+                    <select id="subjectFilter">
+                        <option value="All">All Subjects</option>
+                    </select>
+                </div>
+                <div class="filter-field">
+                    <label for="diffFilter">Difficulty</label>
+                    <select id="diffFilter">
+                        <option value="All">Any Difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-        <form class="search-input-wrap" role="search">
-            <label class="sr-only" for="searchBox">Search questions</label>
-            <input
-                type="text"
-                id="searchBox"
-                placeholder="Search Physics, Chemistry, Maths, Biology..."
-                autocomplete="off"
-                aria-label="Search questions"
-                aria-controls="searchResults"
-            >
-            <button type="submit" id="searchButton" aria-label="Search questions">Search</button>
-        </form>
-
-        <div class="search-suggestions" id="suggestions"></div>
-
-        <div class="search-filters" id="filterChips">
-            <button type="button" class="chip active" data-filter="All">All</button>
-            <button type="button" class="chip" data-filter="JEE Main">JEE Main</button>
-            <button type="button" class="chip" data-filter="JEE Advanced">JEE Advanced</button>
-            <button type="button" class="chip" data-filter="NEET">NEET</button>
+        <div id="resultsInfo" style="margin-bottom: 20px; color: var(--text-secondary); font-size: 15px; font-weight: 600;"></div>
+        
+        <div id="searchResultsContainer">
+            <!-- Results will be injected here as standard cards -->
         </div>
-
-        <!-- Dropdown Filters for Subject and Difficulty -->
-        <div class="search-dropdowns">
-            <select id="subjectFilter" aria-label="Filter by Subject">
-                <option value="">All Subjects</option>
-                <option value="Physics">Physics</option>
-                <optgroup label="Chemistry">
-                    <option value="Physical Chemistry">Physical Chemistry</option>
-                    <option value="Organic Chemistry">Organic Chemistry</option>
-                    <option value="Inorganic Chemistry">Inorganic Chemistry</option>
-                </optgroup>
-                <option value="Maths">Maths</option>
-                <optgroup label="Biology">
-                    <option value="Botany">Botany</option>
-                    <option value="Zoology">Zoology</option>
-                </optgroup>
-            </select>
-
-            <select id="difficultyFilter" aria-label="Filter by Difficulty">
-                <option value="">Any Difficulty</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-            </select>
-        </div>
-
-        <div class="search-meta" id="searchMeta" aria-live="polite"></div>
-        <div id="searchResults" aria-live="polite" style="display: flex; flex-direction: column; gap: 15px;"></div>
 
     </main>
 
-    <!-- JS Module -->
     <script type="module" src="js/search.js"></script>
 
 </body>
