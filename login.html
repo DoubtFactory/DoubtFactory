@@ -3,201 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Login | Doubt Factory</title>
-    <meta name="robots" content="noindex,nofollow"> 
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Login | Doubt Factory</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='46' font-weight='bold' fill='white'>DF</text></svg>">
-    
     <style>
-        .login-wrapper {
-            min-height: calc(100vh - 70px);
+        body {
+            background: var(--bg-main);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
             padding: 20px;
+            box-sizing: border-box;
         }
-
         .login-card {
-            width: 100%;
-            max-width: 420px;
             background: var(--bg-card);
-            padding: 40px 30px;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
-            border-top: 6px solid var(--accent-blue);
-        }
-
-        .login-card h1 {
-            text-align: center;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .login-card p {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            font-size: 15px;
-        }
-
-        .login-card input {
-            margin-bottom: 20px;
-        }
-
-        .login-card button {
+            border-radius: var(--radius-lg);
+            padding: 40px 30px;
             width: 100%;
-            margin-top: 10px;
-        }
-
-        #error {
-            color: #EF4444; 
-            margin-top: 15px;
+            max-width: 400px;
             text-align: center;
-            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .login-card h2 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .login-card p {
+            color: var(--text-secondary);
             font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            background: white;
+            color: #333;
+            border: none;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .google-btn:hover {
+            background: #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+        #loginError {
+            color: #EF4444;
+            font-size: 13px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
         }
     </style>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43GPM3CQJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-T43GPM3CQJ');
-    </script>
 </head>
+<body>
 
-<body id="home-body">
-
-    <!-- ==========================================
-         UNIVERSAL HEADER & SIDEBAR 
-         ========================================== -->
-    <header class="site-header">
-        <a href="index.html" class="logo">
-            <h2>Doubt Factory</h2>
-            <p>Turning Doubts into Clarity</p>
-        </a>
-
-        <!-- Hamburger Icon -->
-        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
+    <div class="login-card">
+        <h2>Welcome to Doubt Factory</h2>
+        <p>Sign in with your Google account to practice quizzes, save your progress, and track your analytics.</p>
+        
+        <button id="googleLoginBtn" class="google-btn">
+            <!-- Google "G" SVG Icon -->
+            <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
             </svg>
+            Sign in with Google
         </button>
 
-        <!-- Sidebar Navigation -->
-        <nav aria-label="Primary navigation" id="primaryNav">
-            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <a href="index.html">Home</a>
-            
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Exams ▾</a>
-                <div class="drop-menu">
-                    <a href="exam.html?type=JEE Main">JEE Main</a>
-                    <a href="exam.html?type=JEE Advanced">JEE Advanced</a>
-                    <a href="exam.html?type=NEET">NEET</a>
-                </div>
-            </div>
-
-            <div class="nav-item-dropdown">
-                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
-                <div class="drop-menu">
-                    <a href="chapter.html?subject=Physics">Physics</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Chemistry</span>
-                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px; font-size: 15px;">Physical Chemistry</a>
-                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Organic Chemistry</a>
-                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px; font-size: 15px;">Inorganic Chemistry</a>
-                    <a href="chapter.html?subject=Maths">Maths</a>
-                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">Biology</span>
-                    <a href="chapter.html?subject=Botany" style="padding-left: 24px; font-size: 15px;">Botany</a>
-                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px; font-size: 15px;">Zoology</a>
-                </div>
-            </div>
-
-            <a href="test-setup.html">Mock Tests</a>
-            <a href="search.html">Search</a>
-            <a href="bookmarks.html">Bookmarks</a>
-        </nav>
-    </header>
-
-    <!-- Sidebar Logic -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const closeMenuBtn = document.getElementById('closeMenuBtn');
-            const primaryNav = document.getElementById('primaryNav');
-            
-            if (!mobileMenuBtn || !primaryNav) return;
-
-            let overlay = document.querySelector('.menu-overlay');
-            if (!overlay) {
-                overlay = document.createElement('div');
-                overlay.className = 'menu-overlay';
-                document.body.appendChild(overlay);
-            }
-
-            function toggleMenu() {
-                const isOpen = primaryNav.classList.contains('open');
-                if (isOpen) {
-                    primaryNav.classList.remove('open');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                } else {
-                    primaryNav.classList.add('open');
-                    overlay.classList.add('active');
-                    document.body.style.overflow = 'hidden'; 
-                }
-            }
-
-            mobileMenuBtn.addEventListener('click', toggleMenu);
-            closeMenuBtn.addEventListener('click', toggleMenu);
-            overlay.addEventListener('click', toggleMenu);
-
-            document.querySelectorAll('.drop-trigger').forEach(trigger => {
-                const newTrigger = trigger.cloneNode(true);
-                trigger.parentNode.replaceChild(newTrigger, trigger);
-                newTrigger.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const dropMenu = this.nextElementSibling;
-                    dropMenu.classList.toggle('mobile-open');
-                });
-            });
-        });
-    </script>
-    <!-- ========================================== -->
-
-    <div class="login-wrapper">
-        <div class="login-card">
-            <h1>Doubt Factory</h1>
-            <p>Administrator Login</p>
-
-            <input id="email" type="email" placeholder="Email Address" required>
-            <input id="password" type="password" placeholder="Password" required>
-            
-            <button id="loginBtn" class="btn-primary">Secure Login</button>
-            <div id="error"></div>
-        </div>
+        <div id="loginError"></div>
     </div>
 
     <script type="module" src="js/login.js"></script>
-    <script type="module" src="js/theme.js"></script>
 </body>
 </html>
