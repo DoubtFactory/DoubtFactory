@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Doubt Factory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .profile-container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
+        
+        .user-header { display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .user-avatar { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-blue); background: var(--bg-main); display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--text-secondary); }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-info h1 { margin: 0 0 5px 0; color: var(--text-primary); font-size: 28px; font-weight: 800; }
+        .user-info p { margin: 0; color: var(--text-secondary); font-size: 15px; }
+
+        .pathway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        .pathway-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 30px; text-align: center;
+            transition: transform 0.2s, border-color 0.2s; text-decoration: none; display: block;
+        }
+        .pathway-card:hover { transform: translateY(-4px); }
+        .pathway-card.quiz-card:hover { border-color: #F97316; }
+        .pathway-card.mock-card:hover { border-color: #8B5CF6; }
+
+        .pathway-icon { width: 60px; height: 60px; margin: 0 auto 20px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+        .quiz-icon { background: rgba(249, 115, 22, 0.1); color: #F97316; }
+        .mock-icon { background: rgba(139, 92, 246, 0.1); color: #A78BFA; }
+
+        .pathway-card h2 { color: var(--text-primary); font-size: 22px; margin-bottom: 10px; }
+        .pathway-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.5; margin-bottom: 25px; }
+        
+        .pathway-btn { display: inline-block; padding: 12px 24px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; transition: all 0.2s; }
+        .btn-quiz { background: #F97316; color: white; }
+        .btn-mock { background: #8B5CF6; color: white; }
+        
+        .logout-btn { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-left: auto; transition: 0.2s; }
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.2); }
+    </style>
+</head>
+<body id="home-body">
+
+    <!-- Paste Universal Header Here -->
+
+    <main class="profile-container">
+        <!-- User Profile Header -->
+        <div class="user-header">
+            <div class="user-avatar" id="userAvatar">👤</div>
+            <div class="user-info">
+                <h1 id="userName">Loading...</h1>
+                <p id="userEmail">Loading profile data...</p>
+            </div>
+            <button id="logoutBtn" class="logout-btn">Log Out</button>
+        </div>
+
+        <!-- Navigation Pathways -->
+        <div class="pathway-grid">
+            <a href="quiz-results.html" class="pathway-card quiz-card">
+                <div class="pathway-icon quiz-icon">🎯</div>
+                <h2>Quiz Analytics</h2>
+                <p>Track your topic-wise accuracy, speed, and overall progress across short practice quizzes.</p>
+                <span class="pathway-btn btn-quiz">View Quiz Progress →</span>
+            </a>
+
+            <a href="mock-results.html" class="pathway-card mock-card">
+                <div class="pathway-icon mock-icon">📝</div>
+                <h2>Mock Test Analytics</h2>
+                <p>Analyze your full-length exam performance, subject-wise breakdowns, and test scores.</p>
+                <span class="pathway-btn btn-mock">View Mock Progress →</span>
+            </a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth, onAuthStateChanged, signOut } from "./js/firebase.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    window.location.href = "login.html?redirect=profile-dashboard.html";
+                    return;
+                }
+                
+                // Populate Google Data
+                document.getElementById('userName').textContent = user.displayName || "Student";
+                document.getElementById('userEmail').textContent = user.email || "";
+                if(user.photoURL) {
+                    document.getElementById('userAvatar').innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                }
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await signOut(auth);
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</body>
+</html>
