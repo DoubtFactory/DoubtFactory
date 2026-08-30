@@ -7,8 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <style>
+        /* Header Actions CSS */
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-profile-btn { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); text-decoration: none; transition: all 0.2s ease; border: 1px solid transparent; overflow: hidden; }
+        .header-profile-btn:hover { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); border-color: rgba(59, 130, 246, 0.3); }
+        .header-profile-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Profile Page CSS */
         .profile-container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
-        
         .user-header { display: flex; align-items: center; gap: 20px; background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 30px; }
         .user-avatar { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-blue); background: var(--bg-main); display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--text-secondary); }
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -17,11 +23,7 @@
 
         .pathway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         
-        .pathway-card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 30px; text-align: center;
-            transition: transform 0.2s, border-color 0.2s; text-decoration: none; display: block;
-        }
+        .pathway-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; text-align: center; transition: transform 0.2s, border-color 0.2s; text-decoration: none; display: block; }
         .pathway-card:hover { transform: translateY(-4px); }
         .pathway-card.quiz-card:hover { border-color: #F97316; }
         .pathway-card.mock-card:hover { border-color: #8B5CF6; }
@@ -43,7 +45,119 @@
 </head>
 <body id="home-body">
 
-    <!-- Paste Universal Header Here -->
+    <!-- ==========================================
+         UNIVERSAL HEADER & SIDEBAR 
+         ========================================== -->
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <h2>Doubt Factory</h2>
+            <p>Turning Doubts into Clarity</p>
+        </a>
+
+        <!-- Right Side Actions (Profile + Hamburger) -->
+        <div class="header-actions">
+            <a href="profile-dashboard.html" id="headerProfileBtn" class="header-profile-btn" aria-label="User Profile">
+                <!-- Default SVG (Shows briefly before auth resolves) -->
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <nav aria-label="Primary navigation" id="primaryNav">
+            <button id="closeMenuBtn" class="close-menu-btn" aria-label="Close Menu">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <a href="index.html">Home</a>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Exams ▾</a>
+                <div class="drop-menu">
+                    <a href="exam.html?type=JEE Main">⚙️ JEE Main</a>
+                    <a href="exam.html?type=JEE Advanced">⚙️ JEE Advanced</a>
+                    <a href="exam.html?type=NEET">⚕️ NEET</a>
+                </div>
+            </div>
+            <div class="nav-item-dropdown">
+                <a tabindex="0" class="drop-trigger">Subjects ▾</a>
+                <div class="drop-menu">
+                    <a href="chapter.html?subject=Physics">⚛️ Physics</a>
+                    <a href="chapter.html?subject=Maths">📐 Maths</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧪 Chemistry</span>
+                    <a href="chapter.html?subject=Physical%20Chemistry" style="padding-left: 24px;">Physical Chemistry</a>
+                    <a href="chapter.html?subject=Organic%20Chemistry" style="padding-left: 24px;">Organic Chemistry</a>
+                    <a href="chapter.html?subject=Inorganic%20Chemistry" style="padding-left: 24px;">Inorganic Chemistry</a>
+                    <span style="display:block; padding: 12px 16px 4px; font-size: 11px; font-weight: bold; color: var(--accent-blue); text-transform: uppercase;">🧬 Biology</span>
+                    <a href="chapter.html?subject=Botany" style="padding-left: 24px;">🌿 Botany</a>
+                    <a href="chapter.html?subject=Zoology" style="padding-left: 24px;">🦁 Zoology</a>
+                </div>
+            </div>
+            <a href="test-setup.html">Mock Tests</a>
+            <a href="explore-quizzes.html">Quizzes</a>
+            <a href="search.html">Search</a>
+            <a href="bookmarks.html">Bookmarks</a>
+            <a href="profile-dashboard.html" style="color: var(--accent-blue);">My Progress</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Sidebar Interaction Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const primaryNav = document.getElementById('primaryNav');
+            
+            if (!mobileMenuBtn || !primaryNav) return;
+
+            let overlay = document.querySelector('.menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'menu-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            function toggleMenu() {
+                const isOpen = primaryNav.classList.contains('open');
+                if (isOpen) {
+                    primaryNav.classList.remove('open');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    primaryNav.classList.add('open');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                }
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            document.querySelectorAll('.drop-trigger').forEach(trigger => {
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                newTrigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropMenu = this.nextElementSibling;
+                    dropMenu.classList.toggle('mobile-open');
+                });
+            });
+        });
+    </script>
+    <!-- ========================================== -->
 
     <main class="profile-container">
         <!-- User Profile Header -->
@@ -74,21 +188,35 @@
         </div>
     </main>
 
+    <!-- Auth and Profile Sync Script -->
     <script type="module">
         import { auth, onAuthStateChanged, signOut } from "./js/firebase.js";
 
         document.addEventListener("DOMContentLoaded", () => {
+            const profileBtn = document.getElementById('headerProfileBtn');
+            
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
                     window.location.href = "login.html?redirect=profile-dashboard.html";
                     return;
                 }
                 
-                // Populate Google Data
+                // Populate Dashboard Main Profile Data
                 document.getElementById('userName').textContent = user.displayName || "Student";
                 document.getElementById('userEmail').textContent = user.email || "";
                 if(user.photoURL) {
                     document.getElementById('userAvatar').innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                }
+
+                // Populate Header Profile Button
+                if(profileBtn) {
+                    if(user.photoURL) {
+                        profileBtn.innerHTML = `<img src="${user.photoURL}" alt="Profile" referrerpolicy="no-referrer">`;
+                    } else {
+                        profileBtn.style.color = "var(--accent-blue)";
+                        profileBtn.style.borderColor = "var(--accent-blue)";
+                        profileBtn.style.background = "rgba(59, 130, 246, 0.15)";
+                    }
                 }
             });
 
