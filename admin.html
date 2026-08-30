@@ -69,7 +69,7 @@
     
     .dash-stats { 
         display: grid; 
-        grid-template-columns: repeat(2, 1fr); /* Changed to 2 items */
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px; 
         margin-bottom: 30px; 
     }
@@ -114,7 +114,7 @@
     #typeLegend div { color: var(--text-secondary) !important; }
 
     /* =========================================
-       CHEMISTRY EDITOR TOOLBAR FIXES (Prevents Stretching)
+       CHEMISTRY EDITOR TOOLBAR FIXES
        ========================================= */
     .options-grid {
         display: grid;
@@ -124,7 +124,7 @@
         width: 100%;
     }
     .option-item {
-        min-width: 0; /* CRITICAL: Prevents flex child from exceeding container width */
+        min-width: 0;
         width: 100%;
         box-sizing: border-box;
     }
@@ -208,6 +208,12 @@
         box-sizing: border-box;
         outline: none;
         resize: vertical;
+    }
+
+    /* Input Focus Styles for Manage Questions */
+    .filter-input-element:focus {
+        border-color: var(--accent-blue) !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 </style>
 </head>
@@ -465,21 +471,29 @@
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                
+                <!-- NEW SEARCH BAR -->
+                <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Search Questions</label>
+                    <input type="text" id="manageSearchFilter" class="filter-input-element" placeholder="Search by keyword, question text, or chapter..." style="padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-size: 14px; outline: none; width: 100%; box-sizing: border-box; transition: all 0.2s;">
+                </div>
+
+                <!-- DROPDOWN FILTERS -->
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Exam</label>
-                    <select id="manageExamFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Exams</option></select>
+                    <select id="manageExamFilter" class="filter-input-element" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Exams</option></select>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Year</label>
-                    <select id="manageYearFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Years</option></select>
+                    <select id="manageYearFilter" class="filter-input-element" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Years</option></select>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Subject</label>
-                    <select id="manageSubjectFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Subjects</option></select>
+                    <select id="manageSubjectFilter" class="filter-input-element" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Subjects</option></select>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Chapter</label>
-                    <select id="manageChapterFilter" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Chapters</option></select>
+                    <select id="manageChapterFilter" class="filter-input-element" style="padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none;"><option value="All">All Chapters</option></select>
                 </div>
             </div>
 
