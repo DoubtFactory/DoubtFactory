@@ -2,98 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Doubt Factory</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <style>
-        body {
-            background: var(--bg-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .login-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .login-card h2 {
-            color: var(--text-primary);
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-        .login-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        .google-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            background: white;
-            color: #333;
-            border: none;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .google-btn:hover {
-            background: #f8f9fa;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transform: translateY(-1px);
-        }
-        .google-icon {
-            width: 20px;
-            height: 20px;
-        }
-        #loginError {
-            color: #EF4444;
-            font-size: 13px;
-            margin-top: 15px;
-            font-weight: 600;
-            display: none;
-        }
+        body { background: var(--bg-main); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .login-card h2 { color: var(--text-primary); margin-bottom: 10px; font-size: 24px; font-weight: 800; }
+        .login-card p { color: var(--text-secondary); margin-bottom: 30px; font-size: 14px; line-height: 1.5; }
+        
+        /* Email/Password Fields */
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group input { width: 100%; padding: 12px 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; box-sizing: border-box; }
+        .input-group input:focus { outline: none; border-color: var(--accent-blue); }
+        
+        .btn-admin { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; margin-bottom: 20px; }
+        .btn-admin:hover { background: #2563EB; }
+
+        .divider { display: flex; align-items: center; text-align: center; color: var(--text-secondary); font-size: 12px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+        .divider::before { margin-right: 10px; }
+        .divider::after { margin-left: 10px; }
+
+        /* Google Button */
+        .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: white; color: #333; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .google-btn:hover { background: #f8f9fa; }
+        .google-btn img { width: 20px; height: 20px; }
+        
+        #errorMsg { color: #EF4444; font-size: 13px; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
         <h2>Welcome to Doubt Factory</h2>
-        <p>Sign in with your Google account to practice quizzes, save your progress, and track your analytics.</p>
-        
+        <p>Sign in to practice quizzes, save your progress, and track your analytics.</p>
+
+        <!-- Admin Email/Password Login -->
+        <div class="input-group">
+            <input type="email" id="emailInput" placeholder="Email Address">
+        </div>
+        <div class="input-group">
+            <input type="password" id="passwordInput" placeholder="Password">
+        </div>
+        <button id="emailLoginBtn" class="btn-admin">Sign In</button>
+
+        <div class="divider">OR</div>
+
+        <!-- Student Google Login -->
         <button id="googleLoginBtn" class="google-btn">
-            <!-- Google "G" SVG Icon -->
-            <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
             Sign in with Google
         </button>
 
-        <div id="loginError"></div>
+        <div id="errorMsg"></div>
     </div>
 
-    <script type="module" src="js/login.js"></script>
+    <script type="module">
+        import { auth, provider } from "./js/firebase.js";
+        import { signInWithPopup, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const googleBtn = document.getElementById("googleLoginBtn");
+            const emailBtn = document.getElementById("emailLoginBtn");
+            const errorMsg = document.getElementById("errorMsg");
+            
+            // Redirect logic after successful login
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectUrl = urlParams.get('redirect') || "index.html";
+
+            function handleLoginSuccess(user) {
+                // If it is the admin email, send them to the admin panel
+                if (user.email === "admin@doubtfactory.com") {
+                    window.location.href = "manage.html"; 
+                } else {
+                    window.location.href = redirectUrl;
+                }
+            }
+
+            // 1. Admin Email/Password Login
+            emailBtn.addEventListener("click", async () => {
+                const email = document.getElementById("emailInput").value;
+                const pass = document.getElementById("passwordInput").value;
+                
+                if(!email || !pass) {
+                    errorMsg.textContent = "Please enter both email and password.";
+                    errorMsg.style.display = "block";
+                    return;
+                }
+
+                try {
+                    emailBtn.textContent = "Signing in...";
+                    const result = await signInWithEmailAndPassword(auth, email, pass);
+                    handleLoginSuccess(result.user);
+                } catch (error) {
+                    emailBtn.textContent = "Sign In";
+                    errorMsg.textContent = "Invalid email or password.";
+                    errorMsg.style.display = "block";
+                    console.error(error);
+                }
+            });
+
+            // 2. Student Google Login
+            googleBtn.addEventListener("click", async () => {
+                try {
+                    googleBtn.innerHTML = "Signing in...";
+                    const result = await signInWithPopup(auth, provider);
+                    handleLoginSuccess(result.user);
+                } catch (error) {
+                    googleBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"> Sign in with Google`;
+                    errorMsg.textContent = "Google sign-in failed. Please try again.";
+                    errorMsg.style.display = "block";
+                    console.error(error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
