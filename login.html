@@ -12,114 +12,43 @@
         .login-card h2 { color: var(--text-primary); margin-bottom: 10px; font-size: 24px; font-weight: 800; }
         .login-card p { color: var(--text-secondary); margin-bottom: 30px; font-size: 14px; line-height: 1.5; }
         
-        /* Email/Password Fields */
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group input { width: 100%; padding: 12px 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; box-sizing: border-box; }
-        .input-group input:focus { outline: none; border-color: var(--accent-blue); }
-        
-        .btn-admin { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
-        .btn-admin:hover { background: #2563EB; }
-
-        /* Google Button */
         .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: white; color: #333; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .google-btn:hover { background: #f8f9fa; }
         .google-btn img { width: 20px; height: 20px; }
         
         #errorMsg { color: #EF4444; font-size: 13px; margin-top: 15px; display: none; }
-        
-        /* Toggle display states */
-        #adminSection { display: none; }
-        #studentSection { display: block; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
         <h2>Welcome to Doubt Factory</h2>
-        <p id="loginSubtitle">Sign in to practice quizzes, save your progress, and track your analytics.</p>
+        <p>Sign in with your Google account to practice JEE/NEET quizzes, save your progress, and track your analytics.</p>
 
-        <!-- Admin Email/Password Login (Hidden by default) -->
-        <div id="adminSection">
-            <div class="input-group">
-                <input type="email" id="emailInput" placeholder="Admin Email Address">
-            </div>
-            <div class="input-group">
-                <input type="password" id="passwordInput" placeholder="Password">
-            </div>
-            <button id="emailLoginBtn" class="btn-admin">Sign In as Admin</button>
-        </div>
-
-        <!-- Student Google Login (Visible by default) -->
-        <div id="studentSection">
-            <button id="googleLoginBtn" class="google-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-                Sign in with Google
-            </button>
-        </div>
+        <button id="googleLoginBtn" class="google-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+            Sign in with Google
+        </button>
 
         <div id="errorMsg"></div>
     </div>
 
     <script type="module">
         import { auth, provider } from "./js/firebase.js";
-        import { signInWithPopup, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import { signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
         document.addEventListener("DOMContentLoaded", () => {
             const googleBtn = document.getElementById("googleLoginBtn");
-            const emailBtn = document.getElementById("emailLoginBtn");
             const errorMsg = document.getElementById("errorMsg");
-            const adminSection = document.getElementById("adminSection");
-            const studentSection = document.getElementById("studentSection");
-            const subtitle = document.getElementById("loginSubtitle");
             
-            // 1. URL Parameter Check for Admin Mode
             const urlParams = new URLSearchParams(window.location.search);
-            const isAdmin = urlParams.get('admin') === 'true';
             const redirectUrl = urlParams.get('redirect') || "index.html";
 
-            if (isAdmin) {
-                adminSection.style.display = 'block';
-                studentSection.style.display = 'none';
-                subtitle.textContent = "Doubt Factory Admin Portal Login";
-            }
-
-            function handleLoginSuccess(user) {
-                if (user.email === "admin@doubtfactory.com") {
-                    window.location.href = "manage.html"; 
-                } else {
-                    window.location.href = redirectUrl;
-                }
-            }
-
-            // 2. Admin Email/Password Login
-            emailBtn.addEventListener("click", async () => {
-                const email = document.getElementById("emailInput").value;
-                const pass = document.getElementById("passwordInput").value;
-                
-                if(!email || !pass) {
-                    errorMsg.textContent = "Please enter both email and password.";
-                    errorMsg.style.display = "block";
-                    return;
-                }
-
-                try {
-                    emailBtn.textContent = "Signing in...";
-                    const result = await signInWithEmailAndPassword(auth, email, pass);
-                    handleLoginSuccess(result.user);
-                } catch (error) {
-                    emailBtn.textContent = "Sign In as Admin";
-                    errorMsg.textContent = "Invalid email or password.";
-                    errorMsg.style.display = "block";
-                    console.error(error);
-                }
-            });
-
-            // 3. Student Google Login
             googleBtn.addEventListener("click", async () => {
                 try {
                     googleBtn.innerHTML = "Signing in...";
                     const result = await signInWithPopup(auth, provider);
-                    handleLoginSuccess(result.user);
+                    window.location.href = redirectUrl;
                 } catch (error) {
                     googleBtn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"> Sign in with Google`;
                     errorMsg.textContent = "Google sign-in failed. Please try again.";
