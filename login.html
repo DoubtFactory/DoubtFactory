@@ -17,13 +17,8 @@
         .input-group input { width: 100%; padding: 12px 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; box-sizing: border-box; }
         .input-group input:focus { outline: none; border-color: var(--accent-blue); }
         
-        .btn-admin { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; margin-bottom: 20px; }
+        .btn-admin { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .btn-admin:hover { background: #2563EB; }
-
-        .divider { display: flex; align-items: center; text-align: center; color: var(--text-secondary); font-size: 12px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
-        .divider::before { margin-right: 10px; }
-        .divider::after { margin-left: 10px; }
 
         /* Google Button */
         .google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; background: white; color: #333; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; }
@@ -31,30 +26,36 @@
         .google-btn img { width: 20px; height: 20px; }
         
         #errorMsg { color: #EF4444; font-size: 13px; margin-top: 15px; display: none; }
+        
+        /* Toggle display states */
+        #adminSection { display: none; }
+        #studentSection { display: block; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
         <h2>Welcome to Doubt Factory</h2>
-        <p>Sign in to practice quizzes, save your progress, and track your analytics.</p>
+        <p id="loginSubtitle">Sign in to practice quizzes, save your progress, and track your analytics.</p>
 
-        <!-- Admin Email/Password Login -->
-        <div class="input-group">
-            <input type="email" id="emailInput" placeholder="Email Address">
+        <!-- Admin Email/Password Login (Hidden by default) -->
+        <div id="adminSection">
+            <div class="input-group">
+                <input type="email" id="emailInput" placeholder="Admin Email Address">
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder="Password">
+            </div>
+            <button id="emailLoginBtn" class="btn-admin">Sign In as Admin</button>
         </div>
-        <div class="input-group">
-            <input type="password" id="passwordInput" placeholder="Password">
+
+        <!-- Student Google Login (Visible by default) -->
+        <div id="studentSection">
+            <button id="googleLoginBtn" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
+                Sign in with Google
+            </button>
         </div>
-        <button id="emailLoginBtn" class="btn-admin">Sign In</button>
-
-        <div class="divider">OR</div>
-
-        <!-- Student Google Login -->
-        <button id="googleLoginBtn" class="google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo">
-            Sign in with Google
-        </button>
 
         <div id="errorMsg"></div>
     </div>
@@ -67,13 +68,22 @@
             const googleBtn = document.getElementById("googleLoginBtn");
             const emailBtn = document.getElementById("emailLoginBtn");
             const errorMsg = document.getElementById("errorMsg");
+            const adminSection = document.getElementById("adminSection");
+            const studentSection = document.getElementById("studentSection");
+            const subtitle = document.getElementById("loginSubtitle");
             
-            // Redirect logic after successful login
+            // 1. URL Parameter Check for Admin Mode
             const urlParams = new URLSearchParams(window.location.search);
+            const isAdmin = urlParams.get('admin') === 'true';
             const redirectUrl = urlParams.get('redirect') || "index.html";
 
+            if (isAdmin) {
+                adminSection.style.display = 'block';
+                studentSection.style.display = 'none';
+                subtitle.textContent = "Doubt Factory Admin Portal Login";
+            }
+
             function handleLoginSuccess(user) {
-                // If it is the admin email, send them to the admin panel
                 if (user.email === "admin@doubtfactory.com") {
                     window.location.href = "manage.html"; 
                 } else {
@@ -81,7 +91,7 @@
                 }
             }
 
-            // 1. Admin Email/Password Login
+            // 2. Admin Email/Password Login
             emailBtn.addEventListener("click", async () => {
                 const email = document.getElementById("emailInput").value;
                 const pass = document.getElementById("passwordInput").value;
@@ -97,14 +107,14 @@
                     const result = await signInWithEmailAndPassword(auth, email, pass);
                     handleLoginSuccess(result.user);
                 } catch (error) {
-                    emailBtn.textContent = "Sign In";
+                    emailBtn.textContent = "Sign In as Admin";
                     errorMsg.textContent = "Invalid email or password.";
                     errorMsg.style.display = "block";
                     console.error(error);
                 }
             });
 
-            // 2. Student Google Login
+            // 3. Student Google Login
             googleBtn.addEventListener("click", async () => {
                 try {
                     googleBtn.innerHTML = "Signing in...";
