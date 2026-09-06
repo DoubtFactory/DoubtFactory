@@ -9,17 +9,13 @@
     <style>
         body { background: var(--bg-main); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .login-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        
         .login-card h2 { color: var(--text-primary); margin-bottom: 10px; font-size: 24px; font-weight: 800; }
         .login-card p { color: var(--text-secondary); margin-bottom: 30px; font-size: 14px; line-height: 1.5; }
-        
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group input { width: 100%; padding: 12px 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; box-sizing: border-box; }
         .input-group input:focus { outline: none; border-color: var(--accent-blue); }
-        
         .btn-admin { width: 100%; padding: 12px; background: var(--accent-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; margin-top: 10px; }
         .btn-admin:hover { background: #2563EB; }
-
         #errorMsg { color: #EF4444; font-size: 13px; margin-top: 15px; display: none; font-weight: 500; }
     </style>
 </head>
@@ -61,22 +57,20 @@
 
                 try {
                     emailBtn.textContent = "Authenticating...";
+                    errorMsg.style.display = "none"; 
+                    
+                    // Attempt Firebase Login
                     await signInWithEmailAndPassword(auth, email, pass);
-                    // Redirect straight to your upload dashboard on success
-                    window.location.href = "admin.html";
-    
+                    
+                    // IMPORTANT: Change 'index.html' to the exact name of your dashboard file!
+                    window.location.href = "admin.html"; 
+                    
                 } catch (error) {
+                    // Force reset the button and display the EXACT error from Firebase
                     emailBtn.textContent = "Access Portal";
-                    errorMsg.textContent = "Invalid admin credentials. Please try again.";
+                    errorMsg.textContent = "Error: " + error.message;
                     errorMsg.style.display = "block";
-                    console.error("Login Error:", error);
-                }
-            });
-            
-            // Allow pressing "Enter" to submit
-            document.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    emailBtn.click();
+                    alert("Login Failed: " + error.message); // Backup alert just in case
                 }
             });
         });
