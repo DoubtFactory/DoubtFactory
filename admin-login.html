@@ -63,7 +63,7 @@
                     emailBtn.textContent = "Authenticating...";
                     await signInWithEmailAndPassword(auth, email, pass);
                     // Redirect straight to your upload dashboard on success
-                    window.location.href = "manage.html"; 
+                    window.location.href = "admin.html"; 
                 } catch (error) {
                     emailBtn.textContent = "Access Portal";
                     errorMsg.textContent = "Invalid admin credentials. Please try again.";
