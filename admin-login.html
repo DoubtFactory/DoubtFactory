@@ -37,15 +37,17 @@
         <div id="errorMsg"></div>
     </div>
 
-    <script type="module">
-        import { auth } from "./js/firebase.js";
-        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+       <script type="module">
+        // Import both auth AND the sign-in function directly from your local file
+        import { auth, signInWithEmailAndPassword } from "./js/firebase.js";
 
         document.addEventListener("DOMContentLoaded", () => {
             const emailBtn = document.getElementById("emailLoginBtn");
             const errorMsg = document.getElementById("errorMsg");
 
-            emailBtn.addEventListener("click", async () => {
+            emailBtn.addEventListener("click", async (e) => {
+                e.preventDefault(); // Prevent any default page refresh
+                
                 const email = document.getElementById("emailInput").value.trim();
                 const pass = document.getElementById("passwordInput").value;
                 
@@ -59,21 +61,27 @@
                     emailBtn.textContent = "Authenticating...";
                     errorMsg.style.display = "none"; 
                     
-                    // Attempt Firebase Login
+                    // Attempt Firebase Login using your local file's function
                     await signInWithEmailAndPassword(auth, email, pass);
                     
-                    // IMPORTANT: Change 'index.html' to the exact name of your dashboard file!
-                    window.location.href = "admin.html"; 
+                    // Redirect to your admin dashboard
+                    window.location.href = "index.html"; 
                     
                 } catch (error) {
-                    // Force reset the button and display the EXACT error from Firebase
                     emailBtn.textContent = "Access Portal";
-                    errorMsg.textContent = "Error: " + error.message;
+                    errorMsg.textContent = "Error: " + error.code; // Shows exact Firebase error
                     errorMsg.style.display = "block";
-                    alert("Login Failed: " + error.message); // Backup alert just in case
+                }
+            });
+            
+            // Allow pressing "Enter" to submit
+            document.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    emailBtn.click();
                 }
             });
         });
     </script>
+
 </body>
 </html>
