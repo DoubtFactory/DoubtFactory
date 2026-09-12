@@ -43,6 +43,15 @@ class EditorHistory {
 const editorHistories = {};
 
 const toolbarConfig = [
+    // NEW: HTML Tag formatters for any alphabet/number
+    { 
+        name: "Format", 
+        items: [
+            { label: "Sub ₍ₓ₎", action: "wrap", args: ["<sub>", "</sub>"] },
+            { label: "Sup ⁽ˣ⁾", action: "wrap", args: ["<sup>", "</sup>"] }
+        ] 
+    },
+    // EXISTING GROUPS
     { name: "Sub (Neutral)", items: ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (+)", items: ["₊", "⁰₊", "₁₊", "₂₊", "₃₊", "₄₊", "₅₊", "₆₊", "₇₊", "₈₊", "₉₊"].map(s => ({ label: s, action: "insert", args: [s] })) },
     { name: "Sub (-)", items: ["₋", "⁰₋", "₁₋", "₂₋", "₃₋", "₄₋", "₅₋", "₆₋", "₇₋", "₈₋", "₉₋"].map(s => ({ label: s, action: "insert", args: [s] })) },
@@ -74,6 +83,12 @@ function buildToolbar(textarea) {
             btn.className = "toolbar-btn";
             btn.textContent = item.label;
             
+            // Allow formatting buttons to be slightly wider
+            if (item.action === "wrap") {
+                btn.style.width = "auto";
+                btn.style.padding = "0 8px";
+            }
+            
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 textarea.focus();
@@ -83,13 +98,31 @@ function buildToolbar(textarea) {
                 const end = textarea.selectionEnd;
                 const text = textarea.value;
                 const beforeText = text.substring(0, start);
+                const selectedText = text.substring(start, end);
                 const afterText = text.substring(end);
                 
                 history.save(text);
-                const insertStr = item.args[0];
-                textarea.value = beforeText + insertStr + afterText;
-                const newCursorPos = start + insertStr.length;
-                textarea.setSelectionRange(newCursorPos, newCursorPos);
+                
+                if (item.action === "wrap") {
+                    // Wraps highlighted text in HTML tags
+                    const openTag = item.args[0];
+                    const closeTag = item.args[1];
+                    textarea.value = beforeText + openTag + selectedText + closeTag + afterText;
+                    
+                    if (selectedText.length > 0) {
+                        textarea.setSelectionRange(start, start + openTag.length + selectedText.length + closeTag.length);
+                    } else {
+                        const newCursorPos = start + openTag.length;
+                        textarea.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                } else if (item.action === "insert") {
+                    // Standard Unicode insertion
+                    const insertStr = item.args[0];
+                    textarea.value = beforeText + insertStr + afterText;
+                    const newCursorPos = start + insertStr.length;
+                    textarea.setSelectionRange(newCursorPos, newCursorPos);
+                }
+                
                 textarea.dispatchEvent(new Event('input'));
             });
             groupDiv.appendChild(btn);
