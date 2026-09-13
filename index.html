@@ -655,5 +655,26 @@
             });
         });
     </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Replace 'homeSearchInput' with the actual ID of your search bar on index.html
+        const homeSearch = document.getElementById("homeSearchInput"); 
+        
+        if (homeSearch) {
+            homeSearch.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    const query = homeSearch.value.trim();
+                    if (query) {
+                        // Redirect with the query in the URL
+                        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                    } else {
+                        window.location.href = "search.html";
+                    }
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
